@@ -1,0 +1,51 @@
+.progress-circle {
+  position: relative;
+  align-items: center;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  font-size: 2rem;
+  margin: auto;
+  .progerss-cicle-percent {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  .progress-circle-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: hidden;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    transition: translate .1s linear;
+    fill: currentColor;
+  }
+  .progress-circle__circle {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke-linecap: round;
+  }
+  
+  .progress-circle__circle:nth-child(1) {
+    stroke-dashoffset: 0;
+  }
+  // 动画过度
+  // .progress-circle__circle:nth-child(2) {
+  //   transition: stroke-dashoffset 0.1s linear;
+  // }
+  span {
+    position: absolute;
+    left: 50%;
+    bottom: 1%;
+    transform: translate(-50%, -50%);
+    font-size: 12px;
+  }
+  img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
