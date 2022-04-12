@@ -1,5 +1,7 @@
 # cpp-ui
 
+生活很快，码代码快乐点！
+
 ## Getting Started
 
 Install dependencies,
