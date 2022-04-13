@@ -15,6 +15,11 @@
   },
   "module": "es/index.js",
   "typings": "es/index.d.ts",
+  "homepage": "https://github.com/niaogege/cpp-ui",
+  "repository": "https://github.com/niaogege/cpp-ui",
+  "bugs": {
+    "url": "https://github.com/niaogege/cpp-ui/issues"
+  },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
