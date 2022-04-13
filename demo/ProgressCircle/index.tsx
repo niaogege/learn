@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react"
 import { ProgressCircle } from 'cpp-ui'
-const duration = 50;
+const duration = 15;
 const ProgressPlayBtn = () => {
   const [currentTime, setCurrentTime] = useState(0)
   const [playState, setPlayState] = useState(3)
@@ -15,11 +15,14 @@ const ProgressPlayBtn = () => {
     curTime.current = currentTime
     if (playState === 3) {
       timer.current = setInterval(() => {
-        if (currentTime + 1 >= duration) {
-          clearInterval(timer.current)
-        } else {
-          setCurrentTime((currentTime) => currentTime + 1)
-        }
+        setCurrentTime((currentTime) => {
+          if (currentTime + 1 >= duration) {
+            clearInterval(timer.current)
+            setPlayState(0)
+            return 0
+          }
+          return currentTime + 1
+        })
       }, 1000)
     }
     return () => {
