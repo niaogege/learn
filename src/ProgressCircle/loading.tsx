@@ -2,14 +2,14 @@
  * @Author: Chendapeng
  * @Date: 2022-03-28 11:00:55
  * @LastEditors: Chendapeng
- * @LastEditTime: 2022-03-28 14:24:08
+ * @LastEditTime: 2022-04-13 14:36:20
  * @Description: 播放加载音频
  */
 
 import React from 'react';
-import loading from '@/src/assets/loading.svg';
+import loading from './loading.svg';
 
-const ABLoading = ({height}) => {
+const ABLoading = ({ height }: { height: string }) => {
   return (
     <div style={{
       maxHeight: height,
