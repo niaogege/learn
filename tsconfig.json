@@ -9,5 +9,7 @@
     "strict": true,
     "skipLibCheck": true,
     "declaration": true
-  }
+  },
+  "exclude": ["es", "node_modules"],
+  "include": ["demo", "src"]
 }

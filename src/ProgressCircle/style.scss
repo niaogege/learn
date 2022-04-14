@@ -42,10 +42,13 @@
     transform: translate(-50%, -50%);
     font-size: 12px;
   }
-  img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
+  .icon {
+    svg {
+      cursor: pointer;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+    }
   }
 }

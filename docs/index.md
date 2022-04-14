@@ -18,10 +18,11 @@ features:
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
 ---
 
-> 目前坐标上海/南京，即将步入程序员的last红利时期，是时候厚积薄发了
-## 个人产出
+> 目前坐标上海/南京，即将步入程序员的 last 红利时期，是时候厚积薄发了
 
-- ui组件
+## 沉淀
+
+- ui 组件
 - 工具函数
 - 脚手架
 - 调试工具
@@ -45,4 +46,3 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](http
 - 思考与成长
 
 ## [个人站点](http://niaogege.cn/)
-

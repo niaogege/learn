@@ -1,7 +1,6 @@
 {
-  "private": true,
-  "name": "cpp-ui",
-  "version": "1.0.0",
+  "name": "@niaogege/cpp-ui",
+  "version": "1.0.1",
   "scripts": {
     "start": "dumi dev",
     "docs:build": "dumi build",
@@ -13,6 +12,10 @@
     "test:coverage": "umi-test --coverage",
     "prepublishOnly": "npm run build"
   },
+  "files": [
+    "esm",
+    "demo"
+  ],
   "module": "es/index.js",
   "typings": "es/index.d.ts",
   "homepage": "https://github.com/niaogege/cpp-ui",
@@ -20,6 +23,14 @@
   "bugs": {
     "url": "https://github.com/niaogege/cpp-ui/issues"
   },
+  "keywords": [
+    "react",
+    "component",
+    "components",
+    "hooks",
+    "frontend",
+    "ui"
+  ],
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
@@ -39,13 +50,17 @@
     "@testing-library/react": "^12.1.2",
     "@types/jest": "^27.0.3",
     "@umijs/fabric": "^2.8.1",
+    "@umijs/plugin-sass": "^1.1.1",
     "@umijs/test": "^3.0.5",
     "classnames": "^2.3.1",
     "dumi": "^1.1.0",
     "father-build": "^1.17.2",
     "gh-pages": "^3.0.0",
     "lint-staged": "^10.0.7",
+    "node-sass": "^7.0.1",
     "prettier": "^2.2.1",
+    "sass-loader": "^12.6.0",
     "yorkie": "^2.0.0"
-  }
+  },
+  "license": "ISC"
 }

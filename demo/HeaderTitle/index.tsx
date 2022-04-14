@@ -1,10 +1,10 @@
-import React, {useState} from "react"
-import { HeaderTitle } from 'cpp-ui'
+import React, { useState } from 'react';
+import { HeaderTitle } from '@niaogege/cpp-ui';
 
 export default ({}) => {
-  return (
-    <div>
-      <HeaderTitle title='Test cpp' />
-    </div>
-  )
-}
+    return (
+        <div>
+            <HeaderTitle title="Test cpp" />
+        </div>
+    );
+};
