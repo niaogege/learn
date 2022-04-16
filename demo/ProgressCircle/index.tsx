@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { ProgressCircle } from '@niaogege/cpp-ui';
+import { ProgressCircle } from '@chendap/ui';
 
 const duration = 15;
 const ProgressPlayBtn = () => {

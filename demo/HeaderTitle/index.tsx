@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { HeaderTitle } from '@niaogege/cpp-ui';
+import { HeaderTitle } from '@chendap/ui';
 
 export default ({}) => {
     return (

@@ -44,21 +44,21 @@ export interface PropgressCircleProp {
      * @description.zh-CN 弧形宽度
      * @default           2
      */
-    strokeLength: number;
+    strokeLength?: number;
 
     /**
      * @description       弧度背景色
      * @description.zh-CN 弧度背景色
      * @default           #F3F4F5
      */
-    defaultStroke: string;
+    defaultStroke?: string;
 
     /**
      * @description       当前高亮弧度背景色
      * @description.zh-CN 当前高亮弧度背景色
      * @default           #FF4646
      */
-    highStroke: string;
+    highStroke?: string;
 
     /**
      * @description       是否是当前播放的音频
