@@ -45,4 +45,6 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](http
 - 源码阅读
 - 思考与成长
 
+不求广，只求精和深！
+
 ## [个人站点](http://niaogege.cn/)
