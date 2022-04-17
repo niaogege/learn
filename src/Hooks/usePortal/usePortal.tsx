@@ -7,6 +7,9 @@ interface UsePortal {
     remove: () => null | boolean;
 }
 const useProtal = (el: Element) => {
+    if (!el) {
+        return () => null;
+    }
     const [portal, setPortal] = useState<UsePortal>({
         render: () => null,
         remove: () => null,
@@ -30,6 +33,7 @@ const useProtal = (el: Element) => {
         setPortal(newPortal);
         return () => {
             el && newPortal.remove();
+            el.parentNode && el.parentNode.removeChild(el);
         };
     }, [el]);
     return portal && portal.render;

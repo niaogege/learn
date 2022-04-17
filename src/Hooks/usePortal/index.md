@@ -20,17 +20,25 @@ nav:
 
 ```ts
 import React from 'react';
-import { render } from 'react-dom';
 import usePortal from './usePortal';
-
+let container: Element;
 const TestPortal = () => {
-  const Portal = usePortal(document.querySelector('title') as HTMLElement);
+  if (!container) {
+    container = document.createElement('div');
+    container.setAttribute('id', 'cpp-ui');
+    document.body.appendChild(container);
+  } else {
+    document.body.appendChild(container);
+  }
+  const Portal = container && usePortal(container);
   return (
-    <div>
-      Hello UsePortal
-      <Portal> UsePortal</Portal>
-    </div>
+    <>
+      <h2>
+        元素查看<code>document.getElementById('cpp-ui')</code>
+      </h2>
+      <Portal> Hello UsePortal</Portal>
+    </>
   );
 };
-render(<TestPortal />, document.getElementById('root'));
+export default TestPortal;
 ```
