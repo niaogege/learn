@@ -8,7 +8,7 @@ group:
 
 本文了解到的知识
 
-- useState 同步还是异步
+- useState 同步还是异步(18.0 版本之前跟之后)
 - useState 中的闭包陷进
 - useState 中的源码
 
@@ -60,15 +60,11 @@ export default () => {
   const [count, setCount] = useState(1);
   const [a, setA] = useState(1);
   const handle = () => {
+    // 闭包陷阱
     setCount(count + 1); // 一次渲染
     setCount(count + 1); // 跟上一行代码一同渲染 合并渲染一次
-    // setCount(count => count + 1)
-    // setCount(count => count + 1)
-    // setTimeout(() => {
-    //   setCount(count => count + 1); // 一次渲染
-    // }, 0)
   };
-  console.log('render'); // 只会渲染一次
+  console.log('render'); // 渲染一次
   return (
     <>
       <div>Count: {count}</div>
@@ -86,14 +82,17 @@ export default () => {
   const [count, setCount] = useState(1);
   const [a, setA] = useState(1);
   const handle = () => {
-    // setCount(count => count + 1)
-    // setCount(count => count + 1)
-    setTimeout(() => {
-      setCount((count) => count + 1); // 一次渲染
-      setCount((count) => count + 1); // 一次渲染
-    }, 0);
+    /** 批处理 回调函数中一次渲染 18.0Before**/
+    setCount((count) => count + 1);
+    setCount((count) => count + 1);
+
+    /**两次渲染 18.0Before**/
+    // setTimeout(() => {
+    //   setCount(count => count + 1); // 一次渲染
+    //   setCount(count => count + 1); // 一次渲染
+    // }, 0)
   };
-  console.log('render'); // 会渲染2次
+  console.log('render'); // 会渲染1次
   return (
     <>
       <div>Count: {count}</div>
@@ -104,19 +103,112 @@ export default () => {
 };
 ```
 
+## React18.0 中的自动批处理 Automatic Batching
+
+批处理是指 react 将多个状态更新，聚合到一次渲染 render 执行，以提高性能
+
+```js
+class ClassIndex extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      a: 0,
+    };
+  }
+  handle = () => {
+    /**两次合为一次渲染**/
+    this.setState({ a: this.state.a + 1 });
+    this.setState({ a: this.state.a + 1 });
+    // 这里跟useState不同，同步执行时useState也会对state进行逐个处理，而setState则只会处理最后一次
+  };
+  handleWithPromise = () => {
+    // 2次渲染 分别打印 1 2
+    Promise.resolve().then(() => {
+      this.setState({ a: this.state.a + 1 });
+      this.setState({ a: this.state.a + 1 });
+    });
+  };
+  render() {
+    const A = this.state.a;
+    return (
+      <div>
+        <h2>A: {A}</h2>
+        <button onClick={this.handle}>同步执行递增</button>
+        <button onClick={this.handleWithPromise}>异步执行递增</button>
+      </div>
+    );
+  }
+}
+```
+
+在 React 18 中，**所有的状态更新，都会自动使用批处理，不关心场景**。
+
+```js
+handleWithPromise = () => {
+  // 18.0 改1次渲染 直接打印2 批处理
+  Promise.resolve().then(() => {
+    this.setState({ a: this.state.a + 1 });
+    this.setState({ a: this.state.a + 1 });
+  });
+};
+```
+
+如果你在某种场景下不想使用批处理，你可以通过 flushSync 来强制同步执行（比如：你需要在状态更新后，立刻读取新 DOM 上的数据等。）
+
+```js
+handleWithPromise = () => {
+  // 18.0 改1次渲染 直接打印2 批处理
+  Promise.resolve().then(() => {
+    ReactDom.flushSync(() => {
+      this.setState({ a: this.state.a + 1 });
+    });
+    this.setState({ a: this.state.a + 1 });
+  });
+};
+```
+
+React 18 的批处理在绝大部分场景下是没有影响，但在 Class 组件中，如果你在两次 setState 中间读取了 state 值，会出现不兼容的情况，如下示例。
+
+```js
+handleClick = () => {
+  setTimeout(() => {
+    this.setState(({ count }) => ({ count: count + 1 }));
+    // 在 React17 及之前，打印出来是 { count: 1, flag: false }
+    // 在 React18，打印出来是 { count: 0, flag: false }
+    console.log(this.state);
+    this.setState(({ flag }) => ({ flag: !flag }));
+  });
+};
+```
+
+通过 **flushSync** 来修正它
+
+```js
+handleClick = () => {
+  setTimeout(() => {
+    ReactDOM.flushSync(() => {
+      this.setState(({ count }) => ({ count: count + 1 }));
+    });
+    // 在 React18，打印出来是 { count: 1, flag: false }
+    console.log(this.state);
+    this.setState(({ flag }) => ({ flag: !flag }));
+  });
+};
+```
+
 ## 源码
 
 ```js
 
 ```
 
-## 其他 useState
+## useState 其他
 
 - [为什么 useState 不能在判断语句中声明](https://react.docschina.org/docs/hooks-rules.html)
--
 
 ## 参考文档
 
+- [React18.0](https://mp.weixin.qq.com/s/t3dYc3Md1dpiv1vaFa5plA)
 - [React useState 和 setState 到底是同步还是异步呢？](https://juejin.cn/post/6959885030063603743#heading-6)
 - [setState 是同步还是异步](https://juejin.cn/post/6875115591154270221#heading-4)
 - [React 精髓：深入了解 useState](https://mp.weixin.qq.com/s/cYNRcKi1CFpFyLxPBGJmIA)

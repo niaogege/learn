@@ -1,11 +1,13 @@
 ---
-title: 工具函数
+title: 其他工具函数
 group:
+  order: 1
   title: 工具函数
+  path: /interview/tools
 nav:
-  order: 2
-  title: '工具函数'
-  path: /tools
+  order: 3
+  title: 'interview'
+  path: /interview
 ---
 
 工具函数介绍

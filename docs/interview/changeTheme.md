@@ -1,7 +1,10 @@
 ---
 title: 主题换肤前端实现
+order: 1
 group:
-  title: tool
+  order: 1
+  title: 工具函数
+  path: /interview/tools
 nav:
   order: 3
   title: 'interview'
