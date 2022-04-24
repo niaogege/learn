@@ -31,3 +31,30 @@ const MyApp = () => {
 // ReactDOM.render(<MyApp />, document.getElementById('root'));
 export default MyApp;
 ```
+
+## Source code
+
+```ts
+import { useEffect, useState } from 'react';
+
+const useWindowSize = () => {
+  const [windowSize, setWindowSize] = useState({
+    width: undefined || 0,
+    height: undefined || 0,
+  });
+  useEffect(() => {
+    const handleResize = () =>
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    window.addEventListener('resize', handleResize);
+    handleResize();
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  return windowSize;
+};
+export default useWindowSize;
+```

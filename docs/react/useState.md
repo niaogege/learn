@@ -119,7 +119,8 @@ class ClassIndex extends Component {
     /**两次合为一次渲染**/
     this.setState({ a: this.state.a + 1 });
     this.setState({ a: this.state.a + 1 });
-    // 这里跟useState不同，同步执行时useState也会对state进行逐个处理，而setState则只会处理最后一次
+    // 这里跟useState不同，同步执行时useState也会对state进行逐个处理，
+    // 而setState则只会处理最后一次
   };
   handleWithPromise = () => {
     // 2次渲染 分别打印 1 2
@@ -153,7 +154,9 @@ handleWithPromise = () => {
 };
 ```
 
-如果你在某种场景下不想使用批处理，你可以通过 flushSync 来强制同步执行（比如：你需要在状态更新后，立刻读取新 DOM 上的数据等。）
+如果你在某种场景下不想使用批处理，你可以通过 **flushSync<R>(fn: () => R): R** 来强制同步执行（比如：你需要在状态更新后，立刻读取新 DOM 上的数据等。），flushSync 会以函数为作用域，函数内部的多个 setState 仍是批处理，阔以更加精准的控制哪些不需要的批量更新
+
+Demo1:
 
 ```js
 handleWithPromise = () => {
@@ -165,6 +168,20 @@ handleWithPromise = () => {
     this.setState({ a: this.state.a + 1 });
   });
 };
+```
+
+Demo2:
+
+```js
+function handleClick() {
+  flushSync(() => {
+    setCount(3);
+    setFlag(true);
+  });
+  // setCount 和 setFlag 为批量更新，结束后
+  setLoading(false);
+  // 此方法会触发两次 render
+}
 ```
 
 React 18 的批处理在绝大部分场景下是没有影响，但在 Class 组件中，如果你在两次 setState 中间读取了 state 值，会出现不兼容的情况，如下示例。
@@ -193,6 +210,19 @@ handleClick = () => {
     console.log(this.state);
     this.setState(({ flag }) => ({ flag: !flag }));
   });
+};
+```
+
+But 请注意的是,下面这种情况 React18.0 依然渲染 2 次，只有在异步里的多个 setState 才会执行批处理
+
+```js
+handleClick = () => {
+  setTimeout(() => {
+    ReactDOM.flushSync(() => {
+      this.setState(({ count }) => ({ count: count + 1 }));
+    });
+  }); // 1次
+  this.setState(({ flag }) => ({ flag: !flag })); // 1次
 };
 ```
 

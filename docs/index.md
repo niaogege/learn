@@ -15,7 +15,7 @@ features:
   - icon: https://gw.alipayobjects.com/zos/bmw-prod/d60657df-0822-4631-9d7c-e7a869c2f21c/k79dmz3q_w126_h126.png
     title: Tool
     desc: axios/rollup/webpack/vite/esbuild...
-footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](https://d.umijs.org)
+footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2021048304号-1](https://beian.miit.gov.cn/#/Integrated/index)
 ---
 
 > 目前坐标上海/南京，即将步入程序员的 last 红利时期，是时候厚积薄发了
@@ -36,7 +36,7 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [dumi](http
 - vue
 - nodejs
 - webpack & vite & rollup
-- 算法
+- 算法(爱不知所起一往情深)
 - 网络
 
 ## 其他相关
