@@ -1,5 +1,6 @@
 ---
-title: css
+title: css面试题
+order: 0
 group:
   order: 0
   title: css
@@ -9,14 +10,22 @@ nav:
   path: /interview
 ---
 
-大佬太牛皮了，我等学习对象
+## BFC， 介绍下 BFC、IFC、GFC 和 FFC
 
-实现 css-module
+这块太重要了！！！
 
-## css modules
+## 怎么让一个 div 水平垂直居中
 
-## css in js
+## 第 57 题：分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景。
+
+## 如何解决移动端 Retina 屏 1px 像素问题
+
+## 介绍下重绘和回流（Repaint & Reflow），以及如何进行优化
+
+## 已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改。
+
+`<img src="1.jpg" style="width:480px!important;”>`
 
 ## 参考
 
-- [手写 css-modules 来深入理解它的原理](https://mp.weixin.qq.com/s/CX-LC014iZ4vpTko59Sf7A)
+- [面试题汇总](https://juejin.cn/post/6844903885488783374#heading-58)

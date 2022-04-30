@@ -338,8 +338,27 @@ const App = () => {
 
 纯函数的特点是函数输出不依赖于任何外部变量，相同的输入一定会产生相同的输出，非常稳定。使用它来进行全局状态修改，使得全局状态可以被预测。
 
+### react-thunk
+
+dispatch 派发 action 的时候阔以传一个 function
+
+```js
+const createThunkMiddleware(extra) {
+  return ({dispatch, getState}) => next => action => {
+    if (typeof action === 'function) {
+     return action(dispatch, getState, extra)
+    }
+    return next(action)
+  }
+}
+const thunk = createThunkMiddleware({})
+thunk.withExtraArgument = createThunkMiddleware
+export default thunk
+```
+
 ## 参考链接
 
 - [你是这样理解 redux 的吗？](https://mp.weixin.qq.com/s/siBfMEjojpEzLIlDpnaBCg)
 - [React 状态管理 - 你可能不需要 Redux，但你需要了解它](https://mp.weixin.qq.com/s/SdD8_yCYmGFmnDtaZGxy5w)
 - [Redux 通关简洁攻略 -- 看这一篇就够了！](https://mp.weixin.qq.com/s/t7W0ulMaq5_8MxuiyTvXvw)
+- [理解 redux-thunk](https://zhuanlan.zhihu.com/p/85403048)

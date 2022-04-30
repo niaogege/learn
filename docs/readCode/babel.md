@@ -22,6 +22,16 @@ Babel 是一个工具链，主要用于将采用 ECMAScript 2015+ 语法编写�
 - 源码转换（codemods、jscodeshift）；
 - 静态分析（lint、根据注释生成 API 文档等）;
 
-### 参考文档
+babel 是 source to source 的转换，整体编译流程分为三步：
 
-- []()
+- parse：通过 parser 把源码转成抽象语法树（AST）
+- transform：遍历 AST，调用各种 transform 插件对 AST 进行增删改
+- generate：把转换后的 AST 打印成目标代码，并生成 sourcemap
+
+source code -> parse -> **AST** -> transform(增删改) -> **AST** -> generate
+
+## AST
+
+## 参考文档
+
+- [最详细、最全面的 Babel 小抄](https://mp.weixin.qq.com/s/miey_S-cBElyxOiAnMVOmw)

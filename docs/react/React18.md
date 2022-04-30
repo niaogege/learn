@@ -8,6 +8,8 @@ group:
 
 ## concurrent mode 并发模式
 
+有能力同时处理多个状态，且有紧急处理和次紧急处理区分
+
 ## 流式服务端渲染
 
 ## startTransition
