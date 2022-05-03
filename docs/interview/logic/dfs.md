@@ -1,6 +1,6 @@
 ---
-title: 总览
-order: 0
+title: 深度度优先遍历DFS
+order: 2
 group:
   order: 3
   title: 算法
@@ -10,8 +10,6 @@ nav:
   title: 'interview'
   path: /interview
 ---
-
-算法一道坎，好像迈的过去，又好像迈不过，这咋办...
 
 ## DFS
 
@@ -74,18 +72,21 @@ output: [1, 2, 4, 5, 3, 6, 7];
 - 中序遍历 **左根右**
 
 ```js
-var inorderTraversal = function (root) {
+function inorderTraversal(root) {
   var arr = [];
+  let num = 1;
   var inorder = (node) => {
     if (node) {
+      console.log(node, num++);
       inorder(node.left);
       arr.push(node.val);
+      debugger;
       inorder(node.right);
     }
   };
   inorder(root);
   return arr;
-};
+}
 input: [1, 2, 3, 4, 5, 6, 7];
 output: [4, 2, 5, 1, 6, 3, 7];
 ```
@@ -111,39 +112,6 @@ output: [4, 5, 2, 6, 7, 3, 1];
 
 - 层序遍历
 
-## BFS
-
-广度优先遍历
-
-### 层序遍历
-
-- 199 二叉树的右视图
-
 ```js
-// first
-var rightSideView = function (root, k = 0, res = []) {
-  if (!root) return res;
-  if (!res[step]) {
-    res[step] = root.val;
-  }
-  rightSideView(root.right, k + 1, res);
-  rightSideView(root.left, k + 1, res);
-  return res;
-};
-// second
-var rightSideView = function (root) {
-  let res = [];
-  let level = 0;
-  const dfs = (node, depth = 1) => {
-    if (node === null) return;
-    if (depth > level) {
-      res.push(node.val);
-      level++;
-    }
-    dfs(node.right, depth + 1);
-    dfs(node.left, depth + 1);
-  };
-  dfs(root);
-  return res;
-};
+
 ```
