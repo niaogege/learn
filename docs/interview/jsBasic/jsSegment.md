@@ -1,5 +1,6 @@
 ---
 title: 代码片段
+order: 2
 group:
   order: 1
   title: js Basic

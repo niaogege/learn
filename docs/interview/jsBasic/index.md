@@ -1,5 +1,6 @@
 ---
 title: Basic
+order: 0
 group:
   order: 1
   title: js Basic

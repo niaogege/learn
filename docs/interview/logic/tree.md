@@ -13,20 +13,44 @@ nav:
 
 > 还是不理解二叉树的递归遍历流程，在此记录刷过的二叉树题目
 
-- 平衡二叉树
+- [110.平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/)
 - [100.相同的树](https://leetcode-cn.com/problems/same-tree/)
 - [98.验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)
 - [二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/])
-- 对称二叉树
+- [对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
 - 根节点到叶子节点的数字之和
 - 二叉树的直径
-- 翻转二叉树
+- [226.翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
 - 二叉树的最大宽度
+- [111.二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
 - 从前序和中序遍历构造二叉树
-- 二叉树的最小深度
 - 二叉树展开为链表
 
 深度优先遍历包含递归和迭代两种方法广度优先遍历包含层序遍历
+
+### [110.平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/)
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ // 左子树平衡且右子树平衡
+ // 左子树和右子树的高度差不能超过1
+ */
+var isBalanced = function (root) {
+  if (!root) return true;
+  const leftD = maxDepth(root.left);
+  const rightD = maxDepth(root.right);
+  return Math.abs(leftD - rightD) <= 1 && isBalanced(root.left) && isBalanced(root.right);
+};
+var maxDepth = (root) => {
+  if (!root) {
+    return 0;
+  } else {
+    return 1 + Math.max(maxDepth(root.left), maxDepth(root.right));
+  }
+};
+```
 
 ### 相同的树
 
@@ -132,6 +156,41 @@ var maxDepth = function (root) {
 };
 ```
 
+### [对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
+
+```js
+//dfs
+var isSymmetric = function (root) {
+  if (root == null) return true;
+  const dfs = (p, q) => {
+    if (!p && !q) return true;
+    if (!p || !q) return false;
+    if (p.val !== q.val) return false;
+    if (dfs(p.left, q.right) && dfs(p.right, q.left)) {
+      return true;
+    }
+    return false;
+  };
+  return dfs(root, root);
+};
+// bfs
+var isSymmetric = function (root) {
+  const isMirror = (l, r) => {
+    const queue = [l, r];
+    while (queue.length) {
+      const u = queue.shift();
+      const v = queue.shift();
+      if (!v && !u) continue;
+      if (!v || !u || v.val != u.val) return false;
+      queue.push(u.left, v.right);
+      queue.push(u.right, v.left);
+    }
+    return true;
+  };
+  return isMirror(root, root);
+};
+```
+
 ### [二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
 
 ```js
@@ -148,4 +207,43 @@ var maxDepth = function (root) {
  * @return {number}
  */
 var diameterOfBinaryTree = function (root) {};
+```
+
+### [二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var minDepth = function (root) {
+  if (root == null) return 0;
+  if (root.left == null && root.right === null) return 1;
+  let ans = -Infinity;
+  if (root.left) {
+    ans = Math.min(minDepth(root.left), ans);
+  }
+  if (root.right) {
+    ans = Math.min(minDepth(root.right), ans);
+  }
+  return ans + 1;
+};
+```
+
+### [226.翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function (root) {
+  if (root == null) return null;
+  let temp = root.left;
+  root.left = root.right;
+  root.right = temp;
+  invertTree(root.left);
+  invertTree(root.right);
+  return root;
+};
 ```
