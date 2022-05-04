@@ -228,13 +228,40 @@ handleClick = () => {
 
 ## 源码
 
-```js
-
-```
-
 ## useState 其他
 
 - [为什么 useState 不能在判断语句中声明](https://react.docschina.org/docs/hooks-rules.html)
+
+## 面试中的其他问题
+
+```js
+class Example extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      val: 0,
+    };
+  }
+  componentDidMount() {
+    this.setState({ val: this.state.val + 1 });
+    console.log(this.state.val); // 第 1 次 log
+
+    this.setState({ val: this.state.val + 1 });
+    console.log(this.state.val); // 第 2 次 log
+
+    setTimeout(() => {
+      this.setState({ val: this.state.val + 1 });
+      console.log(this.state.val); // 第 3 次 log
+
+      this.setState({ val: this.state.val + 1 });
+      console.log(this.state.val); // 第 4 次 log
+    }, 0);
+  }
+  render() {
+    return null;
+  }
+}
+```
 
 ## 参考文档
 
