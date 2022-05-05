@@ -176,3 +176,7 @@ function shallowCopy(data) {
   return target;
 }
 ```
+
+## 参考
+
+- [常见的手写题](https://mp.weixin.qq.com/s/Vbe33lJoj7CxZD-hDadKyg)

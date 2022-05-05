@@ -306,6 +306,7 @@ const store = createStore(reducer, compose(applyMiddleware(thunk), DevTools.inst
 ```js
 const App = () => {
   const state = store.getState();
+  // 强制刷新了
   const [, forceRender] = useReducer((c) => c + 1, 0);
   // 订阅更新,状态变更刷新组件
   useEffect(() => {

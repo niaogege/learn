@@ -13,7 +13,15 @@ nav:
 
 ## TCP
 
+Synchronization: 同步 SYN 客户端想和服务端数据同步 Sequence: 序号，随机生成，作为初始值进行后续判断依据 Acknowledgement: 确认 SYN+ACK 表示确认同步，确认号是根据对方的序列号+1 生产的
+
 ### 老生常谈三次握手
+
+第一次： SYN
+
+第二次： SYN+ACK
+
+第三次： ACK
 
 ### 四次挥手
 
