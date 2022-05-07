@@ -3,7 +3,7 @@ title: 手写js
 order: 1
 group:
   order: 1
-  title: js Basic
+  title: Basic
   path: /interview/js
 nav:
   order: 3

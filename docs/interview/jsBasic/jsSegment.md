@@ -3,7 +3,7 @@ title: 代码片段
 order: 2
 group:
   order: 1
-  title: js Basic
+  title: Basic
   path: /interview/js
 nav:
   order: 3

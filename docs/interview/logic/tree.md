@@ -19,7 +19,7 @@ nav:
 - [二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/])
 - [对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
 - 根节点到叶子节点的数字之和
-- 二叉树的直径
+- [二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
 - [226.翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
 - 二叉树的最大宽度
 - [111.二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
@@ -205,8 +205,21 @@ var isSymmetric = function (root) {
 /**
  * @param {TreeNode} root
  * @return {number}
+ * 左节点高度+右节点高度
  */
-var diameterOfBinaryTree = function (root) {};
+var diameterOfBinaryTree = function (root) {
+  let max = 0;
+  const dfs = (root) => {
+    if (!root) return 0;
+    let l = dfs(root.left);
+    let r = dfs(root.right);
+    if (l + r > max) {
+      max = l + r;
+    }
+    return Math.max(l, r) + 1;
+  };
+  return max;
+};
 ```
 
 ### [二叉树的最小深度](https://leetcode-cn.com/problems/minimum-depth-of-binary-tree/)
@@ -245,5 +258,44 @@ var invertTree = function (root) {
   invertTree(root.left);
   invertTree(root.right);
   return root;
+};
+```
+
+### [二叉树最大宽度](https://leetcode-cn.com/problems/maximum-width-of-binary-tree/)
+
+```js
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var widthOfBinaryTree = function (root) {
+  if (!root) return 0;
+  let queue = [root]; // 存储节点
+  let numArr = [0]; // 存储索引
+  let max = 1;
+  while (queue.length) {
+    let tempQueue = [],
+      tempNumarr = [];
+    while (queue.length) {
+      let node = queue.shift();
+      let num = numArr.shift();
+      if (node.left) {
+        tempQueue.push(node.left);
+        tempNumarr.push(num * 2 + 1);
+      }
+      if (node.right) {
+        tempQueue.push(node.right);
+        tempNumarr.push(num * 2 + 2);
+      }
+    }
+    let tempMax = 0;
+    if (tempNumarr.length) {
+      tempMax = tempNumarr[tempNumarr.length - 1] - tempNumarr[0] + 1;
+    }
+    max = Math.max(max, tempMax);
+    queue = tempQueue;
+    numArr = tempNumarr;
+  }
+  return max;
 };
 ```

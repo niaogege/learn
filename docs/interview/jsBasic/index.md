@@ -1,9 +1,9 @@
 ---
-title: Basic
+title: Basic综述
 order: 0
 group:
   order: 1
-  title: js Basic
+  title: Basic
   path: /interview/js
 nav:
   order: 3

@@ -2,9 +2,9 @@
 title: 主题换肤前端实现
 order: 1
 group:
-  order: 1
-  title: 工具函数
-  path: /interview/tools
+  order: 2
+  title: 通用业务
+  path: /interview/common
 nav:
   order: 3
   title: 'interview'

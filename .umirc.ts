@@ -2,7 +2,7 @@
  * @Author: Chendapeng
  * @Date: 2022-04-12 22:23:54
  * @LastEditors: Chendapeng
- * @LastEditTime: 2022-04-14 22:43:27
+ * @LastEditTime: 2022-05-06 22:41:08
  * @Description:
  */
 import { defineConfig } from 'dumi';
@@ -20,10 +20,6 @@ export default defineConfig({
   ],
   navs: [
     null,
-    {
-      title: 'GitHub',
-      path: 'https://github.com/niaogege/cpp-ui',
-    },
     {
       title: 'Blog',
       path: 'https://niaogege.cn',
