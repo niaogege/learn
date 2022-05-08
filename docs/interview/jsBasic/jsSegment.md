@@ -1,6 +1,6 @@
 ---
 title: 代码片段
-order: 2
+order: 10
 group:
   order: 1
   title: Basic
@@ -75,4 +75,22 @@ function hexToRgb(str) {
 }
 var tt = hexToRgb('#ffffff');
 console.log(tt);
+```
+
+```js
+var a = {};
+a.value = 1;
+var b = a;
+b.value = 2;
+console.log(a.value); // 2
+```
+
+事件源/句柄/事件句柄
+
+```js
+// 事件处理函数
+oBtn.onclick = function () {};
+// 事件源： oBtn
+// 句柄: oBtn.onclick
+// 事件句柄： oBtn.onclick=function(){}
 ```

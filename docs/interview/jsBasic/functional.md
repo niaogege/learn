@@ -1,6 +1,6 @@
 ---
 title: 函数式编程FP
-order: 1
+order: 2
 group:
   order: 1
   title: Basic
