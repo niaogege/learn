@@ -38,6 +38,66 @@ redux 三大原则
 
 ## react-redux 中 connect 怎么连接组件的
 
+高阶组件
+
+```js
+function connect(
+  mapStateToProps?: MapStateToPropsParam<TStateProps, TOwnProps, State>,
+  mapDispatchToProps?: MapDispatchToPropsParam<TDispatchProps, TOwnProps>,
+  mergeProps
+) {
+  const initMapStateToProps = mapStateToPropsFactory(mapStateToProps)
+  const initMapDispatchToProps = mapDispatchToPropsFactory(mapDispatchToProps)
+  const initMergeProps = mergePropsFactory(mergeProps)
+  const wrapWithConnect = (WrappedComponent) => {
+    const selectorFactoryOptions = {
+      initMapStateToProps,
+      // @ts-ignore
+      initMapDispatchToProps,
+      initMergeProps,
+    }
+    function ConnectFunction() {
+            const renderedWrappedComponent = useMemo(() => {
+        return (
+          // @ts-ignore
+          <WrappedComponent
+            {...actualChildProps}
+            ref={reactReduxForwardedRef}
+          />
+        )
+      }, [reactReduxForwardedRef, WrappedComponent, actualChildProps])
+
+      const renderedChild = useMemo(() => {
+        if (shouldHandleStateChanges) {
+          return (
+            <ContextToUse.Provider value={overriddenContextValue}>
+              {renderedWrappedComponent}
+            </ContextToUse.Provider>
+          )
+        }
+        return renderedWrappedComponent
+      }, [ContextToUse, renderedWrappedComponent, overriddenContextValue])
+
+      return renderedChild
+    }
+    const _Connect = React.memo(ConnectFunction)
+    const Connect = _Connect as unknown as ConnectedComponent<
+      typeof WrappedComponent,
+      WrappedComponentProps
+    >
+    Connect.WrappedComponent = WrappedComponent
+    Connect.displayName = ConnectFunction.displayName = displayName
+    return hoistStatics(Connect, WrappedComponent)
+  }
+  return wrapWithConnect
+}
+//
+connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(component)
+```
+
 ## 参考文档
 
 - [一切前端概念，都是纸老虎](https://mp.weixin.qq.com/s/vDqbnfUyL1IZrNb-cIq_Hw)

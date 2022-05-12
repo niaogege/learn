@@ -49,6 +49,21 @@ p1.then((res) => {
 
 > async/await 的目的为了简化使用基于 promise 的 API 时所需的语法。async/await 的行为就好像搭配使用了生成器 generator 和 promise。
 
+## 一些可能涉及到的问题
+
+### 串行接口两个接口，如何保证第二个接口的正常发送
+
+```js
+var p1 = new Promise((resolve, rejece) => {
+  reject('123');
+});
+var p2 = new Promise((resolve, reject) => {
+  resolve('p2');
+});
+```
+
+### 接口什么时候会 canceled
+
 ## 参考
 
 - [js 四种异步解决方案](https://mp.weixin.qq.com/s/eHB1eDwEt93FzSmsX4BSzg)

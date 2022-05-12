@@ -32,8 +32,8 @@ nav:
 
 (function () {
   let num = 43;
-  const binaryNum = +num.toString(2);
-  const hexadecimalNum = +num.toString(16);
+  const binaryNum = +num.toString(2); // 十进制
+  const hexadecimalNum = +num.toString(16); // 十六进制
   console.log(binaryNum, hexadecimalNum);
 })();
 
@@ -93,4 +93,60 @@ oBtn.onclick = function () {};
 // 事件源： oBtn
 // 句柄: oBtn.onclick
 // 事件句柄： oBtn.onclick=function(){}
+```
+
+### 原型
+
+```js
+function Animal() {
+  this.type = 'animal';
+}
+
+function Dog() {
+  this.name = 'dog';
+}
+
+Dog.prototype = new Animal();
+
+var PavlovPet = new Dog();
+
+console.log(PavlovPet.__proto__ === Dog.prototype);
+console.log(Dog.prototype.__proto__ === Animal.prototype);
+```
+
+### 异步循环
+
+```js
+for (let i = 0; i < 3; i++) {
+  const log = () => {
+    console.log(i);
+  };
+  setTimeout(log, 100);
+}
+```
+
+### numbers
+
+```js
+const length = 4;
+const numbers = [];
+for (var i = 0; i < length; i++);
+{
+  numbers.push(i + 1);
+}
+console.log(numbers);
+```
+
+### ++a 和 a++
+
+```js
+function foo() {
+  let a = (b = 0);
+  a++;
+  return a;
+}
+
+foo();
+console.log(typeof a);
+console.log(typeof b);
 ```
