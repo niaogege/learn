@@ -36,9 +36,43 @@ redux 三大原则
 
 ## react-redux 源码手写
 
-## react-redux 中 connect 怎么连接组件的
+### react-redux 中的 Provider 实现
 
-高阶组件
+### react-redux 中 connect 怎么连接组件的
+
+高阶组件，先看普通的示例
+
+```js
+const enhance = (Wrapcomponent) => {
+  const res = class Enhance extends Component {
+    constructor(props) {
+      super(props);
+    }
+    render() {
+      return <Wrapcomponent name="cpp" />;
+    }
+  };
+  res.staticValue = Wrapcomponent.staticValue;
+};
+const WrapComponent = (props) => <div>CHild-{props.name}</div>;
+WrapComponent.staticValue = 'wrappedComponent';
+const EnhancedComponent = enchance(WrapComponent);
+function App() {
+  <EnhancedComponent />;
+}
+const rootElement = document.getElementById('app');
+ReactDOM.render(<App />, rootElement);
+```
+
+接下来看看 connect 用法
+
+```js
+connect(mapStateToProps, mapDispatchToProps)(App);
+```
+
+connect 接受 2 个 mapStateToProps, mapDispatchToProps 参数，返回一个高阶函数，高阶函数接受一个组件，返回一个高阶组件，其实就给传入的组件增加属性和功能
+
+### connect 核心源码
 
 ```js
 function connect(
@@ -57,7 +91,7 @@ function connect(
       initMergeProps,
     }
     function ConnectFunction() {
-            const renderedWrappedComponent = useMemo(() => {
+      const renderedWrappedComponent = useMemo(() => {
         return (
           // @ts-ignore
           <WrappedComponent
@@ -66,7 +100,6 @@ function connect(
           />
         )
       }, [reactReduxForwardedRef, WrappedComponent, actualChildProps])
-
       const renderedChild = useMemo(() => {
         if (shouldHandleStateChanges) {
           return (
@@ -77,7 +110,6 @@ function connect(
         }
         return renderedWrappedComponent
       }, [ContextToUse, renderedWrappedComponent, overriddenContextValue])
-
       return renderedChild
     }
     const _Connect = React.memo(ConnectFunction)
@@ -91,12 +123,15 @@ function connect(
   }
   return wrapWithConnect
 }
-//
 connect(
   mapStateToProps,
   mapDispatchToProps
 )(component)
 ```
+
+## 描述一下 redux 的中间件原理
+
+## redux 如何进行异步处理
 
 ## 参考文档
 

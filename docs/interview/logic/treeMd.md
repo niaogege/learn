@@ -15,8 +15,9 @@ nav:
 - [113.路径总和二](https://leetcode.cn/problems/path-sum-ii/)
 - [437. 路径总和 III](https://leetcode.cn/problems/path-sum-iii/)
 - [根节点到叶子节点的数字之和](https://leetcode-cn.com/problems/3Etpl5/)
-- 从前序和中序遍历构造二叉树
+- [105.从前序和中序遍历构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
 - 二叉树展开为链表
+- [二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
 
 ### [112. 路径总和](https://leetcode-cn.com/problems/path-sum/)
 
@@ -222,5 +223,35 @@ var helper = (root, targetSum) => {
   num += helper(root.left, targetSum - root.left.val);
   num += helper(root.right, targetSum - root.right.val);
   return num;
+};
+```
+
+### [105.从前序和中序遍历构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+
+```js
+/**
+ * @param {number[]} preorder
+ * @param {number[]} inorder
+ * @return {TreeNode}
+ */
+var buildTree = function (preorder, inorder) {};
+```
+
+### [106.从中序与后序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-inorder-and-postorder-traversal/)
+
+```js
+/**
+ * @param {number[]} inorder
+ * @param {number[]} postorder
+ * @return {TreeNode}
+ */
+var buildTree = function(inorder, postorder) {
+  if (!inorder.length || !postorder.length) return null;
+  var first = postorder.pop()
+  var tree = new TreeNode(first)
+  var mid = inorder.indexOf(first)
+  tree.left = buildTree(inorder.slice(0, mid), postorder.slice(0, mid))
+  tree.right = buildTree(inorder.slice(mid + 1), postorder(mid)))
+  return tree
 };
 ```

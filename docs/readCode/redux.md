@@ -17,9 +17,7 @@ nav:
 
 运用 reudx -> 明白核心的 api(createStore/reducer/compose/middleware) -> 源码阅读 -> 手写 redux
 
-> 源码里的 ts 类型好复杂！看得抓狂
-
-> 手写过程中的函数名和变量名尽量结局源码
+> 源码里的 ts 类型好复杂！看得抓狂手写过程中的函数名和变量名尽量结局源码
 
 ## 核心概念
 
@@ -91,9 +89,9 @@ const createStore = function (reducer, initState, rewriteCreateStoreFunc) {
   // 用一个不匹配任何计划的type 来获取初始值
   dispatch({ type: Symbol() });
   return {
-    subscribe,
-    getState,
-    dispatch,
+    subscribe, // 发布订阅
+    getState, // getter
+    dispatch, // setter
     replaceReducer,
   };
 };

@@ -11,6 +11,19 @@ nav:
   path: /interview
 ---
 
+### i++和++i
+
+前缀版（++i）：操作符位于变量的前面，表示**先递增(递减)**，后执行语句；后缀版（i++）：操作符位于变量的后面，表示**先执行语句**，后递增(递减)；
+
+```js
+var i = 0;
+console.log(++i); // 先递增在执行console
+var num = 0;
+console.log(num++); // 先执行console 在递增
+```
+
+### 简介高效片段
+
 ```js
 // 打乱数组
 (function () {
@@ -147,6 +160,43 @@ function foo() {
 }
 
 foo();
-console.log(typeof a);
-console.log(typeof b);
+console.log(typeof a); // undefined
+console.log(typeof b); // number
+```
+
+## 如何正常结构对象里的属性值
+
+在不知道 obj 的属性名 data 的前提下，解构出 name 属性
+
+```js
+var obj = {
+  data: {
+    name: 'cpp',
+  },
+};
+let { [Reflect.ownKeys(obj)]: keys } = obj;
+console.log(keys, '111'); // {name: 'cpp'}
+console.log(Reflect.ownKeys(obj), '22');
+```
+
+```js
+var obj = {
+  data: {
+    name: 'cpp'
+  }
+}
+
+var {
+[
+  Reflect.ownKeys(key)
+]: keys
+} = {
+  (
+    {
+      [Reflect.ownKeys(obj)]: key
+    } = obj
+  ), key
+}
+console.log(key, 'key') // {name: 'cpp'}
+console.log(keys, 'keys') // cpp
 ```
