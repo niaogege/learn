@@ -37,7 +37,9 @@ console.log(num++); // 先执行console 在递增
   let arr = ['cpp', 'ww', 6, false];
   const random = (arr) => arr[Math.floor(Math.random() * arr.length)];
   return random(arr);
-})()(function () {
+})();
+
+(function () {
   let str = '320cpp980706wmh';
   const nums = str.replace(/\D/g, '');
   console.log(nums);
