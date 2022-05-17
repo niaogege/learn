@@ -4,7 +4,7 @@ order: 2
 group:
   title: axios
   order: 0
-  path: /axios
+  path: /node/axios
 nav:
   order: 1
   title: 'node'
@@ -28,3 +28,8 @@ nav:
 > 任何东西都是从使用开始，逐渐加深了解，不然你去看源码看个寂寞
 
 - 源码里封装的 tool
+
+## 参考
+
+- [前端网红框架的插件机制全梳理（axios、koa、redux、vuex）](https://mp.weixin.qq.com/s/V9IrtLA4CW5jnUO-YKzXLg)
+- [面试官不要再问我 axios 了？我能手写简易版的 axios](https://mp.weixin.qq.com/s/nmKU-Z1Ewc75HH0NxgvcCw)
