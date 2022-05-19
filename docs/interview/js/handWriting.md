@@ -301,12 +301,12 @@ mockFlatten(test);
 
 ```js
 function mockFlatten2(res) {
-  var queue = [...res];
+  var stack = [...res];
   var arr = [];
-  while (queue.length) {
-    var cur = queue.pop(); // 最后一个的先出来 栈顶
+  while (stack.length) {
+    var cur = stack.pop(); // 最后一个的先出来 栈顶
     if (Array.isArray(cur)) {
-      queue.push(...cur);
+      stack.push(...cur);
     } else {
       arr.push(cur);
     }
@@ -375,6 +375,37 @@ test.mockTest((item) => item * 2); // [2,4,6]
 
 ```js
 
+```
+
+## 手写乞丐版 ajax
+
+```js
+function ajax({ url, success }) {
+  const config = {
+    url,
+    type: 'GET',
+    async: true,
+    success,
+  };
+  let xhr = new XMLHttpRequest();
+  xhr.open(config.type, config.url, config.async);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      if (xhr.status === 200) {
+        let res = JSON.parse(xhr.responseText);
+        success(res);
+      }
+    }
+  };
+  xhr.send();
+}
+// 使用
+ajax({
+  url: '/api/getData',
+  success: function (res) {
+    console.log(res);
+  },
+});
 ```
 
 ## 参考
