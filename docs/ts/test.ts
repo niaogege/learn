@@ -7,10 +7,14 @@ func2('name');
 
 type Funcs = ((name: string) => void) & ((age: number) => void);
 declare const func3: Funcs;
-func3(20);
+func3(30);
 
 // document.createEvent()
-type TupleToIntersectionFun<Tuple extends unknown[]> = Tuple extends [infer First, ...infer Rest]
+// infer
+// extends
+// 交叉
+// 条件判断
+type TupleToIntersectionFun<T extends unknown[]> = T extends [infer First, ...infer Rest]
   ? First & TupleToIntersectionFun<Rest>
   : {};
 
@@ -36,7 +40,7 @@ type TupleToIntersectionFunTry<Tuple extends unknown[]> = Tuple extends [infer F
 
 type resTry = TupleToIntersectionFunTry<ParamsArr>;
 declare const fun5: resTry;
-fun5('CloseEvent');
+fun5('CustomEvent');
 
 type User = {
   id: number;

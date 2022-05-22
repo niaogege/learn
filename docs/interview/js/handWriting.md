@@ -15,6 +15,27 @@ nav:
 
 ## 实现 const/let
 
+## 手写 Object.create()
+
+创建一个新对象，将传入的对象作为原型(使用现有的对象来提供新创建对象的****proto****)
+
+```js
+function create(o) {
+  function F() {}
+  F.prototype = o;
+  return new F();
+}
+var o = create(null);
+console.log(o);
+// Test
+var person = {
+  name: 'cpp',
+};
+var obj = create(person);
+console.log(obj.name);
+console.log(person.isPrototypeOf(obj));
+```
+
 ## new 手写
 
 - 创建一个空对象-> Object.create()，将空对象的隐式原型指向构造函数的原型链 con.prototype
@@ -56,7 +77,7 @@ function myIntanceof(l, r) {
 
 // second
 function myInstanceof(l, r) {
-  return r.prototype.isPrototypeof(l);
+  return r.prototype.isPrototypeOf(l);
 }
 
 var obj = {};

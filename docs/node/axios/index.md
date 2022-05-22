@@ -1,6 +1,6 @@
 ---
 title: 初识axios
-order: 2
+order: 0
 group:
   title: axios
   order: 0
@@ -18,6 +18,8 @@ nav:
 > 202105 面试的时候取消请求如何取消，底层原理是啥
 
 - axios(config)和 axios.get()或 axios.post 有上什么区别呢？
+
+都是调用 Axios.prototype.request,写法上的不同
 
 - 如何对一个请求进行取消,源码是怎么封装的
 

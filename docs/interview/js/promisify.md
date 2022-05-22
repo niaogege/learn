@@ -1,6 +1,6 @@
 ---
 title: Promisify手写
-order: 4
+order: 5
 group:
   order: 1
   title: js Basic
@@ -13,7 +13,7 @@ nav:
 
 promisify 作用是把回调函数转成 promise 形式？
 
-> 没太理解，具体业务场景是啥
+> 没太理解，具体业务场景是啥 0520
 
 输入：输出：
 

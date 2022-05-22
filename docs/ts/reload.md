@@ -28,6 +28,28 @@ sayName(10, 10); // ok
 // sayName('10', 10) // is not ok
 ```
 
+### 利用函数重载，用一个平铺的方式和数组实现函数定义
+
+```ts
+type ParamsArr = ['CloseEvent', 'CustomEvent', 'InputEvent'];
+
+type ReturnTypeMap = {
+  CloseEvent: string;
+  CustomEvent: void;
+  InputEvent: any;
+};
+
+type TupleToIntersectionFunTry<Tuple extends unknown[]> = Tuple extends [infer First, ...infer Rest]
+  ? First extends keyof ReturnTypeMap
+    ? ((params: First) => ReturnTypeMap[First]) & TupleToIntersectionFunTry<Rest>
+    : never
+  : {};
+
+type resTry = TupleToIntersectionFunTry<ParamsArr>;
+declare const fun5: resTry;
+fun5('CustomEvent');
+```
+
 ### 参考
 
 - [一文读懂 TS 的函数重载，方法重载，构造器重载](https://juejin.cn/post/7055668560965681182#heading-1)
