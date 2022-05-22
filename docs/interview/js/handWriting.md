@@ -371,7 +371,7 @@ var test = [1, 2, 3];
 test.mockTest((item) => item * 2); // [2,4,6]
 ```
 
-## 手写 reduce
+## 手写 Array.prototype.reduce
 
 ```js
 
@@ -407,6 +407,54 @@ ajax({
   },
 });
 ```
+
+## 手写 setTimeout/setInterval
+
+```js
+function setTimeout(fn, delay) {}
+function setIntetval(fn, delay) {}
+```
+
+## 0521
+
+手写 curry1,再次失败了 add(1)(2)(3)(4) 0521 第二次尝试写 固定参数
+
+```js
+function curry(fn) {
+  function judge(...arg) {
+    if (fn.length === arg.length) {
+      return fn.apply(null, arg);
+    } else {
+      return (...args) => judge(...args, ...arg);
+    }
+  }
+  return judge;
+}
+
+var sum = (a, b, c) => a + b + c;
+var add = curry(sum);
+add(1)(2)(3);
+// 参数不固定
+function curry2(fn) {
+  var res = [];
+  function judge(...arg) {
+    if (arg.length) {
+      res.push(...arg);
+      return judge;
+    } else {
+      var val = fn.apply(null, res);
+      res = [];
+      return val;
+    }
+  }
+  return judge;
+}
+var sum = (...rest) => rest.reduce((a, b) => a + b);
+var add = curry2(sum);
+add(1)(2)(3)(4)();
+```
+
+手写 curry2(1)(2)(3)()
 
 ## 参考
 

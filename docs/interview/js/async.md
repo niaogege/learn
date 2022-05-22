@@ -27,7 +27,7 @@ nav:
 
 开篇讲了同步和异步的概念，那么在 JS 中异步的应用场景有哪些呢？
 
-- 定时任务：setTimeout、setInterval
+- 定时任务：setTimeout、setInterval(面试题又来了，还要手写 setTimeout/setInterval)
 - 网络请求：ajax 请求、动态创建 img 标签的加载
 - 事件监听器：addEventListener (发布订阅模式)
 
@@ -119,7 +119,7 @@ then((res) => {
 });
 ```
 
-手写 Promise 里基本都是这种写法
+手写 Promise 里 **the**n 基本都是这种写法
 
 ```js
 then(onFulfilled) {
@@ -136,203 +136,238 @@ then(onFulfilled) {
 }
 ```
 
+## generator(返回值为 Iterator)
+
+Generator 是 ES6 提出的一种异步编程的方案。因为手动创建一个 iterator 十分麻烦，因此 ES6 推出了 generator，用于更方便的创建 iterator。也就是说，**Generator 是一个返回值为 iterator 对象的函数**。在讲 Generator 之前，我们先来看看 iterator 是什么：
+
+### iterator 是什么？
+
+iterator 中文名叫迭代器。它为 js 中各种不同的数据结构(Object、Array、Set、Map)提供统一的访问机制。任何数据结构只要部署了 Iterator 接口，就可以完成遍历操作。 因此 iterator 也是一种对象，不过相比于普通对象来说，它有着专为迭代而设计的接口。
+
+iterator 的作用：
+
+- 为各种数据结构，提供一个统一的、简便的访问接口；
+- 使得数据结构的成员能够按某种次序排列；
+- ES6 创造了一种新的遍历命令 for…of 循环，Iterator 接口主要供 for…of 消费 iterator 的结构： 它有**next**方法，该方法返回一个包含 value 和 done 两个属性的对象（我们假设叫 result）。value 是迭代的值，done 是表明迭代是否完成的标志。true 表示迭代完成，false 表示没有。iterator 内部有指向迭代位置的指针，每次调用 next，自动移动指针并返回相应的 result。原生具备 iterator 接口的数据结构如下：
+- Array
+- Map
+- Set
+- String
+- TypedArray
+- 函数里的 arguments 对象
+- NodeList 对象
+
+这些数据结构都有一个**Symbol.iterator**属性，可以直接通过这个属性来直接创建一个迭代器。也就是说，Symbol.iterator 属性只是一个用来创建迭代器的接口，而不是一个迭代器，因为它不含遍历的部分。
+
+面试题，封装一个类使其可遍历(手写迭代器，遍历对象)
+
 ```js
-class PromiseTest {
-  static PENDING = 'pending';
-  static FULFILLED = 'fulfilled';
-  static REJECTED = 'rejected';
-  constructor(executor) {
-    this.status = PromiseTest.PENDING;
-    this.value = undefined;
-    this.cbs = [];
-    try {
-      executor(this.resolve.bind(this), this.reject.bind(this));
-    } catch (e) {
-      this.reject(e);
-    }
+var obj = {
+  0: 'chen',
+  1: 'peng',
+};
+class MakeIterator {
+  constructor(obj) {
+    this.len = Object.keys(obj).length;
+    this.obj = obj;
+    this.index = 0;
   }
-  // pending异步
-  resolve(value) {
-    if (this.status === PromiseTest.PENDING) {
-      setTimeout(() => {
-        this.status = PromiseTest.FULFILLED;
-        this.value = value;
-        this.cbs.forEach((fn) => fn.onFulfilled(value));
-      });
-    }
+  [Symbol.iterator]() {
+    return this;
   }
-  // pending异步
-  reject(value) {
-    if (this.status === PromiseTest.PENDING) {
-      setTimeout(() => {
-        this.status = PromiseTest.REJECTED;
-        this.value = value;
-        this.cbs.forEach((fn) => fn.onRejected(value));
-      });
-    }
-  }
-  then(onFulfilled, onRejected) {
-    if (typeof onFulfilled !== 'function') {
-      onFulfilled = (val) => val;
-    }
-    if (typeof onRejected !== 'function') {
-      onRejected = (res) => res;
-    }
-    let p1 = new PromiseTest((resolve, reject) => {
-      if (this.status === PromiseTest.PENDING) {
-        this.cbs.push({
-          onFulfilled: (value) => {
-            try {
-              this.parse(p1, onFulfilled(value), resolve, reject);
-            } catch (e) {
-              reject(e);
-            }
-          },
-          onRejected: (value) => {
-            try {
-              this.parse(p1, onFulfilled(value), resolve, reject);
-            } catch (e) {
-              reject(e);
-            }
-          },
-        });
-      }
-      if (this.status === PromiseTest.FULFILLED) {
-        setTimeout(() => {
-          try {
-            this.parse(p1, onFulfilled(this.value), resolve, reject);
-          } catch (e) {
-            let res = onRejected(e);
-            reject(res);
-          }
-        });
-      }
-      if (this.status === PromiseTest.REJECTED) {
-        setTimeout(() => {
-          try {
-            this.parse(p1, onFulfilled(this.value), resolve, reject);
-          } catch (e) {
-            reject(e);
-          }
-        });
-      }
-    });
-    return p1;
-  }
-  parse(p1, res, resolve, reject) {
-    if (p1 === res) {
-      throw new TypeError('Chaining cycle detected for promise');
-    }
-    try {
-      if (res instanceof PromiseTest) {
-        res.then(resolve, reject);
-      } else {
-        resolve(res);
-      }
-    } catch (e) {
-      reject(e);
-    }
-  }
-  static resolve(val) {
-    return new PromiseTest((resolve, reject) => {
-      if (val instanceof PromiseTest) {
-        val.then(resolve, reject);
-      } else {
-        resolve(val);
-      }
-    });
-  }
-  static reject(res) {
-    return new PromiseTest((resolve, reject) => {
-      reject(res);
-    });
-  }
-  static all(arr = []) {
-    let result = [];
-    return new PromiseTest((resolve, reject) => {
-      for (let [index, item] of arr.entries()) {
-        PromiseTest.resolve(item).then(
-          (res) => {
-            result.push(res);
-            if (index === arr.length - 1) {
-              resolve(result);
-            }
-          },
-          (err) => {
-            reject(err);
-          },
-        );
-      }
-    });
-  }
-  static race(arr = []) {
-    return new PromiseTest((resolve, reject) => {
-      for (let [index, item] of arr.entries()) {
-        PromiseTest.resolve(item).then(
-          (res) => {
-            resolve(res);
-          },
-          (err) => {
-            reject(err);
-          },
-        );
-      }
-    });
+  next() {
+    return this.index < this.len
+      ? {
+          value: this.obj[this.index++],
+          done: false,
+        }
+      : {
+          value: undefined,
+          done: true,
+        };
   }
 }
-// demo
-let p3 = new PromiseTest((resolve, reject) => {
-  resolve('p1');
-  console.log('start');
-})
-  .then(
-    (res) => {
-      console.log(res, 'then1');
-      return 'Cpp then';
-    },
-    (err) => {
-      console.log(err);
-    },
-  )
-  .then(
-    (res) => {
-      console.log(res, 'then2');
-      return 'CPP then2';
-    },
-    (err) => {
-      console.log(err);
-    },
-  )
-  .then((res) => {
-    console.log(res, 'then3');
-  });
+// test
+var test = new MakeIterator(obj);
+for (let i of test) {
+  console.log(i, 'III');
+}
+// chen III
+// peng III
 ```
 
-### promise 异常捕获
+for ... of 的循环内部实现机制其实就是**iterator**，它首先调用被遍历集合对象的 **Symbol.iterator** 方法，该方法返回一个迭代器对象，迭代器对象是可以拥有 **.next()** 方法的任何对象，然后，在 for ... of 的每次循环中，都将调用该迭代器对象上的 .next 方法。然后使用 for i of 打印出来的 i 也就是调用.next 方法后得到的对象上的 value 属性。
 
 ```js
-var p1 = new Promise((resolve, reject) => {
-  reject('p1 is rejected');
-});
-p1.then((res) => {
-  console.log('p1 then');
-  return new Promise((resolve, reject) => {
-    resolve('p1 return resolve');
-  });
-})
-  .then((res) => {
-    console.log('p1 then then:', res);
-  })
-  .catch((err) => {
-    console.log('p1 catch:', err);
-  });
+var arr = [1, 2, 3, 4];
+var iter = arr[Symbol.iterator]();
+iter.next(); // { value: 'a', done: false }
+iter.next(); // { value: 'b', done: false }
+iter.next(); // { value: 'c', done: false }
+iter.next(); // { value: undefined, done: true }
 ```
 
-## generator
+面试官：如何定义一个**Iterator**来遍历对象如下对象
+
+> 也阔以说手写一个 Generator 生成器函数
+
+```js
+var test = {
+  a: 'hello',
+  b: 'Fronted end',
+};
+// or
+function* customGenerator() {
+  yield 'hello';
+  yield 'Fronted end';
+}
+var canT = customGenerator();
+canT.next();
+canT.next();
+
+function customIterator(obj) {
+  let len = Object.keys(obj).length;
+  let i = 0;
+  return {
+    next: function () {
+      return i >= len
+        ? {
+            value: undefined,
+            done: true,
+          }
+        : {
+            value: Object.values(obj)[i++],
+            done: false,
+          };
+    },
+  };
+}
+var ite = customIterator(test);
+ite.next();
+```
+
+### Generator 生成器
+
+看个例子
+
+```js
+function* Generator() {
+  yield 1;
+  yield 2;
+  yield 3;
+}
+// generators可以像正常函数一样被调用，不同的是会返回一个 iterator
+let iterator = Generator();
+iterator.next();
+iterator.next();
+iterator.next();
+```
+
+Generator 函数是 ES6 提供的一种**异步编程**解决方案。形式上，Generator 函数是一个普通函数，但是有两个特征:
+
+- function 关键字与函数名之间有一个**星号**
+- 函数体内部使用**yield**语句，定义不同的内部状态
+
+generator 的返回值是一个**iterator**
+
+### yield 和 return 的区别：
+
+- 都能返回紧跟在语句后面的那个表达式的值
+- yield 相比于 return 来说，更像是一个断点。遇到 yield，函数暂停执行，下一次再从该位置继续向后执行，而 return 语句不具备位置记忆的功能。 -一个函数里面，只能执行一个 return 语句，但是可以执行多次 yield 表达式。
+- 正常函数只能返回一个值，因为只能执行一次 return；Generator 函数可以返回一系列的值，因为可以有任意多个 yield
+
+### 使用 Generator 的其余注意事项：
+
+- 需要注意的是，yield 不能跨函数。并且 yield 需要和\*配套使用，别处使用无效
+
+```js
+function* createIterator(items) {
+  items.forEach(function (item) {
+    // 语法错误
+    yield item + 1;
+  });
+}
+```
+
+- 箭头函数不能用做 generator
+
+```js
+var test = *(item) => { // throw error Uncaught SyntaxError: Unexpected token '*'
+  yield 'cpp'
+}
+var tt = test()
+tt.next()
+```
+
+### 好处
+
+- 因为 Generator 可以在执行过程中多次返回，所以它看上去就像一个可以记住执行状态的函数，利用这一点，写一个 generator 就可以实现需要用面向对象才能实现的功能。
+- Generator 还有另一个巨大的好处，就是把异步回调代码变成“**同步**”代码。这个在 ajax 请求中很有用，避免了回调地狱.
+
+Generator 缺陷： 1.函数外部无法捕获异常 2.多个 yield 会导致调试困难
 
 ## async/await
 
 > async/await 的目的为了简化使用基于 promise 的 API 时所需的语法。async/await 的行为就好像搭配使用了生成器 generator 和 promise。
+
+async/await 是**ES7**提出的关于异步的终极解决方案。
+
+### async/await 是 Generator 语法糖
+
+总结下来，async 函数对 Generator 函数的改进，主要体现在以下三点:
+
+- 内置执行器：Generator 函数的执行必须靠执行器，因为不能一次性执行完成，所以之后才有了开源的 co 函数库。但是，async 函数和正常的函数一样执行，也不用 co 函数库，也不用使用 next 方法，而 async 函数自带执行器，会自动执行。适用性更好：co 函数库有条件约束，yield 命令后面只能是 Thunk 函数或 Promise 对象，但是 async 函数的 await 关键词后面，可以不受约束。
+- 可读性更好：async 和 await，比起使用 **\*号和 yield**，语义更清晰明了。
+
+### 关于 async/await 是 Promise 的语法糖：
+
+如果不使用 async/await 的话，Promise 就需要通过链式调用来依次执行 then 之后的代码
+
+```js
+function counter(n) {
+  return new Promise((resolve, reject) => {
+    resolve(n + 1);
+  });
+}
+
+function adder(a, b) {
+  return new Promise((resolve, reject) => {
+    resolve(a + b);
+  });
+}
+
+function delay(a) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => resolve(a), 1000);
+  });
+}
+// 链式调用写法
+function callAll() {
+  counter(1)
+    .then((val) => adder(val, 3))
+    .then((val) => delay(val))
+    .then(console.log);
+}
+callAll(); //5
+```
+
+如果使用 async/ await 调用呢
+
+```js
+async function callAll() {
+  var count = await counter(1);
+  var add = await adder(count + 3);
+  var delay = await delay(add);
+  return delay;
+}
+// callAll() 5
+```
+
+### 手写 async/await 使其实现相似的功能
+
+## 面试中如何回答三者之间的关系
+
+Last: Promise + async 的操作最为常见。因为 Generator 被 async 替代了呀~
 
 ## 一些可能涉及到的问题
 
