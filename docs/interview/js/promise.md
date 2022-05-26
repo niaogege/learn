@@ -142,8 +142,8 @@ class PromiseTest {
         });
       }
       if (this.status === PromiseTest.FULFILLED) {
-        // then方法是微任务 暂时由setTimeout代替
-        setTimeout(() => {
+        // then方法是微任务 暂时由queueMicrotask代替
+        queueMicrotask(() => {
           try {
             this.parse(p1, onFulfilled(this.value), resolve, reject);
           } catch (e) {
@@ -153,7 +153,7 @@ class PromiseTest {
         });
       }
       if (this.status === PromiseTest.REJECTED) {
-        setTimeout(() => {
+        queueMicrotask(() => {
           try {
             this.parse(p1, onFulfilled(this.value), resolve, reject);
           } catch (e) {
@@ -325,6 +325,19 @@ class PromiseTest {
     );
   }
 }
+
+if (typeof window.queueMicrotask !== 'function') {
+  window.queueMicrotask = function (callback) {
+    Promise.resolve()
+      .then(callback)
+      .catch((e) =>
+        setTimeout(() => {
+          throw e;
+        }),
+      );
+  };
+}
+
 // demo
 let p3 = new PromiseTest((resolve, reject) => {
   resolve('p1');
@@ -378,3 +391,6 @@ p1.then((res) => {
 - [后盾人](https://doc.houdunren.com/js/15%20Promise.html#promise)
 - [看了就会，手写 Promise 原理，最通俗易懂的版本！！！](https://juejin.cn/post/6994594642280857630#heading-2)
 - [童欧巴 Promise](https://juejin.cn/post/6907673648216145928#heading-19)
+- [涛哥](https://segmentfault.com/a/1190000039275224)
+- [如何中断 Promise？](https://juejin.cn/post/6847902216028848141)
+- [Promise 练习题](https://mp.weixin.qq.com/s/xa-lvWw3VT4ABN07v8RomA)

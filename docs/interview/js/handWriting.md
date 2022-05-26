@@ -17,7 +17,7 @@ nav:
 
 ## 手写 Object.create()
 
-创建一个新对象，将传入的对象作为原型(使用现有的对象来提供新创建对象的****proto****)
+创建一个新对象，将传入的对象作为原型(使用现有的对象来提供新创建对象的\***\*proto\*\***)
 
 ```js
 function create(o) {
@@ -349,9 +349,34 @@ function mockFlatten(arr = []) {
 }
 ```
 
+## 实现一个反向的 flatten
+
+```js
+function reverseFlatten(max, arr) {
+  var n = 0;
+  var res = arr.reduce(
+    (pre, cur) => {
+      if (pre[n].length <= max) {
+        pre[n].push(cur);
+      }
+      if (pre[n].length === max) {
+        ++n;
+        pre[n] = [];
+      }
+      return pre;
+    },
+    [[]],
+  );
+  return res.filter((n) => n.length);
+}
+var arr = [1, 2, 3, 4, 5, 6, 7];
+reverseFlatten(3, arr);
+// [[1,2,3], [4,5,6], [7]]
+```
+
 ## 实现一个对象版的 flatten
 
-问如何实现对象的扁平化
+面试官问:如何实现对象的扁平化
 
 ```js
 const obj = {

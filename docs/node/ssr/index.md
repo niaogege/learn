@@ -1,9 +1,10 @@
 ---
-title: ssr/csr
+title: ssr服务端渲染
 order: 1
 group:
   title: node
   order: 0
+  path: /node/ssr
 nav:
   order: 5
   title: 'node'
@@ -25,3 +26,6 @@ nav:
 ## 手写 react ssr
 
 ## 参考
+
+- [【万字长文警告】从头到尾彻底理解服务端渲染 SSR 原理](https://juejin.cn/post/6856321751115431944)
+- [同构以及原理](https://hejialianghe.gitee.io/projectPractice/isomorphism.html#_1-1-%E8%AE%A4%E8%AF%86%E5%90%8C%E6%9E%84)
