@@ -110,8 +110,40 @@ input: [1, 2, 3, 4, 5, 6, 7];
 output: [4, 5, 2, 6, 7, 3, 1];
 ```
 
-- 层序遍历
+### 困难题 [岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+
+20220513 题意第一次看都没理解，nnp，数据结构意识太差
 
 ```js
-
+/**
+ * @param {character[][]} grid
+ * @return {number}
+ */
+var numIslands = function (grid) {
+  var dfs = (grid, row, column) => {
+    var nr = grid.length;
+    var nc = grid[0].length;
+    // 当前的值设为0表示已经遍历过
+    grid[row][column] = '0';
+    // 遍历上下左右
+    if (row - 1 >= 0 && grid[row - 1][column] === '1') dfs(gird, row - 1, column);
+    if (row + 1 < nr && grid[row + 1][column] === '1') dfs(grid, row + 1, column);
+    if (column - 1 >= 0 && grid[column - 1][row] === '1') dfs(grid, row, column - 1);
+    if (column + 1 < nc && grid[column + 1][row] === '1') dfs(grid, row, column + 1);
+  };
+  // 行数
+  let nr = grid.length;
+  if (!nr) return 0;
+  let nc = grid[0].length;
+  let num = 0;
+  for (let i = 0; i < nr; i++) {
+    for (let j = 0; j < nc; j++) {
+      if (grid[i][j] === '1') {
+        num++;
+        dfs(grid, i, j);
+      }
+    }
+  }
+  return num;
+};
 ```

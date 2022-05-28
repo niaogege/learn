@@ -24,3 +24,7 @@ nav:
 ## 基础的面试题
 
 - 如何理解 http2.0 中的多路复用
+
+## 杂谈
+
+- protocol-relative URL，暂且可译做**协议相对** URL，即 '//baidu.com'根据当前的 url 访问看是 https or http

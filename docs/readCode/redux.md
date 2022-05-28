@@ -17,9 +17,7 @@ nav:
 
 运用 reudx -> 明白核心的 api(createStore/reducer/compose/middleware) -> 源码阅读 -> 手写 redux
 
-> 源码里的 ts 类型好复杂！看得抓狂
-
-> 手写过程中的函数名和变量名尽量结局源码
+> 源码里的 ts 类型好复杂！看得抓狂手写过程中的函数名和变量名尽量结局源码
 
 ## 核心概念
 
@@ -91,9 +89,9 @@ const createStore = function (reducer, initState, rewriteCreateStoreFunc) {
   // 用一个不匹配任何计划的type 来获取初始值
   dispatch({ type: Symbol() });
   return {
-    subscribe,
-    getState,
-    dispatch,
+    subscribe, // 发布订阅
+    getState, // getter
+    dispatch, // setter
     replaceReducer,
   };
 };
@@ -150,6 +148,8 @@ rootReducer = combineReducers({potato: potatoReducer, tomato: tomatoReducer})
 ```
 
 ### applyMiddleware(...middlewares)
+
+返回跟调用`createStore()`对象类似
 
 扩展 dispatch 函数！
 
@@ -306,6 +306,7 @@ const store = createStore(reducer, compose(applyMiddleware(thunk), DevTools.inst
 ```js
 const App = () => {
   const state = store.getState();
+  // 强制刷新了
   const [, forceRender] = useReducer((c) => c + 1, 0);
   // 订阅更新,状态变更刷新组件
   useEffect(() => {
@@ -338,14 +339,30 @@ const App = () => {
 
 纯函数的特点是函数输出不依赖于任何外部变量，相同的输入一定会产生相同的输出，非常稳定。使用它来进行全局状态修改，使得全局状态可以被预测。
 
+### 什么是 thunk
+
+calculation delay 延迟计算，看下 demo 就明白了
+
+```js
+function wrapped(arg) {
+  return function thunk(...rest) {
+    console.log('thunk ', arg, rest);
+  };
+}
+const thunk = wrapped('cpp');
+thunk('wmh');
+```
+
+> 有点类似函数编程里的柯里化
+
 ### react-thunk
 
-dispatch 派发 action 的时候阔以传一个 function
+dispatch 派发 action 的时候阔以传一个 function，就是一个标准的 redux middleware
 
 ```js
 const createThunkMiddleware(extra) {
   return ({dispatch, getState}) => next => action => {
-    if (typeof action === 'function) {
+    if (typeof action === 'function') {
      return action(dispatch, getState, extra)
     }
     return next(action)
@@ -362,3 +379,4 @@ export default thunk
 - [React 状态管理 - 你可能不需要 Redux，但你需要了解它](https://mp.weixin.qq.com/s/SdD8_yCYmGFmnDtaZGxy5w)
 - [Redux 通关简洁攻略 -- 看这一篇就够了！](https://mp.weixin.qq.com/s/t7W0ulMaq5_8MxuiyTvXvw)
 - [理解 redux-thunk](https://zhuanlan.zhihu.com/p/85403048)
+- [react-redux demo](https://codesandbox.io/s/yv6kqo1yw9)

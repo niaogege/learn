@@ -58,6 +58,10 @@ export default defineConfig({
 
 - error TS2307: Cannot find module '*.svg' or its corresponding type declarations. 解决之道: 主要原因是因为在 ts 里，svg 格式采用了<code>img</code>标签包裹了，执行*tsc\*命令的时候会出现，换了一种方式，每个 svg 都放到一个组件里，然后在导出即可
 
+### 发布到个人一级站点 bytheway.com
+
+切记需要切换到 bytheway 分支，然后手动上次静态资源，如何做到，如果是打包能自动部署，也就是自动把打包后的资源上传到服务器的指定路径就好了？
+
 ## Getting Started
 
 Install dependencies,

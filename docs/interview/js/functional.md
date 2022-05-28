@@ -1,9 +1,9 @@
 ---
 title: 函数式编程FP
-order: 1
+order: 2
 group:
   order: 1
-  title: js Basic
+  title: Basic
   path: /interview/js
 nav:
   order: 3
