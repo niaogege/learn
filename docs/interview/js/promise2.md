@@ -16,6 +16,8 @@ nav:
 面试官问: 如何限制 Promise 请求并发数比如客户端某一时刻一下子同时需要发 100 个请求，浏览器并发限制是 6 个，手写一个阔以设置并发个数的方法
 
 ```js
+// 错误答案 0527
+// 对并发概念理解不深刻
 // 希望三个一组出来
 var res = [];
 for (let i = 0; i < 10; i++) {
@@ -65,59 +67,62 @@ function reverseFlatten(max, arr) {
 批量发请求
 
 ```js
-function httpRequest(url, options){
+function httpRequest(url, options) {
   // 真实的网络请求省略
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      resolve(url,'11')
-    })
+      resolve(url, '11');
+    });
   });
 }
 
 class NetManager {
   constructor(concurrency) {
-    this.max = concurrency
-    this.queue = []
-    this.len = 0
+    this.max = concurrency;
+    this.queue = [];
+    this.len = 0;
   }
   request(url, data) {
     return new Promise((resolve, reject) => {
       this.queue.push({
-        url, data, resolve, reject
-      })
-      this._processNext()
-    })
+        url,
+        data,
+        resolve,
+        reject,
+      });
+      this._processNext();
+    });
   }
   _processNext(url, data) {
     if (this.len >= this.max) {
-      return
+      return;
     }
-    var obj = this.queue.shift()
+    var obj = this.queue.shift();
     if (obj) {
-      this.len ++
-      const p = httpRequest(url, {})
+      this.len++;
+      const p = httpRequest(url, {});
       p.finally(() => {
-        this.len--
-        this._processNext()
-      })
-      p.then(obj.resolve, obj.reject)
+        this.len--;
+        this._processNext();
+      });
+      p.then(obj.resolve, obj.reject);
     }
   }
 }
 function queueGenerate() {
-  var res = []
-  for (let i = 0; i < 10; i ++) {
+  var res = [];
+  for (let i = 0; i < 10; i++) {
     var pN = new Promise((resolve) => {
       setTimeout(() => {
-        resolve(i)
-      }, 1000)
-    })
-    res.push(pN)
+        resolve(i);
+      }, 1000);
+    });
+    res.push(pN);
   }
-  return res
+  return res;
 }
-var instance = new NetManager(3)
-instance.
+var instance = new NetManager(3);
+instance.request(url, {});
 ```
 
 ### 如何优雅中断 Promise
@@ -247,72 +252,3 @@ console.log('end');
 ```
 
 process.nextTick 和 promise.then 都属于 microtask，而 setImmediate 属于 宏任务 macrotask，在事件循环的 check 阶段执行。事件循环的每个阶段（macrotask）之间都会执行 microtask，事件循环的开始会先执行一次 microtask。
-
-### 并发限制
-
-```js
-function dealLimitQuest(urls, max, cb) {
-  const len = urls.length;
-  const queue = [];
-  const res = []; // 存储结果
-  let i = 0;
-  const handleRequest = (url) => {
-    const req = fetch(url).then((res) => {
-      let length = res.push(res);
-      if (length < len && i + 1 < len) {
-        queue.shift();
-        handleRequest(urls[++i]);
-      } else {
-        if (typeof cb === 'function') {
-          cb(res);
-        }
-      }
-    });
-    if (res.push(req) < max) {
-      handleRequest(urls[++i]);
-    }
-  };
-  handleRequest(urls[++i]);
-}
-```
-
-并发限制 2 个，一开始确实是同时发 2 个请求，但是这俩请求不一定能同时返回，如果有一个立马返回了，所以要最大限度利用并发的能力，一旦有一个任务完成 这时候立马从候补任务列表里添加，不断循环往复，直到所有的请求结束
-
-```js
-var timeOut = (i) =>
-  new Promise((resolve, reject) =>
-    setTimeout(() => {
-      resolve(i);
-      console.log(i, 'CPP');
-    }, i),
-  );
-var arr = [1000, 1000, 3000, 3000, 2000, 4000];
-dealPool(2, arr, timeOut);
-function dealPool(max, arr, fn) {
-  let len = arr.length;
-  let ret = [];
-  const executing = [];
-  let i = 0;
-  const queue = () => {
-    if (i === len) {
-      return Promise.resolve();
-    }
-    const item = arr[i++];
-    const p = Promise.resolve(item).then(() => fn.call(null, item));
-    ret.push(p);
-    let r = Promise.resolve();
-    // 总个数大于Max 需要限制下
-    if (max <= len) {
-      let e = p.then(() => {
-        return executing.splice(executing.indexOf(e), 1);
-      });
-      executing.push(e);
-      if (max <= executing) {
-        r = Promise.race(executing);
-      }
-    }
-    return r.then(() => queue());
-  };
-  return queue().then(() => Promise.all(ret));
-}
-```
