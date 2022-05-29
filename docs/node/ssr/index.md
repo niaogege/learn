@@ -21,13 +21,15 @@ server side Render (ssr)
 - react ssr 双端怎么做构建的？区别在哪里？
 - 有没有做过同构组件？服务端和客户端怎么同步状态的？
 - **render** 和 **renderToString** 的底层实现上的区别？得看 react 源码
-- 客户端怎么处理 JS 事件失效的问题？客户端不重新加载 JS 的情况下怎么实现？
+- 客户端怎么处理 JS 事件失效的问题？客户端不重新加载 JS 的情况下怎么实现？ //
 - 做服务端渲染的时候有没有遇到过比较难的点？
 - react ssr 和 **ejs** 性能的差异？
 - SSR 的实现原理是什么？
 - React SSR 是怎么实现的？
 - 你是怎么去做 React SSR 的？
 - Next.js/Nuxt.js
+- award.js 非登录态 ssr 登录态 csr 如何做到
+- 服务端直出
 
 ## 什么是服务端渲染
 
@@ -35,7 +37,7 @@ server side Render (ssr)
 
 #### 同构
 
-一套 react 代码，在服务端执行一次，在客户端也执行一次，reactDom.renderToString 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端执行 ReactDom.hydrate，把事件和属性生效
+一套 react 代码，在服务端执行一次，在客户端也执行一次，reactDom.renderToString 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端执行 **ReactDom.hydrat**e，把事件和属性生效
 
 1. 服务端渲染 jsx->html,使用**ReactDom.renderToString**生成
 2. 客户端在运行 jsx->html,使用**ReactDom.hydrate**进行客户端的再次渲染
@@ -47,6 +49,8 @@ server side Render (ssr)
 服务端拿到数据之后注入到 windows，也就是塞到 window 全局环境中将服务端渲染的数据放到 script 中的**window.context**
 
 ```js
+//
+// server/render.js
 `
   <html>
   <head>
@@ -67,7 +71,37 @@ server side Render (ssr)
 
 ### 脱水 Dehydrate
 
-window 绑定的数据给到客户端 store 客户端的 store 初始数据从 window.context 里面拿
+window 绑定的数据给到客户端 store 客户端的 store 初始数据从 **window.context** 里面拿,然后放到 redux 注入到 app.js 这样所有的组件都能拿到 redux 里的数据
+
+```js
+// store/index.js
+// 客户端脱水
+export const getClientStore = () => {
+  const defaultState = window.context ? window.context.state : {};
+  // return createStore(reducer, defaultState, applyMiddleware(thunk.withExtraArgument(clientAxios)));
+  return createStore(reducer, defaultState, applyMiddleware(thunk));
+};
+// 客户端运用
+// client/app.js
+import ReactDom from 'react-dom';
+import { getClientStore } from '../store';
+import { renderRoutes } from 'react-router-config';
+
+const App = () => {
+  return (
+    <Provider store={getClientStore()}>
+      <BrowserRouter>
+        <Nav />
+        <div>{renderRoutes(routes)}</div>
+      </BrowserRouter>
+    </Provider>
+  );
+};
+// 水合
+ReactDom.hydrate(<App />, document.getElementById('app'));
+```
+
+##
 
 ## 手写 react ssr
 
