@@ -29,15 +29,17 @@ DOM0 事件绑定，给元素的事件行为绑定方法，这些方法都是在
 
 语法 `el.addEventListener(event-name, callback, useCapture)`
 
+event-name: 绑定的事件名 callback: 执行的回调函数 useCapture: 默认 false,代表冒泡时绑定
+
 ## 事件冒泡和事件捕获
 
 ### addEventListener 默认是捕获还是冒泡
 
 默认是冒泡
 
-addEventListener 第三个参数默认为 **false** 代表执行事件冒泡行为。
+addEventListener 第三个参数默认为 **false** 代表执行事件冒泡行为(代表冒泡时绑定)。
 
-当为 true 时执行事件捕获行为。
+当为 true 时执行事件捕获行为(代表捕获时绑定)。
 
 ## 事件代理
 
@@ -58,6 +60,85 @@ focus、blur 这些事件没有事件冒泡机制，所以无法进行委托绑�
 mousemove、mouseout 这样的事件，虽然有事件冒泡，但是只能不断通过位置去计算定位，对性能消耗高，因此也是不适合于事件委托的
 
 ## 如何自定义一个事件，是某一个对象能够捕获到？
+
+## target 和 currentTarget 区别
+
+target: 代表的是触发事件的元素 currentTarget: 代表的是绑定事件的元素
+
+addEventListener 第三个参数是 true 的话则分别打印,捕获
+
+```js
+targetId是child
+currentTarget grand
+targetId是child
+currentTarget parent
+targetId是child
+currentTarget child
+```
+
+addEventListener 第三个参数是 false 的话则分别打印,冒泡
+
+```js
+targetId是child
+currentTarget child
+targetId是child
+currentTarget parent
+targetId是child
+currentTarget grand
+```
+
+代码示例：
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>冒泡和捕获</title>
+  </head>
+  <body>
+    <div id="grand">
+      爷爷
+      <div id="parent">
+        父亲
+        <div id="child">自己</div>
+      </div>
+    </div>
+    <script>
+      var grand = document.getElementById('grand');
+      var parent = document.getElementById('parent');
+      var child = document.getElementById('child');
+      grand.addEventListener(
+        'click',
+        function (e) {
+          const { target, currentTarget } = e;
+          console.log(`targetId是${target.id}`);
+          console.log(`currentTarget ${currentTarget.id}`);
+        },
+        true,
+      );
+      parent.addEventListener(
+        'click',
+        function (e) {
+          const { target, currentTarget } = e;
+          console.log(`targetId是${target.id}`);
+          console.log(`currentTarget ${currentTarget.id}`);
+        },
+        true,
+      );
+      child.addEventListener(
+        'click',
+        function (e) {
+          const { target, currentTarget } = e;
+          console.log(`targetId是${target.id}`);
+          console.log(`currentTarget ${currentTarget.id}`);
+        },
+        true,
+      );
+    </script>
+  </body>
+</html>
+```
 
 ## 感谢大佬提供的技术支持
 

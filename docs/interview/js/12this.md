@@ -1,6 +1,6 @@
 ---
 title: this/apply/call/bind
-order: 8
+order: 12
 group:
   order: 1
   title: js Basic
@@ -17,6 +17,27 @@ nav:
 - bind 有什么用？连续多个 bind，最后 this 指向是什么？
 
 ## this 指向
+
+```js
+var name = 'global';
+var obj = {
+  name: 'ngnce',
+  log: () => {
+    console.log(this.name);
+  },
+};
+obj.log();
+var test = obj.log;
+test();
+
+var obj = {
+  name: 'ngnce',
+  log: function () {
+    console.log(this.name);
+  },
+};
+obj.log();
+```
 
 ## call/apply
 

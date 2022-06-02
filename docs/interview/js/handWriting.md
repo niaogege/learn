@@ -260,7 +260,7 @@ function shallowCopy(data) {
 
 <!-- 频繁触发的事件时，一段固定时间内延迟执行执行， -->
 
-每间隔 N 秒只执行一次，频率变少主要应用场景比如说浏览器缩放大小/滚动事件
+每间隔 N 秒只执行一次，频率变少主要应用场景 比如说浏览器缩放大小/滚动事件
 
 ```js
 function throttle(fn, delay) {
@@ -278,7 +278,7 @@ function throttle(fn, delay) {
 
 ### 防抖
 
-触发事件 N 秒后函数只能执行一次，如果在 N 秒又触发事件，则需要重新计时主要应用场景：提交按钮
+触发事件 N 秒后函数只能执行一次，如果在 N 秒又触发事件，则需要重新计时，主要应用场景：提交按钮
 
 ```js
 function debounce(fn, delay) {
@@ -501,6 +501,19 @@ add(1)(2)(3)(4)();
 ```
 
 手写 curry2(1)(2)(3)()
+
+## 手写题按类排序
+
+面试官： [{ price: 1, size: 2 }, { price: 2, size: 2 }, { price: 1, size: 1 }]] 依次按照 price、size 降序排序
+
+```js
+function sort(arr) {
+  return arr
+}
+sort(
+   [{ price: 1, size: 2 }, { price: 2, size: 2 }, { price: 1, size: 1 }]]
+)
+```
 
 ## 参考
 

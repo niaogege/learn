@@ -1,6 +1,6 @@
 ---
 title: 四种异步之Promise(2)-面试题并发限制
-order: 4
+order: 10
 group:
   order: 1
   title: js Basic

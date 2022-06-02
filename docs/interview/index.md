@@ -9,7 +9,7 @@ nav:
   path: /interview
 ---
 
-![interview.png](https://s2.loli.net/2022/05/17/s5QWcRwzKbSh6oI.png)
+![前端面试.png](https://s2.loli.net/2022/06/02/PrqOvHVRsmXCM5G.png)
 
 - 我每天都在问自己，如果现在公司裁员，我有幸拿大礼包了，我是该如何度过这段艰难的岁月
 - 各种原理东西，读了看了，在试着手写，手写 1 遍/2 遍...，试着理解设计思想

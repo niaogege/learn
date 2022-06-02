@@ -1,6 +1,6 @@
 ---
 title: Promisify手写
-order: 5
+order: 9
 group:
   order: 1
   title: js Basic
@@ -99,7 +99,7 @@ loadImgPromise(imgSrc)
 不通用。我们需要封装一个比较通用的 **promisify** 函数，但是这一步基本也勾出了 promisify 函数的大致框架
 
 ```js
-function loadP(src) {
+function loadPromise(src) {
   return new Promise((resolve, reject) => {
     loadImg(src, function (err, con) {
       // 重点是这部 这调用外部的函数，如果我们传入一个参数呢

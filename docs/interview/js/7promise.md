@@ -1,6 +1,6 @@
 ---
 title: 四种异步之Promise
-order: 4
+order: 7
 group:
   order: 1
   title: js Basic

@@ -37,3 +37,55 @@ var addStrings = function (num1, num2) {
   return res;
 };
 ```
+
+## 找出数组中出现次数最多的字符串
+
+```js
+// 输入 ['cpp','wmh','cpp']
+// 输出 ‘cpp’
+function findMaxStr(arr) {
+  var m = new Map();
+  var max = 0;
+  for (let i = 0; i < arr.length; i++) {
+    var cur = arr[i];
+    if (!m.has(cur)) {
+      m.set(cur, 1);
+    } else {
+      var index = m.get(cur);
+      m.set(cur, index + 1);
+      max = Math.max(m.get(cur), max);
+    }
+  }
+  var str = '';
+  for (let [key, item] of m.entries()) {
+    if (max === item) {
+      str = key;
+    }
+  }
+  return str;
+}
+```
+
+or
+
+```js
+const getMostStr = (arr) => {
+  let obj = {};
+  let mostObj = {
+    str: '',
+    count: 0,
+  };
+  for (let i = 0; i < arr.length; i++) {
+    if (obj[arr[i]]) {
+      obj[arr[i]]++;
+    } else {
+      obj[arr[i]] = 1;
+    }
+    if (mostObj.count < obj[arr[i]]) {
+      mostObj.count = obj[arr[i]];
+      mostObj.str = arr[i];
+    }
+  }
+  return mostObj.str;
+};
+```

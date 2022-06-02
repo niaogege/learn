@@ -1,6 +1,6 @@
 ---
 title: 四种异步之Promise(2)-面试题
-order: 4
+order: 8
 group:
   order: 1
   title: js Basic
