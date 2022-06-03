@@ -11,60 +11,7 @@ nav:
   path: /interview
 ---
 
-### 请求并发限制个数
-
-面试官问: 如何限制 Promise 请求并发数比如客户端某一时刻一下子同时需要发 100 个请求，浏览器并发限制是 6 个，手写一个阔以设置并发个数的方法
-
-```js
-// 错误答案 0527
-// 对并发概念理解不深刻
-// 希望三个一组出来
-var res = [];
-for (let i = 0; i < 10; i++) {
-  var pN = new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(i);
-    }, 1000);
-  });
-  res.push(pN);
-}
-function resolvePromiseMax(max, arr) {
-  var res = reverseFlatten(max, arr);
-  var p = Promise.resolve();
-  const dfs = () => {
-    while (res.length > 0) {
-      var temp = res.shift();
-      p = Promise.all(temp).then((res) => {
-        dfs();
-        return res;
-      });
-    }
-  };
-  return p;
-}
-resolvePromiseMax(3, res).then((res) => {
-  console.log(res, 'res');
-});
-function reverseFlatten(max, arr) {
-  var n = 0;
-  var res = arr.reduce(
-    (pre, cur) => {
-      if (pre[n].length <= max) {
-        pre[n].push(cur);
-      }
-      if (pre[n].length === max) {
-        ++n;
-        pre[n] = [];
-      }
-      return pre;
-    },
-    [[]],
-  );
-  return res.filter((n) => n.length);
-}
-```
-
-批量发请求
+### 批量发请求
 
 ```js
 function httpRequest(url, options) {
@@ -225,7 +172,7 @@ console.log(req); // rejected
 
 ### Promise 值穿透
 
-.then 或者 .catch 的参数期望是函数，传入非函数则会发生值穿透。
+Promise.then 或者 Promise.catch 的参数期望是函数，传入非函数则会发生值穿透。
 
 ```js
 Promise.resolve(1).then().then(2).then(22).then(Promise.resolve(3)).then(console.log);

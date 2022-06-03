@@ -282,7 +282,6 @@ function throttle(fn, delay) {
 
 ```js
 function debounce(fn, delay) {
-  let flag = false
   let timer = null
   return function(...args) {
     if (timer) {
