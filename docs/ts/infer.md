@@ -34,12 +34,28 @@ type SayNameParam1 = MockParamtersType<typeof SayName>;
 type T0 = string[];
 type GetType<T extends any[]> = T extends (infer P)[] ? P : T;
 type T0Type = GetType<T0>;
+//  简化看看呢
 type GetType2<T extends any[]> = string[] extends (infer P)[] ? P : T;
+```
+
+面试官： 实现类型 First<T>，取到数组第一项的类型：
+
+```ts
+type arr1 = ['a', 'b', 'c'];
+type arr2 = [3, 2, 1];
+
+type head1 = First<arr1>; // expected to be 'a'
+type head2 = First<arr2>; // expected to be 3
+
+// 实现First
+type First<T extends any[]> = T extends [infer F, ...infer R] ? F : never;
 ```
 
 ## 使用限制
 
 1.infer 只能在条件类型的 extends 子句中使用， 2. **infer** 声明的类型变量只在条件类型的 **true** 分支中可用
+
+> 条件类型是 extends ? : type GetType<T extends any[]> = T extends (infer P)[] ? P : T; 左边的 extends 是约束类型 右边的 T extends (infer P)[]? P : T 才是条件类型
 
 'infer' declarations are only permitted in the 'extends' clause of a conditional type 仅在条件类型的**extends**的**子句**中允许使用**infer**声明
 

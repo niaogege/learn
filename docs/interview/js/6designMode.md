@@ -11,10 +11,6 @@ nav:
   path: /interview
 ---
 
-## 控制反转和依赖注入
-
-> 很早的时候就接触这玩意，可惜不知道代表什么意思
-
 ## 观察者模式
 
 观察者模式包含两种角色：
@@ -51,3 +47,10 @@ element.addEventListener(‘click’, callback2, false)
 ## 组合模式
 
 ## 装饰者模式
+
+[如何理解装饰器的作用](https://mp.weixin.qq.com/s/FTtobh-wGylG1TQAkng8uw)
+
+## 参考
+
+- [了不起的 IoC 与 DI](https://mp.weixin.qq.com/s/fVwGIP3vJXqoQX9jK6NAVw)
+- [黄子毅的技术博客](https://github.com/ascoders/weekly/tree/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)

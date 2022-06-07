@@ -35,21 +35,47 @@ render(`{{msg}}-{{name}}`, {msg: 'chendap', name: 'wmh'})
 ## 手写字母转换
 
 ```js
-输入: 'on-click-handle'
-输出： 'onClickHandle'
+输入: 'on-click-handle';
+输出: 'onClickHandle';
 function transform(str) {
   return str.replace(/[-|@|_]+(.)?/g, (match, path) => {
-    return path ? path.toUpperCase() : ''
-  })
+    return path ? path.toUpperCase() : '';
+  });
 }
-transform('on-click-handle')
+transform('on-click-handle');
 ```
 
 ## 二分查找
 
-```js
+输入： [11,33,44,55,66,1] target=33 输出： 1
 
+```js
+function binaryFind(arr, target) {
+  var end = arr.length - 1;
+  var start = 0;
+  while (end >= start) {
+    let mid = (start + end) >> 1;
+    if (arr[mid] > target) {
+      end = mid - 1;
+    } else if (arr[mid] < target) {
+      start = mid + 1;
+    } else if (arr[mid] === target) {
+      return mid;
+    }
+  }
+  return -1;
+}
 ```
+
+## 笔试题：实现 destructuringArray 方法，达到如下效果
+
+```js
+// destructuringArray( [1,[2,4],3], "[a,[b],c]" );
+// result
+// { a:1, b:2, c:3 }
+```
+
+## 实现一个 immutable
 
 ## 参考
 

@@ -176,6 +176,11 @@ Promise.then 或者 Promise.catch 的参数期望是函数，传入非函数则�
 
 ```js
 Promise.resolve(1).then().then(2).then(22).then(Promise.resolve(3)).then(console.log);
+// 1
+
+Promise.resolve(22).then().then(Promise.reject(3)).then(console.log);
+// 22
+// Uncaught(in Promise) 3
 ```
 
 ### 事件循环中涉及到的 Promise

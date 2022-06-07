@@ -22,3 +22,9 @@ function InitApp() {
 ```
 
 ## 如何处理错误边界 ErrorBoundaries
+
+## React.cloneElement()
+
+> React.cloneElement(element, { location, computedMatch: match })
+
+为啥会有这个 API?主要解决什么场景
