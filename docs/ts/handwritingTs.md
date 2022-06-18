@@ -23,7 +23,7 @@ type T1011 = {
   name: 'Cpp';
   age: 20;
 };
-type T111 = Transform<T101>;
+type T111 = Transform1<T1011>;
 // type T11 = {
 //     Cpp: "name";
 //     20: "age";
@@ -102,8 +102,8 @@ interface Test {
 type MyRecord1<K extends string | number | symbol, T extends {}> = {
   [P in K]: T;
 };
-type T61 = MyRecord<'hobby', Test>;
-const t61: T6 = {
+type T61 = MyRecord1<'hobby', Test>;
+const t61: T61 = {
   hobby: {
     name: '111',
     age: 31,
@@ -156,7 +156,7 @@ type T25 = Exclude1<T24, T23>;
 // type T25 = "c"
 ```
 
-### 实现类型 Awaited，比如从 Promise<ExampleType> 拿到 ExampleType
+### 实现类型 Awaited，比如从 `Promise<ExampleType> 拿到 ExampleType`
 
 ```ts
 type T26 = Promise<[Promise<{ name: 'cpp' }>, 2, 3]>;
@@ -196,6 +196,7 @@ type Result = Concat<[1], [2]>; // expected to be [1, 2]
 type Concat<A extends unknown[], B extends unknown[]> = [...A, ...B];
 type T31 = Concat<[1, [2, 3]], [4]>;
 type Concat2<A, B> = [...(A extends any[] ? A : [A]), ...(B extends any[] ? B : [B])];
+type T031 = Concat2<[1, [2, 3]], [4]>;
 // 如何实现数组的多重解构之后的组合？？
 ```
 
@@ -316,4 +317,108 @@ type TrimStrRight<Str extends string> = Str extends `${infer Rest}${' ' | '\n' |
   ? TrimStrRight<Rest>
   : Str;
 type T48 = TrimStrRight<'cpp 11 '>; // type T48 = "cpp"
+```
+
+### MyOmit<T, U>
+
+```ts
+type T49 = {
+  name: string;
+  age: number;
+  sex: boolean;
+};
+type T50 = MyOmit<T49, 'age' | 'name'>;
+type MyOmit<T, K extends keyof T> = {
+  [P in Exclude<keyof T, K>]: T[P];
+};
+type MyOimt1<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+type T51 = MyOimt1<T49, 'age' | 'name'>;
+```
+
+### MyReadonly2
+
+```ts
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+type T52 = MyReadonly2<Todo, 'title' | 'description'>;
+type T53 = MyReadonly3<Todo, 'title' | 'description'>;
+const todo1: T52 = {
+  title: 'Hey',
+  description: 'foobar',
+  completed: false,
+};
+// 最早的时候写的思路正确
+type MyReadonly2<T, K extends keyof T> = {
+  readonly [P in K]: T[P];
+} & {
+  [P in Exclude<keyof T, K>]: T[P];
+};
+type MyReadonly3<T, K extends keyof T> = Readonly<Pick<T, K>> & Omit<T, K>;
+todo1.title = 'Hello'; // Error: cannot reassign a readonly property
+todo1.description = 'barFoo'; // Error: cannot reassign a readonly property
+todo1.completed = true; // OK
+```
+
+### DeepReadonly<T>
+
+```ts
+type X = {
+  x: {
+    a: 1;
+    b: 'hi';
+  };
+  y: 'hey';
+};
+
+type Expected = {
+  readonly x: {
+    readonly a: 1;
+    readonly b: 'hi';
+  };
+  readonly y: 'hey';
+};
+
+type Todo3 = DeepReadonly<X>; // should be same as `Expected`
+type DeepReadonly<T extends Record<string, any>> = {
+  readonly [P in keyof T]: T[P] extends Record<string, any> ? DeepReadonly<T[P]> : T[P];
+};
+```
+
+### Tuple to Union
+
+该题将元组类型转换为其所有值的可能集合，也就是我们希望用所有下标访问这个数组，在 TS 里用 [number] 作为下标即可：
+
+```ts
+type Arr = ['1', '2', '3'];
+type TupleToUnion<T extends unknown[]> = T[number];
+type T62 = TupleToUnion<Arr>; // expected to be '1' | '2' | '3'
+```
+
+### Last of Array
+
+```ts
+type arr1 = ['a', 'b', 'c'];
+type arr2 = [3, 2, 1];
+
+type tail1 = Last<arr1>; // expected to be 'c'
+type tail2 = Last<arr2>; // expected to be 1
+
+type Last<T extends unknown[]> = T extends [...infer F, infer R] ? R : never;
+```
+
+### Pop<T>
+
+实现 Pop<T>，返回去掉元组最后一项之后的类型：
+
+```ts
+type arr01 = ['a', 'b', 'c', 'd'];
+type arr02 = [3, 2, 1];
+
+type re1 = Pop<arr01>; // expected to be ['a', 'b', 'c']
+type re2 = Pop<arr02>; // expected to be [3, 2]
+
+type Pop<T extends unknown[]> = T extends [...infer F, infer L] ? F : never;
 ```

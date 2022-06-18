@@ -4,11 +4,11 @@ order: 0
 group:
   title: axios
   order: 0
-  path: /node/axios
+  path: /read-code/axios
 nav:
   order: 1
-  title: 'node'
-  path: /node
+  title: 'read-code'
+  path: /read-code
 ---
 
 ## 总览

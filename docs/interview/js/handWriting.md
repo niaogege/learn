@@ -375,7 +375,7 @@ reverseFlatten(3, arr);
 
 ## 实现一个对象版的 flatten
 
-面试官问:如何实现对象的扁平化
+面试官问: 如何实现对象的扁平化
 
 ```js
 const obj = {

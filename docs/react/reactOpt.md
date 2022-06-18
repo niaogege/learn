@@ -12,8 +12,8 @@ group:
 
 了解 React 渲染的基本原理。在 v16 后 React 组件渲染会分为两个阶段，即 render 和 commit 阶段。
 
-- render 阶段决定需要进行哪些变更。这个阶段 React 会调用 **render** 函数，并将结果和上一次 render 的结果进行 diff, 计算出需要进行变更的操作队列
-- commit 阶段。或者称为提交阶段, 在这个阶段会执行 render 阶段 diff 出来的变更请求。比如 DOM 插入、更新、删除、排序等等。在这个阶段 React 还会调用 **componentDidMount 和 componentDidUpdate** 生命周期函数.
+- **render 阶段** 决定需要进行哪些变更。这个阶段 React 会调用 **render** 函数，并将结果和上一次 render 的结果进行 diff, 计算出需要进行变更的操作队列
+- **commit 阶段** 或者称为提交阶段, 在这个阶段会执行 render 阶段 diff 出来的变更请求。比如 DOM 插入、更新、删除、排序等等。在这个阶段 React 还会调用 **componentDidMount 和 componentDidUpdate** 生命周期函数.
 
 ## 概括起来
 

@@ -25,6 +25,8 @@ nav:
 
 - type 和 interface 都支持扩展
 
+- 条件类型 a extends b ? c : d 仅仅支持在 type 关键字中使用，interface 中不行
+
 ```ts
 type Person = {
   name: string;

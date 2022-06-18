@@ -13,13 +13,34 @@ nav:
 
 ### i++和++i
 
-前缀版（++i）：操作符位于变量的前面，表示**先递增(递减)**，后执行语句；后缀版（i++）：操作符位于变量的后面，表示**先执行语句**，后递增(递减)；
+-前缀版（++i）：操作符位于变量的前面，表示**先递增(递减)**，后执行语句； -后缀版（i++）：操作符位于变量的后面，表示**先执行语句**，后递增(递减)；
 
 ```js
 var i = 0;
-console.log(++i); // 先递增在执行console
+console.log(++i); // 先递增在执行console 1
 var num = 0;
-console.log(num++); // 先执行console 在递增
+console.log(num++); // 先执行console 在递增 0
+```
+
+- 手写二叉树的层序遍历（DFS）
+
+```js
+var levelOrder = function (root) {};
+```
+
+- 打印题
+
+```js
+let a = 0,
+  b = 0;
+function fn(a) {
+  fn = function fn2(b) {
+    console.log(++a + b);
+  };
+  console.log(a++);
+}
+fn(1); // 1
+fn(2); // 5
 ```
 
 ### 简介高效片段

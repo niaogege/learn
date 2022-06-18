@@ -4,11 +4,11 @@ order: 1
 group:
   title: axios
   order: 0
-  path: /node/axios
+  path: /read-code/axios
 nav:
   order: 1
-  title: 'node'
-  path: /node
+  title: 'read-code'
+  path: /read-code
 ---
 
 面试官问你，如何才能设计出像 **Axios** 这样牛皮的请求和响应拦截器? 能不能简单手写其中的原理

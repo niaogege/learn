@@ -18,4 +18,10 @@ V16 之前，react 会直接遍历 vdom, 通过 dom Api 增删改查 dom 的方�
 
 `JSX -> Render Function -> VDom -> Fiber`
 
-Vdom 转 Fiber 过程称为 reconcile，是能中断的， schedual 机制在空闲时间执行 reconcile,reconcile 调合过程中会做 diff,打上增删改查的标记(EffectTag),并把对应的 dom 创建好，然后一次性把 fiber 渲染到真实 dom 上，也就是 commit 过程
+Vdom 转 Fiber 过程称为 **reconcile**，是能中断的， schedual 机制在空闲时间执行 reconcile,reconcile 调合过程中会做 diff,打上增删改查的标记(EffectTag),并把对应的 dom 创建好，然后一次性把 fiber 渲染到真实 dom 上，也就是 commit 过程
+
+## JSX
+
+## 参考
+
+- [React 是如何创建 vdom 和 fiber tree](https://mp.weixin.qq.com/s/f1AHGOosON-GHTrDO_99Gg)

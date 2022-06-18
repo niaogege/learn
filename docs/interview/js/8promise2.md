@@ -83,7 +83,7 @@ var p1 = new Promise((resolve) => {
   }, 500);
 });
 p1.then((res) => res)
-  .then(() => {})
+  .then(() => {}) // ？
   .catch(() => {
     console.log('catch');
   })

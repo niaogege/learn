@@ -4,11 +4,11 @@ order: 2
 group:
   title: axios
   order: 0
-  path: /node/axios
+  path: /read-code/axios
 nav:
   order: 1
-  title: 'node'
-  path: /node
+  title: 'read-code'
+  path: /read-code
 ---
 
 ## 取消请求方式
@@ -131,7 +131,84 @@ cancel();
 
 ### CancelToken 是如何串联到 xhr 请求使之取消请求的
 
-发布订阅模式
+首先用户侧需要传取消请求的一个配置项 cancelToken，初始化的时候，CancelToken 类会生成一个 cancelToken 实例，这个实例需要传一个执行函数，通过这个执行函数能得到当前 Promise 中的 resolve,也就是暴露给用户侧的
+
+```js
+cancel();
+```
+
+只用当用户侧手动取消了请求，才会执行到 xhr 里的取消请求,也就是利用 Promise 的 then 来取消用户侧发的 xhr,
+
+```js
+if (config && config.cancelToken) {
+  // 只有resolved的时候才能取消请求
+  // 相当于new CancelToken()
+  config.cancelToken.promise.then(function onCanceled(res) {
+    if (!xhr) return;
+    xhr.abort();
+    xhr = null;
+  });
+}
+```
+
+源码里则比这更复杂，因为可能存在多个取消请求，所以在收集 cancelToken 的时候，采用老套的发布订阅模式，什么时候订阅，什么时候发布呢
+
+- 订阅初始化的时候订阅，也就是在得到配置的时候，生成 CancelToken 实例的时候订阅
+
+```js
+//  CancelToken
+CancelToken.prototype.subscribe = function subscribe(listener) {
+  if (this.reason) {
+    listener(this.reason);
+    return;
+  }
+
+  if (this._listeners) {
+    this._listeners.push(listener);
+  } else {
+    this._listeners = [listener];
+  }
+};
+// xhr.js
+
+if (config.cancelToken || config.signal) {
+  // Handle cancellation
+  // eslint-disable-next-line func-names
+  onCanceled = function (cancel) {
+    if (!request) {
+      return;
+    }
+    reject(!cancel || (cancel && cancel.type) ? new CanceledError() : cancel);
+    request.abort();
+    request = null;
+  };
+
+  config.cancelToken && config.cancelToken.subscribe(onCanceled); // 订阅
+
+  if (config.signal) {
+    config.signal.aborted ? onCanceled() : config.signal.addEventListener('abort', onCanceled);
+  }
+}
+```
+
+什么时候触发订阅函数呢
+
+```js
+function CancelToken(executor) {
+  var token = this;
+  // eslint-disable-next-line func-names
+  this.promise.then(function (cancel) {
+    if (!token._listeners) return;
+    var i;
+    var l = token._listeners.length;
+    console.log('BEFORE 执行监听函数');
+    for (i = 0; i < l; i++) {
+      token._listeners[i](cancel);
+    }
+    token._listeners = null;
+  });
+}
+```
 
 ## 参考文档
 

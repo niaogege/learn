@@ -169,3 +169,34 @@ dealAsync();
 ## 参考
 
 - [从 22 行有趣的源码库中，我学到了 callback promisify 化的 Node.js 源码实现](https://juejin.cn/post/7028731182216904740#heading-8)
+
+## 并发请求限制
+
+```js
+function request(url) {
+  return new Promise((resove, reject) => {
+    setTimeout(() => {
+      resolve('ccc');
+    });
+  });
+}
+// 已失败
+function asyncPool(max, urls, fn) {
+  var res = [];
+  var temp = [];
+  var next = () => {
+    for (let item of urls) {
+      var p1 = Promise.resolve(item).then((res) => fn(res));
+      temp.push(p1);
+      if (urls.length >= max) {
+        var index = temp.indexOf(p1);
+        temp.splice(index, 1);
+        if (temp.length >= max) {
+          res.push(Promise.race(temp));
+        }
+      }
+    }
+  };
+  return res;
+}
+```

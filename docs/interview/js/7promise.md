@@ -58,6 +58,114 @@ then 的语法如下，onFulfilled 函数处理 fulfilled 状态， onRejected �
 
 onFulfilled 或 onRejected 不是函数将被忽略两个函数只会被调用一次 onFulfilled 在 promise 执行成功时调用 onRejected 在 promise 执行拒绝时调用 `Promise.then(onFulfilled, onRejected)`
 
+### 链式调用
+
+每次的 then 都是一个全新的 promise，默认 then 返回的 promise 状态是 **fulfilled**
+
+```js
+var p1 = new Promise((resolve) => {
+  resolve('cpp');
+});
+var p2 = p1.then((res) => console.log(res));
+p2.then(() => {
+  console.log('P2 then');
+});
+
+// console.log(p1) // Promise {<fulfilled>}
+// console.log(p2) // Promise {<pending>}
+
+setTimeout(() => {
+  console.log(p1); // Promise {<fulfilled>: 'cpp'}
+  console.log(p2); // Promise {<fulfilled>: undefined}
+});
+```
+
+每次的 then 都是一个全新的 promise，不要认为上一个 promise 状态会影响以后 then 返回的状态
+
+如果 then 返回 promise 时，后面的 then 就是对返回的 promise 的处理，需要等待该 promise 变更状态后执行。
+
+```js
+var promise = new Promise((resolve) => {
+  resolve('cpp');
+});
+var p1 = promise
+  .then(() => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve('setTimeout');
+      }, 1000);
+    });
+  })
+  .then((res) => {
+    console.log('res', res);
+  });
+```
+
+### thenable
+
+[thenable](https://doc.houdunren.com/js/15%20Promise.html#%E5%85%B6%E5%AE%83%E7%B1%BB%E5%9E%8B) Promise.resolve 包含 then 方法的对象就是一个 promise ，系统将传递 resolvePromise 与 rejectPromise 做为函数参数
+
+下例中使用 resolve 或在 then 方法中返回了具有 then 方法的对象
+
+- 该对象即为 promise 要先执行，并在方法内部更改状态
+- 如果不更改状态，后面的 then promise 都为等待状态
+
+```js
+var p1 = new Promise((resolve) => {
+  window.resolve = resolve;
+});
+var p2 = p1
+  .then((res) => {
+    console.log(`fulfilled: ${res}`);
+    return {
+      then(resolve, reject) {
+        reject('rejected');
+      },
+    };
+  })
+  .then(null, (err) => {
+    console.log(err, 'err');
+  });
+// resolve包含then则相当于 resolve(new Promise(resolve => resolve()))
+resolve({
+  then(resolve, reject) {
+    resolve('p1 内部的then');
+  },
+});
+console.log(p1, p2); // Promise {<pending>} Promise {<pending>}
+// p1 内部的then
+// rejected err
+```
+
+改造下,resolve 里直接返回一个 promise,结果是跟上面的一样
+
+```js
+var p1 = new Promise((resolve) => {
+  window.resolve = resolve;
+});
+var p2 = p1
+  .then((res) => {
+    console.log(`fulfilled: ${res}`);
+    return {
+      then(resolve, reject) {
+        reject('rejected');
+      },
+    };
+  })
+  .then(null, (err) => {
+    console.log(err, 'err');
+  });
+// resolve包含then则相当于 resolve(new Promise(resolve => resolve()))
+resolve(
+  new Promise((resolve) => {
+    resolve('p1 内部的then');
+  }),
+);
+console.log(p1, p2); // Promise {<pending>} Promise {<pending>}
+// p1 内部的then
+// rejected err
+```
+
 ### 手写较为正常一点的 Promise
 
 > 但始终有一句没能深刻理解 res.then(resolve, reject)

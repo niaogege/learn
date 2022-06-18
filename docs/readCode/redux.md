@@ -4,7 +4,7 @@ order: 1
 group:
   title: react
   order: 1
-  path: /read-code/redux
+  path: /read-code/react
 nav:
   order: 1
   title: 'read-code'
