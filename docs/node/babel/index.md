@@ -1,6 +1,6 @@
 ---
 title: 初识babel
-order: 1
+order: 0
 group:
   title: babel
   order: 0
@@ -11,7 +11,24 @@ nav:
   path: /node
 ---
 
+接触 babel，主要有几个小目标：
+
+- AST 语法熟悉
+- babel 转译过程以及相关 api
+- preset 跟 plugin 区别
+- babel 插件实战,箭头函数转普通函数
+- babel 插件实战，插桩
+- 函数参数 rest 转换成对象格式
+- 自动埋点
+- 自动生成国际化
+- 压缩混淆
+- 模块遍历器
+- linter
+- 手写简易 babel,加深理解
+
 > 前端工程化中 babel 绝对占了很大一部分比例，面试中听到这个词就是浑身发麻，作为一枚 copy 工程师，还得了解下 babel 的基本知识,学习这方面知识，初试 babel 真的是无从抓起
+
+> 要静下心来把 ast 相关基础夯实，后面才能盖房
 
 ## js -> js
 
@@ -74,11 +91,14 @@ generate：把转换后的 AST 打印成目标代码，并生成 sourcemap
 
 这个阶段就比较简单了， 在 transform 阶段处理 AST 结束后，该阶段的任务就是将 AST 转换回 code, 在此期间会对 AST 进行深度优先遍历，根据节点所包含的信息生成对应的代码，并且会生成对应的 sourcemap。
 
-## AST
-
-标识符 Identifer、各种字面量 xxLiteral、各种语句 xxStatement，各种声明语句 xxDeclaration，各种表达式 xxExpression，以及 Class、Modules、File、Program、Directive、Comment 这些 AST 节点
-
 ## 参考文档
+
+膜拜以下大佬的文章
+
+> 第二次在看感觉你之前基础好多了 0622
 
 - [最详细、最全面的 Babel 小抄](https://mp.weixin.qq.com/s/miey_S-cBElyxOiAnMVOmw)
 - [保姆级教学！这次一定学会 babel 插件开发！](https://mp.weixin.qq.com/s/ZVWffh-MWcRNl2rDp0cKiQ)
+- [babel 原理&plugin 实战](https://mp.weixin.qq.com/s/RbACACK0S-aBgLjG3rU2dw)
+- [如何用 Babel 为代码自动引入依赖](https://mp.weixin.qq.com/s/v0U20Pko84aU0Ugry42uOA)
+- [如何用 Babel 为代码自动引入依赖并自动安装依赖](https://github.com/axuebin/babel-inject-dep-demo)

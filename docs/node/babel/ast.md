@@ -1,6 +1,6 @@
 ---
 title: 初识Ast
-order: 2
+order: 1
 group:
   title: babel
   order: 0
@@ -10,6 +10,8 @@ nav:
   title: 'node'
   path: /node
 ---
+
+![babel APi.png](https://s2.loli.net/2022/06/22/N7Rhz9UsBLpwGlQ.png)
 
 ## AST
 

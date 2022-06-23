@@ -37,7 +37,12 @@ let someTypeThree2: GetSomeType<string | number>;
 那么，什么情况下会产生分发(跟下文的分布式条件类型一样)呢？满足分发需要一定的条件，我们来一起看看：
 
 - 分发一定是需要产生在 extends 产生的类型条件判断中，并且是前置类型,这种就不行`T extends string | number ? 'a' : 'b'`
-- 要满足所谓的裸类型中才会产生效果
+- 要满足所谓的**裸类型**中才会产生效果(裸类型 没有被数组/元组/Promise 包装过)
+
+```ts
+type Te11<T> = T extends number ? 'a' : 'b';
+type te11 = Te11<11 | '111'>;
+```
 
 条件类型` a extends b ? c : d`仅仅支持在 type 关键字中使用。
 
@@ -82,6 +87,10 @@ type TypeName<T> = T extends string
   ? 'function'
   : 'object';
 type T1 = TypeName<string | number>; // 分布式条件类型 string | number
+type T1112 = TypeName<undefined>;
+type TestUnde<T> = T extends undefined ? 'undefined' : any;
+type T1113 = TestUnde<undefined>; // type T1113 = "undefined"
+type T1114 = TestUnde<111>; // type T1114 = any
 ```
 
 TypeName 属于分布式条件类型(分发)。在条件类型中，如果被检查的类型是一个 “裸” 类型参数，即没有被数组、元组或 Promise 等包装过，则该条件类型被称为**分布式条件**类型。**对于分布式条件类型来说，当传入的被检查类型是联合类型的话，在运算过程中会被分解成多个分支**。

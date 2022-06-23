@@ -275,7 +275,7 @@ function TIs(val) {
   }
 }
 TIs(111);
-
+// 统一处理
 function isOfType<T>(obj: any, props: keyof T): obj is T {
   return (obj as T)[props] !== undefined;
 }
