@@ -1,9 +1,9 @@
 ---
 title: 工具相关
-order: 3
+order: 0
 group:
   title: 工具
-  order: 0
+  order: 6
   path: /node/tool
 nav:
   order: 1

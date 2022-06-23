@@ -2,7 +2,7 @@
  * @Author: Chendapeng
  * @Date: 2022-04-12 22:23:54
  * @LastEditors: Chendapeng
- * @LastEditTime: 2022-05-28 18:49:28
+ * @LastEditTime: 2022-06-23 13:45:33
  * @Description:
  */
 import { defineConfig } from 'dumi';
@@ -10,7 +10,7 @@ import { defineConfig } from 'dumi';
 // const path = require('path');
 // const lastPath = path.resolve(__dirname, 'src')
 export default defineConfig({
-  title: 'cpp-ui',
+  title: '@chendapeng',
   favicon: 'https://s2.loli.net/2022/04/12/5gOhrAGakuTdQXc.jpg',
   logo: 'https://s2.loli.net/2022/04/12/5gOhrAGakuTdQXc.jpg',
   outputPath: 'docs-dist',

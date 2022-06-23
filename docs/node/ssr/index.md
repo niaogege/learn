@@ -1,8 +1,8 @@
 ---
 title: ssr服务端渲染
-order: 1
+order: 2
 group:
-  title: node
+  title: ssr
   order: 0
   path: /node/ssr
 nav:

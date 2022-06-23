@@ -1,24 +1,28 @@
 ---
 hero:
   title: '@chendap'
-  desc: 码代码久了，总要留下点什么！
+  desc: 码代码久了，总要留下点什么！水喝多了尿自然就有!
   actions:
     - text: Getting Started
       link: /components
 features:
   - icon: https://gw.alipayobjects.com/zos/bmw-prod/881dc458-f20b-407b-947a-95104b5ec82b/k79dm8ih_w144_h144.png
-    title: React
-    desc: React redux && React router && React Dom && Hooks;
+    title: 库和框架
+    desc: React && Vue && Axios
   - icon: https://gw.alipayobjects.com/zos/bmw-prod/d1ee0c6f-5aed-4a45-a507-339a4bfe076c/k7bjsocq_w144_h144.png
     title: Interview
-    desc: 集大成者...
+    desc: 不要为了面试而面试
   - icon: https://gw.alipayobjects.com/zos/bmw-prod/d60657df-0822-4631-9d7c-e7a869c2f21c/k79dmz3q_w126_h126.png
-    title: Tool
-    desc: axios/rollup/webpack/vite/esbuild...
+    title: 前端工程化
+    desc: babel/rollup/webpack/vite/esbuild...
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2021048304号-1](https://beian.miit.gov.cn/#/Integrated/index)
 ---
 
 > 目前坐标上海/南京，即将步入程序员的 last 红利时期，是时候厚积薄发了
+
+> 始终保持一个对技术热爱的 ❤️
+
+![前端面试.png](https://s2.loli.net/2022/06/23/Z5V4FuNXb7GdrhE.png)
 
 ## 沉淀
 
@@ -28,10 +32,13 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 - 调试工具
 - webpack plugin
 - rollup plugin
+- babel plugin
 
 ## 面试相关
 
 - css
+- js
+- ts
 - browser
 - react
 - vue
