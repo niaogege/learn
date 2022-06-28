@@ -1,6 +1,6 @@
 ---
 title: 手写react-redux部分
-order: 2
+order: 10
 group:
   title: react
   order: 1

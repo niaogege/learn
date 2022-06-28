@@ -1,10 +1,10 @@
 ---
-title: 前端设计模式
-order: 6
+title: 设计模式
+order: 0
 group:
-  order: 1
+  order: 10
   title: js Basic
-  path: /interview/js
+  path: /interview/designMode
 nav:
   order: 3
   title: 'interview'
@@ -53,7 +53,7 @@ babel 在遍历 AST 树的时候，处理一个节点时，是以访问者的形
 
 ### 应用场景
 
-- js 事件就是经典的发布-订阅模式的实现
+- js 事件就是经典的**发布-订阅模式**的实现
 
 ```js
 // 我们向某dom文档订阅了点击事件，当点击发生时，他会执行我们传入的callback

@@ -82,6 +82,7 @@ function myInstanceof(l, r) {
 
 var obj = {};
 console.log(obj instanceof Object);
+myInstanceof(obj, Object);
 ```
 
 ## curry 函数柯里化

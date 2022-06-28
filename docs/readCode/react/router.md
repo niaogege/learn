@@ -1,6 +1,6 @@
 ---
 title: 前端路由原理
-order: 5
+order: 10
 group:
   title: react
   order: 1

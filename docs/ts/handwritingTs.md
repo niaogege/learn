@@ -236,9 +236,15 @@ type T37 = Includess<[boolean], true>; // type T37 = false
 
 ### 实现 Push<T, K> 函数：
 
+// 如果是多层呢
+
 ```ts
 type Result1 = Push<[1, 2], '3'>; // [1, 2, '3']
 type Push<T extends any[], A> = [...T, A];
+
+type Push2<T, A> = T extends unknown[] ? [...T, A] : [T, A];
+type RR2 = Push2<[1, 2, 3], '4'>; // type RR2 = [1, 2, 3, "4"]
+type RR3 = Push2<[1, 2, [3, 4]], '4'>; // type RR2 = [1, 2, 3, "4"]
 ```
 
 ### 实现 Unshift<T, K> 函数：
@@ -277,7 +283,8 @@ type T39 = ReturnType2<typeof SayName1>;
 ```ts
 type T40 = [1,2,3]
 type T41 = PopArr<T40>
-type PopArr<T extends unknown[]> = T extends [...infer F, infer L]
+type PopArr<T extends unknown[]> =
+T extends [...infer F, infer L]
   ? F extends any[] ? F
   : L
 ```
@@ -308,6 +315,21 @@ type Replace<T, A extends string, B extends string> = T extends `${infer Prefix}
   : T;
 type T46 = Replace<'Cpp is ?!', '?!', 'WMH'>; // type T46 = "Cpp is WMH"
 type T47 = Replace<'Cpp is', 'a', 'WMH'>; // type T47 = "Cpp is"
+```
+
+### ReplaceAll
+
+```ts
+type ReplaceAll<
+  T,
+  A extends string,
+  B extends string,
+> = T extends `${infer Prefix}${A}${infer Suffix}`
+  ? Prefix extends ''
+    ? `${Prefix}${B}${Suffix}`
+    : ReplaceAll<`${Prefix}${B}${Suffix}`, A, B>
+  : T;
+type T461 = ReplaceAll<'Cpp  ?! is ?!', '?!', 'WMH'>; // type T46 = "CppWMH is WMH"
 ```
 
 ### Trim
@@ -389,7 +411,7 @@ type DeepReadonly<T extends Record<string, any>> = {
 
 ### Tuple to Union
 
-该题将元组类型转换为其所有值的可能集合，也就是我们希望用所有下标访问这个数组，在 TS 里用 [number] 作为下标即可：
+该题将元组类型转换为其所有值的可能集合，也就是我们希望用所有下标访问这个数组，在 TS 里用 **[number]** 作为下标即可：
 
 ```ts
 type Arr = ['1', '2', '3'];
@@ -421,4 +443,12 @@ type re1 = Pop<arr01>; // expected to be ['a', 'b', 'c']
 type re2 = Pop<arr02>; // expected to be [3, 2]
 
 type Pop<T extends unknown[]> = T extends [...infer F, infer L] ? F : never;
+```
+
+### IsUnion
+
+```ts
+type re3 = IsUnion<'a' | 'b'>;
+type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : false;
+type re4 = IsUnion<'11'>;
 ```

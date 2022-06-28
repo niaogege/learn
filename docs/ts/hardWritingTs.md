@@ -17,7 +17,6 @@ nav:
 
 ```ts
 declare const config: Chainable;
-
 const result = config
   .option('foo', 123)
   .option('name', 'type-challenges')
@@ -67,6 +66,18 @@ type Chainable<T extends Record<string, any> = {}> = {
   >;
   get: () => T;
 };
+```
+
+### PromiseAll
+
+```ts
+const promiseAllTest1 = PromiseAll([1, 2, 3] as const); // Promise<readonly [1, 2, 3]>
+const promiseAllTest2 = PromiseAll([1, 2, Promise.resolve(3)] as const); // Promise<readonly [1, 2, number]>
+const promiseAllTest3 = PromiseAll([1, 2, Promise.resolve(3)]); // Promise<(number | Promise<number>)[]>
+
+declare function PromiseAll<T>(values: T): Promise<{
+  [P in keyof T]: T[P] extends Promise<infer U> ? U : T[P];
+}>;
 ```
 
 ### isTuple
@@ -131,15 +142,21 @@ type GetOptional<T extends Record<string, any>> = {
   [P in keyof T as {} extends Pick<T, P> ? P : never]: T[P];
 };
 type Up9 = GetOptional<Up8>;
+// type Up9 = {
+//     age?: number | undefined;
+// }
 ```
 
-重点是这句提取值可能问 unfined 的属性`{} extends Pick<T, P> ? P : never` 如果提取非可选索引呢
+重点是这句提取值可能为 undefined 的属性`{} extends Pick<T, P> ? P : never` 如果提取非可选索引呢
 
 ```ts
 type GetNotOptional<T extends Record<string, any>> = {
   [P in keyof T as {} extends Pick<T, P> ? never : P]: T[P];
 };
 type Up10 = GetNotOptional<Up8>;
+// type Up10 = {
+//     name: string;
+// }
 ```
 
 ### RemoveIndexSignature
@@ -187,4 +204,20 @@ type Up13 = ClassPublicProps<Dong>;
 
 ```ts
 
+```
+
+### Append Argument
+
+```ts
+type Fn = (a: number, b: string) => number;
+
+type Up14 = AppendArgument<Fn, boolean>; // type Up14 = (arg_0: number, arg_1: string, arg_2: boolean) => number
+type Up15 = AppendArgument2<Fn, boolean>; // type Up15 = (args_0: number, args_1: string, args_2: boolean) => number
+// expected be (a: number, b: string, x: boolean) => number
+type AppendArgument2<F, E> = F extends (...args: infer T) => infer R
+  ? (...args: [...T, E]) => R
+  : F;
+type AppendArgument<T, E> = T extends (...arg: infer P) => any
+  ? (...arg: [...P, E]) => ReturnType<T>
+  : T;
 ```

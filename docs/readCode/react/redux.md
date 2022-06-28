@@ -1,6 +1,6 @@
 ---
 title: 手写redux
-order: 1
+order: 9
 group:
   title: react
   order: 1

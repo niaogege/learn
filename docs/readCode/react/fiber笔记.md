@@ -1,0 +1,252 @@
+---
+title: fiber (笔记)
+order: 3
+group:
+  title: react源码阅读
+  order: 0
+  path: /read-code/react
+nav:
+  order: 1
+  title: 'read-code'
+  path: /read-code
+---
+
+> 内容来自神光[手写简易版 React 来彻底搞懂 fiber 架构](https://mp.weixin.qq.com/s/sy5ZoXu09_bwhDUb1TcLvw)
+
+> 了解 fiber 设计理念
+
+关于 Vdom 以及 class component 以及 function component 细节移步上文
+
+createElement 被称为 render function，它的执行结果是 vdom。为什么不直接把 jsx 编译为 vdom 呢？因为 **render function** 可以执行动态逻辑。我们可以加入 state、props，可以包装一下实现 class 和 function 组件
+
+## V16 之前
+
+实现 createElement(type, props, ...children)
+
+```js
+function createElement(type, props, ...children) {
+  return {
+    type,
+    props: {
+      ...props,
+      children: children.map((child) => {
+        return typeof child === 'object' ? child : createTextElement(child);
+      }),
+    },
+  };
+}
+function createTextElement(text) {
+  return {
+    type: 'TEXT_ELEMENT',
+    props: {
+      nodeValue: text,
+      children: [],
+    },
+  };
+}
+```
+
+## V16 之后架构
+
+引入了 Fiber 架构，执行 render Function 之后不是直接渲染 vdom，而是先转成 Fiber 链表
+
+vdom 里通过 **children** 关联父子节点，而 fiber 里面则是通过 **child** 关联第一个子节点，然后通过 **sibling** 串联起下一个，所有的节点可以 return 到父节点。
+
+- child 指向关联的**第一个**子节点
+- sibling 指向同级兄弟节点
+- return 指向父级节点
+
+> 链表结构，即通过 child 指向下一级，同时 sibling 指向兄弟节点，此 fiber 还是双向链表，阔以通过 return 节点指回父节点
+
+schedule: **空闲时**协调后面的 fiber，由 scheduler 调度器完成 reconcile: **把 vdom 转 Fiber**, 由 reconciler 协调器完成 commit: 最后全部转完之后，再**一次性 render**，由 renderer 渲染器完成
+
+## 简单实现 fiber 版 react
+
+### schedule
+
+循环调度浏览器是否还有空闲时间，如果有空闲时间就去协调 vdom 转成 fiber,直到所有 vdom 节点都转成了 fiber,就开始进行 commit 操作
+
+```js
+let nextFiberReconcileWork = null; // 当前处理到的fiber
+let wipRoot = null; // 根节点
+
+requestIdleCallback(workLoop);
+
+function workLoop(deadline) {
+  let shouldYield = false;
+  while (nextFiberReconcileWork && !shouldYield) {
+    // reconcile
+    nextFiberReconcileWork = performNextWork(nextFiberReconcileWork);
+    console.log(nextFiberReconcileWork, 'nextFiberReconcileWork');
+    shouldYield = deadline.timeRemaining() < 1;
+  }
+  if (!nextFiberReconcileWork && wipRoot) {
+    commitRoot(); // commit
+  }
+  requestIdleCallback(workLoop);
+}
+
+// reconcile当前的fiber
+// 按照顺序处理child/sibling
+// reconcile 当前 fiber 节点，然后再按照顺序继续处理 child、sibling，处理完之后回到 return 的 fiber 节点。
+function performNextWork(fiber) {
+  reconcile(fiber);
+  if (fiber.child) {
+    return fiber.child;
+  }
+  // 不断调度
+  let nextFiber = fiber;
+  while (nextFiber) {
+    if (nextFiber.sibling) {
+      return nextFiber.sibling;
+    }
+    nextFiber = nextFiber.return;
+  }
+}
+```
+
+### reconcile
+
+schedule 的 loop 已经在不断进行了，那么只要提交一个 **nextFiberReconcileWork**，下次 loop 就能处理到,这就是 render 的实现
+
+reconcile 主要做的工作： 1.vdom 转成 fiber 格式，最终把 vdom 树转成 fiber 链表 2.准备好要用的 dom 节点，确定是增删改
+
+```js
+// reconcile 是 vdom 转 fiber
+// 一个是提前创建对应的 dom 节点
+// diff，确定是增、删还是改
+function reconcile(fiber) {
+  if (!fiber.dom) {
+    fiber.dom = createDom(fiber);
+  }
+  reconcileChildren(fiber, fiber.props.children);
+}
+
+// 把之前的vdom转成child/sibling/return组成的链表
+function reconcileChildren(wipFiber, elements) {
+  let index = 0;
+  let prevSibling = null;
+  while (index < elements.length) {
+    const element = elements[index];
+    // fiber格式
+    let newFiber = {
+      type: element.type,
+      props: element.props,
+      dom: null,
+      return: wipFiber,
+      effectTag: 'PLACEMENT', // 新增节点标记
+    };
+    if (index === 0) {
+      wipFiber.child = newFiber;
+    } else if (element) {
+      prevSibling.sibling = newFiber;
+    }
+    prevSibling = newFiber;
+    index++;
+  }
+}
+
+function createDom(fiber) {
+  let dom;
+  if (fiber.type === 'PLACEMENT') {
+    dom = document.createTextNode('');
+  } else {
+    dom = document.createElement(fiber.type);
+  }
+  for (const prop in fiber.props) {
+    setAttribute(dom, prop, fiber.props[prop]);
+  }
+  return dom;
+}
+
+function createElement(type, props, ...children) {
+  return {
+    type,
+    props: {
+      ...props,
+      children: children.map((child) =>
+        typeof child === 'object' ? child : createTextElement(child),
+      ),
+    },
+  };
+}
+
+function createTextElement(text) {
+  return {
+    type: 'TEXT_ELEMENT',
+    props: {
+      nodeValue: text,
+      children: [],
+    },
+  };
+}
+
+function render(element, container) {
+  wipRoot = {
+    dom: container,
+    props: {
+      children: [element],
+    },
+  };
+  console.log('render');
+  nextFiberReconcileWork = wipRoot;
+}
+
+const setAttribute = (dom, key, value) => {
+  if (key === 'children') {
+    return;
+  }
+  if (key === 'nodeValue') {
+    dom.textContent = value;
+  } else if (isEventListenerAttr(key, value)) {
+    const eventType = key.slice(2).toLowerCase();
+    dom.addEventListener(eventType, value);
+  } else if (isStyleAttr(key, value)) {
+    Object.assign(dom.style, value);
+  } else if (isPlainAttr(key, value)) {
+    dom.setAttribute(key, value);
+  }
+};
+
+function isEventListenerAttr(key, value) {
+  return typeof value == 'function' && key.startsWith('on');
+}
+
+function isStyleAttr(key, value) {
+  return key === 'style' && typeof value == 'object';
+}
+
+function isPlainAttr(key, value) {
+  return typeof value != 'object' && typeof value != 'function';
+}
+```
+
+### commit
+
+commit 就是对 dom 的增删改，而且比之前 vdom 架构时的渲染还要快，因为 dom 都提前创建了
+
+每个 fiber 节点的渲染就是按照 child、sibling 的顺序以此插入到 dom 中
+
+```js
+// commit
+function commitRoot() {
+  commitWork(wipRoot.child);
+  wipRoot = null;
+}
+
+function commitWork(fiber) {
+  if (!fiber) {
+    return;
+  }
+  let domParentFiber = fiber.return;
+  while (!domParentFiber.dom) {
+    domParentFiber = domParentFiber.return;
+  }
+  let domParent = domParentFiber.dom;
+  if (fiber.effectTag === 'PLACEMENT' && fiber.dom !== null) {
+    domParent.appendChild(fiber.dom);
+  }
+  commitWork(fiber.child);
+  commitWork(fiber.sibling);
+}
+```

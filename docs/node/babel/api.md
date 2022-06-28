@@ -206,13 +206,26 @@ visitor 对象的 value 是对象或者函数：
 函数会接收两个参数 path 和 state。
 
 ```js
-visitor: {
-  Identifer: (path, state) {}, // 函数
-  StringLiteral: {
-    enter(path, state) {},
-    exit(path, state) {}
+module.exports = declare((api, options, dirname) => {
+  visitor: {
+    Identifer: (path, state) {}, // 函数
+    StringLiteral: {
+      enter(path, state) {},
+      exit(path, state) {}
+    },
+    Program: {
+      enter(path) {}
+    }
   }
-}
+})
+```
+
+如果只指定一个函数，默认就是 enter 阶段会调用
+
+```js
+traverse(ast, {
+  FunctionDeclaration(path, state) {}, // 进入节点时调用
+});
 ```
 
 可以为单个节点的类型，也可以是多个节点类型通过 | 连接，还可以通过别名指定一系列节点类型。

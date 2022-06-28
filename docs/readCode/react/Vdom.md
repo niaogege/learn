@@ -1,6 +1,6 @@
 ---
-title: react源码Vdom和jsx
-order: 0
+title: react源码Vdom和jsx(笔记)
+order: 1
 group:
   title: react源码阅读
   order: 0
@@ -11,15 +11,29 @@ nav:
   path: /read-code
 ---
 
+> 第 2 次看虚拟 DOM 了，至少应该在理解一点点吧
+
+> 内容来自神光[手写简易前端框架：vdom 渲染和 jsx 编译](https://mp.weixin.qq.com/s/xwt5bd31IZChpEx79w5E5g)
+
 - 实现简单的 virtual-dom
+- 实现简单的 createElement
 
 ### 实现简单的 virtual-dom
 
-VDom 声明式的描述页面结构对象
+> 虚拟 DOM 其实就是 js 对象，通过对象的方式表示真实的 DOM 结构，将页面的状态抽象成 js 对象的形式
+
+VDom 声明式的描述页面结构对象，现代前端框架很多都基于 vdom。前端框架负责把 vdom 转为对真实 dom 的增删改，也就是 vdom 的渲染。
 
 dom 主要是**元素、属性、文本**，vdom 也是一样，其中元素是 {type、props、children} 的结构，文本就是字符串、数字。属性就是 props ,包含 className/style/onClick 等属性
 
 type: li/div/p 元素标签名 props: className/style/onClick children: []
+
+VDom 实现一般来说是这四个步骤
+
+- 用 js 对象模拟 DOM 树
+- **render 方法生成真实 DOM 节点**
+- 计算新老虚拟 dom 差异-即 diff 算法
+- 将两个虚拟 DOM 对象的差异应用到真正的 DOM 树
 
 ```js
 {
@@ -66,6 +80,12 @@ type: li/div/p 元素标签名 props: className/style/onClick children: []
 }
 ```
 
+前端框架就是通过这样的对象结构来描述界面的，然后把它渲染到真实 DOM 上
+
+这样的对象结构怎么渲染呢？
+
+明显要用递归，对不同的类型做不同的处理。
+
 如果是文本类型，那么就要用 **document.createTextNode** 来创建文本节点。
 
 如果是元素类型，那么就要用 **document.createElement** 来创建元素节点，元素节点还有属性要处理，并且要递归的渲染子节点。
@@ -84,25 +104,193 @@ function isElementDom(vdom) {
 // style 合并到dom.style
 
 function setAttribute(dom, key, val) {
-  if (typeof val === 'function' && startsWith('on')) {
-    const eventType = key.slice(2).toLowerCase();
-    dom.addEventListeners(key, val);
+  if (typeof val === 'function' && key.startsWith('on')) {
+    const eventType = key.slice(2).toLowerCase(); // onClick => click
+    dom.addEventListener(eventType, val);
+  } else if (key === 'style' && typeof val === 'object') {
+    Object.assign(dom.style, val); // style
+  } else if (typeof val !== 'function' && typeof val !== 'object') {
+    dom.setAttribute(key, val); // className 等设置
   }
 }
 
+// render函数最终返回真实DOM
 const render = (vdom, parent = null) => {
+  // 如果有父节点要挂载到父节点 组装成一个dom树
   const mount = parent ? (el) => parent.appendChild(el) : (el) => el;
+  // 如果是文本节点 则是先创建文本节点在直接挂载
   if (isTextDom(vdom)) {
     return mount(document.createTextNode(vdom));
-  } else if (isElement(vdom)) {
-    const dom = mount(document.createElement(vdom));
-    for (const child of vdom.childrem) {
+    // 如果是元素类型 则需要遍历和递归处理
+  } else if (isElementDom(vdom)) {
+    const dom = mount(document.createElement(vdom.type));
+    for (const child of vdom.children) {
       render(child, dom);
     }
-    for (const prop of vdom.props) {
+    // 元素上的各种属性需要设置下
+    for (const prop in vdom.props) {
       setAttribute(dom, prop, vdom.props[prop]);
     }
     return dom;
   }
 };
+
+render(vdom, document.getElementById('root'));
+```
+
+敲黑板： 「通过不同的 **api** (比如 document.createElement/document.createTextNode) 创建 dom 和设置属性(比如 dom.addEventListener/dom.setAttribute)，这就是 vdom 的渲染流程。」
+
+通过不同的 DOM API 创建和设置属性，返回最终的真实 DOM
+
+> vdom 写起来也太麻烦了，没人会直接写 vdom，一般是通过更友好的 DSL（领域特定语言） 来写，然后编译成 vdom，比如 jsx 和 template。
+
+## JSX
+
+上面的 vdom 改为 jsx 来写就是这样的：
+
+```js
+const data = {
+  a1: 'cppCreateElement',
+  a2: 'wmh',
+  a3: 'chendapeng',
+};
+const jsx = (
+  <ul className="list">
+    <li className="item" style={{ background: 'blue', color: 'pink' }} onClick={() => alert(2)}>
+      {data.a3}
+    </li>
+    <li className="item">{data.a1}</li>
+    <li className="item">{data.a2}</li>
+  </ul>
+);
+
+render(jsx, document.getElementById('root'));
+```
+
+明显比直接写 vdom 紧凑了不少，但是需要做一次编译。
+
+用@babel/preset 编译下，然后产物是这样玩意
+
+```js
+const data = {
+  a1: 'cppCreateElement',
+  a2: 'wmh',
+  a3: 'chendapeng',
+};
+const jsx = createElement(
+  'ul',
+  {
+    className: 'list',
+  },
+  createElement(
+    'li',
+    {
+      className: 'item',
+      style: {
+        background: 'blue',
+        color: 'pink',
+      },
+      onClick: () => alert(2),
+    },
+    data.a3,
+  ),
+  createElement(
+    'li',
+    {
+      className: 'item',
+    },
+    data.a1,
+  ),
+  createElement(
+    'li',
+    {
+      className: 'item',
+    },
+    data.a2,
+  ),
+);
+render(jsx, document.getElementById('root'));
+```
+
+> 业界上称上面的就是 render Function 渲染函数
+
+为啥不直接是 vdom 对象，而是一些函数呢？
+
+因为这样会有一次执行的过程，可以放入一些动态逻辑，执行渲染函数，生成 Vdom(V16 之前)
+
+渲染函数的的名字目前看是`createElement`，这个是因为在配置@babel/preset 设置的**pragma**，当然你也阔以配置其他的，比如自己配置的`cppCreateElement`
+
+```js
+// .babelrc.js
+module.exports = {
+  presets: [
+    [
+      '@babel/preset-react',
+      {
+        pragma: 'cppCreateElement',
+      },
+    ],
+  ],
+};
+```
+
+然后编译后的产物就是如下
+
+> babel 是如何编译 jsx 的
+
+```js
+const data = {
+  a1: 'cppCreateElement',
+  a2: 'wmh',
+  a3: 'chendapeng',
+};
+const jsx = cppCreateElement(
+  'ul',
+  {
+    className: 'list',
+  },
+  cppCreateElement(
+    'li',
+    {
+      className: 'item',
+      style: {
+        background: 'blue',
+        color: 'pink',
+      },
+      onClick: () => alert(2),
+    },
+    data.a3,
+  ),
+  cppCreateElement(
+    'li',
+    {
+      className: 'item',
+    },
+    data.a1,
+  ),
+  cppCreateElement(
+    'li',
+    {
+      className: 'item',
+    },
+    data.a2,
+  ),
+);
+render(jsx, document.getElementById('root'));
+```
+
+那么这个渲染函数`cppCreateElement`是啥逻辑呢
+
+> 执行 cppCreateElement 渲染函数，返回 type、props、children 的对象
+
+render function 就是生成 vdom 的，所以实现大概是这样：
+
+```js
+function cppCreateElement(type, props = {}, ...children) {
+  return {
+    type,
+    props,
+    children,
+  };
+}
 ```

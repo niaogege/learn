@@ -15,4 +15,6 @@ nav:
 
 > 2022 06 11
 
+> 202206 26 有点认怂 react 源码还是不知道无从下手
+
 膜拜[卡颂大佬的 react 源码阅读](https://react.iamkasong.com/#%E7%AB%A0%E8%8A%82%E5%88%97%E8%A1%A8)

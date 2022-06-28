@@ -8,7 +8,7 @@ group:
 
 # Fiber
 
-React 是通过 jsx 描述界面的，会把 jsx 编译成 render function, 然后执行 render Function 生成 VDom
+React 是通过 jsx 描述界面的，babel 会把 jsx 编译成 render function, 然后执行 render Function 生成 VDom
 
 `JSX -> Render Function -> VDom`
 
@@ -18,9 +18,16 @@ V16 之前，react 会直接遍历 vdom, 通过 dom Api 增删改查 dom 的方�
 
 `JSX -> Render Function -> VDom -> Fiber`
 
-Vdom 转 Fiber 过程称为 **reconcile**，是能中断的， schedual 机制在空闲时间执行 reconcile,reconcile 调合过程中会做 diff,打上增删改查的标记(EffectTag),并把对应的 dom 创建好，然后一次性把 fiber 渲染到真实 dom 上，也就是 commit 过程
+Vdom 转 Fiber 过程称为 **reconcile**，是能中断的， schedule 机制在空闲时间执行 reconcile,reconcile 调合过程中会做 diff,打上增删改查的标记(EffectTag),并把对应的 dom 创建好，然后一次性把 fiber 渲染到真实 dom 上，也就是 commit 过程
 
-## JSX
+React16 架构可以分为三层：
+
+Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入 Reconciler(RequestIdleCallback polyfill) Reconciler（协调器）—— 负责找出变化的组件,当 Scheduler 将任务交给 Reconciler 后，Reconciler 会为变化的虚拟 DOM 打上代表增/删/更新的标记 Renderer（渲染器）—— 负责将变化的组件渲染到页面上,Renderer 根据 Reconciler 为虚拟 DOM 打的标记，同步执行对应的 DOM 操作。
+
+react 渲染有 2 个过程
+
+- render 阶段
+- commit 阶段
 
 ## 参考
 
