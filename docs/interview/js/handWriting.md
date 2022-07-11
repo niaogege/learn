@@ -504,15 +504,26 @@ add(1)(2)(3)(4)();
 
 ## 手写题按类排序
 
-面试官： [{ price: 1, size: 2 }, { price: 2, size: 2 }, { price: 1, size: 1 }]] 依次按照 price、size 降序排序
+面试官： [{ price: 1, size: 2 }, { price: 2, size: 2 }, { price: 1, size: 1 }] 依次按照 price、size 降序排序
 
 ```js
 function sort(arr) {
-  return arr
+  return arr.sort((a, b) => {
+    return Number(a.price) > Number(b.price)
+  })
 }
 sort(
-   [{ price: 1, size: 2 }, { price: 2, size: 2 }, { price: 1, size: 1 }]]
+  [
+    { price: 1, size: 2 },
+    { price: 2, size: 2 },
+    { price: 1, size: 1 },
+    { price: 3, size: 1}
+  ]
 )
+    { price: 3, size: 1}
+    { price: 2, size: 2 },
+    { price: 1, size: 1 },
+    { price: 1, size: 2 },
 ```
 
 ## 参考

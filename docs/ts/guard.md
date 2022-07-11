@@ -120,6 +120,17 @@ type WmhType = typeof Wmh;
 
 > as const 只能用在实例之后声明，不能用在类型之后
 
+```ts
+const list = [
+  { name: 'a', val: 1 },
+  { name: 'b', val: 2 },
+  { name: 'c', val: 3 },
+] as const;
+type PicKName<T extends readonly unknown[] = []> = T[number] extends { name: infer N } ? N : never;
+type NameList = PicKName<typeof list>;
+// type NameList = "a" | "b" | "c"
+```
+
 ## 类型保护
 
 类型保护是可执行运行时检查的一种表达式，用于确保该类型在一定的范围内。换句话说，类型保护可以保证一个字符串是一个字符串，尽管它的值也可以是一个数值。类型保护与特性检测并不是完全不同，其主要思想是尝试检测属性、方法或原型，以确定如何处理值。目前主要有四种的方式来实现类型保护：

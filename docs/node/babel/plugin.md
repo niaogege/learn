@@ -93,7 +93,7 @@ Babel's code transformations are enabled by applying plugins (or presets) to you
 
 这意味着如果两个转换插件都将处理“程序（Program）”的某个代码片段，则将根据转换插件或 preset 的排列顺序依次执行。
 
-- 插件在 Presets 前运行。先 plugin 在 preset
+- 插件在 Presets 前运行。先 plugin 再 preset，先插件再预设
 - 插件顺序从前往后排列。
 - Preset 顺序是颠倒的（从后往前）。
 

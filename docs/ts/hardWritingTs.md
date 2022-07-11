@@ -159,6 +159,44 @@ type Up10 = GetNotOptional<Up8>;
 // }
 ```
 
+### PartialByKeys
+
+实现 PartialByKeys<T, K>，使 K 匹配的 Key 变成可选的定义，如果不传 K 效果与 Partial<T> 一样：
+
+```ts
+interface User {
+  name: string;
+  age: number;
+  address: string;
+}
+
+type UserPartialName = PartialByKeys<User, 'name'>; // { name?:string; age:number; address:string }
+
+type Merge<T> = {
+  [P in keyof T]: T[P];
+};
+type PartialByKeys<T extends Record<PropertyKey, any>, K extends PropertyKey = keyof T> = Merge<
+  Partial<T> & Omit<T, K>
+>;
+```
+
+### RequiredByKeys
+
+实现 RequiredByKeys<T, K>，使 K 匹配的 Key 变成必选的定义，如果不传 K 效果与 Required<T> 一样：
+
+```ts
+interface User12 {
+  name?: string
+  age?: number
+  address?: string
+}
+
+type UserRequiredName = RequiredByKeys<User12, 'name'> // { name: string; age?: number; address?: string }
+type RequiredByKeys<T extends Record<PropertyKey, any>, K extends keyof T> = Merge<
+T & Required<Pick<T, K>
+>
+```
+
 ### RemoveIndexSignature
 
 如果想删除索引类型中的可索引签名呢？
@@ -221,3 +259,7 @@ type AppendArgument<T, E> = T extends (...arg: infer P) => any
   ? (...arg: [...P, E]) => ReturnType<T>
   : T;
 ```
+
+## 参考文档
+
+- [精读《MinusOne, PickByType, StartsWith...》](https://mp.weixin.qq.com/s/eV6V92Q2olfFXiPXZY4vbw)

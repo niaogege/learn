@@ -18,3 +18,4 @@ nav:
 ## 参考
 
 - [【CSS】骨架屏 Skeleton 效果](https://mp.weixin.qq.com/s/xU_c2GHNQwpQdsIIl2hrCg)
+- [关于骨架屏的最佳实践](https://segmentfault.com/q/1010000021381227/a-1020000021385080)

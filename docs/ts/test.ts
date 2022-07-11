@@ -85,3 +85,6 @@ function sayName(value: string | number, age: number = 0): number | string | und
   }
 }
 sayName(10, 10);
+
+import * as data from './module';
+console.log(data);

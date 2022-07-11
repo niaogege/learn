@@ -38,6 +38,8 @@ babel 在遍历 AST 树的时候，处理一个节点时，是以访问者的形
 
 ### 代码实现
 
+## 装饰者模式
+
 ## 观察者模式
 
 观察者模式包含两种角色：
@@ -72,10 +74,6 @@ element.addEventListener(‘click’, callback2, false)
 ## 工厂模式
 
 ## 组合模式
-
-## 装饰者模式
-
-[如何理解装饰器的作用](https://mp.weixin.qq.com/s/FTtobh-wGylG1TQAkng8uw)
 
 ## 参考
 

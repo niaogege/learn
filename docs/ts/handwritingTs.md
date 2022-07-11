@@ -452,3 +452,12 @@ type re3 = IsUnion<'a' | 'b'>;
 type IsUnion<A, B = A> = A extends A ? ([B] extends [A] ? false : true) : false;
 type re4 = IsUnion<'11'>;
 ```
+
+### 提取数组对象里的某一个属性的值
+
+```ts
+type PickKeyValue<T extends readonly unknown[] | []> = T[number] extends { type: infer R }
+  ? R
+  : never;
+type T11 = PickKeyValue<[{ type: 'cpp' }, { type: 'wmh' }]>; // type T11 = "cpp" | "wmh"
+```

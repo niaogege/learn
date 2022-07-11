@@ -19,7 +19,7 @@ nav:
 
 nodejs debugger 的原理:
 
-js V8 引擎会启动 **debugger server**（websocket），等待客户端连接，我们可以通过各种 debugger client 连上来进行调试，比如 **chrome devtools**、**vscode debugger**，debugger server 和 debugger client 之间是通过 v8 debugger protocol 来通信的,
+js V8 引擎会启动 **debugger server**（websocket），等待客户端连接，我们可以通过各种 debugger client 连上来进行调试，比如 **chrome devtools**、**vscode debugger**，debugger server 和 debugger client 之间是通过 **v8 debugger protocol** 来通信的,
 
 ## chrome devtool
 
@@ -35,7 +35,7 @@ Debugger listening on ws://127.0.0.1:9229/dfffef7b-2113-4943-8a88-7e8eb68111c3
 
 vscode debugger 的使用主要是在 **.vscode/launch.json** 里面添加调试配置。
 
-- launch： 把 nodejs 代码跑起来，启动 debugger server，然后用 client 来连接
+- launch：把 nodejs 代码跑起来，启动 debugger server，然后用 client 来连接
 - attach：已经有了 debugger server，只需要启动一个 debugger client 连接上就行
 
 ```js
@@ -64,7 +64,7 @@ vscode debugger 的使用主要是在 **.vscode/launch.json** 里面添加调试
 
 具体的配置项常用的有：
 
-- outFiles 指定 sourcemap 的位置，用来调试 ts 源码等需要编译的代码
+- **outFiles** 指定 sourcemap 的位置，用来调试 ts 源码等需要编译的代码
 - stopOnEntry 在首行停住
 - args 来指定一些命令行参数
 - **runtimeExecutable** 当运行时不是 nodejs 的时候需要指定，比如 vscode 或者其他的一些运行时

@@ -46,6 +46,12 @@ React 的生命周期可以分为三个阶段：挂载、渲染、卸载; ![life
 
 1.componentWillUnmount () 在此处完成组件的卸载和数据的销毁。
 
+### 父子组件生命周期顺序
+
+- 渲染挂载父组件 渲染 子组件渲染 子组件挂载 父组件挂载 Parent render => Child render => Child componentDidMount => Parent componentDidMount
+
+- 卸载顺序父组件先卸载， 子组件在卸载 parent componentWillUnmount => child componentWillUnmount
+
 ### 参考文档
 
 - [react 生命周期详解](https://mp.weixin.qq.com/s/yBZmFMAiXXbhXt0Ommo5Gw)

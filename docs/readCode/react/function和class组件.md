@@ -90,6 +90,8 @@ class Component {
   setState(nextState) {
     this.state = nextState;
   }
+  componentDidMount() {}
+  componentWillUnmount() {}
   render() {
     return <></>;
   }

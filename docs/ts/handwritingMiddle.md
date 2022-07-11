@@ -11,11 +11,24 @@ nav:
   path: /interview
 ---
 
+### 字符串转联合类型
+
 中等难度的类型体操
 
 ```ts
 type R1 = GetChars<'abc', never>; // 'a' | 'b' | 'c'
 type GetChars<T extends string, R> = T extends `${infer F}${infer L}` ? GetChars<L, F | R> : R;
+```
+
+### 构造数组 BuildArr
+
+```ts
+type R2 = BuildArr<2>; // type R2 = [unknown, unknown]
+type BuildArr<
+  Length extends number,
+  E = unknown,
+  Arr extends unknown[] = [],
+> = Arr['length'] extends Length ? Arr : BuildArr<Length, E, [...Arr, E]>;
 ```
 
 ## 参考文档

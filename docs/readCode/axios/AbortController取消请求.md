@@ -15,7 +15,7 @@ nav:
 
 面试官：如何取消一个已经发出去的 xhr?
 
-### [AbortController api](https://developer.mozilla.org/zh-CN/docs/Web/API/AbortController])
+### [AbortController api](https://developer.mozilla.org/zh-CN/docs/Web/API/AbortController)
 
 AbortController 接口表示一个控制器对象，允许你根据需要**中止一个或多个 Web** 请求。
 

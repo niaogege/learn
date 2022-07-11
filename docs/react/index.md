@@ -10,7 +10,9 @@ nav:
   path: /react
 ---
 
-## react 生态
+## react 理解
+
+[大佬对 react 理解](https://mp.weixin.qq.com/s/MngOfrMjCUJVlRBBt9oZyg)
 
 ### 基础面试题
 
