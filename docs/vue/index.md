@@ -3,9 +3,9 @@ title: Vue总览
 order: 0
 group:
   title: vue生态
-  order: 8
-nav:
   order: 1
+nav:
+  order: 8
   title: 'vue'
   path: /vue
 ---

@@ -461,3 +461,46 @@ type PickKeyValue<T extends readonly unknown[] | []> = T[number] extends { type:
   : never;
 type T11 = PickKeyValue<[{ type: 'cpp' }, { type: 'wmh' }]>; // type T11 = "cpp" | "wmh"
 ```
+
+### Minus
+
+```ts
+type T12 = Minus<23, 11>; // 12
+type Minus<A extends number, B extends number> = BuildArr<A> extends [
+  ...arr: BuildArr<B>,
+  ...arr2: infer L,
+]
+  ? L['length']
+  : never;
+```
+
+### OmitByType
+
+实现 OmitByType<T, U> 根据类型 U 排除 T 中的 Key：
+
+```ts
+type OmitBoolean = OmitByType<
+  {
+    name: string;
+    count: number;
+    isReadonly: boolean;
+    isEnable: boolean;
+  },
+  boolean
+>; // { name: string; count: number }
+type OmitByType<T extends Record<PropertyKey, any>, U extends unknown> = {
+  [P in keyof T as T[P] extends U ? never : P]: T[P];
+};
+```
+
+### AnyOf
+
+实现 AnyOf 函数，任意项为真则返回 true，否则返回 false，空数组返回 false
+
+```ts
+
+type Sample1 = AnyOf<[1, '', false, [], {}]> // expected to be true.
+type Sample2 = AnyOf<[0, '', false, [], {}]> // expected to be false.
+
+type AnyOf<T>
+```

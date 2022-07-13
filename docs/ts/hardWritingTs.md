@@ -199,7 +199,7 @@ T & Required<Pick<T, K>
 
 ### RemoveIndexSignature
 
-如果想删除索引类型中的可索引签名呢？
+如果想删除索引类型中的**可索引签名**呢？
 
 索引签名不能构造成字符串字面量类型，因为它没有名字，而其他索引可以。
 
@@ -212,6 +212,10 @@ type RemoveIndexSignature<T extends Record<string, any>> = {
   [K in keyof T as K extends `${infer R}` ? R : never]: T[K];
 };
 type Up12 = RemoveIndexSignature<Up11>;
+
+// type Up12 = {
+//     sleep: () => void;
+// }
 ```
 
 ### ClassPublicProps
@@ -260,6 +264,53 @@ type AppendArgument<T, E> = T extends (...arg: infer P) => any
   : T;
 ```
 
+### Assign 合并选项
+
+合并对象
+
+```ts
+type Up16 = Assign<{ a: 1; d: 4 }, { a: 2; b: 3 }>;
+// expect { d: 4, a: 2, b: 3}
+type Assign<T1 extends Record<PropertyKey, any>, T2 extends Record<PropertyKey, any>> = {
+  [K in keyof T1 | keyof T2]: K extends keyof T2 ? T2[K] : K extends keyof T1 ? T1[K] : never;
+};
+const Test171 = assign({ a: 1, d: 4 }, { a: 2, b: 3 });
+
+declare function assign<Obj1 extends Record<string, any>, Obj2 extends Record<string, any>>(
+  obj1: Obj1,
+  obj2: Obj2,
+): Assign<Obj1, Obj2>;
+```
+
+### Diff
+
+找出两个对象的不同
+
+```ts
+type Foo = {
+  name: string;
+  age: string;
+};
+type Bar = {
+  name: string;
+  age: string;
+  gender: number;
+  say: () => void;
+};
+
+type Up17 = Diff<Foo, Bar>; // { gender: number }
+type Up18 = Exclude<keyof Foo, keyof Bar>; // type Up19 = "gender" | "say"
+type Up19 = Exclude<keyof Bar, keyof Foo>; // type Up19 = "gender" | "say"
+type Diff<A extends Record<PropertyKey, any>, B extends Record<PropertyKey, any>> = {
+  [K in Exclude<keyof A, keyof B> | Exclude<keyof B, keyof A>]: K extends keyof B
+    ? B[K]
+    : K extends keyof A
+    ? A[K]
+    : never;
+};
+```
+
 ## 参考文档
 
 - [精读《MinusOne, PickByType, StartsWith...》](https://mp.weixin.qq.com/s/eV6V92Q2olfFXiPXZY4vbw)
+- [精读《Diff, AnyOf, IsUnion...》](https://mp.weixin.qq.com/s/11B6kLuz9TxykGU6_Hh8ug)
