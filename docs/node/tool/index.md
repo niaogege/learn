@@ -11,9 +11,11 @@ nav:
   path: /node
 ---
 
-## node 端 debugger 调试技巧
+## 1.[node 端 debugger 调试技巧](./tool/debugger.md)
 
-## monoRepo
+## 2.[npm/yarn/pnpm](./tool/yarn%E5%92%8Cnpm.md)
+
+## 3.[monoRepo](./tool/monorepo%E5%AE%9E%E6%88%98.md)
 
 yarn 有一个**workspaces**可以支持 monorepo，使用这个功能需要在 package.json 里面配置 workspaces
 

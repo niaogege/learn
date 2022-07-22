@@ -22,7 +22,7 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 > 始终保持一个对技术热爱的 ❤️
 
-![前端面试.png](https://s2.loli.net/2022/06/23/Z5V4FuNXb7GdrhE.png)
+![interview.png](https://s2.loli.net/2022/07/21/ZIaF8mitBkeSwfq.png)
 
 ## 沉淀
 

@@ -38,6 +38,7 @@ nav:
 
 ## browser
 
+- js 执行机制
 - 浏览器原理
 - jwt/cookie/session
 
@@ -63,6 +64,12 @@ nav:
 - https
 - tcp/udp/http
 - 缓存
+
+## ts
+
+- 各种类型体操
+- 逆变和协变
+- interface 和 type 区别
 
 > 在哪里跌倒 就在哪里爬起来
 

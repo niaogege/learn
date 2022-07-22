@@ -127,6 +127,11 @@ type UnionToIntersection<T> = (T extends T ? (x: T) => unknown : never) extends 
   ? R
   : never;
 type Up7 = UnionToIntersection<Up5>;
+// type Up7 = {
+//     name: 'cpp';
+// } & {
+//     age: 30;
+// }
 ```
 
 ### GetOptional
@@ -147,7 +152,7 @@ type Up9 = GetOptional<Up8>;
 // }
 ```
 
-重点是这句提取值可能为 undefined 的属性`{} extends Pick<T, P> ? P : never` 如果提取非可选索引呢
+重点是这句提取值可能为 **undefined** 的属性`{} extends Pick<T, P> ? P : never` 如果提取非可选索引呢
 
 ```ts
 type GetNotOptional<T extends Record<string, any>> = {
@@ -192,6 +197,13 @@ interface User12 {
 }
 
 type UserRequiredName = RequiredByKeys<User12, 'name'> // { name: string; age?: number; address?: string }
+
+// type UserRequiredName = {
+//     name: string;
+//     age?: number | undefined;
+//     address?: string | undefined;
+// }
+
 type RequiredByKeys<T extends Record<PropertyKey, any>, K extends keyof T> = Merge<
 T & Required<Pick<T, K>
 >
@@ -219,6 +231,8 @@ type Up12 = RemoveIndexSignature<Up11>;
 ```
 
 ### ClassPublicProps
+
+keyof 提取出 public 属性的属性名
 
 ```ts
 class Dong {
@@ -301,6 +315,7 @@ type Bar = {
 type Up17 = Diff<Foo, Bar>; // { gender: number }
 type Up18 = Exclude<keyof Foo, keyof Bar>; // type Up19 = "gender" | "say"
 type Up19 = Exclude<keyof Bar, keyof Foo>; // type Up19 = "gender" | "say"
+
 type Diff<A extends Record<PropertyKey, any>, B extends Record<PropertyKey, any>> = {
   [K in Exclude<keyof A, keyof B> | Exclude<keyof B, keyof A>]: K extends keyof B
     ? B[K]
@@ -308,6 +323,93 @@ type Diff<A extends Record<PropertyKey, any>, B extends Record<PropertyKey, any>
     ? A[K]
     : never;
 };
+```
+
+### ObjectEntries
+
+实现 TS 版本的 **Object.entries**：
+
+```ts
+interface Model {
+  name: string;
+  age: number;
+  locations: string[] | null;
+}
+type modelEntries = ObjectEntries<Partial<Model>>;
+// ['name', string] | ['age', number] | ['locations', string[] | null];
+type ObjectEntries<T extends Record<PropertyKey, any>> = {
+  [K in keyof T]-?: [K, RemoveUndefined<T[K]>];
+}[keyof T];
+
+interface Model1 {
+  hobby?: string;
+}
+type Up20 = ObjectEntries<Model1>;
+type Up21 = number | undefined | string[];
+type RemoveUndefined<T> = [T] extends [undefined] ? T : Exclude<T, undefined>;
+type Up22 = RemoveUndefined<Up21>;
+```
+
+### Tuple to Nested Object
+
+实现 TupleToNestedObject<T, P>，其中 T 仅接收字符串数组，P 是任意类型，生成一个递归对象结构，满足如下结果：
+
+```ts
+type Up41 = [1, 2, 3, 4];
+type Up42 = Up41['length'];
+type Up43 = ['hello', 1, 'cpp'];
+type Up44 = Up43['length'];
+type a = TupleToNestedObject<['a'], string>; // {a: string}
+type b = TupleToNestedObject<['a', 'b'], number>; // {a: {b: number}}
+type c = TupleToNestedObject<[], boolean>; // boolean. if the tuple is empty, just return the U type
+
+type TupleToNestedObject<T extends string[], P extends any> = {};
+```
+
+### 接口类型的约束
+
+```ts
+type UnionToIntersection1<U> = (U extends any ? (arg: U) => any : never) extends (
+  arg: infer I,
+) => void
+  ? I
+  : never;
+type Up23 = 'a' | 'b' | 'c';
+type Up24 = 'd' | 'e' | 'f';
+type Up27 = [string, number, symbol];
+type Up25 =
+  | {
+      type: 'a';
+      payload: 'd';
+    }
+  | {
+      type: 'b';
+      payload: 'e';
+    }
+  | {
+      type: 'c';
+      payload: 'f';
+    };
+
+type Up26 = ToAction<Up23>;
+type Up28 = ToAction2<Up24>;
+type ToAction<A extends PropertyKey> = {
+  [P in A]: {
+    type: P;
+  };
+}[A];
+type ToAction2<A extends PropertyKey> = {
+  [P in A]: {
+    payload: P;
+  };
+}[A];
+type Last1<A extends Record<PropertyKey, any>, B extends string> = A extends { type: infer F }
+  ? {
+      type: F;
+      payload: B[number];
+    }
+  : never;
+type Up30 = Last1<Up26, Up24>;
 ```
 
 ## 参考文档

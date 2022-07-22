@@ -282,7 +282,7 @@ type T39 = ReturnType2<typeof SayName1>;
 
 ```ts
 type T40 = [1,2,3]
-type T41 = PopArr<T40>
+type T41 = PopArr<T40> // type T41 = [1, 2]
 type PopArr<T extends unknown[]> =
 T extends [...infer F, infer L]
   ? F extends any[] ? F
@@ -419,6 +419,13 @@ type TupleToUnion<T extends unknown[]> = T[number];
 type T62 = TupleToUnion<Arr>; // expected to be '1' | '2' | '3'
 ```
 
+如果是联合转元祖呢
+
+```ts
+type T631 = '1' | '2' | '3'
+type UnionToTuple<T extends unknown> = ??
+```
+
 ### Last of Array
 
 ```ts
@@ -497,10 +504,48 @@ type OmitByType<T extends Record<PropertyKey, any>, U extends unknown> = {
 
 实现 AnyOf 函数，任意项为真则返回 true，否则返回 false，空数组返回 false
 
+// 利用 extends Array<> 的方式，让 TS 自动帮你遍历
+
 ```ts
+type Sample1 = AnyOf<[1, '', false, [], {}]>; // expected to be true.
+type Sample2 = AnyOf<[0, '', false, [], {}]>; // expected to be false.
 
-type Sample1 = AnyOf<[1, '', false, [], {}]> // expected to be true.
-type Sample2 = AnyOf<[0, '', false, [], {}]> // expected to be false.
+type False = '' | false | undefined | null | 0 | [] | never | Record<PropertyKey, any>;
+type AnyOf<T extends readonly any[]> = T extends False[] ? false : true;
+```
 
-type AnyOf<T>
+### 剔除属性为 undefined 的类型
+
+- 联合类型剔除 undefined 类型
+
+```ts
+type Up211 = number | undefined | string[];
+type RemoveUndefined1<T> = T extends [undefined] ? T : Exclude<T, undefined>;
+type Up221 = RemoveUndefined1<Up211>; //  number | string[]
+```
+
+- 数组类型中剔除 undefiend
+
+```ts
+type Up222 = ['c', 1, 0, undefined];
+
+// 删除类型中的undefiend
+type RemoveUndefined2<T extends unknown[], I, R extends unknown[] = []> = T extends [
+  infer F,
+  ...infer L,
+]
+  ? Equal1<F, I> extends true
+    ? RemoveUndefined2<L, I, R>
+    : RemoveUndefined2<L, I, [...R, F]>
+  : R;
+type Up223 = RemoveUndefined2<Up222, undefined>;
+
+type Equal1<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
+```
+
+### 实现 TS 版 Array.shift：
+
+```ts
+type T14 = Shift1<[3, 2, 1]>; // [2, 1]
+type Shift1<T extends any[]> = T extends [infer A, ...infer R] ? R : T;
 ```
