@@ -10,3 +10,5 @@ nav:
   title: 'interview'
   path: /interview
 ---
+
+js 超时设置
