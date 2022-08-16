@@ -431,10 +431,11 @@ type UnionToTuple<T extends unknown> = ??
 ```ts
 type arr1 = ['a', 'b', 'c'];
 type arr2 = [3, 2, 1];
-
+type RR<T extends unknown[]> = T extends [...infer F, infer R] ? [R, ...RR<F>] : [];
 type tail1 = Last<arr1>; // expected to be 'c'
 type tail2 = Last<arr2>; // expected to be 1
-
+type tail3 = RR<arr1>;
+type tail4 = RR<arr2>;
 type Last<T extends unknown[]> = T extends [...infer F, infer R] ? R : never;
 ```
 

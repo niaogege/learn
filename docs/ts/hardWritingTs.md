@@ -359,11 +359,31 @@ type Up41 = [1, 2, 3, 4];
 type Up42 = Up41['length'];
 type Up43 = ['hello', 1, 'cpp'];
 type Up44 = Up43['length'];
-type a = TupleToNestedObject<['a'], string>; // {a: string}
-type b = TupleToNestedObject<['a', 'b'], number>; // {a: {b: number}}
-type c = TupleToNestedObject<[], boolean>; // boolean. if the tuple is empty, just return the U type
+type a = TupleToNestedObject1<['a'], string>; // {a: string}
+type b = TupleToNestedObject1<['a', 'b'], number>; // {a: {b: number}}
+type c = TupleToNestedObject1<[], boolean>; // boolean. if the tuple is empty, just return the U type
 
-type TupleToNestedObject<T extends string[], P extends any> = {};
+// type TupleToNestedObject<
+//   T extends string[],
+//   P extends any,
+//   S = {}> = T extends [...infer A, infer R extends PropertyKey]
+//   ? R extends string
+//     ? { [K in R]: P }
+//     : A extends [] ? {name: 'cpp'} : {name: 'wmh'}
+//   : P;
+
+type TupleToNestedObject1<
+  T,
+  U,
+  S = U> =
+  T extends []
+    ? S
+    : (T extends [...infer A, infer Last extends PropertyKey]
+      ? TupleToNestedObject1<A, U, {
+          [K in Last]: S
+        }>
+      : never
+    );
 ```
 
 ### 接口类型的约束
@@ -410,6 +430,41 @@ type Last1<A extends Record<PropertyKey, any>, B extends string> = A extends { t
     }
   : never;
 type Up30 = Last1<Up26, Up24>;
+```
+
+### BEM style string
+
+```ts
+type Up31 = BEM1<'btn', [], ['small', 'medium', 'large']>; // 'btn--small' | 'btn--medium' | 'btn--large'
+
+type Up34 = BEM2<'btn', [], ['small', 'medium', 'large']>;
+// type Up34 = "btn--small" | "btn--medium" | "btn--large"
+
+type Up35 = BEM2<'btn', ['cpp'], ['small', 'medium', 'large']>;
+// type Up35 = "btn__cpp--small" | "btn__cpp--medium" | "btn__cpp--large"
+```
+
+```ts
+type BEM1<
+  B extends string,
+  E extends string[],
+  M extends string[],
+> = `${B}__${E[number]}--${M[number]}`;
+
+type IsNever<T> = T[] extends never[] ? true : false;
+type SafeUnion<T> = IsNever<T> extends true ? '' : T;
+
+type BEM2<
+  B extends string,
+  E extends string[],
+  M extends string[],
+> = `${B}${SafeUnion<`__${E[number]}`>}${SafeUnion<`--${M[number]}`>}`;
+
+type Equal2<A, B = A> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+  ? true
+  : false;
+type Up32 = Equal2<any, true>;
+type Up33 = Equal2<unknown, never>; // type Up33 = false
 ```
 
 ## 参考文档

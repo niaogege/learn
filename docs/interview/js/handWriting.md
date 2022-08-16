@@ -379,17 +379,7 @@ reverseFlatten(3, arr);
 面试官问: 如何实现对象的扁平化
 
 ```js
-const obj = {
- a: {
-      b: 1,
-      c: 2,
-      d: {e: 5}
-    },
- b: [1, 3, {a: 2, b: 3}],
- c: 3
-}
-
-flatten(obj) 结果返回如下
+// 结果返回如下
 // {
 //  'a.b': 1,
 //  'a.c': 2,
@@ -400,6 +390,33 @@ flatten(obj) 结果返回如下
 //  'b[2].b': 3
 //   c: 3
 // }
+var obj = {
+  a: {
+    b: 1,
+    c: 2,
+    d: { e: 5 },
+  },
+  b: [1, 3, { a: 2, b: 3 }],
+  c: 3,
+};
+
+flatten(obj);
+
+function flatten(obj, key = '', res = {}, isArray = false) {
+  for (let [k, v] of Object.entries(obj)) {
+    if (Array.isArray(v)) {
+      let temp = isArray ? `${key}[${k}]` : key + k;
+      flatten(v, temp, res, true);
+    } else if (typeof v === 'object') {
+      let temp = isArray ? `${key}[${k}].` : key + k + '.';
+      flatten(v, temp, res);
+    } else {
+      let temp = isArray ? `${key}[${k}]` : key + k;
+      res[temp] = v;
+    }
+  }
+  return res;
+}
 ```
 
 ## 手写 map
@@ -414,13 +431,47 @@ Array.prototype.mockMap = function (fn, context) {
   return res;
 };
 var test = [1, 2, 3];
-test.mockTest((item) => item * 2); // [2,4,6]
+test.mockMap((item) => item * 2); // [2,4,6]
+```
+
+## 手写 Array.prototype.filter
+
+```js
+Array.prototype.myFilter = function (fn, context) {
+  var arr = Array.prototype.slice.call(this);
+  var res = [];
+  for (let i = 0; i < arr.length; i++) {
+    if (fn.call(context, arr[i], i, arr)) {
+      res.push(arr[i]);
+    }
+  }
+  return res;
+};
+var test = [1, 2, 3];
+test.myFilter((e) => e > 2);
 ```
 
 ## 手写 Array.prototype.reduce
 
-```js
+- 初始值传不传 差距蛮大
+- 返回值如何处理
 
+```js
+Array.prototype.myReduce = function (fn, initvalue) {
+  var arr = Array.prototype.slice.call(this);
+  var res, startIndex;
+  res = initvalue ? initvalue : arr[0];
+  startIndex = initvalue ? 0 : 1;
+  for (let i = startIndex; i < arr.length; i++) {
+    res = fn.call(null, res, arr[i], i, this);
+  }
+  return res;
+};
+var sum = (...arr) =>
+  arr.myReduce((a, b) => {
+    return a + b;
+  }, 10);
+sum(1, 2, 3);
 ```
 
 ## 手写乞丐版 ajax

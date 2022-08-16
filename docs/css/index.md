@@ -126,6 +126,8 @@ Inline Formate Context 行内格式化上下文
 - 元素选择器(p/span)/伪元素选择器（0001）(:afrer/before)
 - 关系选择器(兄弟 后代 A + B 紧邻组合)/通配符选择器（0000）
 
+## link 和@import 区别
+
 ## 参考
 
 - [面试题汇总](https://juejin.cn/post/6844903885488783374#heading-58)

@@ -13,6 +13,88 @@ nav:
 
 ts 强类型语言已经大势所趋，工具还是得需要掌握，至于要掌握到多深的程度？I dont Konw
 
+> 每次类型体操让我有一点清醒，知道自己在思考了，也算好事
+
+## enum 和 const
+
+[使用“const”优化 TypeScript 中的枚举](https://mp.weixin.qq.com/s/PPVPg0Spe09ZDqJ1aqBkxA)
+
+在 TypeScript 中使用枚举是访问旨在: 多个文件共享的**特定参数**的好方法，例如特定用户的访问级别或特定常量。
+
+Enums 会生成大量代码，通过 const 在 TypeScript 中与我们的 Enums 一起引入关键字，我们可以减轻大量生成的代码
+
+通常，我们会如下声明一个 Enum：
+
+```ts
+export enum Sizes {
+  Small,
+  Middle,
+  Large,
+}
+// 然后可以像这样访问枚举：
+const coffee = {
+  name: 'pro',
+  size: Sizes.Middle, // 1
+};
+```
+
+以上代码会被编译成
+
+```js
+let exports = {};
+exports.__esModule = true;
+exports.Sizes = void 0;
+var Sizes;
+(function (Sizes) {
+  Sizes[(Sizes['Small'] = 0)] = 'Small';
+  Sizes[(Sizes['Middle'] = 1)] = 'Middle';
+  Sizes[(Sizes['Large'] = 2)] = 'Large';
+})((Sizes = exports.Sizes || (exports.Sizes = {})));
+var coffee = {
+  name: 'pro',
+  size: Sizes.Middle,
+};
+console.log(coffee, 'coffee');
+```
+
+默认情况下，枚举还创建所谓的**反向映射**。这意味着我们可以获取 Enum 属性值并将其传递给 Enum 本身以获得其文字的值：
+
+```ts
+export enum Sizes {
+  Small,
+  Middle,
+  Large,
+}
+const coffee1 = {
+  name: 'cpp',
+  size: Sizes[Sizes.Small], // 'Small'
+};
+```
+
+大多数时候您可能不需要这种反向映射功能，如果是这种情况，那么您当然可以通过使用 **const** 规避这种反映射
+
+```ts
+const enum Sizes1 {
+  Small,
+  Middle,
+  Large,
+}
+
+const coffee2 = {
+  name: 'cpp',
+  size: Sizes1.Middle,
+};
+```
+
+编译 js 后代码很简单
+
+```js
+var coffee2 = {
+  name: 'cpp',
+  size: 1 /* Middle */,
+};
+```
+
 ## 体操类型
 
 ```ts

@@ -110,7 +110,7 @@ p1.then((res) => res)
   });
 ```
 
-在 then 语句里返回一个永远 pending 的 Promise 即可
+在 **then 语句里返回一个永远 pending 的 Promise 即可**
 
 - 中断 Promise
 

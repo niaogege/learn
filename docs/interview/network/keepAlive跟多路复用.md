@@ -21,7 +21,7 @@ HTTP/1.x keep-alive 是什么 HTTP/2 多路复用 HTTP/1.x keep-alive 与 HTTP/2
 
 TCP 连接的新建成本很高，因为客户端和服务器建立连接时需要“三次握手”，发送 3 个数据包，需要 1 个 RTT；关闭连接是“四次挥手”，4 个数据包需要 2 个 RTT，并且开始时发送速率较慢（slow start），随着网页加载的外部资源越来越多，这个问题就愈发突出了所以 HTTP/1.0 引入了 keep-alive 长连接，HTTP/1.0 中是默认关闭的，可以通过 Connection: keep-alive; 开启 ，HTTP/1.1 默认是开启的，无论加没加 Connection: keep-alive;
 
-所谓长连接，即在 HTTP 请求建立 TCP 连接时，请求结束，TCP 连接不断开，继续保持一段时间（timeout），在这段时间内，同一客户端向服务器发送请求都会复用该 TCP 连接，并重置 timeout 时间计数器，在接下来 timeout 时间内还可以继续复用 TCP 。这样无疑省略了反复创建和销毁 TCP 连接的损耗。
+所谓长连接，即在 HTTP 请求建立 **TCP 连接时，请求结束，TCP 连接不断开**，继续保持一段时间（timeout），在这段时间内，同一客户端向服务器发送请求都会复用该 TCP 连接，并重置 timeout 时间计数器，在接下来 timeout 时间内还可以继续复用 TCP 。这样无疑省略了反复创建和销毁 TCP 连接的损耗。
 
 ## HTTP/2 多路复用
 

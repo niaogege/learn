@@ -33,16 +33,30 @@ server side Render (ssr)
 
 ## 什么是服务端渲染
 
+服务器端渲染（Server-Side Rendering）是指由服务端完成页面的 HTML 结构拼接的页面处理技术，发送到浏览器，然后为其绑定状态与事件，成为完全可交互页面的过程。
+
+csr 和 ssr 最大的区别在于前者页面渲染是由 js 负责进行的，而后者则是由服务端直接返回 html 让浏览器直接渲染
+
 ## 脱水 Dehydrate 和 注水 Hydrate
 
 #### 同构
 
-一套 react 代码，在服务端执行一次，在客户端也执行一次，reactDom.renderToString 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端执行 **ReactDom.hydrat**e，把事件和属性生效
+一套 react 代码，在服务端执行一次，在客户端也执行一次，reactDom.renderToString 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端执行 **ReactDom.hydrate**，把事件和属性生效
 
 1. 服务端渲染 jsx->html,使用**ReactDom.renderToString**生成
 2. 客户端在运行 jsx->html,使用**ReactDom.hydrate**进行客户端的再次渲染
 
 如果用服务端渲染，务必保持服务端塞给 react 组件的数据跟浏览器端数据保持一致
+
+所谓同构，通俗的讲，就是一套 React 代码在服务器上运行一遍，到达浏览器又运行一遍。**服务端渲染完成页面结构**，**浏览器端渲染完成事件绑定**
+
+> 客户端如何绑定事件的？
+
+让浏览器去拉取 JS 文件执行，让 JS 代码来控制
+
+同构的执行流程：
+
+服务端运 react 生产 html -> 发送到浏览器 -> 浏览器渲染 html -> 浏览器加载 js 脚本 -> JS 代码执行并接管页面的操作
 
 #### 注水 Hydrate
 
@@ -101,7 +115,7 @@ const App = () => {
 ReactDom.hydrate(<App />, document.getElementById('app'));
 ```
 
-##
+## 同构
 
 ## 手写 react ssr
 

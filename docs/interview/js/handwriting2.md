@@ -67,7 +67,7 @@ function binaryFind(arr, target) {
 }
 ```
 
-## 笔试题：实现 destructuringArray 方法，达到如下效果
+## 笔试题：实现 **destructuringArray** 方法，达到如下效果
 
 ```js
 // destructuringArray( [1,[2,4],3], "[a,[b],c]" );
@@ -76,6 +76,63 @@ function binaryFind(arr, target) {
 ```
 
 ## 实现一个 immutable
+
+## 数组或者对象扁平化
+
+```js
+var test = [1, 2, [3, 4]];
+function flatten(arr) {
+  var res = [];
+  var stack = [arr];
+  while (stack.length) {
+    var temp = stack.pop();
+    if (Array.isArray(temp)) {
+      stack.push(...temp);
+    } else {
+      res.push(temp);
+    }
+  }
+  return res.reverse();
+}
+flatten(test);
+
+function flatten2(arr) {
+  while (arr.some(Array.isArray)) {
+    arr = [].concat(...arr);
+  }
+  return arr;
+}
+```
+
+```js
+var test = {
+  a: {
+    b: 1,
+    c: 2,
+    d: {
+      e: 5,
+    },
+  },
+  f: [6, 7, { g: 8 }],
+  h: 10,
+};
+function flatten(obj, key = '', res = {}, isArray = false) {
+  for (let [k, val] of Object.entries(obj)) {
+    if (Array.isArray(val)) {
+      let temp = isArray ? `${key}[${k}]` : key + k;
+      flatten(val, temp, res, true);
+    } else if (typeof val === 'object') {
+      let temp = isArray ? `${key}[${k}].` : key + k + '.';
+      flatten(val, temp, res);
+    } else {
+      let temp = isArray ? `${key}[${k}]` : key + k;
+      res[temp] = val;
+    }
+  }
+  return res;
+}
+flatten(test);
+```
 
 ## 参考
 
