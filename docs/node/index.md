@@ -17,6 +17,73 @@ nav:
 - 浏览器通过事件驱动来服务界面上的交互
 - Node 通过事件驱动来服务 I/O
 
+## Cjs/Amd/umd/Esmodule
+
+### Cjs
+
+CJS 是 CommonJS 的缩写。经常我们这么使用：
+
+```js
+// importing
+const doSomething = require('./doSomething.js');
+
+// exporting
+module.exports = function doSomething(n) {
+  // do something
+};
+```
+
+### Amd
+
+AMD 代表异步模块定义。(依赖前置)下面是一个示例代码
+
+```js
+define(['dep1', 'dep2'], function (dep1, dep2) {
+  //Define the module value by returning a value.
+  return function () {};
+});
+```
+
+又或者
+
+```js
+// "simplified CommonJS wrapping" https://requirejs.org/docs/whyamd.html
+define(function (require) {
+  var dep1 = require('dep1'),
+    dep2 = require('dep2');
+  return function () {};
+});
+```
+
+- AMD 是异步(asynchronously)导入模块的(因此得名)
+- 一开始被提议的时候，AMD 是为前端而做的(而 CJS 是后端)
+- AMD 的语法不如 CJS 直观。我认为 AMD 和 CJS 完全相反
+
+### umd
+
+UMD 代表**通用模块定义**（Universal Module Definition）
+
+```js
+(function (root, factory) {
+    if (typeof define === "function" && define.amd) {
+        define(["jquery", "underscore"], factory);
+    } else if (typeof exports === "object") {
+        module.exports = factory(require("jquery"), require("underscore"));
+    } else {
+        root.Requester = factory(root.$, root._);
+    }
+}(this, function ($, _) {
+    // this is where I defined my module implementation
+    var Requester = { // ... };
+    return Requester;
+}));
+```
+
+- 在前端和后端都适用（“通用”因此得名）
+- 与 CJS 或 AMD 不同，UMD 更像是一种配置多个模块系统的模式
+- 当使用 Rollup/Webpack 之类的打包器时，UMD 通常用作备用模块
+- UMD 随处可见，通常在 **ESM 不起作用的情况下用作备用**
+
 ## Esmodule 跟 commonjs 区别
 
 commonjs 是 nodejs 端模块化组织方式 esm 是浏览器端模块化组织方式

@@ -2,7 +2,7 @@
  * @Author: Chendapeng
  * @Date: 2022-04-12 22:23:54
  * @LastEditors: Chendapeng
- * @LastEditTime: 2022-06-23 13:45:33
+ * @LastEditTime: 2022-08-17 19:26:14
  * @Description:
  */
 import { defineConfig } from 'dumi';
@@ -11,8 +11,8 @@ import { defineConfig } from 'dumi';
 // const lastPath = path.resolve(__dirname, 'src')
 export default defineConfig({
   title: '@chendapeng',
-  favicon: 'https://s2.loli.net/2022/04/12/5gOhrAGakuTdQXc.jpg',
-  logo: 'https://s2.loli.net/2022/04/12/5gOhrAGakuTdQXc.jpg',
+  favicon: 'https://pica.zhimg.com/v2-5cc11a3ba02cd7827cda429546f7bacf_xl.jpg?source=32738c0c',
+  logo: 'https://pica.zhimg.com/v2-5cc11a3ba02cd7827cda429546f7bacf_xl.jpg?source=32738c0c',
   outputPath: 'docs-dist',
   locales: [
     ['zh-CN', '中文'],
@@ -26,8 +26,8 @@ export default defineConfig({
     },
   ],
   mode: 'site',
-  // base: '/cpp-ui',
-  // publicPath: '/cpp-ui/',
+  base: '/cpp-ui',
+  publicPath: '/cpp-ui/',
   // exportStatic: { htmlSuffix: process.env.NODE_ENV === 'production' ? true : false },
   // more config: https://d.umijs.org/config
   // chainWebpack(memo, { env, webpack, createCSSRule }) {
@@ -40,4 +40,7 @@ export default defineConfig({
     type: 'none',
   },
   sass: {},
+  // dynamicImport: {
+  //   loading: '@/Loading',
+  // },
 });

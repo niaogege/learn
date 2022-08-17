@@ -1,3 +1,7 @@
+import Cpp from './module';
+
+console.log(Cpp.name, Cpp.age);
+
 export {};
 
 export type ExcludeTest = 'cpp' | 'wmh';
