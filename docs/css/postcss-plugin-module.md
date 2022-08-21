@@ -121,13 +121,51 @@ function Guang {
 
 但这个是运行时的，有点耗性能
 
+## Ast 中的 css
+
+看图加深基本认知[Postcss](https://astexplorer.net/)
+
+![astpostcss.png](https://s2.loli.net/2022/08/18/cz4qPFfxQsLC7Bh.png)
+
+postcss 插件的形式是一个函数返回一个对象，函数接收插件的 options，返回的的对象里包含了 AST 的处理逻辑，可以指定对什么 AST 做什么处理。
+
+这里的 Once 代表对 AST 根节点做处理，第一个参数是 AST，第二个参数是一些辅助方法，比如可以创建 AST。
+
+postcss 的 AST 主要有三种：
+
+- atrule：以 @ 开头的规则，比如：
+
+```css
+@media screen and (min-width: 480px) {
+  body {
+    background-color: lightgreen;
+  }
+}
+```
+
+- rule：选择器开头的规则，比如：
+
+```css
+#main {
+  border: 1px solid black;
+}
+```
+
+- decl：具体的样式，比如：
+
+```css
+border: 1px solid black;
+```
+
 ## 手写 css modules
 
 > postCSS
 
 postCSS 是一款 css 编译器。
 
-类比 Babel 家族的@babel/parser 可以将 js 代码解析为 AST（抽象语法树），再利用众多插件（@babel/plugin-xx）的能力改写 AST，最终输出改写后的 js 代码。
+类比 Babel 家族的 **@babel/parser** 可以将 js 代码解析为 AST（抽象语法树），再利用众多插件（@babel/plugin-xx）的能力改写 AST，最终输出改写后的 js 代码。
+
+postCSS 利用自身的 parser 可以将 css 代码解析为 AST，再利用众多插件（上文介绍的 autoprefixer 就是一种）改写 AST，最终输出改写后的 css 代码。
 
 首先看 npm [postcss-modules-scope](https://www.npmjs.com/package/postcss-modules-scope)官网中的例子
 

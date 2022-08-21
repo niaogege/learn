@@ -13,7 +13,9 @@ nav:
 
 面试官问： 实现一个 node 异步函数的 **promisify**
 
-promisify 作用是把回调函数转成 promise 形式？即调用该回调函数的时候有 2 个参数，第一个是错误信息，其次才是真正要返回的内容，Promisify 就是把第二个参数转化为 promise
+promisify 作用是把**回调函数转成 promise 形式**？
+
+即调用该**回调函数**的时候有 2 个参数，第一个是错误信息，其次才是真正要返回的内容，Promisify 就是把**第二个参数转化为 promise**
 
 > 没太理解，具体业务场景是啥 0520 看下示例就明白了若川大佬的文章很好理解 浅显易懂 0528
 
@@ -53,7 +55,6 @@ readFileAsync('test.js').then(
 ```js
 var imgSrc = 'http://xx/jpg';
 function loadImg(src, cb) {
-  console.log(process, 'PROCESS');
   if (process !== undefined) return;
   const img = document.createElement('img');
   img.src = src;
