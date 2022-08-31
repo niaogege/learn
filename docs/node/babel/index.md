@@ -3,7 +3,7 @@ title: 初识babel
 order: 0
 group:
   title: babel
-  order: 0
+  order: 1
   path: /babel
 nav:
   order: 1

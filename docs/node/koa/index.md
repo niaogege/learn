@@ -3,13 +3,21 @@ title: koa
 order: 0
 group:
   title: koa
-  order: 1
+  order: 2
   path: /node/koa
 nav:
   order: 5
   title: 'node'
   path: /node
 ---
+
+- 实现一下 koa 的中间件中的 run 方法
+
+```js
+var list = [function (next) {}];
+
+function run(list) {}
+```
 
 ## KOA 的中间件原理
 

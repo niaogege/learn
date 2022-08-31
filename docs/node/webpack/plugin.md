@@ -32,6 +32,14 @@ Webpack 可以将其理解是一种基于事件流的编程范例，一个插件
 
 而将这些插件控制在 webapck 事件流上的运行的就是 webpack 自己写的基础类**Tapable**。
 
+常用的 plugin 如下
+
+- html-webpack-plugin：简化 html 文件创建
+- uglifyjs-webpack-plugin：通过 UglifyES 压缩 ES6 代码
+- webpack-parallel-uglify-plugin: 多核压缩,提高压缩速度
+- webpack-bundle-analyzer: 可视化 webpack 输出文件的体积
+- mini-css-extract-plugin: CSS 提取到单独的文件中,支持按需加载
+
 ### Tapable
 
 **tapable** 库暴露了很多 Hook（钩子）类，为插件提供挂载的钩子。
@@ -40,7 +48,7 @@ Tapable 暴露出挂载**plugin**的方法，使我们能 将 plugin 控制在 w
 
 ```js
 const {
-  SyncHook,
+  SyncHook, //
   SyncBailHook,
   SyncWaterfallHook,
   SyncLoopHook,

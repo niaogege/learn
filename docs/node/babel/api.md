@@ -3,7 +3,7 @@ title: babel相关API
 order: 2
 group:
   title: babel
-  order: 0
+  order: 1
   path: /babel
 nav:
   order: 1

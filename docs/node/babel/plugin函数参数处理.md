@@ -3,7 +3,7 @@ title: plugin实战之函数参数处理
 order: 6
 group:
   title: babel
-  order: 0
+  order: 1
   path: /babel
 nav:
   order: 1

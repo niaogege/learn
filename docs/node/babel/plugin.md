@@ -3,7 +3,7 @@ title: pulgin和preset区别
 order: 3
 group:
   title: babel
-  order: 0
+  order: 1
   path: /babel
 nav:
   order: 1

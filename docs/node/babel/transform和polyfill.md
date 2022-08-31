@@ -3,7 +3,7 @@ title: transform和polyfill区别
 order: 5
 group:
   title: babel
-  order: 0
+  order: 1
   path: /babel
 nav:
   order: 1
@@ -92,7 +92,7 @@ helper 分为两种：
 
 ### babel runtime
 
-babel runtime 里面放运行时加载的模块，会被打包工具打包到产物中，下面放着各种需要在 runtime 使用的函数，包括三部分：regenerator、corejs、helper。
+babel runtime 里面放运行时加载的模块，会被打包工具打包到产物中，下面放着各种需要在 runtime 使用的函数，包括三部分：**regenerator、corejs、helper**。
 
 - corejs 这就是新的 api 的 **polyfill**，分为 2 和 3 两个版本，3 才实现了实例方法的 polyfill
 

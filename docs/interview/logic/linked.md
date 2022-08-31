@@ -108,4 +108,83 @@ var deleteDuplicates = function (head) {
 };
 ```
 
+### [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+
+将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
+
+#### 第一种遍历方式
+
+```js
+var mergeTwoLists = function (l1, l2) {
+  var dummy = {
+    val: 0,
+    next: null,
+  };
+  var cur = dummy;
+  while (l1 && l2) {
+    if (l1.val >= l2.val) {
+      cur.next = l2;
+      l2 = l2.next;
+    } else {
+      cur.next = l1;
+      l1 = l1.next;
+    }
+    cur = cur.next;
+  }
+  cur.next = l1 || l2;
+  return dummy.next;
+};
+```
+
+#### 递归
+
+```js
+var mergeTwoLists = function (l1, l2) {
+  if (l1 === null) {
+    return l2;
+  } else if (l2 === null) {
+    return l1;
+  } else if (l1.val < l2.val) {
+    l1.next = mergeTwoLists(l1.next, l2);
+    return l1;
+  } else {
+    l2.next = mergeTwoLists(l1, l2.next);
+    return l2;
+  }
+};
+```
+
+```js
+/**
+ * @param {ListNode} list1
+ * @param {ListNode} list2
+ * @return {ListNode}
+ */
+var mergeTwoLists = function (list1, list2) {
+  let arr = [];
+  while (list1) {
+    arr.push(list1.val);
+    list1 = list1.next;
+  }
+  while (list2) {
+    arr.push(list2.val);
+    list2 = list2.next;
+  }
+  var sum = arr.sort((a, b) => a - b);
+  var dummy = {
+    val: 1,
+    next: null,
+  };
+  var cur = dummy;
+  for (let i = 0; i < sum.length; i++) {
+    cur.next = {
+      val: sum[i],
+      next: null,
+    };
+    cur = cur.next;
+  }
+  return dummy.next;
+};
+```
+
 ### LRU

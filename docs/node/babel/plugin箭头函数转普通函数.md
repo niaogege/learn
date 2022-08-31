@@ -3,7 +3,7 @@ title: 箭头函数转普通函数
 order: 4
 group:
   title: babel
-  order: 0
+  order: 1
   path: /babel
 nav:
   order: 1
