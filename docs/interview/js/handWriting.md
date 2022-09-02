@@ -264,14 +264,26 @@ function shallowCopy(data) {
 每间隔 N 秒只执行一次，频率变少主要应用场景 比如说浏览器缩放大小/滚动事件
 
 ```js
+// timeout
 function throttle(fn, delay) {
   var timeout = null;
   return function (...rest) {
     if (!timeout) {
       timeout = setTimeout(() => {
-        fn.apply(this, delay);
+        fn.apply(this, rest);
         timeout = null;
       }, delay);
+    }
+  };
+}
+// 时间戳版
+function throttle(fn, delay) {
+  var timer;
+  return function (...rest) {
+    var now = Date.now();
+    if (now - timer > delay) {
+      fn.apply(this, rest);
+      timer = now;
     }
   };
 }
@@ -279,7 +291,7 @@ function throttle(fn, delay) {
 
 ### 防抖
 
-触发事件 N 秒后函数只能执行一次，如果在 N 秒又触发事件，则需要重新计时，主要应用场景：提交按钮
+触发事件 N 秒后函数只能执行一次，如果在 N 秒又触发事件，则先回 clearTimeout,然后需要重新计时，主要应用场景：提交按钮，重复提交
 
 ```js
 function debounce(fn, delay) {

@@ -106,6 +106,45 @@ var climbStairs = function (n) {
 };
 ```
 
+### [746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
+
+给你一个整数数组 cost ，其中 cost[i] 是从楼梯第 i 个台阶向上爬需要支付的费用。一旦你支付此费用，即可选择向上爬一个或者两个台阶。
+
+你可以选择从下标为 0 或下标为 1 的台阶开始爬楼梯。
+
+请你计算并返回达到楼梯顶部的最低花费。
+
+示例
+
+```js
+输入：cost = [1,100,1,1,1,100,1,1,100,1]
+输出：6
+解释：你将从下标为 0 的台阶开始。
+- 支付 1 ，向上爬两个台阶，到达下标为 2 的台阶。
+- 支付 1 ，向上爬两个台阶，到达下标为 4 的台阶。
+- 支付 1 ，向上爬两个台阶，到达下标为 6 的台阶。
+- 支付 1 ，向上爬一个台阶，到达下标为 7 的台阶。
+- 支付 1 ，向上爬两个台阶，到达下标为 9 的台阶。
+- 支付 1 ，向上爬一个台阶，到达楼梯顶部。
+总花费为 6 。
+```
+
+参考答案：
+
+```js
+/**
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = function (cost) {
+  var dp = [cost[0], cost[1]];
+  for (let i = 2; i < cost.length; i++) {
+    dp[i] = Math.min(dp[i - 1], dp[i - 2]) + cost[i];
+  }
+  return Math.min(dp[cost.length - 1], dp[cost.length - 2]);
+};
+```
+
 ### [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
 
 给你一个整数数组 nums ，请你找出一个具有最大和的连续子数组（子数组最少包含一个元素），返回其最大和。
@@ -207,3 +246,54 @@ var longestPalindrome = function (s) {};
 ```
 
 ### [正则表达式匹配](https://leetcode.cn/problems/regular-expression-matching/)
+
+### [62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+
+一个机器人位于一个 m x n  网格的左上角 （起始点在下图中标记为 “Start” ）。
+
+机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+
+问总共有多少条不同的路径？
+
+```js
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function (m, n) {
+  // 确定dp数组以及下标
+  var dep = new Array(m).fill().map((_) => new Array(n).fill(1));
+  // 递归初始化
+  // 递归遍历
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+    }
+  }
+  return dp[m - 1][n - 1];
+};
+```
+
+### [63. 不同路径 II](https://leetcode.cn/problems/unique-paths-ii/)
+
+```js
+/**
+ * @param {number[][]} obstacleGrid
+ * @return {number}
+ */
+var uniquePathsWithObstacles = function (obstacleGrid) {
+  let hor = obstacleGrid.length;
+  let ver;
+  for (let m = 1; m < obstacleGrid.length; m++) {
+    var val = obstacleGrid[m];
+    ver = val.length;
+    for (let n = 1; n < val.length; n++) {
+      let cur = obstacleGrid[m][n];
+      if (cur === 1) continue;
+      obstacleGrid[m][n] = obstacleGrid[m - 1][n] + obstacleGrid[m][n - 1];
+    }
+  }
+  return obstacleGrid[hor - 1][ver - 1];
+};
+```
