@@ -28,7 +28,7 @@ type SayNameReturn = MockReturnType<typeof SayName>;
 type SayNameParam1 = MockParamtersType<typeof SayName>;
 ```
 
-面试官： 得到如下数据类型 T0 中的数据类型
+面试官：得到如下数据类型 T0 中的数据类型
 
 ```ts
 type T0 = string[];
@@ -53,11 +53,13 @@ type First<T extends any[]> = T extends [infer F, ...infer R] ? F : never;
 
 ## 使用限制
 
-1.infer 只能在条件类型的 extends 子句中使用， 2. **infer** 声明的类型变量只在条件类型的 **true** 分支中可用
+1.infer 只能在条件类型的 extends 子句中使用，
+
+2. **infer** 声明的类型变量只在条件类型的 **true** 分支中可用
 
 > 条件类型是 extends ? : type GetType<T extends any[]> = T extends (infer P)[] ? P : T; 左边的 extends 是约束类型 右边的 T extends (infer P)[]? P : T 才是条件类型
 
-'infer' declarations are only permitted in the 'extends' clause of a conditional type 仅在条件类型的**extends**的**子句**中允许使用**infer**声明
+**'infer'** declarations are only permitted in the 'extends' clause of a conditional type 仅在条件类型的**extends**的**子句**中允许使用**infer**声明
 
 ```ts
 type WrongInfer<T extends (infer U)[]> = T[0];
@@ -106,6 +108,81 @@ const Test: Intersection = {
   a: 'cpp',
   b: 10,
 };
+
+type Equal22<A, B = A> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+  ? true
+  : false;
+type TT11 = Equal22<true, true>;
+```
+
+### Exclude<A, B>
+
+联合类型当作为类型参数出现在条件类型左边时，会被分散成单个类型传入，这叫做**分布式条件类型**。
+
+所以写法上可以简化， A extends B 就是对每个类型的判断。
+
+过滤掉 B 类型，剩下的类型组成联合类型。也就是取差集。
+
+```ts
+type TT122 = Exclude2<'a' | 'c' | 'b', 'a' | 'b'>; // type TT122 = "c"
+type TT1222 = Exclude2<'a' | 'b', 'a' | 'b' | 'c'>; // type TT1222 = never
+type Exclude2<A, B> = A extends B ? never : A;
+```
+
+### Extract<A, B>
+
+取交集
+
+```ts
+type TT123 = Extra2<'a' | 'c' | 'b', 'a' | 'b'>; // type TT123 = "a" | "b"
+
+type Extra2<A, B> = A extends B ? A : never;
+```
+
+### Include<A, B>
+
+判断 B 是否在 A 里面
+
+```ts
+type TT14 = Include<['a', 'b'], 'a'>; // type TT14 = true
+type Include<A extends unknown[], V> = A extends [infer F, ...infer R]
+  ? Equal22<F, V> extends true
+    ? true
+    : Include<R, V>
+  : false;
+```
+
+### Omit<T, K>
+
+索引类型中去掉 K 的属性
+
+```ts
+type TT15 = {
+  name: string;
+  age: number;
+};
+type TT17 = Omit<TT15, 'age'>;
+// type TT17 = {
+//     name: string;
+// }
+type TT16 = Omit1<TT15, 'age'>;
+type Omit1<T extends Record<PropertyKey, any>, K extends keyof any> = Pick<T, Exclude<K, keyof T>>;
+```
+
+### Awaited
+
+获取 Promise 返回的类型
+
+```ts
+type TT18 = Awaited<Promise<Promise<number>>>; // type TT18 = number
+type TT19 = Awaited1<Promise<Promise<number>>>; // type TT18 = number
+type Awaited1<T extends any> = T extends null | undefined
+  ? T
+  : T extends object & { then(onfulfilled: infer F): any }
+  ? F extends (value: infer V, ...args: any) => any
+    ? Awaited1<V>
+    : never
+  : T;
 ```
 
 ## 参考

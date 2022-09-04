@@ -208,8 +208,8 @@ type Includes1<T extends any, B extends string> = B extends T ? true : false;
 
 type isT32 = Includes1<'Kars' | 'Esidisi' | 'Wamuu' | 'Santana', 'Kars'>; // expected to be `false`
 type Includes<T extends any[], A> = A extends T[number] ? true : false;
-type T33 = Includes<['a', 'b'], 'c'>;
-type T34 = Includes<[boolean], false>;
+type T33 = Includes<['a', 'b'], 'c'>; // type T33 = false
+type T34 = Includes<[boolean], false>; // type T34 = true
 type T35 = Includes<[boolean], true>;
 ```
 

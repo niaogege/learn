@@ -15,6 +15,14 @@ nav:
 
 > 接下来的重点刷题对象
 
+- [746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
+- [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
+- [647. 回文子串](https://leetcode.cn/problems/palindromic-substrings/)
+- [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
+- [62. 不同路径](https://leetcode.cn/problems/unique-paths/)
+- [343.整数拆分](https://leetcode.cn/problems/integer-break/submissions/)
+- [96. 不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/)
+
 ### dp 五大步骤
 
 - 确定 **dp** 数组以及下标的含义 dp[i]还是 dp[i][j]
@@ -181,7 +189,7 @@ var maxSubArray = function (nums) {
 
 ### [647. 回文子串](https://leetcode.cn/problems/palindromic-substrings/)
 
-给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。
+[答案](https://programmercarl.com/0647.%E5%9B%9E%E6%96%87%E5%AD%90%E4%B8%B2.html#%E6%9A%B4%E5%8A%9B%E8%A7%A3%E6%B3%95) 给你一个字符串 s ，请你统计并返回这个字符串中 回文子串 的数目。
 
 回文字符串 是正着读和倒过来读一样的字符串。
 
@@ -221,10 +229,12 @@ var countSubstrings = function (s) {
   for (let i = len - 1; i >= 0; i--) {
     for (let j = i; j < len; j++) {
       if (s[j] === s[i]) {
+        // a aa
         if (j - i <= 1) {
           count = count + 1;
           dp[i][j] = true;
         } else if (dp[i + 1][j - 1]) {
+          // cabac => aba
           count = count + 1;
           dp[i][j] = true;
         }
@@ -237,12 +247,46 @@ var countSubstrings = function (s) {
 
 ### [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
 
+动态规划五步骤
+
+- 确定 dp 数据格式 new Array(n).fill().map((\_) => new Array(n).fill(false))
+- dp 初始化
+- 递推公式
+- 遍历顺序
+- 模拟
+
 ```js
 /**
  * @param {string} s
  * @return {string}
  */
-var longestPalindrome = function (s) {};
+var longestPalindrome = function (s) {
+  if (!s.length || s.length === 1) return s;
+  let len = s.length;
+  var dp = new Array(len).fill().map(() => new Array(len).fill(false));
+  console.log(dp, 'dp');
+  let begin = 0;
+  let max = 1;
+  for (let i = len - 1; i >= 0; i--) {
+    for (let j = i; j < len; j++) {
+      if (s[j] != s[i]) {
+        dp[i][j] = false;
+      } else {
+        if (j - i <= 1) {
+          dp[i][j] = true;
+        } else {
+          dp[i][j] = dp[i + 1][j - 1];
+        }
+      }
+      let temp = j - i + 1;
+      if (dp[i][j] && temp > max) {
+        begin = i;
+        max = temp;
+      }
+    }
+  }
+  return s.substring(begin, begin + max);
+};
 ```
 
 ### [正则表达式匹配](https://leetcode.cn/problems/regular-expression-matching/)
@@ -283,17 +327,84 @@ var uniquePaths = function (m, n) {
  * @return {number}
  */
 var uniquePathsWithObstacles = function (obstacleGrid) {
-  let hor = obstacleGrid.length;
-  let ver;
-  for (let m = 1; m < obstacleGrid.length; m++) {
-    var val = obstacleGrid[m];
-    ver = val.length;
-    for (let n = 1; n < val.length; n++) {
-      let cur = obstacleGrid[m][n];
-      if (cur === 1) continue;
-      obstacleGrid[m][n] = obstacleGrid[m - 1][n] + obstacleGrid[m][n - 1];
+  let m = obstacleGrid.length;
+  let n = obstacleGrid[0].length;
+  var dp = new Array(m).fill().map((_) => new Array(n).fill(0));
+  // 第一行初始化 遇到障碍物后变0
+  for (let i = 0; i < n && obstacleGrid[0][i] === 0; i++) {
+    dp[0][i] = 1;
+  }
+  // 第一列
+  for (let i = 0; i < m && obstacleGrid[i][0] === 0; i++) {
+    dp[i][0] = 1;
+  }
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      if (obstacleGrid[i][j] === 0) {
+        dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+      }
     }
   }
-  return obstacleGrid[hor - 1][ver - 1];
+  return dp[m - 1][n - 1];
+};
+```
+
+### [整数拆分](https://leetcode.cn/problems/integer-break/submissions/)
+
+递推公式 **dp[i] = Math.max(dp[i], [i-j]*j, dp[i-j]*j)**
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var integerBreak = function (n) {
+  let dp = new Array(n + 1).fill(0);
+  dp[2] = 1;
+  for (let i = 3; i <= n; i++) {
+    for (let j = 1; j < i; j++) {
+      dp[i] = Math.max(dp[i], j * (i - j), dp[i - j] * j);
+    }
+  }
+  return dp[n];
+};
+```
+
+### [96. 不同的二叉搜索树](https://leetcode.cn/problems/unique-binary-search-trees/)
+
+[卡特兰数](https://baike.baidu.com/item/%E5%8D%A1%E7%89%B9%E5%85%B0%E6%95%B0)
+
+给你一个整数 n ，求恰由 n 个节点组成且节点值从 1 到 n 互不相同的 二叉搜索树 有多少种？返回满足题意的二叉搜索树的种数。
+
+```js
+输入：n = 3
+输出：5
+示例 2：
+
+输入：n = 1
+输出：1
+```
+
+```js
+/**
+ * @param {number} n
+ * @return {number}
+ */
+var numTrees = function (n) {
+  var dp = new Array(n + 1).fill(0);
+  dp[0] = 1;
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j <= i; j++) {
+      dp[i] = dp[i] + dp[i - j] * dp[j - 1];
+      // dp[3] = dp[0]*dp[2] + dp[1]*dp[1] + dp[2]*dp[0]
+      // 头节点为1的时候=左子树有0个节点*右子树有2个节点
+      // 头节点为2的时候=左子树有1个节点*右子树有1个节点
+      // 头节点为3的时候=左子树有2个节点*右子树有0个节点
+
+      // dp[4] = dp[0]*dp[3]+d[1]*dp[2]+dp[2]*dp[1]+dp[3]*dp[0]
+      // 简化出 dp[i] = dp[i] + dp[i - j] * dp[j - 1];
+    }
+  }
+  return dp[n];
 };
 ```

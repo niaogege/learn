@@ -467,7 +467,122 @@ type Up32 = Equal2<any, true>;
 type Up33 = Equal2<unknown, never>; // type Up33 = false
 ```
 
+### Unique
+
+实现 Unique<T>，对 T 去重：
+
+```ts
+type Res = Unique<[1, 1, 2, 2, 3, 3]>; // expected to be [1, 2, 3]
+type Res1 = Unique<[1, 2, 3, 4, 4, 5, 6, 7]>; // expected to be [1, 2, 3, 4, 5, 6, 7]
+type Res2 = Unique<[1, 'a', 2, 'b', 2, 'a']>; // expected to be [1, "a", 2, "b"]
+type Res3 = Unique<[string, number, 1, 'a', 1, string, 2, 'b', 2, number]>; // expected to be [string, number, 1, "a", 2, "b"]
+type Res4 = Unique<[unknown, unknown, any, any, never, never]>; // expected to be [unknown, any, never]
+type Unique<T extends unknown[], R extends unknown[] = []> = T extends [infer F, ...infer L]
+  ? Includes3<R, F> extends true
+    ? Unique<L, R>
+    : Unique<L, [...R, F]>
+  : R;
+// 这种方式有问题
+type Includes2<Arr extends unknown[], V> = V extends Arr[number] ? true : false;
+type Includes3<Arr extends unknown[], V> = Arr extends [infer F, ...infer L]
+  ? Equal3<V, F> extends true
+    ? true
+    : Includes3<L, V>
+  : false;
+type Up40 = Includes2<[1, 2, 3], 2>;
+
+type Equal3<A, B = A> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+  ? true
+  : false;
+```
+
+### MapTypes
+
+实现 **MapTypes<T, R>**，根据对象 R 的描述来替换类型：
+
+```ts
+type StringToNumber = {
+  mapFrom: string; // value of key which value is string
+  mapTo: number; // will be transformed for number
+};
+type StringToDate = {
+  mapFrom: string; // value of key which value is string
+  mapTo: Date;
+};
+type Up100 = MapTypes<{ iWillBeANumberOneDay: string }, StringToNumber>; // gives { iWillBeANumberOneDay: number; }
+type Up101 = MapTypes<{ iWillBeNumberOrDate: string }, StringToDate | StringToNumber>; // gives { iWillBeNumberOrDate: number | Date; }
+type Up102 = MapTypes2<{ iWillBeNumberOrDate: string }, StringToDate | StringToNumber>; // gives { iWillBeNumberOrDate: number | Date; }
+type MapTypes<
+  T extends Record<PropertyKey, any>,
+  A extends {
+    mapFrom: any;
+    mapTo: any;
+  },
+> = {
+  [P in keyof T]: [T[P]] extends [A['mapFrom']] ? A['mapTo'] : T[P];
+};
+
+type MapTypes2<
+  T extends Record<PropertyKey, any>,
+  A extends {
+    mapFrom: any;
+    mapTo: any;
+  },
+> = {
+  [P in keyof T]: [T[P]] extends [A['mapFrom']] ? Transform<A, T[P]> : T[P];
+};
+type Transform<
+  R extends {
+    mapFrom: any;
+    mapTo: any;
+  },
+  T,
+> = R extends any ? (T extends R['mapFrom'] ? R['mapTo'] : never) : never;
+```
+
+### Construct Tuple
+
+生成指定长度的 Tuple：
+
+```ts
+type Up103 = ConstructTuple<999>; // expect to be [unknown, unkonwn]
+type ConstructTuple<
+  T extends number,
+  E extends unknown = unknown,
+  Arr extends unknown[] = [],
+> = Arr['length'] extends T ? Arr : ConstructTuple<T, E, [E, ...Arr]>;
+```
+
+### Number Range
+
+实现 NumberRange<T, P>，生成数字为从 T 到 P 的联合类型：
+
+```ts
+type Up104 = NumberRange<2, 9>; //  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+type NumberRange<
+  T extends number,
+  P extends number,
+  U extends any[] = Len<T>,
+  R extends number = never,
+> = U['length'] extends P ? R | U['length'] : NumberRange<T, P, [0, ...U], R | U['length']>;
+
+type Len<N extends number, R extends unknown[] = []> = R['length'] extends N
+  ? R
+  : Len<N, [0, ...R]>;
+type Up105 = Len<10>;
+```
+
+> 没看懂？？
+
+### 实现 Combination<T>:
+
+```ts
+// expected to be `"foo" | "bar" | "baz" | "foo bar" | "foo bar baz" | "foo baz" | "foo baz bar" | "bar foo" | "bar foo baz" | "bar baz" | "bar baz foo" | "baz foo" | "baz foo bar" | "baz bar" | "baz bar foo"`
+type Keys = Combination<['foo', 'bar', 'baz']>;
+```
+
 ## 参考文档
 
+- [精读《Unique, MapTypes, Construct Tuple...》](https://mp.weixin.qq.com/s/bVKm5BuMg2hKE8FG5ZHX4w)
 - [精读《MinusOne, PickByType, StartsWith...》](https://mp.weixin.qq.com/s/eV6V92Q2olfFXiPXZY4vbw)
 - [精读《Diff, AnyOf, IsUnion...》](https://mp.weixin.qq.com/s/11B6kLuz9TxykGU6_Hh8ug)
