@@ -25,6 +25,8 @@ nav:
 - [78. 子集](https://leetcode.cn/problems/subsets/)
 - [491. 递增子序列](https://leetcode.cn/problems/increasing-subsequences/)
 - [47. 全排列 II](https://leetcode.cn/problems/permutations-ii/)
+- [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
+- [79. 单词搜索](https://leetcode.cn/problems/word-search/)
 
 ### 模板
 

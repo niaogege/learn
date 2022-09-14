@@ -1,6 +1,6 @@
 ---
-title: cookie/jwt/session
-order: 2
+title: jwt
+order: 4
 group:
   order: 10
   title: browser

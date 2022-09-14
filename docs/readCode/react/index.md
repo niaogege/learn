@@ -18,3 +18,7 @@ nav:
 > 202206 26 有点认怂 react 源码还是不知道无从下手
 
 膜拜[卡颂大佬的 react 源码阅读](https://react.iamkasong.com/#%E7%AB%A0%E8%8A%82%E5%88%97%E8%A1%A8)
+
+> 20220908 react 源码调试算是搞通了 [react 源码调试](./../../react/0.react%20source%20debugger.md)
+
+> 为啥这么纠结，搞个源码这么磨叽，真是磨叽 [ React 进阶实践指南](https://juejin.cn/book/6945998773818490884)

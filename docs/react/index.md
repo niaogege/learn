@@ -29,4 +29,4 @@ nav:
 - [react-redux]
 - [react-router]
 
-我发现自己毫无计划地学 react 相关生态 这应该不是我所想看到的，我还是继续规划自己的学习内容，比如五一的时候看完 react-redux & redux 相关的源码，5 月中旬看完 react-router
+> 我发现自己毫无计划地学 react 相关生态 这应该不是我所想看到的，我还是继续规划自己的学习内容，比如五一的时候看完 react-redux & redux 相关的源码，5 月中旬看完 react-router

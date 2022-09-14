@@ -345,11 +345,18 @@ var uniquePathsWithObstacles = function (obstacleGrid) {
       }
     }
   }
+
   return dp[m - 1][n - 1];
 };
 ```
 
 ### [整数拆分](https://leetcode.cn/problems/integer-break/submissions/)
+
+给定一个正整数 n ，将其拆分为 k 个 正整数 的和（ k >= 2 ），并使这些整数的乘积最大化。
+
+返回 你可以获得的最大乘积 。
+
+输入: n = 10 输出: 36 解释: 10 = 3 + 3 + 4, 3 × 3 × 4 = 36。
 
 递推公式 **dp[i] = Math.max(dp[i], [i-j]*j, dp[i-j]*j)**
 
@@ -385,6 +392,8 @@ var integerBreak = function (n) {
 输出：1
 ```
 
+参考答案：
+
 ```js
 /**
  * @param {number} n
@@ -407,4 +416,73 @@ var numTrees = function (n) {
   }
   return dp[n];
 };
+```
+
+### 背包问题
+
+第一步确定 dp 下标
+
+```js
+dp = new Array(n).fill().map((e) => new Array(n).fill(0));
+```
+
+第二步 找到递推公式
+
+```js
+dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+```
+
+第三步 dp 初始化
+
+```js
+for (let j = weight[0]; j <= size; j++) {
+  dp[0][j] = value[0];
+}
+```
+
+第四步确定遍历顺序
+
+先遍历物品，在遍历背包重量
+
+```js
+for (let i = 1; i < weight.length; i++) {
+  for (let j = 0; j <= size; j++) {
+    if (weight[i] > j) {
+      dp[i][j] = dp[i - 1][j];
+    } else [(dp[j][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]))];
+  }
+}
+```
+
+代码如下
+
+```js
+function beibao(weight, value, size) {
+  let len = weight.length
+  let dp = new Array(len).fill().map((_) => new Array(size+1).fill(0))
+  // 当背包容量大于物品0的重量时，将物品0放入到背包中
+  for(let j = weight[0]; j <= size; j++) {
+    dp[0][j] = value[0]
+  }
+  // 先遍历物品，再遍历重量
+  for (let i=1;i<weight.length;i++) {
+    for (let j = 0;j<= size;j++) {
+      // 如果当前背包容量小于物品重量
+      if (weight[i] > j) {
+        dp[i][j] = dp[i-1][j] // 背包物品的价值等于背包不放置当前物品时的价值
+      } else [
+        // 若背包当前重量可以放置物品
+        dp[j][j] = Math.max(
+          dp[i-1][j],
+          dp[i-1][j-weight[i]] + value[i]
+        )
+        // 背包的价值等于放置该物品或不放置该物品的最大值
+      ]
+    }
+  }
+  console.table(dp)
+  return dp[len-1][size]
+}
+beibao([1, 2, 3, 5], [15, 20, 30, 55], 4)) // 45
+beibao([1, 2, 3, 5], [15, 20, 30, 55], 6)) // 70
 ```

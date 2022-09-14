@@ -1,6 +1,6 @@
 ---
 title: ssr服务端渲染
-order: 2
+order: 0
 group:
   title: ssr
   order: 0
@@ -37,11 +37,9 @@ server side Render (ssr)
 
 csr 和 ssr 最大的区别在于前者页面渲染是由 js 负责进行的，而后者则是由服务端直接返回 html 让浏览器直接渲染
 
-## 脱水 Dehydrate 和 注水 Hydrate
+### 同构
 
-#### 同构
-
-一套 react 代码，在服务端执行一次，在客户端也执行一次，reactDom.renderToString 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端执行 **ReactDom.hydrate**，把事件和属性生效
+一套 react 代码，在服务端执行一次，在客户端也执行一次，**reactDom.renderToString** 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端执行 **ReactDom.hydrate**，把事件和属性生效
 
 1. 服务端渲染 jsx->html,使用**ReactDom.renderToString**生成
 2. 客户端在运行 jsx->html,使用**ReactDom.hydrate**进行客户端的再次渲染
@@ -57,6 +55,77 @@ csr 和 ssr 最大的区别在于前者页面渲染是由 js 负责进行的，�
 同构的执行流程：
 
 服务端运 react 生产 html -> 发送到浏览器 -> 浏览器渲染 html -> 浏览器加载 js 脚本 -> JS 代码执行并接管页面的操作
+
+具体如何操作呢？其实就是在服务端渲染的页面结构里加上一个 index.js 文件，这个文件拉取的 js 代码就是用来完成同构的，具体实现
+
+```js
+export const render = (store, routes, req) => {
+  const content = renderToString(
+    <Provider store={store}>
+      // 服务端路由 StaticRouter
+      <StaticRouter location={req.path}>
+        <Nav />
+        <div>{renderRoutes(routes)}</div>
+      </StaticRouter>
+    </Provider>,
+  );
+  return `
+    <html>
+    <head>
+      <title>ssr Title cpp</title>
+    </head>
+      <body>
+      <div id='app'>${content}</div>
+      <script src='index.js'></script>
+      <script>
+        window.context = {
+          state: ${JSON.stringify(store.getState())}
+        }
+      </script>
+      </body>
+    </html>
+  `;
+};
+```
+
+index.js 如何生成的呢，这个是由 client 端 webpack 打包生成的,先是在 client 端引入 react-dom
+
+```js
+// client/app.js
+import React from 'react';
+import ReactDom from 'react-dom';
+import { BrowserRouter, Link } from 'react-router-dom';
+import routes from '../route';
+import { Provider } from 'react-redux';
+import { renderRoutes } from 'react-router-config';
+
+const App = () => {
+  return (
+    <Provider>
+      <BrowserRouter>
+        <div>{renderRoutes(routes)}</div>
+      </BrowserRouter>
+    </Provider>
+  );
+};
+// 水合
+ReactDom.hydrate(<App />, document.getElementById('app'));
+```
+
+然后 webpack 打包成**index.js**
+
+```js
+// webpack.client.js
+module.exports = merge(common, {
+  mode: "development",
+  entry: path.resolve(__dirname, "../src/client/app.js"),
+  output: {
+    path: path.resolve(__dirname, "../public"),
+    filename: "index.js",
+    chunkFilename: "js/[id].[chunkhash].js",
+  },
+}
+```
 
 #### 注水 Hydrate
 
@@ -81,6 +150,18 @@ csr 和 ssr 最大的区别在于前者页面渲染是由 js 负责进行的，�
     </body>
   </html>
   `;
+```
+
+**package.json** 中需要修改下执行命令,通过 nodemon 监视文件变化，然后重新编译
+
+```json
+//package.json的script部分
+  "scripts": {
+    "dev": "npm-run-all --parallel dev:**",
+    "dev:start": "nodemon --watch build --exec node \"./build/bundle.js\"",
+    "dev:build:server": "webpack --config webpack.server.js --watch",
+    "dev:build:client": "webpack --config webpack.client.js --watch"
+  },
 ```
 
 ### 脱水 Dehydrate
@@ -115,7 +196,21 @@ const App = () => {
 ReactDom.hydrate(<App />, document.getElementById('app'));
 ```
 
-## 同构
+## 安全问题
+
+安全问题非常关键，尤其是涉及到服务端渲染，开发者要格外小心。这里提出一个点：我们前面提到了注水和脱水过程，其中的代码：
+
+```js
+<script>
+  window.context = {
+    initialState: ${JSON.stringify(store.getState())}
+   }
+</script>
+```
+
+非常容易遭受 XSS 攻击，JSON.stringify 可能会造成 script 注入,使用 serialize-javascript 库进行处理，这也是同构应用中最容易被忽视的细节。另一个规避这种 XSS 风险的做法是：将数据传递个页面中一个隐藏的 textarea 的 value 中，textarea 的 value 自然就不怕 XSS 风险了。
+
+[ssr api](https://www.cnblogs.com/ayqy/p/react-ssr-api.html)
 
 ## 手写 react ssr
 
