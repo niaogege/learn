@@ -82,7 +82,7 @@ module.exports = {
 
 ## loader 作用是什么
 
-（1）实现对不同格式文件的处理，比如将 Scss 转换为 CSS，或将 TypeScript 转化为 Javascript。
+（1）实现对不同格式文件的处理，比如将 **Scss 转换为 CSS**，或将 TypeScript 转化为 Javascript。
 
 （2）可以编译文件，从而使其能够添加到依赖关系中。loader 是 WebPack 最重要的部分之一。通过使用不同的 loader，我们能够调用外部的脚本或者工具，实现对不同格式文件的处理。loader 需要在 webpack.config.js 里单独用 module 进行配置。
 
@@ -96,3 +96,21 @@ module.exports = {
 - css-loader：加载 CSS，支持模块化、压缩、文件导入等特性
 - style-loader：把 CSS 代码注入到 JavaScript 中，通过 DOM 操作去加载 CSS。
 - eslint-loader：通过 ESLint 检查 JavaScript 代码
+
+### Webpack 运行机制中的 loader 和 plugin
+
+初始化配置文件(挂载插件 new Pluin()) -》 初始化编译器(Compiler) -》 构建 Compilation 对象 -》 编译静态资源(loader 仅作用这一步) -》 输出结果
+
+[webpack 运行的流程简图](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/77ae854e57df4bb692dd3aaf983b23a6~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
+
+plugin 在哪个阶段运行的呢
+
+webpack 会在各个生命周期中广播事件，并触发对应的插件：
+
+[webpack 各个生命周期事件](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/646064b458ec44128d627405246863ef~tplv-k3u1fbpfcp-zoom-in-crop-mark:3024:0:0:0.awebp)
+
+### css-loader 跟 style-loader 区别
+
+## 参考
+
+- [【Webpack 进阶】Loader 深入解析](https://juejin.cn/post/6944349196539396133)

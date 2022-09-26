@@ -22,6 +22,7 @@ react-router 相关的代码手写和原理加深理解,需要理解什么？单
 - 项目里的 react-dom-router 如何 debugger?
 - v5 Vs V6 版本差异
 - HistoryRouter/BrowserRouter/HashRouter 三者区别以及应用场景
+- HistoryRouter/BrowserRouter/HashRouter/StaticRouter 实现原理
 - Switch/Route 两个组件为啥要一起才能使用 如何封装
 - useParams/useHistory/useLocation/useRouteMatch 如何封装
 - 看完 React-router/React-router-dom 学到了什么，别说白看？

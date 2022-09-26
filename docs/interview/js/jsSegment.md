@@ -113,6 +113,12 @@ var tt = hexToRgb('#ffffff');
 console.log(tt);
 ```
 
+随机生成颜色
+
+```js
+const randomColor = () => `${Math.random().toString(16).slice(-6)}`;
+```
+
 ```js
 var a = {};
 a.value = 1;

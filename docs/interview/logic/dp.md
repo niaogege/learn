@@ -1,5 +1,5 @@
 ---
-title: 动态规划
+title: 动态规划1.0
 order: 9
 group:
   order: 3
@@ -245,6 +245,29 @@ var countSubstrings = function (s) {
 };
 ```
 
+第二次
+
+```js
+var countSubstrings = function (s) {
+  let len = s.length;
+  let dp = new Array(len).fill().map((e) => new Array(len).fill(false));
+  let count = 0;
+  for (let i = len - 1; i >= 0; i--) {
+    for (let j = i; j < len; j++) {
+      if (s[i] !== s[j]) {
+        continue;
+      } else {
+        dp[i][j] = j - i <= 1 || dp[i + 1][j - 1];
+      }
+      if (dp[i][j]) {
+        count++;
+      }
+    }
+  }
+  return count;
+};
+```
+
 ### [5. 最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
 
 动态规划五步骤
@@ -350,7 +373,7 @@ var uniquePathsWithObstacles = function (obstacleGrid) {
 };
 ```
 
-### [整数拆分](https://leetcode.cn/problems/integer-break/submissions/)
+### [343.整数拆分](https://leetcode.cn/problems/integer-break/submissions/)
 
 给定一个正整数 n ，将其拆分为 k 个 正整数 的和（ k >= 2 ），并使这些整数的乘积最大化。
 
@@ -392,6 +415,8 @@ var integerBreak = function (n) {
 输出：1
 ```
 
+递推公式： **dp[i] = dp[i] + dp[i - j] \* dp[j - 1];**
+
 参考答案：
 
 ```js
@@ -418,7 +443,13 @@ var numTrees = function (n) {
 };
 ```
 
-### 背包问题
+### 01 背包问题
+
+01 背包： 有 N 种物品，每种物品只有一个
+
+完全背包： 有 N 种物品,每种物品有无限个
+
+多重背包：有 N 种物品，每种物品个数各不相同
 
 第一步确定 dp 下标
 
@@ -432,7 +463,7 @@ dp = new Array(n).fill().map((e) => new Array(n).fill(0));
 dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
 ```
 
-第三步 dp 初始化
+第三步 dp 初始化当背包容量大于物品 0 的重量时，将物品 0 放入到背包中
 
 ```js
 for (let j = weight[0]; j <= size; j++) {
@@ -449,7 +480,9 @@ for (let i = 1; i < weight.length; i++) {
   for (let j = 0; j <= size; j++) {
     if (weight[i] > j) {
       dp[i][j] = dp[i - 1][j];
-    } else [(dp[j][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]))];
+    } else {
+      dp[j][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+    }
   }
 }
 ```
@@ -458,31 +491,128 @@ for (let i = 1; i < weight.length; i++) {
 
 ```js
 function beibao(weight, value, size) {
-  let len = weight.length
-  let dp = new Array(len).fill().map((_) => new Array(size+1).fill(0))
+  let len = weight.length;
+  let dp = new Array(len).fill().map((_) => new Array(size + 1).fill(0));
   // 当背包容量大于物品0的重量时，将物品0放入到背包中
-  for(let j = weight[0]; j <= size; j++) {
-    dp[0][j] = value[0]
+  for (let j = weight[0]; j <= size; j++) {
+    dp[0][j] = value[0];
   }
   // 先遍历物品，再遍历重量
-  for (let i=1;i<weight.length;i++) {
-    for (let j = 0;j<= size;j++) {
-      // 如果当前背包容量小于物品重量
+  for (let i = 1; i < weight.length; i++) {
+    for (let j = 0; j <= size; j++) {
+      // 如果当前物品重量大于背包总容量
       if (weight[i] > j) {
-        dp[i][j] = dp[i-1][j] // 背包物品的价值等于背包不放置当前物品时的价值
-      } else [
+        dp[i][j] = dp[i - 1][j]; // 背包物品的价值等于背包不放置当前物品时的价值
+      } else {
         // 若背包当前重量可以放置物品
-        dp[j][j] = Math.max(
-          dp[i-1][j],
-          dp[i-1][j-weight[i]] + value[i]
-        )
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
         // 背包的价值等于放置该物品或不放置该物品的最大值
-      ]
+      }
     }
   }
-  console.table(dp)
-  return dp[len-1][size]
+  console.table(dp);
+  return dp[len - 1][size];
 }
-beibao([1, 2, 3, 5], [15, 20, 30, 55], 4)) // 45
-beibao([1, 2, 3, 5], [15, 20, 30, 55], 6)) // 70
+beibao([1, 2, 3, 5], [16, 20, 30, 55], 4); // 45
+beibao([1, 2, 3, 5], [16, 20, 30, 55], 6); // 70
+```
+
+### 01 背包 一维数组，滚动数组
+
+1.dp 数组的含义 dp[j] 2.确定递推公式二维降为一维数组，不断覆盖
+
+dp[j]
+
+3.dp 初始化
+
+```js
+dp[0] = values[0];
+```
+
+4.遍历顺序
+
+5.举例推导
+
+```js
+function beibao(weight, value, size) {
+  let len = weight.length;
+  let dp = new Array(size + 1).fill(0);
+  for (let i = 0; i < len; i++) {
+    for (let j = size; j >= weight[i]; j--) {
+      dp[j] = Math.max(dp[j], dp[j - weight[i]] + value[i]);
+    }
+  }
+  console.table(dp);
+  return dp[size];
+}
+beibao([1, 2, 3, 5], [16, 20, 30, 55], 6); // 71
+```
+
+### [416. 分割等和子集](https://leetcode.cn/problems/partition-equal-subset-sum/)
+
+给你一个 只包含正整数 的 非空 数组 nums 。请你判断是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+
+示例 1：
+
+输入：nums = [1,5,11,5] 输出：true 解释：数组可以分割成 [1, 5, 5] 和 [11] 。
+
+一维数组，dp[11] = total/2
+
+```js
+var canPartition = function(nums) {
+  var sum = nums.reduce((a, b) => a + b)
+  if (sum % 2 === 1) return false
+  let bgSize = sum / 2; // 两个子集的和
+  let len = nums.length;
+  let dp = new Array(bgSize+1).fill(0) // dp初始化
+  // 先遍历物品
+  for(let let i = 0; i < len; i ++) {
+    for(let j = bgSize; j >= 0; j --) {
+      dp[j] = Math.max(
+        dp[j], // 不放改物品
+        dp[j-nums[i]] + nums[i], // 放物品
+      )
+    }
+  }
+  return dp[bgSize] === bgSize
+}
+```
+
+### [1049. 最后一块石头的重量 II](https://leetcode.cn/problems/last-stone-weight-ii/)
+
+动规五步曲
+
+- 确定 dp 数组以及下标 dp[i]
+
+- 找到递推公式
+
+```js
+dp[j] = Math.max(dp[j], dp[j - stones[i]] + stones[i]);
+```
+
+- dp 初始化
+
+```js
+dp[0] = 0;
+```
+
+- 遍历顺序
+
+```js
+/**
+ * @param {number[]} stones
+ * @return {number}
+ */
+var lastStoneWeightII = function (stones) {
+  let sum = stones.reduce((a, b) => a + b);
+  let bgSize = Math.floor(sum / 2);
+  let len = stones.length;
+  let dp = new Array(bgSize + 1).fill(0);
+  for (let i = 0; i < len; i++) {
+    for (let j = bgSize; j >= stones[i]; j--) {
+      dp[j] = Math.max(dp[j], dp[j - stones[i]] + stones[i]);
+    }
+  }
+  return sum - 2 * dp[bgSize];
+};
 ```
