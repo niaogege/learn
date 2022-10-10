@@ -416,14 +416,15 @@ type DeepReadonly<T extends Record<string, any>> = {
 ```ts
 type Arr = ['1', '2', '3'];
 type TupleToUnion<T extends unknown[]> = T[number];
-type T62 = TupleToUnion<Arr>; // expected to be '1' | '2' | '3'
+type T62 = TupleToUnion<Arr>; //  '1' | '2' | '3'
 ```
 
-如果是联合转元祖呢
+如果是联合类型转元祖类型呢
 
 ```ts
-type T631 = '1' | '2' | '3'
-type UnionToTuple<T extends unknown> = ??
+type T631 = '1' | '2' | '3';
+type UnionToTuple<T extends unknown, R extends unknown[] = []> = T extends string ? [T] : R;
+type T632 = UnionToTuple<T631>;
 ```
 
 ### Last of Array

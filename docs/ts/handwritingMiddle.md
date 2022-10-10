@@ -11,13 +11,15 @@ nav:
   path: /interview
 ---
 
-### 字符串转联合类型
-
 中等难度的类型体操
 
+### 字符串转联合类型
+
 ```ts
-type R1 = GetChars<'abc', never>; // 'a' | 'b' | 'c'
+type R1 = GetChars<'abcd', '1'>; // 'a' | 'b' | 'c' | 'd'
 type GetChars<T extends string, R> = T extends `${infer F}${infer L}` ? GetChars<L, F | R> : R;
+type StrToUnion<S> = S extends `${infer F}${infer R}` ? F | StrToUnion<R> : never;
+type R01 = StrToUnion<'abcd'>; // StrToUnion
 ```
 
 ### 构造数组 BuildArr

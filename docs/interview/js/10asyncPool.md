@@ -31,6 +31,12 @@ nav:
 }
 ```
 
+普通 es7 实现
+
+```js
+
+```
+
 输出： Promise.all 保存所有 resolve 结果实现过程
 
 ```js

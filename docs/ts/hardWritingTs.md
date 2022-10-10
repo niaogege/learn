@@ -111,7 +111,7 @@ type Up4 = IsTuple<number[]>;
 
 > 比如 A 和 B 的交叉类型 A & B 就是联合类型 A | B 的子类型，因为更具体
 
-函数参数的逆变性质一般就联合类型转交叉类型会用
+函数参数的**逆变性质**一般就联合类型转交叉类型会用
 
 ```ts
 type Up5 = { name: 'cpp' } | { age: 30 };
@@ -132,6 +132,16 @@ type Up7 = UnionToIntersection<Up5>;
 // } & {
 //     age: 30;
 // }
+```
+
+> 1008 晦涩难懂
+
+```ts
+type UnionToIntersection2<T> = (T extends any ? (arg: T) => unknown : never) extends (
+  x: infer R,
+) => unknown
+  ? R
+  : never;
 ```
 
 ### GetOptional
@@ -312,7 +322,12 @@ type Bar = {
   say: () => void;
 };
 
-type Up17 = Diff<Foo, Bar>; // { gender: number }
+type Up17 = Diff<Bar, Foo>;
+type Up171 = Diff<Foo, Bar>; // same
+// type Up17 = {
+//     gender: number;
+//     say: () => void;
+// }
 type Up18 = Exclude<keyof Foo, keyof Bar>; // type Up19 = "gender" | "say"
 type Up19 = Exclude<keyof Bar, keyof Foo>; // type Up19 = "gender" | "say"
 
@@ -579,6 +594,17 @@ type Up105 = Len<10>;
 ```ts
 // expected to be `"foo" | "bar" | "baz" | "foo bar" | "foo bar baz" | "foo baz" | "foo baz bar" | "bar foo" | "bar foo baz" | "bar baz" | "bar baz foo" | "baz foo" | "baz foo bar" | "baz bar" | "baz bar foo"`
 type Keys = Combination<['foo', 'bar', 'baz']>;
+```
+
+### Subsequence 全排列
+
+实现 Subsequence<T> 输出所有可能的子序列：
+
+```ts
+type A = Subsequence3<[1, 2, 3]> // [] | [1, 2, 3] | [1] | [1, 2] | [2] | [3] | [2, 3] | [1, 3]
+type Subsequence3<T extends number[]> = T extends [infer F, ...infer R extends number[]]
+? Subsequence3<R> | [F, ...Subsequence3<R>]
+: T
 ```
 
 ## 参考文档

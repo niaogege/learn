@@ -233,6 +233,8 @@ ReactDom.hydrate(<App />, document.getElementById('app'));
 
 ## 手写 react ssr
 
+见代码仓库[react ssr](https://github.com/niaogege/ssr)
+
 ## 参考
 
 - [从头开始，彻底理解服务端渲染原理(8 千字汇总长文)](https://juejin.cn/post/6844903881390964744)
