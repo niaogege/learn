@@ -41,6 +41,41 @@ type E14 = UnionToIntersection3<E15>;
  * /
 ```
 
+### 实现嵌套类型 Awaited
+
+```ts
+type A1 = Promise<[1, 2, 3, 4]>;
+type A2 = Awaited<A1>; // type A2 = [1, 2, 3, 4]
+type A3 = Promise<Promise<{ name: string }>>;
+type A4 = Awaited<A3>;
+// type A4 = {
+//     name: string;
+// }
+type MyAwaited1<T extends Promise<unknown>> = T extends Promise<infer A> ? A : T;
+type A21 = MyAwaited1<A1>; // type A2 = [1, 2, 3, 4]
+type MyAwaited2<T extends Promise<unknown>> = T extends Promise<infer A>
+  ? A extends Promise<unknown>
+    ? MyAwaited2<A>
+    : A
+  : T;
+type A41 = MyAwaited2<A3>;
+// type A41 = {
+//     name: string;
+// }
+type AllAwaited<T> = T extends null | undefined
+  ? T
+  : T extends object & { then(onFullfill: infer F): any }
+  ? F extends (value: infer V, ...arg: any) => any
+    ? AllAwaited<V>
+    : never
+  : T;
+type A31 = AllAwaited<A1>; // type A31 = [1, 2, 3, 4]
+type A32 = AllAwaited<A3>;
+// type A32 = {
+//     name: string;
+// }
+```
+
 ### SymmetricDifference
 
 SymmetricDifference<T, U>获取没有同时存在于 T 和 U 内的类型。

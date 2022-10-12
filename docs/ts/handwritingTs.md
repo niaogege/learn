@@ -160,8 +160,15 @@ type T25 = Exclude1<T24, T23>;
 
 ```ts
 type T26 = Promise<[Promise<{ name: 'cpp' }>, 2, 3]>;
+type T261 = Awaited<T26>;
+// type T261 = [Promise<{
+//     name: 'cpp';
+// }>, 2, 3]
 type MyPromise<T> = T extends Promise<infer A> ? A : never;
 type T27 = MyPromise<T26>;
+// type T27 = [Promise<{
+//     name: 'cpp';
+// }>, 2, 3]
 ```
 
 还需要考虑嵌套 Promise 类型
@@ -174,10 +181,9 @@ type MyAwaited<T extends Promise<unknown>> = T extends Promise<infer A>
     : A
   : never;
 
-type T29 = MyAwaited<T28>;
+type T29 = MyAwaited<T28>; // type T29 = [1, 2, 3]
 type P1 = Promise<[3, 4]>;
 type T30 = MyAwaited<Promise<P1>>;
-// type T29 = [1, 2, 3]
 // type T30 = [3, 4]
 ```
 
