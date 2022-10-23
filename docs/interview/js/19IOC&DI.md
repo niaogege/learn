@@ -20,6 +20,7 @@ nav:
 - 依赖注入： 怎么注入
 - 依赖注入解决的问题是什么
 - 了解如何使用 TypeScript 实现一个 IoC 容器，并了解 装饰器、反射 的相关知识。
+- NestJS 各种 IOC/DI，需要深度学习和了解
 
 ## 面向对象编程中的控制反转 IoC 和依赖注入 DI
 
@@ -150,6 +151,66 @@ IoC 不是一种技术，只是一种思想，是面向对象编程中的一种�
 
 有了 IoC 容器，依赖关系就改变了，原先的依赖关系就没了，它们都依赖 **IoC** 容器了，通过 IoC 容器来建立它们之间的关系。
 
+#### 使用 DI 框架
+
+使用依赖注入框架之后，系统中的服务会统一注册到 IoC 容器中，如果服务有依赖其他服务时，也需要对依赖进行声明。当用户需要使用特定的服务时，IoC 容器会负责该服务及其依赖对象的创建与管理工作。具体的流程如下图所示：
+
+[DI 框架/IOC 容器](https://mmbiz.qpic.cn/mmbiz_jpg/jQmwTIFl1V1iabX6Yglr9UXwNaPsia7o9bRT01etaXY2x8wibRM4hm6ukicuN6F9gHkgSTs6LDfWQNtQticW2pia0Uibg/640?wx_fmt=jpeg&wxfrom=5&wx_lazy=1&wx_co=1)
+
+五个步骤
+
+- Ioc 容器注册 B 服务
+- 声明对服务 B 的依赖
+- 获取服务 A
+- 注入服务 B
+- 返回服务 A
+
+### 创建简单的 IOC 容器
+
+```js
+class A {
+  constructor(p) {
+    this.params = p;
+  }
+}
+class C {
+  constructor(p) {
+    this.params = p;
+  }
+}
+
+class Container {
+  constructor() {
+    this.modules = {};
+  }
+  provide(key, object) {
+    this.modules[key] = object;
+  }
+  get(key) {
+    return this.modules[key];
+  }
+}
+
+const Ioc = new Container();
+Ioc.provide('a', new A());
+Ioc.provide('c', new C());
+
+class B {
+  constructor(container) {
+    this.a = container.get('a');
+    this.c = container.get('c');
+  }
+  run() {
+    console.log(this.a.params, this.c.params);
+  }
+}
+new B(Ioc).run();
+```
+
+### 进阶版创建 IOC 容器
+
 ## 参考
 
 - [Decorator（装饰器模式）](https://github.com/ascoders/weekly/blob/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/175.%E7%B2%BE%E8%AF%BB%E3%80%8A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20-%20Decorator%20%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%E3%80%8B.md)
+- [了不起的 IoC 与 DI](https://mp.weixin.qq.com/s/fVwGIP3vJXqoQX9jK6NAVw)
+- [黄子毅的技术博客](https://github.com/ascoders/weekly/tree/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F)

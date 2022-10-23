@@ -10,17 +10,9 @@ nav:
   path: /node
 ---
 
-## node 自身架构
-
-[带你重新认识 Node](https://cloud.tencent.com/developer/article/1915417)
-
-- 浏览器通过事件驱动来服务界面上的交互
-- Node 通过事件驱动来服务 I/O
-
 ## node 包含模块
 
 - Koa
-- Express
 - ssr
 - vite
 - rollup

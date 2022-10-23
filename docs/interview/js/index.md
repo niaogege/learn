@@ -27,7 +27,113 @@ class Cpp {
 
 [实例属性的新写法](https://es6.ruanyifeng.com/#docs/class#%E5%AE%9E%E4%BE%8B%E5%B1%9E%E6%80%A7%E7%9A%84%E6%96%B0%E5%86%99%E6%B3%95)
 
+类的属性和方法，除非显式定义在其本身（即定义在 this 对象上），否则都是定义在原型上（即定义在 class 上）
+
+```js
+class Cpp {
+  constructor() {
+    this.name = 'cpp';
+  }
+  getName() {
+    return this.name;
+  }
+}
+var cppInstance = new Cpp();
+cppInstance.hasOwnProperty('name'); // true
+cppInstance.hasOwnProperty('getName'); // false
+cppInstance.__proto__.hasOwnProperty('getName'); // true
+```
+
+### 取值函数（getter）和存值函数（setter）
+
+与 ES5 一样，在“类”的内部可以使用 get 和 set 关键字，对某个属性设置存值函数和取值函数，拦截该属性的存取行为。
+
+```js
+class Cpp2 {
+  constructor() {}
+  get prop() {
+    return 'cpp getter prop';
+  }
+  set prop(val) {
+    console.log('cpp::', val);
+  }
+}
+var test = new Cpp2();
+test.prop = 123;
+console.log(test.prop);
+```
+
+### 静态方法
+
+类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上**static**关键字，就表示该方法**不会被实例继承**，而是直接通过类来调用，这就称为“静态方法”。
+
+```js
+class Foo {
+  static getName() {
+    return 'cpp';
+  }
+}
+Foo.getName(); // cpp
+var test1 = new Foo();
+test1.getName(); // VM486:2 Uncaught TypeError: test1.getName is not a function
+```
+
+注意，如果静态方法包含 this 关键字，这个 this 指的是类，而不是实例。
+
+```js
+class Foo {
+  static getName() {
+    this.bar();
+  }
+  static bar() {
+    console.log('static');
+  }
+  bar() {
+    console.log('instance');
+  }
+}
+Foo.getName(); // static
+```
+
+### 静态属性
+
+静态属性指的是 Class 本身的属性，即**Class.propName**，而不是定义在实例对象（this）上的属性。
+
+```js
+// 老写法
+class Foo {}
+Foo.prop = 1;
+Foo.prop; // 1
+
+// 新写法
+class Foo1 {
+  static prop = 1;
+}
+Foo.prop;
+```
+
+### 私有属性的正式写法
+
+```js
+class IncreasingCounter {
+  #count = 0;
+  get value() {
+    console.log('Getting the current value!');
+    return this.#count;
+  }
+  increment() {
+    this.#count++;
+  }
+}
+var tt = new IncreasingCounter();
+tt.#count; // Uncaught SyntaxError: Private field '#count' must be declared in an enclosing class
+```
+
+上面代码中，#count 就是**私有属性**，只能在类的内部使用（this.#count）。如果在类的外部使用，就会报错。
+
 ## 继承
+
+[](../js/5extend.md)
 
 ## 作用域以及作用域链以及上下文
 

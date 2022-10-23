@@ -28,6 +28,7 @@ nav:
 - Next.js/Nuxt.js
 - award.js 非登录态 ssr 登录态 csr 如何做到？
 - 如何调试 ssr?
+- 如何调试 vite+ts 配置出来的 ssr 项目
 
 ## 什么是服务端渲染
 
@@ -235,6 +236,78 @@ ReactDom.hydrate(<App />, document.getElementById('app'));
 ## 手写 react ssr
 
 见代码仓库[react ssr](https://github.com/niaogege/ssr)
+
+## ssr 工程如何调试
+
+调试套路：
+
+- 想法设法生成 sourceMap,webpack 需要配置
+- 想办法使得 sourceMap 中的 source 字段（源文件位置）指向你要调试的文件，利用 Chrome devTools Protocol
+
+以本项目为例
+
+- First webapck 打包后的文件需要有 sourceMap 文件在 build/webpack.server.js 中添加 sourceMap 配置
+
+```js
+module.exports = {
+  mode: 'development',
+  target: 'node',
+  devtool: 'source-map',
+  entry: path.resolve(__dirname, '../src/server/index.js'),
+  output: {
+    filename: 'bundle.js',
+    path: path.resolve(__dirname, '../dist'),
+    libraryTarget: 'commonjs',
+  },
+  // xxx 省略其他代码
+};
+```
+
+- Second 命令行启动的时候加上调试参数
+
+```json
+  "scripts": {
+    "dev:server": "webpack --config build/webpack.server.js --watch",
+    "dev:client": "webpack --config build/webpack.client.js --watch",
+    // 添加 --inspect参数 启动debugger
+    "dev:start": "nodemon --watch build --exec node --inspect dist/bundle.js",
+    "dev": "npm-run-all --parallel dev:*"
+  },
+```
+
+- Third1: 用 Chrome DevTools 调试 node 代码
+
+chrome 浏览器打开**chrome://inspect/#devices**，下面列出的是所有可以调试的目标，也就是 ws 服务端：
+
+点击 inspect 就可以调试这个 node 脚本了：
+
+但是这样也是和调试网页一样的问题，在 Chrome DevTools 里调试，在 VSCode 里写代码，这俩是分离开的，切来切去也挺不方便的。
+
+那 VSCode 能不能调试 node 代码呢？
+
+- Third2: 用 VSCode Debugger 调试 node 代码
+
+项目跟目录添加 **.vscode/launch.json** 的调试配置文件：
+
+```js
+{
+  "configurations": [
+    {
+      "name": "SSR Program",
+      "program": "${workspaceFolder}/dist/bundle.js", // 需要自己制定项目的入口文件
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "type": "node"
+    }
+  ]
+}
+```
+
+完了，现在本地在重新启动下，就能在 node 端调试源代码了
+
+## 如何调试 vite+ts 配置出来的 ssr 项目？
+
+其实主要是 ts 端代码如何调试，vite 可以先不考虑
 
 ## 参考
 

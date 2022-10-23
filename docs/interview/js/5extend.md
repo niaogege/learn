@@ -261,7 +261,11 @@ function inheritPrototype(Child, Parent) {
 }
 ```
 
-第一步： 创建对象，基于父类原型创建一个副本 prototype 第二步： 增强对象，弥补因重写原型而失去的默认的 constructor 属性第三步： 指定对象，将副本 prototype 赋值给子类型的原型属性
+第一步： 创建对象，基于**父类原型**创建一个副本 prototype
+
+第二步： 增强对象，弥补因重写原型而失去的默认的 constructor 属性
+
+第三步： 指定对象，将副本 prototype 赋值给子类型的**原型属性**
 
 ```js
 // 父类初始化实例属性和原型属性
@@ -280,7 +284,7 @@ var child2 = new Child('wmh');
 console.log(child1, child2);
 ```
 
-目前最成熟的方法，开发人员普遍认为寄生组合式继承是引用类型最理想的继承范式。
+目前最成熟的方法，开发人员普遍认为**寄生组合式继承**是引用类型最理想的继承范式。
 
 ## ES6 继承
 
@@ -301,7 +305,6 @@ class Parent {
     console.log(this.name);
   }
 }
-
 class Child extends Parent {
   constructor(name, age, sex) {
     super(name, age);
