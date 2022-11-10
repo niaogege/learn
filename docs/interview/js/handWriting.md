@@ -38,7 +38,7 @@ console.log(person.isPrototypeOf(obj));
 
 ## new 手写
 
-- 创建一个空对象-> Object.create()，将空对象的隐式原型指向构造函数的原型链 con.prototype
+- 创建一个空对象-> **Object.create()**，将空对象的隐式原型(\***\*protp\*\***)指向构造函数的原型链 **con.prototype**
 - 使用 apply 改变 this 指向 apply(obj, rest)
 - 返回该对象(如果无返回值或者返回一个非对象，则返回 obj 否则返回一个新创建的对象)
 
@@ -58,6 +58,20 @@ function newObj(fn, ...rest) {
 var instance2 = newObj(Obj, 'cpp');
 console.log(instance2, '222');
 ```
+
+> 隐式原型和显式原型每个函数都有显式原型属性，即**prototype**，默认指向一个空的 Object 对象
+
+```js
+function Fn() {}
+var fn = new Fn();
+fn.__proto__ === Fn.prototype; // true
+```
+
+每个实例对象都有自己的隐式原型属性，即\***\*proto\*\***, 值为对应的构造函数的显式原型的值也就是 **实例对象的隐式原型 === 构造函数的显式原型**
+
+原型链： 访问一个对象的属性时，先在自身属性上找，找到返回。如果没有，就沿着\***\*proto\*\***这条链向上找，找到返回。如果最终没有找到，返回 null 原型链的尽头就是**Object**的原型对象。
+
+Object.prototype.**proto** === null
 
 ## instanceof 手写
 
@@ -486,6 +500,23 @@ var sum = (...arr) =>
 sum(1, 2, 3);
 ```
 
+> 20221031 日手写
+
+```js
+Array.prototype.myReduce = function (cb, init) {
+  var arr = Array.prototype.slice.call(this);
+  var res, start;
+  res = init ? init : arr[0];
+  start = init ? 0 : 1;
+  for (let i = start; i < arr.length; i++) {
+    res = cb.call(null, res, arr[i], i, this);
+  }
+  return res;
+};
+var test = [1, 2, 3].myReduce((a, b) => a + b);
+console.log(test, 'test');
+```
+
 ## 手写乞丐版 ajax
 
 ```js
@@ -587,6 +618,50 @@ sort(
     { price: 2, size: 2 },
     { price: 1, size: 1 },
     { price: 1, size: 2 },
+```
+
+## 隔了 N 月之后再次尝试
+
+### new 操作符手写
+
+```js
+function Cpp(name) {
+  this.name = name;
+}
+var obj1 = new Cpp('cpp');
+console.log(obj1);
+function NewInstance(con, ...rest) {
+  var obj = Object.create(con.prototype);
+  var res = con.apply(obj, rest); // 构造函数指向新创建的对象
+  return res instanceof Object ? res : obj;
+}
+var obj2 = NewInstance(Cpp, name);
+console.log(obj2);
+```
+
+### apply/call
+
+```js
+
+```
+
+### Object.create
+
+Object.create 用于创建新对象，使此对象作为新创建对象的原型
+
+```js
+Object.prototype.myCreate = function (proto) {
+  const fn = function () {};
+  fn.prototype = proto;
+  return new fn();
+};
+function A() {
+  this.name = 'cpp';
+}
+var test1 = Object.create(A);
+var test2 = Object.myCreate(A);
+console.log(test2.__proto__ === A);
+console.log(test1, test2);
 ```
 
 ## 参考

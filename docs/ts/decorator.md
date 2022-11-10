@@ -411,7 +411,7 @@ defineMetadata 的入参包括元数据 **Key**、**元数据 Value**、**目标
 
 #### 基于类型的元数据
 
-反射元数据提案中内置了基于**类型**的元数据，你可以通过 design:type、design:paramtypes 以及 design:returntype 这三个内置的元数据 Key，获取到类与类成员的类型、参数类型、返回值类型
+反射元数据提案中内置了基于**类型**的元数据，你可以通过 **design:type**、design:paramtypes 以及 design:returntype 这三个内置的元数据 Key，获取到**类与类成员的类型**、**参数类型**、**返回值类型**
 
 ```ts
 import 'reflect-metadata';

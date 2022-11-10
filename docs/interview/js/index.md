@@ -11,7 +11,7 @@ nav:
   path: /interview
 ---
 
-### js 知识点
+## js 知识点 class
 
 - class 类的实例属性
 

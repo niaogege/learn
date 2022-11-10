@@ -209,6 +209,56 @@ new B(Ioc).run();
 
 ### 进阶版创建 IOC 容器
 
+我们的容器必须具体两个功能，实例的注册和获取，这很容易让人联想到 Map，基于这个思路，我们首先简单实现一个容器：
+
+```ts
+class Container1 {
+  bindMap = new Map();
+  // 实例注册
+  bind(identifier: string, clazz: any, constructorArgs: Array<any> = []) {
+    this.bindMap.set(identifier, {
+      clazz,
+      constructorArgs,
+    });
+  }
+  // 实例获取
+  get<T>(identifier: string): T {
+    const target = this.bindMap.get(identifier);
+    const { clazz, constructorArgs } = target;
+    return (instance = Reflect.construct(clazz, constructorArgs));
+  }
+}
+```
+
+这里我们用到了 Reflect.construct，它的行为有点像 new 操作符，帮助我们进行对象的实例化。有了容器之后，我们就可以彻底抛弃传参实现解耦，如下所示：
+
+```ts
+class B1 {
+  constructor(p: number) {
+    this.p = p;
+  }
+}
+class A1 {
+  b: B1;
+  constructor() {
+    this.b = container.get('b');
+  }
+}
+const container = new Container1();
+container.bind('a', A1);
+container.bind('b', B1, [10]);
+
+// 取出
+const a = container.get('a');
+console.log(a, 'AAA'); // A => { b: B { p: 10 } }
+```
+
+具体看代码[ContainerTest](https://stackblitz.com/edit/ptdisn?file=src/ContainerTest.ts)
+
+## 实现一个简易 IoC 容器
+
+> 膜拜林不渡大佬的文章[基于装饰器的依赖注入实现](https://juejin.cn/book/7086408430491172901/section/7110429713230725153)
+
 ## 参考
 
 - [Decorator（装饰器模式）](https://github.com/ascoders/weekly/blob/master/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/175.%E7%B2%BE%E8%AF%BB%E3%80%8A%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%20-%20Decorator%20%E8%A3%85%E9%A5%B0%E5%99%A8%E6%A8%A1%E5%BC%8F%E3%80%8B.md)

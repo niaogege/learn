@@ -1,6 +1,6 @@
 ---
 title: 控制器controller
-order: 11
+order: 1
 group:
   title: nestjs
   order: 5

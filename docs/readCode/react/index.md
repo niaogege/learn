@@ -22,3 +22,13 @@ nav:
 > 20220908 react 源码调试算是搞通了 [react 源码调试](./../../react/0.react%20source%20debugger.md)
 
 > 为啥这么纠结，搞个源码这么磨叽，真是磨叽 [ React 进阶实践指南](https://juejin.cn/book/6945998773818490884)
+
+> 20221103 再次鼓起勇气学习 react 相关的面试知识，加油
+
+react 源码阅读相关
+
+- [react-source-code-debug](https://github.com/neroneroffy/react-source-code-debug)
+- [mini-react](https://github.com/lizuncong/mini-react)
+- [tiny-react](https://github.com/PiNengShaoNian/tiny-react)
+
+> 20221103 什么时候也自己来一个源码相关的仓库

@@ -14,7 +14,6 @@ nav:
 - BoM
 - 浏览器的基本原理
 - 浏览器的多进程架构
-- cookie/jwt/session
 
 感谢大佬提供的技术好文
 

@@ -14,6 +14,8 @@ nav:
 - 类装饰器/属性装饰器/方法装饰器/参数装饰器区别和示例
 - 面向切面编程 AOP 和面向对象编程区别 OOP
 
+- [如何基于 TypeScript 实现控制反转](https://juejin.cn/post/6898882861277904910#heading-2)
+
 ## 定义
 
 JavaScript 中的装饰器和 Python 的装饰器类似，依赖于 **Object.defineProperty**，一般是用来装饰类、类属性、类方法。使用装饰器可以做到不直接修改代码，就实现某些功能，做到真正的**面向切面编程**。这在一定程度上和 Proxy 很相似，但使用起来比 Proxy 会更加简洁。
@@ -80,13 +82,13 @@ Test = decorator(Test) || Test;
 除了可以修改类本身，还可以通过修改原型，给实例增加新属性。下面是给目标类增加 speak 方法的例子
 
 ```ts
-const withSpeak = (targetClass) => {
+const withSpeak = () => (targetClass) => {
   const prototype = targetClass.prototype;
   prototype.speak = function () {
     console.log('I can speak ', this.language);
   };
 };
-@withSpeak
+@withSpeak()
 class Student {
   constructor(language) {
     this.language = language;
@@ -121,7 +123,6 @@ export connect(mapStateToProps, mapDispatchToProps)(App)
 // 装饰器语法
 @connect(mapStateToProps, mapDispatchToProps)
 class App extends React.component {}
-
 ```
 
 另一个例子
@@ -161,11 +162,9 @@ class PageIndex extends Component {
 }
 ```
 
-target 是指目标构造函数。例如，如果装饰器在 class 的构造函数中(类装饰器)，target 指向 class 的构造函数。如果装饰器在 class 的方法中(方法装饰器)，target 指向这个方法。
+### 方法装饰器或者访问符装饰器
 
-### 类属性或者方法装饰器
-
-**类属性装饰器**可以用在类的**属性、方法、get/set** 函数中，一般会接收三个参数
+**类属性装饰器**可以用在类的**方法、get/set** 函数中，一般会接收三个参数
 
 - target：被修饰的类
 - name：类成员的名字
@@ -356,57 +355,6 @@ const mixin =
     });
     return descriptor;
   };
-```
-
-### log 日志
-
-装饰器一种很方便的用法就是快速为方法添加记录日志的行为。下面这个例子中，我们实现了一个日志装饰器，函数被调用时会记录函数名。这个装饰器也可以自定义日志消息。请注意，如果我们要为装饰器提供参数，我们需要返回一个函数。
-
-```ts
-function log(target, name, descriptor) {
-  let message = `LOG: Calling \`${name}\` function.`;
-  if (typeof name === 'string') {
-    return (target, name, descriptor) => {
-      console.log(`LOG: ${message}`, name);
-      return descriptor;
-    };
-  } else {
-    console.log(message);
-    return descriptor;
-  }
-}
-```
-
-日志装饰器使用
-
-```ts
-class Robot {
-  @log
-  destroyHumans() {
-    return `Destroying humans.`;
-  }
-}
-
-const robot = new Robot();
-console.log(robot.destroyHumans());
-// LOG: Calling `destroyHumans` function.
-// "Destroying humans."
-```
-
-日志装饰器自定义日志消息：
-
-```ts
-class Robot {
-  @log('Invoking the function `%s`')
-  destroyHumans() {
-    return `Destroying humans.`;
-  }
-}
-
-const robot = new Robot();
-console.log(robot.destroyHumans());
-// LOG: Invoking the function `destroyHumans`
-// "Destroying humans."
 ```
 
 ### 统计函数执行时间

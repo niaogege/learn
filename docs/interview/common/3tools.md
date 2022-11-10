@@ -1,7 +1,7 @@
 ---
 title: 工具函数
 group:
-  order: 2
+  order: 3
   title: 通用业务
   path: /interview/common
 nav:
@@ -17,6 +17,47 @@ nav:
 - debounce
 - throttle
 - loadResource(动态加载 js/css 文件)
+
+```js
+const loadJS = async (url, fn) => {
+	const resolvedUrl = typeof url === 'function' ? await url() : url;
+	const script = document.createElement('script')
+	script.type = 'text/javascript';
+	script.onload = fn;
+	script.src = resolvedUrl;
+	document.getElementsByTagName('head')[0].appendChild(script);
+}
+// 实际应用
+function(remote) {
+  return new Promise(resolve => {
+    const callback = () => {
+      if (!remote.inited) {
+        remote.lib = window[remoteId];
+        remote.lib.init(wrapShareScope(remote.from))
+        remote.inited = true;
+      }
+      resolve(remote.lib);
+    }
+    return loadJS(remote.url, callback);
+  });
+}
+```
+
+动态加载 css
+
+```js
+// 加载 css
+const dynamicLoadingCss = (cssFilePath) => {
+  const metaUrl = import.meta.url;
+  const curUrl = metaUrl.substring(0, metaUrl.lastIndexOf('remoteEntry.js'));
+  const element = document.head.appendChild(document.createElement('link'));
+  element.href = curUrl + cssFilePath;
+  element.rel = 'stylesheet';
+};
+// 应用
+dynamicLoadingCss('./__federation_expose_App.css');
+```
+
 - observe (使用 IntersectionObserver 监视 dom 元素在文档视口的可见性)
 - unobserve (取消 observe 监控)
 - 埋点函数
