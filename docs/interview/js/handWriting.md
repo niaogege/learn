@@ -548,6 +548,49 @@ ajax({
 });
 ```
 
+### JS 检测网络宽带
+
+```js
+function speedTest(fn) {
+  let startTime, endTime, fileSize
+  const xhr = new XMLHttpRequest()
+  xhr.open(
+    'GET',
+    'https://s2.loli.net/2022/07/21/ZIaF8mitBkeSwfq.png',
+    true
+  )
+  xhr.onreadystatechange = function() {
+    if (xhr.readyState === 2) {
+      startTime = Date.now()
+    }
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      endTime = Date.now()
+      fileSize = xhr.responseText.length;
+      const speed = (fileSize / ((endTime - startTime) / 1000))/ 1024;
+      fn && fn(Math.floor(speed)) 
+    }
+  }
+  xhr.send()
+}
+speedTest((speed) => {
+  console.log(speed, 'speed')
+})
+```
+
+> 事实上，前两种还要额外设置 http 请求头来禁止使用本地缓存（开发测试下可以在控制台Network面板下点击禁用缓存），要不然图片加载一次后就不会在去服务器加载，自然也测不出网络的带宽.
+
+chrome65+添加了一些原生的方法可以检测有关设备正在使用的连接与网络进行通信的信息。
+```js
+function measureBW () {
+    return navigator.connection.downlink * 1024 /8;   //单位为KB/sec
+}
+measureBW() ;
+```
+我们还可以通过 navigator.connection 上的 change 事件来监听网络带宽的变化：
+```js
+navigator.connection.addEventListener('change', measureBW)
+```
+
 ## 手写 setTimeout/setInterval
 
 ```js

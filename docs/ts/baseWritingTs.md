@@ -11,6 +11,8 @@ nav:
   path: /interview
 ---
 
+积累一些基础且重要的体操类型，多多练习
+
 ### 比较两个类型是否相等
 
 ```ts
@@ -31,14 +33,41 @@ type UnionToIntersection3<T> = (T extends T ? (x: T) => unknown : never) extends
   ? R
   : never;
 type E15 = { name: 'cpp' } | { age: 30 };
+// type E14 = {
+//     name: 'cpp';
+// } & {
+//     age: 30;
+// }
+
 type E14 = UnionToIntersection3<E15>;
-/**
- * type E14 = {
-    name: 'cpp';
-} & {
-    age: 30;
+
+type E152 = { name: string } | { age: number };
+type E142 = UnionToIntersection3<E152>;
+const e142: E142 = { name: 'cpp', age: 30 };
+```
+
+### 索引类型转联合类型
+
+```ts
+interface E141 {
+  name: string;
+  age: number;
 }
- * /
+type IndexToUnion<T extends Record<PropertyKey, any>> = {
+  [K in keyof T]: {
+    [K2 in K]: T[K2];
+  };
+}[keyof T];
+
+type E151 = IndexToUnion<E141>;
+// type E151 = {
+//     name: string;
+// } | {
+//     age: number;
+// }
+const e143: E151 = { name: 'cpp', age: 30 };
+const e144: E151 = { name: 'cpp' };
+const e145: E151 = { age: 30 };
 ```
 
 ### 实现嵌套类型 Awaited
@@ -98,10 +127,25 @@ type AType = {
   key2: () => void;
   key3: Function;
 };
-type Eg = FunctionKeys<AType>;
-type FunctionKeys<T> = {
-  [K in keyof T as T[K] extends Function ? K : never]: T[K];
+type Eg = FunctionKeys<AType, Function>;
+// type Eg = {
+//     key2: () => void;
+//     key3: Function;
+// }
+type FunctionKeys<T, F> = {
+  [K in keyof T as T[K] extends F ? K : never]: T[K];
 };
+
+// Before
+type BeforeFunctionKeys<T, F> = {
+  [K in keyof T]: T[K] extends F ? K : never;
+}[keyof T];
+type Keyss = BeforeFunctionKeys<AType, Function>;
+type BeforeAllFilter = Pick<AType, Keyss>;
+// type BeforeAllFilter = {
+//     key2: () => void;
+//     key3: Function;
+// }
 ```
 
 **as 重映射！！！**

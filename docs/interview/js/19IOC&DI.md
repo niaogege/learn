@@ -13,6 +13,9 @@ nav:
 
 感谢阿宝哥提供的技术文章[了不起的 IOC/DI](https://mp.weixin.qq.com/s?__biz=MzI2MjcxNTQ0Nw==&mid=2247485950&idx=1&sn=9bfed7fee2f2a02b5e9994480a66e1e9&scene=21#wechat_redirect)
 
+[如何基于 TypeScript 实现控制反转](https://juejin.cn/post/6898882861277904910#heading-2)
+
+[代码实践](https://stackblitz.com/edit/ptdisn?file=index.ts)
 > 很早的时候就接触这玩意，可惜不知道代表什么意思
 
 - 概念

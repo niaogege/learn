@@ -387,18 +387,17 @@ type c = TupleToNestedObject1<[], boolean>; // boolean. if the tuple is empty, j
 //     : A extends [] ? {name: 'cpp'} : {name: 'wmh'}
 //   : P;
 
-type TupleToNestedObject1<
-  T,
-  U,
-  S = U> =
-  T extends []
-    ? S
-    : (T extends [...infer A, infer Last extends PropertyKey]
-      ? TupleToNestedObject1<A, U, {
-          [K in Last]: S
-        }>
-      : never
-    );
+type TupleToNestedObject1<T, U, S = U> = T extends []
+  ? S
+  : T extends [...infer A, infer Last extends PropertyKey]
+  ? TupleToNestedObject1<
+      A,
+      U,
+      {
+        [K in Last]: S;
+      }
+    >
+  : never;
 ```
 
 ### 接口类型的约束
@@ -566,6 +565,7 @@ type ConstructTuple<
   E extends unknown = unknown,
   Arr extends unknown[] = [],
 > = Arr['length'] extends T ? Arr : ConstructTuple<T, E, [E, ...Arr]>;
+type Up1031 = ConstructTuple<2, 'pp'>; // type Up1031 = ["pp", "pp"]
 ```
 
 ### Number Range
@@ -601,10 +601,66 @@ type Keys = Combination<['foo', 'bar', 'baz']>;
 实现 Subsequence<T> 输出所有可能的子序列：
 
 ```ts
-type A = Subsequence3<[1, 2, 3]> // [] | [1, 2, 3] | [1] | [1, 2] | [2] | [3] | [2, 3] | [1, 3]
+type A = Subsequence3<[1, 2, 3]>; // [] | [1, 2, 3] | [1] | [1, 2] | [2] | [3] | [2, 3] | [1, 3]
 type Subsequence3<T extends number[]> = T extends [infer F, ...infer R extends number[]]
-? Subsequence3<R> | [F, ...Subsequence3<R>]
-: T
+  ? Subsequence3<R> | [F, ...Subsequence3<R>]
+  : T;
+
+type BackTrack<T extends number[]> = T extends [infer F, ...infer R extends number[]]
+  ? BackTrack<R> | [F, ...BackTrack<R>]
+  : T;
+type AA = BackTrack<[3, 6, 9]>;
+```
+
+### interface 对象转成联合类型
+
+```ts
+interface INName {
+  name: string;
+  age: number;
+}
+// expected
+type INNameT = { name: string } | { age: number };
+let tt11: INNameT = { name: 'cpp' };
+let tt112: INNameT = { age: 33 };
+let tt113: INNameT = { age: 33, name: 'wmh' };
+```
+
+实战
+
+```ts
+type CHANGEIN<T extends Record<PropertyKey, any>> = {
+  [K in keyof T]: {
+    [K2 in K]: T[K2];
+  };
+}[keyof T];
+type IN1 = CHANGEIN<INName>;
+type IN2 = keyof INName;
+let tt100: IN2 = 'name';
+let tt1001: IN2 = 'age';
+let tt1131: IN1 = { age: 33, name: 'wmh' };
+```
+
+### DFS 遍历属性名
+
+```ts
+type TP = {
+  name: string;
+  age: {
+    cc: {
+      dd: string;
+    };
+    ee: number;
+  };
+};
+type DFS<T> = {
+  [K in keyof T]: K extends string
+    ? T[K] extends Record<PropertyKey, any>
+      ? K | `${K}.${DFS<T[K]>}`
+      : K
+    : never;
+}[keyof T];
+type DD1 = DFS<TP>; // type DD1 = "name" | "age" | "age.cc" | "age.ee" | "age.cc.dd"
 ```
 
 ## 参考文档
