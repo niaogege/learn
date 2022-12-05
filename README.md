@@ -10,12 +10,12 @@
 
 ### 关于路由配置
 
-当前页面为啥放在博客页面的一个子路由， **/cpp-ui**，在部署的时候，一开始发现生成的静态资源拿不到，后面看到是相对路径不对，
+当前页面为啥放在博客页面的一个子路由， **/learn**，在部署的时候，一开始发现生成的静态资源拿不到，后面看到是相对路径不对，
 
 ```ts
 import { defineConfig } from 'dumi';
 export default defineConfig({
-  publicPath: '/cpp-ui/',
+  publicPath: '/learn/',
 });
 ```
 
@@ -24,8 +24,8 @@ export default defineConfig({
 ```ts
 import { defineConfig } from 'dumi';
 export default defineConfig({
-  publicPath: '/cpp-ui/',
-  base: '/cpp-ui',
+  publicPath: '/learn/',
+  base: '/learn',
 });
 ```
 
@@ -60,7 +60,7 @@ export default defineConfig({
 
 ### 发布到个人一级站点 bytheway.com
 
-切记需要切换到 bytheway 分支，然后手动上次静态资源，如何做到，如果是打包能自动部署，也就是自动把打包后的资源上传到服务器的指定路径就好了？
+切记需要切换到 bytheway 分支，然后手动上次静态资源，如何做到，如果是打包能自动部署，也就是自动把打包后的资源上传到服务器的指定路径就好了？ ———————— 已解决，通过 githubAction 进行自动化部署,请看 **/.github/workflows/deploy.yml**
 
 ## Getting Started
 

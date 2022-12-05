@@ -2,7 +2,7 @@
  * @Author: Chendapeng
  * @Date: 2022-04-12 22:23:54
  * @LastEditors: Chendapeng
- * @LastEditTime: 2022-10-10 15:34:01
+ * @LastEditTime: 2022-12-05 19:30:44
  * @Description:
  */
 import { defineConfig } from 'dumi';
@@ -26,8 +26,8 @@ export default defineConfig({
     },
   ],
   mode: 'site',
-  base: '/cpp-ui/',
-  publicPath: '/cpp-ui/',
+  base: '/learn/',
+  publicPath: '/learn/',
   // exportStatic: { htmlSuffix: process.env.NODE_ENV === 'production' ? true : false },
   // more config: https://d.umijs.org/config
   // chainWebpack(memo, { env, webpack, createCSSRule }) {
