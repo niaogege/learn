@@ -16,6 +16,7 @@ nav:
 [如何基于 TypeScript 实现控制反转](https://juejin.cn/post/6898882861277904910#heading-2)
 
 [代码实践](https://stackblitz.com/edit/ptdisn?file=index.ts)
+
 > 很早的时候就接触这玩意，可惜不知道代表什么意思
 
 - 概念

@@ -73,7 +73,7 @@ css 自定义属性存在作用域，即它声明时候所处的 css 选择器�
 
 ```scss
 // 定义
-@mixin theme-color ($name, $light, $dark) {
+@mixin theme-color($name, $light, $dark) {
   :root {
     #{$name}: $light;
   }
@@ -83,8 +83,7 @@ css 自定义属性存在作用域，即它声明时候所处的 css 选择器�
 }
 // 使用
 @import '../../style/mixin/color.scss'; // 这一步很关键
-@include theme-color(--study-primary-color, '#fff', '#000')
-.main {
+@include theme-color(--study-primary-color, '#fff', '#000') .main {
   color: var(--study-primary-color);
 }
 ```
@@ -142,7 +141,7 @@ const changeTheme = (e = 'light') => {
 这一步主要是用于当前作用域的文件，当然绝大部分的主题色是阔以定义在前面说的*dark.scss/light.scss*
 
 ```scss
-@mixin theme-color ($var, $light, $dark) {
+@mixin theme-color($var, $light, $dark) {
   :root {
     #{$val}: $light;
   }

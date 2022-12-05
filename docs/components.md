@@ -29,7 +29,7 @@ nav:
 - Modal
 - Pullup
 - AlertDialog
-- Popover 
+- Popover
 - Drag
 - Tooltip
 - PopConfirm
@@ -70,7 +70,7 @@ nav:
 ### 数据展示
 
 - Cell
-- Badge 
+- Badge
 - WaterMark
 - Text
 - ImageViewer (图片查看器)
@@ -97,4 +97,3 @@ nav:
 - ErrorBoudary （错误边界）
 - Waypoint （可见/不可见指示）
 - AutoCenter (自动居中)
-

@@ -50,27 +50,24 @@ type result3 = ConstructTuple<3, string>; // type result3 = [string, string, str
 // expected to be `"foo" | "bar" | "baz" | "foo bar" | "foo bar baz" | "foo baz" | "foo baz bar" | "bar foo" | "bar foo baz" | "bar baz" | "bar baz foo" | "baz foo" | "baz foo bar" | "baz bar" | "baz bar foo"`
 // type Keys = Combination<['foo', 'bar', 'baz']>
 // type Combination<T extends string[], U = T[number], A = U> =
-// U extends infer U extends string ? `${U} ${Combination<T, Exclude<A, U>>}` | U : never; 
+// U extends infer U extends string ? `${U} ${Combination<T, Exclude<A, U>>}` | U : never;
 
-type StrToUnion<S> = S extends `${infer F}${infer R}`
-  ? F | StrToUnion<R>
-  : never
+type StrToUnion<S> = S extends `${infer F}${infer R}` ? F | StrToUnion<R> : never;
 
-type TT11 = StrToUnion<'abc'>
+type TT11 = StrToUnion<'abc'>;
 
-type Len = ['a', 'b', 'c'][number]
-type Len2 = ['a', 'b', 'c']['length']
+type Len = ['a', 'b', 'c'][number];
+type Len2 = ['a', 'b', 'c']['length'];
 
+type A = Subsequence2<[1, 2, 3]>; // [] | [1] | [2] | [1, 2]
+type AB = Subsequence<[1, 2, 3]>; // [] | [1] | [2] | [1, 2]
+type Subsequence<T extends number[], U = unknown> = T extends [infer F, ...infer R extends number[]]
+  ? [F] | Subsequence<R, U | F> | T | []
+  : T;
 
-type A = Subsequence2<[1, 2, 3]> // [] | [1] | [2] | [1, 2]
-type AB = Subsequence<[1, 2, 3]> // [] | [1] | [2] | [1, 2]
-type Subsequence<T extends number[], U = unknown> = T extends [infer F, ...(infer R extends number[])]
-? [F] | Subsequence<R, U | F > | T | []
-: T
-
-type Subsequence2<T extends number[]> = T extends [infer F, ...(infer R extends number[])]
-? Subsequence2<R> | [F, ...Subsequence2<R>]
-: T
+type Subsequence2<T extends number[]> = T extends [infer F, ...infer R extends number[]]
+  ? Subsequence2<R> | [F, ...Subsequence2<R>]
+  : T;
 
 class EG2 {
   private name: string;
@@ -95,7 +92,7 @@ interface Dog extends Animals {
 let A: Animals;
 let B: Dog;
 
-A = B
+A = B;
 // B = A
 interface User {
   id: number;
@@ -118,13 +115,13 @@ let CppPerson: CPP = {
 personT = CppPerson; // ok
 // CppPerson = personT
 
-let PP1: Array<User>
-let CC1: Array<CPP>
-PP1 = CC1
+let PP1: Array<User>;
+let CC1: Array<CPP>;
+PP1 = CC1;
 
-let EG3: Array<Animals>
-let EG4: Array<Dog>
-EG3 = EG4
+let EG3: Array<Animals>;
+let EG4: Array<Dog>;
+EG3 = EG4;
 
 interface Animal {
   name: string;
@@ -134,8 +131,8 @@ interface Dog extends Animal {
   break(): void;
 }
 
-type AnimalFn = (arg: Animal) => void
-type DogFn = (arg: Dog) => void
+type AnimalFn = (arg: Animal) => void;
+type DogFn = (arg: Dog) => void;
 
 let Eg1: AnimalFn;
 let Eg2: DogFn;
@@ -145,13 +142,13 @@ Eg1 = Eg2;
 // 反过来可以
 Eg2 = Eg1;
 
-let animal: AnimalFn = (arg: Animal) => {}
+let animal: AnimalFn = (arg: Animal) => {};
 let dog: DogFn = (arg: Dog) => {
   arg.break();
-}
+};
 
-animal = dog
-animal({name: 'cpp'})
+animal = dog;
+animal({ name: 'cpp' });
 
 interface EventListener {
   (evt: Event): void;
@@ -167,11 +164,11 @@ interface MouseEvent extends Event {
 }
 
 interface Window {
-  addEventListener(type: string, listener: EventListener)
+  addEventListener(type: string, listener: EventListener);
 }
 
-window.addEventListener('click', (e: Event) => {})
-window.addEventListener('mouseout', (e: MouseEvent) => {})
+window.addEventListener('click', (e: Event) => {});
+window.addEventListener('mouseout', (e: MouseEvent) => {});
 
 type E24 = {
   name: string;
@@ -195,30 +192,35 @@ type E27 = Intersection<E24, E25>;
 type Intersection<T extends object, U extends object> = Pick<T, Extract<keyof T, keyof U>> &
   Extract<keyof U, keyof T>;
 
-export const e271:E27 = {
-  hobby: 'cpp'
-}
+export const e271: E27 = {
+  hobby: 'cpp',
+};
 
-type Intersection1<T extends object, U extends object> = Pick<T,
+type Intersection1<T extends object, U extends object> = Pick<
+  T,
   Extract<keyof T, keyof U> & Extract<keyof U, keyof T>
->
+>;
 
-type Eg = Intersection1<{key1: string}, {key1:string, key2: number}>
+type Eg = Intersection1<{ key1: string }, { key1: string; key2: number }>;
 
-type UnionTo<T> = (T extends T ? (x: T) => unknown : never) extends (
-  (x: infer R) => unknown
-) ? R : never;
+type UnionTo<T> = (T extends T ? (x: T) => unknown : never) extends (x: infer R) => unknown
+  ? R
+  : never;
 
 type E251 = {
   hobby: string;
 };
-type E2512 = {
-  name: string;
-} | {hobby: string};
-type E2513 = UnionTo<E2512>
+type E2512 =
+  | {
+      name: string;
+    }
+  | { hobby: string };
+type E2513 = UnionTo<E2512>;
 
-type Equal<A, B = A> = (<T>() => T extends A ? 1 : 2) extends (<T>() => T extends B ? 1 : 2) ? true : false;
-type E28 = Equal<E251, {hobby: string, name: symbol}>
+type Equal<A, B = A> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+  ? true
+  : false;
+type E28 = Equal<E251, { hobby: string; name: symbol }>;
 
 type T26 = Promise<[Promise<{ name: 'cpp' }>, 2, 3]>;
 type MyPromise<T> = T extends Promise<infer A> ? A : never;

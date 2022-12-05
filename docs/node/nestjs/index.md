@@ -95,3 +95,52 @@ Nginx 作为专业的 WEB 代理服务器，在代理方面能够提供**负载�
 - 物料系统
 
 物料系统主要是针对于**静态资源**的管理，一般物料系统会跟 DevOps 体系关联比较大，毕竟物料会涉及构建部署的过程，但我们的主题并不是 DevOps，所以物料系统在小册的占比不会很高，只是作为一个辅助类型的项目为网关服务提供静态资源路由的配置、资源版本的管理等功能。
+
+### Nestjs 学习
+
+> postMan 一定要安装起来，不然怎么测试接口
+
+- app.controller.ts 常见功能是用来**处理 http 请求以及调用 service 层的处理方法**
+- app.module.ts 根模块用于处理其他类的**引用与共享**。
+- app.service.ts **封装通用的业务逻辑、与数据层的交互（例如数据库）、其他额外的一些三方请求**
+- main.ts 应用程序入口文件。它使用 NestFactory 用来创建 Nest 应用实例。
+
+- 生成一个模块 (nest g mo) 来组织代码，使其保持清晰的界限（Module）。
+- 生成一个控制器 (nest g co) 来定义**CRUD 路径**（Controller）。
+- 生成一个服务 (nest g s) 来**表示/隔离业务逻辑**（Service）。
+- 生成一个**实体类/接口**来代表资源数据类型（Entity）。
+
+#### Nestjs 中的 DI
+
+Nest 是建立在强大的设计模式，通常称为**依赖注入**。我们建议在官方的 [Angular](https://angular.cn/guide/dependency-injection-providers)文档中阅读有关此概念的精彩文章。
+
+在 Nest 中，借助 TypeScript 功能，管理依赖项非常容易，因为它们仅按**类型**进行解析。在下面的示例中，Nest 将 catsService 通过创建并返回一个实例来解析 CatsService（或者，在单例的正常情况下，如果现有实例已在其他地方请求，则返回现有实例）。解析此依赖关系并将其传递给控制器的构造函数（或分配给指定的属性）：
+
+```ts
+// @Controller('cats')
+export class CatsController {
+  constructor(private catsService: CatsService) {}
+}
+```
+
+#### Controller/Module/Provider
+
+```js
+nest g module Cat // 新建模块
+
+nest g service Ctas // 新建提供者 也就是服务商
+
+nest g controller cats // 创建控制器
+```
+
+#### Nestjs 中间件
+
+Nest 中间件实际上等价于 express 中间件。 下面是 Express 官方文档中所述的中间件功能：
+
+中间件函数可以执行以下任务:
+
+- 执行任何代码。
+- 对请求和响应对象进行更改。
+- 结束请求-响应周期。
+- 调用堆栈中的下一个中间件函数。
+- 如果当前的中间件函数**没有**结束请求-响应周期, 它必须调用 next() 将控制传递给下一个中间件函数。否则, 请求将被挂起。

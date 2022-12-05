@@ -1,5 +1,5 @@
 ---
-title:  播放圆形进度条
+title: 播放圆形进度条
 order: 1
 group:
   title: 基础组件

@@ -11,7 +11,18 @@ nav:
   path: /node
 ---
 
+- 如何使用共享模块
+- 如何导出模块
+- 全局模块如何定义和使用 Global
+
 模块是具有 **@Module**() 装饰器的类。 @Module() 装饰器提供了元数据，Nest 用它来**组织应用程序结构**
+
+**@module()** 装饰器接受一个描述模块属性的对象：
+
+- providers 由 Nest 注入器实例化的提供者，并且可以至少在整个模块中共享
+- controllers 必须创建的一组控制器
+- imports 导入模块的列表，这些模块导出了此模块中所需提供者
+- exports 由本模块提供并应在其他模块中可用的提供者的子集。
 
 ### Module
 
@@ -37,50 +48,4 @@ function Module(metadata) {
   };
 }
 exports.Module = Module;
-```
-
-### Injectable
-
-```js
-import { Injectable } from '@nestjs/common';
-
-@Injectable({
-  scope: 1,
-  durable: true,
-})
-export class AppService {
-  getHello(): string {
-    return 'Hello World! CPP';
-  }
-}
-
-// interface
-export declare function Injectable(options?: InjectableOptions): ClassDecorator;
-export declare function mixin<T>(mixinClass: Type<T>): Type<T>;
-export declare type InjectableOptions = ScopeOptions;
-// source
-function Injectable(options) {
-  return (target) => {
-    Reflect.defineMetadata(constants_1.INJECTABLE_WATERMARK, true, target);
-    Reflect.defineMetadata(constants_1.SCOPE_OPTIONS_METADATA, options, target);
-  };
-}
-exports.Injectable = Injectable;
-function mixin(mixinClass) {
-  Object.defineProperty(mixinClass, 'name', {
-    value: (0, uuid_1.v4)(),
-  });
-  Injectable()(mixinClass);
-  return mixinClass;
-}
-exports.mixin = mixin;
-```
-
-### Controller 中的@Get 请求
-
-```ts
-@Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
 ```

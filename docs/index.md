@@ -55,4 +55,8 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 不求广，只求精和深！
 
-## [个人站点](http://niaogege.cn/)
+## 个人维护的站点
+
+- [个人站点](http://niaogege.cn/)
+- [生活和工作点滴记录](http://niaogege.cn/love)
+- [nest-test](http://niaogege.cn/nest-test)
