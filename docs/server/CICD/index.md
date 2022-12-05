@@ -15,19 +15,16 @@ nav:
 
 - 了解 CI/CD 基本概念
 - 基于 githubAction 实现前端项目的自动化测试/发布和部署(已完成)
-- 基于 githubAction 实现 Nodejs 项目的自动化测试/发布和部署(待验证)
-- 基于 githubAction 实现 npm 包自动发布
-- 发布一个基本的 actions 插件
-- 搭建基本的 jenkins 环境，
+- 基于 githubAction 实现 Nodejs 项目的自动化测试/发布和部署(已完成)
+- 基于 githubAction 实现 npm 包自动发布(未完成)
+- 发布一个基本的 actions 插件(未完成)
+- 搭建基本的 jenkins 环境，(已完成)
 - 基于 jenkins 环境，实现前端项目的自动化测试/发布和部署
 - 基于 jenkins 环境，实现 Nodejs 项目的自动化测试/发布和部署
-- 了解 docker/nginx/k8s
-- 了解数据库
-- 学习 golang
 
 > [阮一峰巨佬 太厉害了](ruanyifeng.com)
 
-目标： 合格的搬砖**工程师**
+目标： 合格的 full-stack 搬砖**工程师**
 
 ## CI/CD
 
@@ -43,6 +40,18 @@ nav:
 [GitHub Actions 入门教程](http://www.ruanyifeng.com/blog/2019/09/getting-started-with-github-actions.html?fileGuid=1PWJAvQBtLA5IGh3)
 
 ### actions 插件
+
+常用的几个推荐
+
+- 检出代码的 actions/checkout@v1
+
+- 安装 nodejs 环境的 actions/setup-node@v1
+
+- 传输文件到私服的 peaceiris/actions-gh-pages@v3 [sh-scp-ssh-pipelines](https://github.com/cross-the-world/ssh-scp-ssh-pipelines/blob/master/app.py)
+
+这个竟然是用 py 写的
+
+- 创建 Github Pages 站点 peaceiris/actions-gh-pages@v3
 
 #### 创建 github Pages 站点
 

@@ -15,6 +15,22 @@ nav:
 
 主要涉及的有：
 
+- 了解 CI/CD 基本概念
+- 基于 githubAction 实现前端项目的自动化测试/发布和部署(已完成)
+- 基于 githubAction 实现 Nodejs 项目的自动化测试/发布和部署(已完成)
+- 基于 githubAction 实现 npm 包自动发布(未完成)
+- 发布一个基本的 actions 插件(未完成)
+- 搭建基本的 jenkins 环境，(已完成)
+- 基于 jenkins 环境，实现前端项目的自动化测试/发布和部署
+- 基于 jenkins 环境，实现 Nodejs 项目的自动化测试/发布和部署
+- 了解 docker 以及基本概念
+- 学会配置基本的 nginx
+- 了解 k8s
+- 了解数据库
+- 学习 golang
+
+> [阮一峰巨佬 太厉害了](ruanyifeng.com)
+
 - CI/CD
 - Docker
 - K8s
