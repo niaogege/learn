@@ -1,5 +1,7 @@
 # @cpp/learn
 
+[![wakatime](https://wakatime.com/badge/github/niaogege/learn.svg)](https://wakatime.com/badge/github/niaogege/learn)
+
 生活很快，码代码快乐点！为啥选择 dumi?
 
 - 组件显示的属性通过 ts 配置能自动帮你生成表格类型的 md 文档，这样写完组件和组件 demo，组件的使用方式也基本搞定了
