@@ -60,3 +60,5 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 - [个人站点](http://niaogege.cn/)
 - [生活和工作点滴记录](http://www.bytheway.com/love)
 - [后端接口测试](http://www.bytheway.com/api/v1/user)
+- [react 源码调试](http://niaogege.cn/debugger-react-resource/)
+- [ssr-vite]()

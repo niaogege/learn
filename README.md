@@ -1,4 +1,4 @@
-# @cpp/docs
+# @cpp/learn
 
 生活很快，码代码快乐点！为啥选择 dumi?
 
@@ -60,36 +60,55 @@ export default defineConfig({
 
 ### 发布到个人一级站点 bytheway.com
 
-切记需要切换到 bytheway 分支，然后手动上次静态资源，如何做到，如果是打包能自动部署，也就是自动把打包后的资源上传到服务器的指定路径就好了？ ———————— 已解决，通过 githubAction 进行自动化部署,请看 **/.github/workflows/deploy.yml**
+切记需要切换到 bytheway 分支，然后手动上次静态资源，如何做到，如果是打包能自动部署，也就是自动把打包后的资源上传到服务器的指定路径就好了？ ———————— 已解决，通过 githubAction 进行自动化部署,请看 **/.github/workflows/deploy.yml**文件
 
-## Getting Started
+```js
+name: Deploy
 
-Install dependencies,
+on:
+  push:
+    branches:
+      - main
 
-```bash
-$ npm i
-```
+env:
+  TARGET_DIR: /www/web/learn
 
-Start the dev server,
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]
+    steps:
+      - name: Checkout # 步骤1
+        uses: actions/checkout@v1 # 使用的动作。格式：userName/repoName。作用：检出仓库，获取源码。 官方actions库：https://github.com/actions
 
-```bash
-$ npm start
-```
+      - name: Use Node.js # 步骤2
+        uses: actions/setup-node@v1 # 作用：安装nodejs
+        with:
+          node-version: ${{ matrix.node-version }} # 版本
 
-Build documentation,
+      - run: npm install --frozen-lockfile
+      - name: Build
+        run: npm run docs:build
 
-```bash
-$ npm run docs:build
-```
+      - name: Deploy Server
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        env:
+          WELCOME: 'ssh scp ssh pipelines CPP server'
+          LASTSSH: 'after copying success'
+        with:
+          host: '111.230.199.157'
+          user: 'root'
+          pass: ${{ secrets.FTP_PASSWORD }}
+          connect_timeout: 20s
+          first_ssh: |-
+            rm -rf $TARGET_DIR
+            echo $WELCOME
+            mkdir -p $TARGET_DIR
+          scp: |-
+            './docs-dist/*' => $TARGET_DIR/
+          last_ssh: |-
+            echo $LASTSSH
 
-Run test,
-
-```bash
-$ npm test
-```
-
-Build library via `father-build`,
-
-```bash
-$ npm run build
 ```
