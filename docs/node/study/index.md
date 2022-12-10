@@ -124,11 +124,16 @@ Node 保持了 JavaScript 在浏览器中单线程的特点 JavaScript 与其他
 
 RPC（remote procedure call，远程过程调用），指通过网络从远程计算机上请求服务。是常见的计算机通信方式之一。
 
-RPC 可以理解为一种设计模型，通常包含 传输协议 和 序列化协议 。传输协议通常使用 TCP 传输二进制数据，因为相比 HTTP 和 JSON ，传输效率更高，性能更好。现在出名的 RPC 服务例如，Google 的 gRPC、阿里的 Dubble。
+RPC 可以理解为一种设计模型，通常包含 传输协议 和 序列化协议 。传输协议通常使用 TCP 传输二进制数据，因为相比 HTTP 和 JSON ，传输效率更高，性能更好。现在出名的 RPC 服务例如，Google 的 _gRPC_、阿里的 _Dubble_。
 
 #### 创建 RPC 的过程
 
-- client 创建 socket - connect 建立链接 - on 监听数据 - write 发送数据
+客户端创建过程
+
+- client 创建 socket
+- connect 建立链接
+- on 监听数据
+- write 发送数据
 
 ```js
 const net = require('net');
@@ -161,7 +166,12 @@ function fetchData() {
 }
 ```
 
-- server 创建 server - 绑定端口 listen - on 监听数据 - write 发送数据
+服务端创建过程
+
+- server 创建 server
+- 绑定端口 listen
+- on 监听数据
+- write 发送数据
 
 ```js
 const net = require('net');
@@ -190,3 +200,7 @@ Backend For Frontend，简称 BFF，**服务于前端的后端**，并非是一�
 ### 基础工具
 
 前端领域中的编译器、构建工具、搭建脚手架等。比较出名的例如 Webpack、cli 都是很成功的。
+
+### 参考资料
+
+- [nodejs 学习笔记](https://github.com/chyingp/nodejs-learning-guide)

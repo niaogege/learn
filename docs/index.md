@@ -58,7 +58,8 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 ## 个人维护的站点
 
 - [个人站点](http://niaogege.cn/)
-- [生活和工作点滴记录](http://www.bytheway.com/love)
-- [后端接口测试](http://www.bytheway.com/api/v1/user)
+- [生活和工作点滴记录](http://www.bythewayer.com/love)
+- [后端接口测试 nestjs 项目](http://www.bythewayer.com/api/v1/user)
 - [react 源码调试](http://niaogege.cn/debugger-react-resource/)
+- [nextjs 项目]()
 - [ssr-vite]()
