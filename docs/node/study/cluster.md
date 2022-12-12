@@ -14,6 +14,10 @@ nav:
 
 - Pm2 中的 cluster 模式和 fork 模式区别
 - child_process 模块提供的 4 种新建子进程 API: spawn、execFile、exec 和 fork
+- Nodejs 的 Cluster 模块采用了哪种集群模式？
+- 多个进程为什么可以监听同一个端口？
+- 多个进程之间如何通信？
+- 如何对多个 Worker 进行请求分发？（负载均衡策略）
 
 ### Pm2 中的 cluster 模式和 fork 模式区别
 

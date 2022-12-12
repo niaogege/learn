@@ -11,6 +11,13 @@ nav:
   path: /server
 ---
 
+需要了解以及掌握的
+
+- Docker 部署前端项目
+- Docker 部署 nodejs 项目
+- 学会使用 docker-compose
+- docker 高效部署
+
 不知道从哪里开始学起 Docker? 只能看一点记一点知识
 
 > 推荐阮老师的[Docker 入门教程](https://www.ruanyifeng.com/blog/2018/02/docker-tutorial.html) > [Docker 从入门到实践](https://yeasy.gitbook.io/docker_practice/basic_concept)
@@ -54,10 +61,14 @@ docker container rm [containerID]
 docker container kill [containerID]
 
 ## 生成容器
-docker container run -p 8000:3000 -it cpp-demo
-docker container run -p 3002:3002 -it niaogege/next-demo:0.0.2
+docker container run -p 8000:3000 -itd cpp-demo
+docker container run -p 3002:3002 -itd niaogege/next-demo:0.0.2
+docker container run -p 3002:3002 -itd next-demo:0.0.3
 
-# 查看镜像内的文件列表
+# 启动已经终止的容器
+docker container start next-demo:0.0.3
+
+# 进入容器
 docker exec -it [containerID] /bin/bash
 
 # 查看当前镜像内的文件
