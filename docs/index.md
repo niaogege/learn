@@ -22,17 +22,21 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 > 始终保持一个对技术热爱的 ❤️
 
+## 个人维护
+
+- [个人博客](https://bythewayer.com/)
+- [个人站点老的](http://niaogege.cn/)
+- [爱我所爱](https://bythewayer.com/love)
+- [保持热爱技术的心](https://bythewayer.com/learn)
+- [后端接口测试 nestjs 项目](https://bythewayer.com/api/v1/cats/query?id=890)
+- [react 源码调试](http://niaogege.cn/debugger-react-resource/)
+- [nextjs 项目](https://bythewayer.com/next)
+
 ![interview.png](https://s2.loli.net/2022/07/21/ZIaF8mitBkeSwfq.png)
 
-## 沉淀
+## 工具
 
-- ui 组件
-- 工具函数
-- 脚手架
-- 调试工具
-- webpack plugin
-- rollup plugin
-- babel plugin
+- [云图床](https://cloudimge.com/niaogege)
 
 ## 面试相关
 
@@ -46,20 +50,18 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 - webpack & vite & rollup
 - 算法(爱不知所起一往情深)
 - 网络
-
-## 其他相关
-
 - 源码调试
 - 源码阅读
 - 思考与成长
 
+## 沉淀
+
+- ui 组件
+- 工具函数
+- 脚手架
+- 调试工具
+- webpack plugin
+- rollup plugin
+- babel plugin
+
 不求广，只求精和深！
-
-## 个人维护的站点
-
-- [个人站点](http://niaogege.cn/)
-- [生活和工作点滴记录](http://www.bythewayer.com/love)
-- [后端接口测试 nestjs 项目](http://www.bythewayer.com/api/v1/user)
-- [react 源码调试](http://niaogege.cn/debugger-react-resource/)
-- [nextjs 项目]()
-- [ssr-vite]()

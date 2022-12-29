@@ -14,3 +14,4 @@ nav:
 ### 参考
 
 - [使用 Docker 构建前端应用](https://zhuanlan.zhihu.com/p/39241059)
+- [如何將前端網站打包成 Docker Image](https://blog.wu-boy.com/2020/07/how-to-create-docker-image-in-reactjs-or-vuejs/)

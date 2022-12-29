@@ -2,7 +2,7 @@
  * @Author: Chendapeng
  * @Date: 2022-04-12 22:23:54
  * @LastEditors: Chendapeng
- * @LastEditTime: 2022-12-05 19:30:44
+ * @LastEditTime: 2022-12-29 11:21:27
  * @Description:
  */
 import { defineConfig } from 'dumi';
@@ -22,7 +22,7 @@ export default defineConfig({
     null,
     {
       title: 'Blog',
-      path: 'https://niaogege.cn',
+      path: 'https://bythewayer.com',
     },
   ],
   mode: 'site',

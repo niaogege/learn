@@ -73,7 +73,7 @@ docker container stop [containerId]
 ### 进入容器
 
 ```bash
-docker exec -it [containerId] bash
+docker exec -it [containerId] sh
 
 # 退出容器
 exit
