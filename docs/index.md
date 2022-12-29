@@ -22,7 +22,7 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 > 始终保持一个对技术热爱的 ❤️
 
-## 个人维护
+## 沉淀维护
 
 - [个人博客](https://bythewayer.com/)
 - [个人站点老的](http://niaogege.cn/)
