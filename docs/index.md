@@ -38,6 +38,10 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 - [云图床](https://cloudimge.com/niaogege)
 
+## 收藏价值的网站
+
+- [30secondsofcode](https://www.30secondsofcode.org/)
+
 ## 面试相关
 
 - css
