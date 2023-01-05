@@ -16,9 +16,9 @@ nav:
 
 useEvent 有俩个特性：
 
-- 在组件多次 render 时保持引用一致
+- 在组件多次 render 时保持*引用一致*
 
-- 函数内始终能获取到最新的 props 与 state
+- 函数内始终能获取到最新的 **props 与 state**
 
 <code src="./index.tsx"></code>
 

@@ -9,9 +9,8 @@ const useRequest = (url: string, options: any) => {
                 const abortController = new AbortController();
                 const signal = abortController.signal;
                 setAbort(() => abortController.abort());
-                const res = await fetch(url, { ...options, signal });
-                const json = await res.json();
-                setResponse(json);
+                const res = await window.fetch(url, { ...options, signal, method: 'get' });
+                setResponse(res);
             } catch (error) {
                 setError(error as any);
             }

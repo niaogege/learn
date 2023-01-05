@@ -1,6 +1,6 @@
 ---
 hero:
-  title: '@chendap'
+  title: 'Learning'
   desc: 码代码久了，总要留下点什么！水喝多了尿自然就有!
   actions:
     - text: Getting Started
@@ -24,7 +24,7 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 ## 沉淀维护
 
-- [个人博客](https://bythewayer.com/)
+- [@个人博客](https://bythewayer.com/) ｜ [www 个人博客](https://www.bythewayer.com/)
 - [个人站点老的](http://niaogege.cn/)
 - [爱我所爱](https://bythewayer.com/love)
 - [保持热爱技术的心](https://bythewayer.com/learn)
@@ -32,11 +32,11 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 - [react 源码调试](http://niaogege.cn/debugger-react-resource/)
 - [nextjs 项目](https://bythewayer.com/next)
 
-![interview.png](https://s2.loli.net/2022/07/21/ZIaF8mitBkeSwfq.png)
+<!-- ![interview.png](https://s2.loli.net/2022/07/21/ZIaF8mitBkeSwfq.png) -->
 
 ## 工具
 
-- [云图床](https://cloudimge.com/niaogege)
+- [免费开源的简历生成器](https://rxresu.me/zh)
 
 ## 收藏价值的网站
 

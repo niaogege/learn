@@ -29,7 +29,9 @@ import React from 'react';
 import useRequest from './useRequest';
 
 const ImageFetch = () => {
-  const res: any = useRequest('https://dog.ceo/api/breeds/image/random', {});
+  const res: any = useRequest('https://bythewayer.com/api/v1/cats/image', {
+    method: 'GET',
+  });
   if (!res.response) {
     return <div>Loading...</div>;
   }

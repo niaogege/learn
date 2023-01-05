@@ -1,17 +1,13 @@
 import React from 'react';
 import useRequest from './useRequest';
 
-const MyApp = (props) => {
-    const res = useRequest('https://dog.ceo/api/breeds/image/random', {
-        method: 'GET',
-        headers: [
-            { 'Content-Type': 'application/json' },
-        ],
-    });
+const MyApp = () => {
+    const res = useRequest('https://bythewayer.com/api/v1/cats/image', {});
+    console.log(res, 'ress')
     if (!res || !res.response) {
         return <div>Loading...</div>;
     }
-    const imageUrl = res.response.message;
+    const imageUrl = res.response;
     return (
         <>
             {
