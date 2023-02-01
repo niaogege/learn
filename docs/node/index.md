@@ -229,6 +229,30 @@ vscode debugger 的使用主要是在 .vscode/launch.json 里面添加调试配�
 npx create-react-app my-test-app
 ```
 
+- 区别 1.一个永久存在，一个临时安装，用完后删除 npm 他会在本地全局性的安装 create-react-app，这个包会存储在 node 目录下面去。以后创建 react 项目直接执行 create-react-app 命令就可以了。
+
+npx 命令他会把 create-react-app 安装包临时安装上，等项目初始化完成以后，他就删除掉。
+
+- 区别 2.npx 会帮你执行依赖包里的二进制文件
+- 区别 3.npx 可以执行文件，但是 npm 不可以 npx 阔以指定 node 版本来运行 npm scripts：
+
+```js
+npx -p node@16 npm run build
+```
+
+再比如 npx http-server 可以一句话帮你开启一个静态服务器！（第一次运行会稍微慢一些）
+
+```js
+npx http-server
+```
+
+主要好处是
+
+- **临时安装可执行依赖包**，不用全局安装，不用担心长期的污染。
+- 可以执行依赖包中的命令，安装完成自动运行。
+- 自动加载 node_modules 中依赖包，不用指定$PATH。
+- 可以指定 node 版本、命令的版本，解决了不同项目使用不同版本的命令的问题。
+
 ## 参考
 
 - [微服务/API 前端开发时代之 BFF 速学入门教程](https://mp.weixin.qq.com/s/zP-sWo6IiRUjMsLeTtRA_w)
