@@ -41,6 +41,8 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 ## 收藏价值的网站
 
 - [30secondsofcode](https://www.30secondsofcode.org/)
+- [前端能力学习知识图谱](https://roadmap.sh/frontend/)
+- [2022js 明星项目](https://risingstars.js.org/2022/zh)
 
 ## 面试相关
 
