@@ -2,7 +2,7 @@
  * @Author: Chendapeng
  * @Date: 2022-04-12 22:23:54
  * @LastEditors: Chendapeng
- * @LastEditTime: 2022-12-29 11:21:27
+ * @LastEditTime: 2023-02-01 18:22:53
  * @Description:
  */
 import { defineConfig } from 'dumi';
@@ -11,8 +11,8 @@ import { defineConfig } from 'dumi';
 // const lastPath = path.resolve(__dirname, 'src')
 export default defineConfig({
   title: '@chendapeng',
-  favicon: 'https://pica.zhimg.com/v2-5cc11a3ba02cd7827cda429546f7bacf_xl.jpg?source=32738c0c',
-  logo: 'https://pica.zhimg.com/v2-5cc11a3ba02cd7827cda429546f7bacf_xl.jpg?source=32738c0c',
+  favicon: 'https://www.bythewayer.com/img/logo1.webp',
+  logo: 'https://www.bythewayer.com/img/logo1.webp',
   outputPath: 'docs-dist',
   locales: [
     ['zh-CN', '中文'],
