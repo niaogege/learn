@@ -37,6 +37,7 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 ## 工具
 
 - [免费开源的简历生成器](https://rxresu.me/zh)
+- [图片转换](https://convertio.co/)
 
 ## 收藏价值的网站
 
