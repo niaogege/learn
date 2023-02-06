@@ -19,3 +19,4 @@ nav:
 - koa
 - axios
 - qiankun
+- vite
