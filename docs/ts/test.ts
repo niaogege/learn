@@ -88,3 +88,9 @@ sayName(10, 10);
 
 import * as data from './module';
 console.log(data);
+
+const enum ConstRoutes {
+  // 此前会提示「常量枚举成员初始值设定项只能包含字面量值和其他计算的枚举值」
+  Parts = `${Prefix}/parts`, // "/data/parts"
+  Invoices = `${Prefix}/invoices`, // "/data/invoices"
+}

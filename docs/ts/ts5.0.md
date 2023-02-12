@@ -84,3 +84,55 @@ function logged(value, { kind, name }) {
 @logged
 class Test {}
 ```
+
+### 类方法装饰器
+
+类型定义如下：
+
+```ts
+type ClassMethodDecorator = (
+  value: Function,
+  context: {
+    kind: 'method';
+    name: string | symbol;
+    access: { get(): unknown };
+    isStatic: boolean;
+    isPrivate: boolean;
+    addInitializer(initializer: () => void): void;
+  },
+) => Function | void;
+```
+
+其 value 参数为被装饰的类方法，可以通过**返回一个新的方法来直接在原型层面代替掉原来的方法**（对于静态方法则在 Class 的层面替换）。或者你也可以包裹这个原来的方法，执行一些额外的逻辑：
+
+```ts
+function logged(value, { kind, name }) {
+  if (kind === 'method') {
+    return function (...args) {
+      const ret = value.apply(this, args);
+      return ret;
+    };
+  }
+}
+class Test1 {
+  @logged()
+  test(arg) {}
+}
+```
+
+### 类属性装饰器
+
+类型定义如下：
+
+```ts
+type ClassFieldDecorator = (
+  value: undefined,
+  context: {
+    kind: 'field';
+    name: string | symbol;
+    access: { get(): unknown; set(value: unknown): void };
+    isStatic: boolean;
+    isPrivate: boolean;
+  },
+) => (initialValue: unknown) => unknown | void;
+```

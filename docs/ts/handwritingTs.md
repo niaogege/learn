@@ -557,3 +557,35 @@ type Equal1<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
 type T14 = Shift1<[3, 2, 1]>; // [2, 1]
 type Shift1<T extends any[]> = T extends [infer A, ...infer R] ? R : T;
 ```
+
+### 数组项转成对象 key
+
+```ts
+type arr = [
+  {
+    key: 'aaa';
+  },
+  {
+    key: 'bbb';
+  },
+  {
+    key: 'ccc';
+  },
+];
+
+type GenObj = {
+  aaa: any;
+  bbb: any;
+  ccc: any;
+};
+
+type TransferObj<T extends Array<{ key: string }>> = {
+  [K in T[number]['key']]: any;
+};
+type T15 = TransferObj<arr>;
+// type T15 = {
+//     aaa: any;
+//     bbb: any;
+//     ccc: any;
+// }
+```

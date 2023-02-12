@@ -122,15 +122,19 @@ DOMContentLoaded 的触发时机是：加载完页面，解析完所有标签（
 - 如果页面中没有 script 标签，DOMContentLoaded 事件并没有等待 CSS 文件、图片加载完成。
 - 如果页面中静态的写有 script 标签，DOMContentLoaded 事件需要等待 JS 执行完才触发。而且 script 标签中的 JS 需要等待位于其前面的 CSS 的加载完成。
 
+结论：
+
+- 当初始的 HTML 文档被完全加载和解析完成之后，DOMContentLoaded 事件被触发，而无需等待样式表、图像和子框架的完全加载.
+
+- 当整个页面及所有依赖资源如样式表和图片都已完成加载时，将触发 load 事件
+
+先触发 DOMContentLoaded 事件，在触发 load 事件
+
 ### defer 与 DOMContentLoaded
 
-结论： 先执行 defer 脚本 再触发 DOMContentLoaded,在 DOM、CSSOM 构建完毕，defer 脚本执行完成之后，DOMContentLoaded 事件触发。如果 script 标签中包含 defer，那么这一块脚本将不会影响 HTML 文档的解析，而是等到 HTML 解析完成后才会执行。而 DOMContentLoaded 只有在 defer 脚本执行结束后才会被触发。 所以这意味着什么呢？HTML 文档解析不受影响，等 DOM 构建完成之后 defer 脚本执行，但脚本执行之前需要等待 CSSOM 构建完成。在 DOM、CSSOM 构建完毕，defer 脚本执行完成之后，DOMContentLoaded 事件触发。
+结论： 先执行 defer 脚本 再触发 DOMContentLoaded
 
-### DOMContentLoaded 与 onLoad
-
-当 HTML 文档解析完成就会触发 DOMContentLoaded，而所有资源加载完成之后，load 事件才会被触发。
-
-> 肯定是先执行 DOMContentLoaded 事件，然后才执行 onLoad 事件
+在 DOM、CSSOM 构建完毕，defer 脚本执行完成之后，DOMContentLoaded 事件触发。如果 script 标签中包含 defer，那么这一块脚本将不会影响 HTML 文档的解析，而是等到 HTML 解析完成后才会执行。而 DOMContentLoaded 只有在 defer 脚本执行结束后才会被触发。 所以这意味着什么呢？HTML 文档解析不受影响，等 DOM 构建完成之后 defer 脚本执行，但脚本执行之前需要等待 CSSOM 构建完成。在 DOM、CSSOM 构建完毕，defer 脚本执行完成之后，DOMContentLoaded 事件触发。
 
 ## Preload and Prefetch
 

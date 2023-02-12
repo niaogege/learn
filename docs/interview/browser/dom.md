@@ -37,9 +37,97 @@ DOM0 事件绑定，给元素的事件行为绑定方法，这些方法都是在
 
 ### DOM 2 级事件
 
-语法 `el.addEventListener(event-name, callback, useCapture)`
+> [EventTarget.addEventListener()](https://developer.mozilla.org/zh-CN/docs/Web/API/EventTarget/addEventListener)
 
-event-name: 绑定的事件名 callback: 执行的回调函数 useCapture: 默认 false,代表冒泡时绑定
+EventTarget.addEventListener() 方法将指定的监听器注册到 EventTarget 上，当该对象触发指定的事件时，指定的回调函数就会被执行。事件目标可以是一个文档上的元素 Element、Document 和 Window，也可以是任何支持事件的对象（比如 XMLHttpRequest）。
+
+addEventListener() 的工作原理是将实现 EventListener 的函数或对象添加到调用它的 EventTarget 上的指定事件类型的事件侦听器列表中。如果要绑定的函数或对象已经被添加到列表中，该函数或对象不会被再次添加。
+
+- 语法
+
+```js
+addEventListener(type, listener);
+addEventListener(type, listener, options);
+addEventListener(type, listener, useCapture);
+```
+
+- useCapture 参数(可选)
+
+一个布尔值，表示在 DOM 树中注册了 listener 的元素，是否要先于它下面的 EventTarget 调用该 listener。当 useCapture（设为 true）时，沿着 DOM 树向上冒泡的事件不会触发 listener。当一个元素嵌套了另一个元素，并且两个元素都对同一事件注册了一个处理函数时，所发生的事件冒泡和事件捕获是两种不同的事件传播方式。事件传播模式决定了元素以哪个顺序接收事件
+
+如果没有指定，useCapture 默认为 false
+
+- options(可选) 一个指定有关 listener 属性的可选参数对象。可用的选项如下：
+
+**capture** 可选一个布尔值，表示 listener 会在该类型的事件**捕获阶段**传播到该 EventTarget 时触发。
+
+**once** 可选一个布尔值，表示 listener 在添加之后**最多只调用一次**。如果为 true，listener 会在其被调用之后自动移除。
+
+**passive** 可选一个布尔值，设置为 true 时，表示 listener 永远**不会调用 preventDefault()**。如果 listener 仍然调用了这个函数，客户端将会忽略它并抛出一个控制台警告
+
+**signal** 可选 AbortSignal，该 AbortSignal 的 abort() 方法被调用时，监听器会被移除。
+
+### js 案例：添加一个简单的监听器
+
+这个例子用来展示如何使用 addEventListener() 监听鼠标点击一个元素的事件。
+
+```html
+<body>
+  <table id="outside">
+    <tr>
+      <td id="t1">one</td>
+    </tr>
+    <tr>
+      <td id="t2">two</td>
+    </tr>
+  </table>
+  <script>
+    function modoify() {
+      const t2 = document.getElementById('t2');
+      const isT2 = t2.firstChild.nodeValue === 'Three';
+      t2.firstChild.nodeValue = isT2 ? 'Two' : 'Three';
+    }
+    const el = document.getElementById('outside');
+    el.addEventListener('click', modoify, false);
+  </script>
+</body>
+```
+
+这个例子中，modoify() 是一个 **click 事件的监听器**，通过使用 addEventListenter() 注册到 table 对象上。在表格中任何位置单击都会触发事件并执行 modoify()。
+
+### js 案例：实现一个可移除的监听器
+
+这个例子用来展示如何使用 addEventListenter() 添加一个可被 AbortSignal 移除的侦听器
+
+```html
+<body>
+  <table id="outside">
+    <tr>
+      <td id="t1">one</td>
+    </tr>
+    <tr>
+      <td id="t2">two</td>
+    </tr>
+  </table>
+  <script>
+    const controller = new AbortController();
+    function modoify() {
+      const t2 = document.getElementById('t2');
+      const isT2 = t2.firstChild.nodeValue === 'Three';
+      t2.firstChild.nodeValue = isT2 ? 'Two' : 'Three';
+      if (t2.firstChild.nodeValue === 'Three') {
+        controller.abort();
+      }
+    }
+    const el = document.getElementById('outside');
+    el.addEventListener('click', modoify, {
+      signal: controller.signal,
+    });
+  </script>
+</body>
+```
+
+在这个例子中，我们修改了上一个例子的代码。在第二行的内容变为 three 时，我们调用了传入 addEventListener() 的 AbortController 中的 abort() 方法。如此，无论如何点击表格，第二行的内容都不会再发生改变，因为表格中的点击事件监听器已被移除。
 
 ## 事件冒泡和事件捕获
 
@@ -50,6 +138,76 @@ event-name: 绑定的事件名 callback: 执行的回调函数 useCapture: 默�
 addEventListener 第三个参数默认为 **false** 代表**执行事件冒泡行为**(代表冒泡时绑定)。
 
 当为 true 时执行事件捕获行为(代表捕获时绑定)。
+
+### 检测：以下代码输出打印顺序
+
+```html
+<body>
+  <section class="container" id="container">
+    <section class="item" id="item">
+      <section class="btn" id="btn">Click me</section>
+    </section>
+  </section>
+  <script>
+    document.addEventListener(
+      'click',
+      (e) => {
+        console.log('Document click');
+      },
+      {
+        capture: true,
+      },
+    );
+
+    container.addEventListener(
+      'click',
+      (e) => {
+        console.log('Container click');
+        // e.stopPropagation()
+      },
+      {
+        capture: true,
+      },
+    );
+
+    item.addEventListener('click', () => {
+      console.log('Item click');
+    });
+
+    btn.addEventListener('click', () => {
+      console.log('Btn click');
+    });
+
+    btn.addEventListener(
+      'click',
+      () => {
+        console.log('Btn click When Capture');
+      },
+      {
+        capture: true,
+      },
+    );
+
+    // Document click
+    // Container click
+    // Btn click When Capture
+    // Btn click
+    // Item click
+  </script>
+</body>
+```
+
+记住： 捕获阶段是在冒泡阶段前面，先捕获在冒泡
+
+### 阻止默认行为阻止冒泡
+
+- 阻止冒泡
+
+w3c 的方法是 **e.stopPropagation**()，IE 则是使用 e.cancelBubble = true；
+
+- 阻止默认行为
+
+w3c 的方法是 **e.preventDefault**()，IE 则是使用 e.returnValue = false;
 
 ## 事件代理
 
@@ -171,7 +329,7 @@ btn.addEventListener('click', function pp() {
 - target: 代表的是**触发事件**的元素
 - currentTarget: 代表的是**绑定事件**的元素
 
-> 触发事件和绑定事件的元素不一样
+> 触发事件和绑定事件的元素不一样,触发事件的元素可能一样 绑定的元素肯定不一样
 
 addEventListener 第三个参数是 true 的话则分别打印,捕获
 
