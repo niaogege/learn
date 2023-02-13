@@ -139,7 +139,7 @@ addEventListener 第三个参数默认为 **false** 代表**执行事件冒泡�
 
 当为 true 时执行事件捕获行为(代表捕获时绑定)。
 
-### 检测：以下代码输出打印顺序
+### 检测 1：以下代码输出打印顺序
 
 ```html
 <body>
@@ -199,7 +199,72 @@ addEventListener 第三个参数默认为 **false** 代表**执行事件冒泡�
 
 记住： 捕获阶段是在冒泡阶段前面，先捕获在冒泡
 
-### 阻止默认行为阻止冒泡
+### 检测 2: 以下代码输出
+
+```html
+<body>
+  <div id="parent">
+    parent
+    <div id="child">child</div>
+  </div>
+  <script>
+    let parent = document.getElementById('parent');
+    let child = document.getElementById('child');
+
+    child.onclick = function () {
+      console.log('child click1');
+    };
+    parent.addEventListener(
+      'click',
+      function (e) {
+        console.log('parent 冒泡事件');
+      },
+      false,
+    );
+    child.addEventListener(
+      'click',
+      function (e) {
+        console.log('child 冒泡事件2');
+      },
+      false,
+    );
+    child.addEventListener(
+      'click',
+      function (e) {
+        console.log('child 冒泡事件1');
+      },
+      false,
+    );
+    parent.addEventListener(
+      'click',
+      function (e) {
+        console.log('parent 捕获事件');
+      },
+      true,
+    );
+    child.addEventListener(
+      'click',
+      function (e) {
+        console.log('child 捕获事件');
+      },
+      true,
+    );
+    child.onclick = function () {
+      console.log('child click2');
+    };
+    // parent 捕获事件
+    // child 捕获事件
+    // child click2
+    // child 冒泡事件2
+    // child 冒泡事件1
+    // parent 冒泡事件
+  </script>
+</body>
+```
+
+总结： 1.onclick 事件后面会覆盖前面 2.addEventListener 事件前后不会被覆盖，按照顺序先后执行，前面的会先执行 3.先捕获在冒泡
+
+### 阻止默认行为和阻止冒泡
 
 - 阻止冒泡
 

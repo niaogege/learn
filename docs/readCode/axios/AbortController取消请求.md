@@ -11,11 +11,13 @@ nav:
   path: /read-code
 ---
 
-## 取消请求方式
-
 面试官：如何取消一个已经发出去的 xhr?
 
-### [AbortController api](https://developer.mozilla.org/zh-CN/docs/Web/API/AbortController)
+- xhr 如何取消请求
+- fetch 中如何取消请求
+- axios 中如何取消请求
+
+## 普及一个 DOM API:[AbortController api](https://developer.mozilla.org/zh-CN/docs/Web/API/AbortController)
 
 AbortController 接口表示一个控制器对象，允许你根据需要**中止一个或多个 Web** 请求。
 
@@ -28,7 +30,29 @@ AbortController 接口表示一个控制器对象，允许你根据需要**中�
 
 我们先使用 AbortController() 构造函数创建一个控制器，然后使用 **AbortController.signal**属性获取其关联 AbortSignal 对象的引用。
 
-当一个 fetch request 初始化，我们把 AbortSignal 作为一个选项传递到到请求对象（如下 { signal }）。这将 signal 和 controller 与这个 fetch request 相关联，然后允许我们通过调用 **AbortController.abort()** 中止请求，如下第二个事件监听函数。
+当一个 fetch request 初始化，我们把 AbortSignal 作为一个选项传递到到请求对象（如下 { signal }）。这将 signal 和 controller 与这个 fetch request 相关联，然后允许我们通过调用 **AbortController.abort()** 中止请求
+
+## xhr 中的取消请求：xhr.abort()
+
+```js
+function testAbort() {
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', url, true);
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+      console.log(xhr.response);
+    }
+  };
+  xhr.send();
+  xhr.abort();
+}
+```
+
+如果该请求已被发出，XMLHttpRequest.abort() 方法将终止该请求。当一个请求被终止，它的 readyState 将被置为 **XMLHttpRequest.UNSENT** (0)，并且请求的 status 置为 0。
+
+## fetch 中如何取消请求,使用 AbortController()
+
+> AbortController 文档见 AbortSignal - MDN (opens new window)[https://developer.mozilla.org/en-US/docs/Web/API/AbortSignal]，它不仅可以取消 Fetch 请求发送，同样也可以取消事件的监听(通过 addEventListener 的第三个参数 signal 控制)
 
 ```js
 const controller = new AbortController();
@@ -57,7 +81,7 @@ function fetchVideo() {
 
 ## axios 取消请求方式
 
-[Axios Cancellation](https://axios-http.com/docs/cancellation) Axios 适配器有两种，分别是基于 dom 的 xhr 请求和 node 端原生的 http 请求(node 端的 http.js)，细看了下浏览器端的 xhr.js 中的取消请求，这里面有版本区别，目前官网上已建议**v0.22.0**之后，采用 AbortController 这种方式取消 axios 途径发出的 xhr 请求
+[Axios Cancellation](https://axios-http.com/docs/cancellation) Axios 适配器有两种，分别是基于 dom 的 xhr 请求和 node 端原生的 http 请求(node 端的 http.js)，细看了下浏览器端的 xhr.js 中的取消请求，这里面有版本区别，目前官网上已建议**v0.22.0**之后，采用 **AbortController** 这种方式取消 axios 途径发出的 xhr 请求
 
 ```js
 // 官网示例
@@ -74,9 +98,9 @@ axios
 controller.abort();
 ```
 
-v0.22.0 之前是通过**CancelToken**的两种方式取消，我猜是因为可取消的 promises proposal 方案被撤销了
+v0.22.0 之前是通过**CancelToken**的两种方式取消，我猜是因为可取消的 **promises proposal** 方案被撤销了
 
-### axios.CancelToken.source();
+### Before v0.22.0 第一种：axios.CancelToken.source();
 
 You can create a cancel token using the CancelToken.source factory as shown below:
 
@@ -108,7 +132,7 @@ axios.post(
 source.cancel('Operation canceled by the user.');
 ```
 
-### 传递可执行函数给 CancelToken 构造函数
+### Before v0.22.0 第二种：传递可执行函数给 CancelToken 构造函数
 
 You can also create a cancel token by passing an executor function to the CancelToken constructor:
 

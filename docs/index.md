@@ -1,7 +1,7 @@
 ---
 hero:
   title: 'Learning'
-  desc: 码代码久了，总要留下点什么！水喝多了尿自然就有!
+  desc: 码代码久了，总要留下点什么！水喝多了尿自然就有! 未来不可期，能做的就是把握现在!
   actions:
     - text: Getting Started
       link: /components
@@ -48,13 +48,6 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 ## 面试相关
 
-- css
-- js
-- ts
-- browser
-- react
-- vue
-- nodejs
 - webpack & vite & rollup
 - 算法(爱不知所起一往情深)
 - 网络
