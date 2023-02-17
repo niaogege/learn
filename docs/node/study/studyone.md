@@ -1,10 +1,10 @@
 ---
 title: Node学习笔记
-order: 0
+order: 2
 group:
-  title: base
+  title: study
   order: 0
-  path: /base
+  path: /study
 nav:
   order: 1
   title: 'node'
