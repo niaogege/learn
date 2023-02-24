@@ -154,3 +154,4 @@ TCP 三次握手，其实就是建立一个 TCP 连接，客户端与服务器�
 - [HTTPS 是什么？加密原理和证书。SSL/TLS 握手过程](https://www.bilibili.com/video/BV1KY411x7Jp?spm_id_from=333.337.search-card.all.click) 看了这么多 https 相关的文章，以下两篇文章说的很通透,非常值得推荐阅读，仔细品味
 - [一篇文章读懂 HTTPS 及其背后的加密原理](https://mp.weixin.qq.com/s/3gI8avaaaEaBJjOKitN7Fw)
 - [看了很多 HTTPS 原理介绍，这个是最详细的了！](https://mp.weixin.qq.com/s/Kl0D0EorDfqQi2w-tqcVbQ)
+- [爱奇艺海外版 HTTPS 效率是如何提升的？](https://mp.weixin.qq.com/s/9YgE_no2JmFilzJal_KzEg)
