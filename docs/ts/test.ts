@@ -94,3 +94,20 @@ const enum ConstRoutes {
   Parts = `${Prefix}/parts`, // "/data/parts"
   Invoices = `${Prefix}/invoices`, // "/data/invoices"
 }
+
+interface DataType {
+  name: string;
+  age: number;
+}
+function getData2(id: string): DataType;
+function getData2(id: string[]): DataType[];
+function getData2(id: string | string[]): DataType | DataType[] {
+  let data;
+  if (Array.isArray(id)) {
+    return data as DataType[];
+  } else {
+    return data as DataType;
+  }
+}
+getData2('1111');
+getData2(['1111']);
