@@ -10,6 +10,8 @@ nav:
   path: /node
 ---
 
+- [前端工程化历程](https://mp.weixin.qq.com/s/o8B8HAczZtIZM8V_HHwNqg)
+
 ## node 包含模块
 
 - Koa
