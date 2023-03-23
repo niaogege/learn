@@ -60,7 +60,7 @@ docker-compose -d up web
 
 ### docker-compose 字段介绍
 
-假设我们编写一个关于 nigix 的 yml 文件：
+假设我们编写一个关于 nginx 的 yml 文件：
 
 ```bash
 # docker-compose.yml

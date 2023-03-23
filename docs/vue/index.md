@@ -128,3 +128,66 @@ function parsePath(path) {
   };
 }
 ```
+
+## vue3 响应式原理
+
+### proxy
+
+Proxy 是 ES6 新增的一个构造函数，用来创建一个 **目标对象的代理对象**，拦截对原对象的所有操作；用户可以通过**注册相应的拦截方法**来实现对象操作时的自定义行为。与 Object,defineProperty 比起来，有非常明显的优势：
+
+- 拦截操作更加多样
+- 拦截定义更加直接
+- 性能更加高效
+
+在 Vue 中体现最为明显的一点就是：Proxy 代理对象之后不仅可以拦截对象属性的读取、更新、方法调用之外，对整个对象的新增、删除、枚举等也能直接拦截，而 Object.defineProperty 只能针对对象的已知属性进行读取和更新的操作拦截。
+
+```js
+var obj = { name: 'chenpp', age: 30 };
+var proxyObj = new Proxy(obj, {
+  get(target, property) {
+    console.log('getting::' + target[property]);
+    return target[property];
+  },
+  set(target, property, val) {
+    console.log('set::' + val);
+    target[property] = val;
+  },
+  deleteProperty(target, property) {
+    console.log('delete::' + target[property]);
+    delete target[property];
+  },
+});
+console.log(proxyObj.name);
+proxyObj.name = 'wmh';
+console.log(proxyObj.name);
+```
+
+只有通过 proxyObj 进行操作的时候才能通过**定义的操作拦截方法**进行处理，直接使用原对象则无法触发拦截器。
+
+这也是 Vue 3 中要求的 reactive 声明的对象修改原对象无法触发视图更新的原因。
+
+并且 Proxy 也只针对 引用类型数据 才能进行代理，所以这也是 Vue 的基础数据都需要通过 ref 进行声明的原因，内部会建立一个新对象保存原有的基础数据值。
+
+### vue3 响应式的实现
+
+在选择了使用 Proxy 代理来进行数据的操作拦截时，Vue 对依赖收集的逻辑也进行了修改，让我们分别来解析一下这两者的实现。
+
+- ref
+
+```ts
+export interface Ref<T> {
+  value: T;
+}
+export interface UnwrapRef<T> {}
+export function ref<T>(value: T): Ref<UnwrapRef<T>> {}
+```
+
+- shallowRef
+
+- reactive
+
+- shallowRective
+
+- readonly
+
+- shallowReadonly
