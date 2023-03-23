@@ -51,13 +51,13 @@ csr 和 ssr 最大的区别在于前者页面渲染是由 js 负责进行的，�
 
 如果用服务端渲染，务必保持服务端塞给 react 组件的数据跟浏览器端数据保持一致
 
-所谓同构，通俗的讲，就是一套 React 代码在服务器上运行一遍，到达浏览器又运行一遍。**服务端渲染完成页面结构,DOM 拼接**，**浏览器端渲染完成事件绑定**, 不仅是**模板页面渲染**，后面的**路由**，**数据的请求**都涉及到同构的概念。可以理解成，服务器端渲染都是基于同构去展开的，大家这里关注一下这个概念，对后面的学习理解会有很大的帮助
+所谓同构，通俗的讲，就是一套 React 代码在服务器上运行一遍，到达浏览器又运行一遍。**服务端渲染完成页面结构,DOM 拼接**，**浏览器端渲染完成事件绑定**, 不仅是**模板页面渲染**，后面的**路由**，**数据的请求**都涉及到同构的概念。可以理解成，服务器端渲染都是基于同构去展开的
 
 > 服务端负责静态 dom 的拼接，而客户端负责事件的绑定
 
 > 客户端如何绑定事件的？
 
-ReactDom.hydrateRoot: 在已经提供了服务器端静态渲染节点的情况下使用，它只会对**模板中的事件**进行处理
+**ReactDom.hydrateRoot**: 在已经提供了服务器端静态渲染节点的情况下使用，它只会对**模板中的事件**进行处理
 
 让浏览器去拉取 JS 文件执行，让 JS 代码来控制
 
@@ -135,6 +135,16 @@ module.exports = merge(common, {
   },
 }
 ```
+
+#### react 中的注水和水合是一个意思吗
+
+注水：React 中的注水（hydration）是指在服务器端渲染（SSR）时，将 React 组件的初始状态（props 和 state）注入到 HTML 中，以便在客户端渲染时能够快速恢复组件的状态。
+
+水合 rehydration ：是指将服务器端渲染的**HTML 内容转换为客户端可交互的 React 组件树**的过程。在服务器端渲染时，React 会将组件树渲染为 HTML 字符串，然后将其发送到客户端。当客户端接收到 HTML 字符串后，React 会重新创建组件树，并将其与服务器端渲染的 HTML 字符串进行比对，以确保它们是一致的。这个过程称为水合。
+
+水合的过程可以提高应用程序的性能和用户体验，因为它允许 React 在客户端重新创建组件树时，避免重新渲染整个页面。相反，**React 只会更新需要更新的部分**，从而提高应用程序的响应速度和性能。
+
+两个不完全是。在 React 中，注水（hydration）是指将服务器端渲染的 HTML 代码转换为客户端可交互的 React 组件树的过程。而水合（rehydration）则是指在客户端重新渲染组件时，将组件树与浏览器中已有的 DOM 结构进行匹配的过程。虽然这两个过程都涉及到将服务器端渲染的 HTML 转换为客户端可交互的组件树，但注水和水合是两个不同的概念。
 
 #### 注水 Hydrate
 
@@ -308,6 +318,105 @@ chrome 浏览器打开**chrome://inspect/#devices**，下面列出的是所有�
 ## 如何调试 vite+ts 配置出来的 ssr 项目？
 
 其实主要是 ts 端代码如何调试，vite 可以先不考虑
+
+## SSR 优缺点
+
+SSR 的缺点
+
+- 由于我们在每次请求时首先在服务端渲染页面，并且必须等待页面的数据需求，这可能会导致 TTFB 速度变慢。这可能是由多种原因导致的，包括未优化的服务端代码或者许多并发的服务端请求。不过，使用像 Next.js 这样的框架可以提前生成页面并使用 SSG（静态站点生成）和 ISR（增量静态站点生成）等技术将它们缓存在服务端，从而在一定程度上解决了这个问题。
+- 即使初始加载速度很快，用户仍然需要等待下载页面的所有 JavaScript 并对其进行处理，以便页面可以**重新注水并变得可交互**。
+
+## 流式 SSR
+
+浏览器可以通过 **HTTP 流接收 HTML**。流式传输允许 Web 服务端通过单个 HTTP 连接将数据发送到客户端，该连接可以无限期保持打开状态。因此，我们可以通过网络以多个块的形式在浏览器上加载数据，这些数据在渲染时按顺序加载。
+
+### React 18 中的流式 SSR
+
+React 18 弃用了 renderToNodeStream API，取而代之的是一个名为 **renderToPipeableStream** 的新 API，它通过 Suspense 解锁了一些新功能，允许将应用分解为更小的独立单元，这些单元可以独立完成我们在 SSR 中看到的步骤。这是因为 Suspense 添加了两个主要功能：
+
+- 服务端流式渲染；
+- 客户端选择性注水。
+
+### 服务端流式渲染
+
+如上所述，React 18 之前的 SSR 是一种全有或全无的方法。 首先，需要获取页面所需的数据，并生成 HTML，然后将其发送到客户端。 由于 HTTP 流，情况不再如此。在 React 18 中想要使用这种方式，可以包装可能需要较长时间才能加载且在 Suspense 中不需要立即显示在屏幕上的组件。为了了解它的工作原理，假设 Comments API 很慢，所以我们将 Comments 组件包装在 Suspense 中：
+
+```js
+<Layout>
+  <NavBar />
+  <Sidebar />
+  <RightPane>
+    <Post />
+    <Suspense fallback={<Spinner />}>
+      <Comments />
+    </Suspense>
+  </RightPane>
+</Layout>
+```
+
+这样，初始 HTML 中就不存在 Comments，返回的只有占位的 Spinner：
+
+```js
+<main>
+  <nav>
+    <!--NavBar -->
+    <a href="/">Home</a>
+   </nav>
+  <aside>
+    <!-- Sidebar -->
+    <a href="/profile">Profile</a>
+  </aside>
+  <article>
+    <!-- Post -->
+    <p>Hello world</p>
+  </article>
+  <section id="comments-spinner">
+    <!-- Spinner -->
+    <img width=400 src="spinner.gif" alt="Loading..." />
+  </section>
+</main>
+```
+
+最后，当数据准备好用于服务端的 Comments 时，React 将发送最少的 HTML 到带有内联<script>标签的同一流中，以将 HTML 放在正确的位置：
+
+```js
+<div hidden id="comments">
+  <!-- Comments -->
+  <p>First comment</p>
+  <p>Second comment</p>
+</div>
+<script>
+  // 简化了实现
+  document.getElementById('sections-spinner').replaceChildren(
+    document.getElementById('comments')
+  );
+</script>
+```
+
+因此，这解决了第一个问题，因为现在不需要等待服务端获取所有数据，浏览器可以开始渲染应用的其余部分，即使某些部分尚未准备好。
+
+### 客户端选择性注水
+
+用户不必等待所有 JavaScript 被下载才能开始与应用交互。 除此之外，它还有助于在页面开始流式传输时立即加载其他资源（CSS、JavaScript、字体等），有助于并行更多请求
+
+另外，如果有多个组件包裹在 Suspense 中并且还没有在客户端上注水，但是用户开始与其中一个交互，React 将优先考虑给该组件注水。
+
+```js
+<Layout>
+  <NavBar />
+  <Suspense fallback={<BigSpinner />}>
+    <Suspense fallback={<SidebarGlimmer />}>
+      <Sidebar />
+    </Suspense>
+    <RightPane>
+      <Post />
+      <Suspense fallback={<CommentsGlimmer />}>
+        <Comments />
+      </Suspense>
+    </RightPane>
+  </Suspense>
+</Layout>
+```
 
 ## 参考
 

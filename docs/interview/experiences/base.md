@@ -100,6 +100,8 @@ var name2 = mockCall(null, obj);
 
 ### bind
 
+[Bind 模拟](https://segmentfault.com/a/1190000009271416)
+
 ### es6 继承
 
 ### 如何使用 es5 实现继承

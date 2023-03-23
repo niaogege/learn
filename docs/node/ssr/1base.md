@@ -11,6 +11,8 @@ nav:
   path: /node
 ---
 
+> 本文涉及的 React 版本是 17.x react18.0 的流式渲染还没搞懂
+
 ### SSR 原理
 
 我们知道 vue 是通过 template 描述页面结构，而 react 是通过 jsx，但不管是 template 还是 jsx，编译后都会产生 render function，然后执行产生 vdom。 vdom 在浏览器里会通过 dom api 增删改 dom 来完成 CSR，在服务端会通过**拼接字符串**来完成 SSR
@@ -21,11 +23,11 @@ nav:
 
 ### 同构
 
-所谓同构，通俗的讲，就是一套 React 代码在服务器上运行一遍，到达浏览器又运行一遍。**服务端渲染完成页面结构,DOM 拼接**，**浏览器端渲染完成事件绑定**, 不仅是**模板页面渲染**，后面的**路由**，**数据的请求**都涉及到同构的概念。可以理解成，服务器端渲染都是基于同构去展开的，大家这里关注一下这个概念，对后面的学习理解会有很大的帮助
+所谓同构，通俗的讲，就是一套 React 代码在服务器上运行一遍，到达浏览器又运行一遍。**服务端渲染完成页面结构,DOM 拼接**，**浏览器端渲染完成事件绑定**, 不仅是**模板页面渲染**，后面的**路由**，**数据的请求**都涉及到同构的概念。可以理解成，服务器端渲染都是基于同构去展开的
 
 ### 模板页面渲染同构
 
-reactDom.renderToString 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端再执行一次 react 代码，把事件属性生效
+**reactDom.renderToString** 将 jsx 转为 html 文本的时候，不会处理 jsx 上面的 attrs 的事件属性。所以需要在客户端再执行一次 react 代码，把事件属性生效
 
 1. 服务端渲染 jsx->html,使用**ReactDom.renderToString**生成
 2. 客户端在运行 jsx->html,使用**ReactDom.hydrate**进行客户端的再次渲染
@@ -190,6 +192,8 @@ export const render = (store, routes, req, context: { css: [] }) => {
 ```
 
 ### 如何在 ssr 中进行调试
+
+[调试参考](../../node/tool/1.debugger.md)
 
 ### 参考
 
