@@ -17,7 +17,7 @@ nav:
 
 postCSS 是一款 css 编译器。
 
-类比 Babel 家族的@babel/parser 可以将 js 代码解析为 AST（抽象语法树），再利用众多插件（@babel/plugin-xx）的能力改写 AST，最终输出改写后的 js 代码。
+类比 Babel 家族的**@babel/parser** 可以将 js 代码解析为 AST（抽象语法树），再利用众多插件（@babel/plugin-xx）的能力改写 AST，最终输出改写后的 js 代码。
 
 postCSS 利用自身的**parser**可以将 css 代码解析为 AST，再利用众多插件（上文介绍的 autoprefixer 就是一种）改写 AST，最终输出改写后的 css 代码。
 

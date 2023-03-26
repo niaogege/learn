@@ -1,6 +1,6 @@
 ---
-title: css loader的各种区别
-order: 3
+title: tailwindcss相关积累
+order: 4
 group:
   order: 0
   title: css
@@ -10,5 +10,3 @@ nav:
   title: 'interview'
   path: /interview
 ---
-
-style-loader 跟 css-loader 区别

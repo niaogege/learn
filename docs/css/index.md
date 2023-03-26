@@ -43,9 +43,25 @@ flex-basis: 0%;
 - flex-shrink: 定义项目的缩小比例，默认 1，即如果空间不足该项目将缩小
 - flex-basis: 在分配多余的空间之前，项目占据的主轴空间，浏览器根据这个属性计算主轴是否有剩余空间，默认值 auto,即项目的本来大小
 
+### flex 交叉轴上如何对齐
+
+**align-content** 属性定义了**多根轴线**的对齐方式。如果项目只有一根轴线，该属性不起作用。 .box { align-content: flex-start | flex-end | center | space-between | space-around | stretch; }
+
+> content-center => align-content:center
+
+**align-items** 属性定义项目在交叉轴上如何对齐 .box { align-items: flex-start | flex-end | center | baseline | stretch; }
+
+> items-center => align-items:center
+
+**align-self**属性允许单个项目有与其他项目不一样的对齐方式，可覆盖 align-items 属性 .item { align-self: auto | flex-start | flex-end | center | baseline | stretch; }
+
+> self-center => align-self:center
+
 ### flex 布局优缺点
 
 ## BFC， 介绍下 BFC、IFC、GFC 和 FFC
+
+块级格式化上下文，是 web 页面盒模型布局里的 css 渲染模式，指一个独立的渲染区域或指一个隔离的独立容器。
 
 > 这块太重要了！！！什么是 BFC,如何触发 BFC,Block Formate Context 块级格式化上下文,一个独立的渲染区域或指一个隔离的独立容器
 
@@ -77,6 +93,8 @@ flex-basis: 0%;
 ### IFC
 
 Inline Formate Context 行内格式化上下文
+
+## float 如何清除浮动
 
 ## 怎么让一个 div 水平垂直居中
 
