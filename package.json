@@ -61,7 +61,7 @@
     "lint-staged": "^13.2.0",
     "node-sass": "^7.0.1",
     "prettier": "^2.2.1",
-    "sass-loader": "^12.6.0",
+    "sass-loader": "^13.2.2",
     "yorkie": "^2.0.0"
   },
   "license": "ISC"
