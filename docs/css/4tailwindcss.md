@@ -30,7 +30,89 @@ npx @chendap/wmh-theme??
 - 创建 postcss.config.js 文件，这里的配置主要是添加 tailwindcss 的插件，这样你编写的 css 才会被 tailwindcss 处理；
 - 创建 tailwind.config.js 文件，主要进行扫描规则、主题、插件等配置。
 
+所有的安装完之后需要在引入的 css 文件里添加
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+```
+
+其中 tailwind base 相当于一份重置样式表，包含了最基础的样式。tailwind components 包含了一些组件类， 组件相当于复合样式，tailwind utilities 包含了工具类，也就是 flex mx-auto 这些内置样式。
+
+这么划分的原因是因为 css 的优先级规则，tailwindcss 全部都是一级样式，在类名权重相等的情况，下面的样式可以覆盖上面的样式，所以工具类优先，组件类次之，基础样式兜底，生成的样式顺序尤为重要，所以 上面三句指令的顺序非必须建议不要修改。
+
 ## 进阶用法
+
+### 添加自己的插件[使用可复用的第三方插件扩展 Tailwind](https://tailwindcss.com/docs/plugins)
+
+比如项目中有一处样式是这样，需要一行文本之后使用省略号，或者三行文本需要使用省略号，这时候你该怎么办
+
+```js
+// tailwind.config.js
+const plugin = require('tailwindcss/plugin');
+
+module.exports = {
+  plugins: [
+    plugin(function ({ addUtilities, addComponents, addBase, addVariant, e, prefix, config }) {
+      // Add your custom styles here
+    }),
+  ],
+};
+```
+
+比如官方提供的[line-clamp 插件](https://github.com/tailwindlabs/tailwindcss-line-clamp)
+
+```js
+const plugin = require('tailwindcss/plugin');
+const baseStyles = {
+  overflow: 'hidden',
+  display: '-webkit-box',
+  '-webkit-box-orient': 'vertical',
+};
+
+const lineClamp = plugin(
+  function ({ matchUtilities, addUtilities, theme, variants }) {
+    const values = theme('lineClamp');
+    matchUtilities(
+      {
+        'line-clamp': (value) => ({
+          ...baseStyles,
+          '-webkit-line-clamp': `${value}`,
+        }),
+      },
+      { values },
+    );
+    addUtilities(
+      [
+        {
+          '.line-clamp-none': {
+            '-webkit-line-clamp': 'unset',
+          },
+        },
+      ],
+      variants('lineClamp'),
+    );
+  },
+  {
+    theme: {
+      lineClamp: {
+        1: '1',
+        2: '2',
+        3: '3',
+        4: '4',
+        5: '5',
+        6: '6',
+      },
+    },
+    variants: {
+      lineClamp: ['responsive'],
+    },
+  },
+);
+
+module.exports = lineClamp;
+```
 
 ### 响应式断点
 
@@ -135,20 +217,32 @@ localStorage.theme = 'dark';
 localStorage.removeItem('theme');
 ```
 
-### 自定义 class 中使用 Tailwind 语法 [(使用 @apply 抽取组件类)](https://www.tailwindcss.cn/docs/extracting-components)
+### Reusing Styles 之 自定义 class 中使用 Tailwind 语法 [(使用 @apply 抽取组件类)](https://tailwindcss.com/docs/reusing-styles#extracting-classes-with-apply)
 
-```js
-<div class="p-2 text-gray-900 font-semibold">首页</div>
-<div class="p-2 text-gray-900 font-semibold">学习TailwindCSS</div>
-<div class="p-2 text-gray-900 font-semibold">TailwindCSS的设计哲学</div>
-<div class="p-2 text-gray-900 font-semibold">最佳实践</div>
+```html
+<!-- Before extracting a custom class -->
+<button
+  class="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+>
+  Save changes
+</button>
+
+<!-- After extracting a custom class -->
+<button class="btn-primary">Save changes</button>
 ```
 
-抽象定制一个类包含 p-2 text-gray-900 font-semibold,TailwindCSS 提供了@apply 语法，这种语法的使用手感与在 html 模板中使用是一样的：
+抽象定制一个类**btn-primary**包含 `py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75`,TailwindCSS 提供了@apply 语法，这种语法的使用手感与在 html 模板中使用是一样的：
 
 ```css
-.menu {
-  @apply p-2 text-gray-900 font-semibold;
+//styles/global.css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .btn-primary {
+    @apply py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75;
+  }
 }
 ```
 
@@ -172,7 +266,7 @@ div {
 }
 ```
 
-### 重写/覆盖 Tailwind 配置[自定义配置变量]](https://www.tailwindcss.cn/docs/customizing-colors)
+### 重写/覆盖 Tailwind 配置[自定义配置变量](https://www.tailwindcss.cn/docs/customizing-colors)
 
 ```js
 // tailwind.config.js
@@ -200,3 +294,7 @@ module.exports = {
 <span class="text-primary">主色</span> / <span class="text-regular">常规色</span> /
 <span class="text-secondary">次要色</span> / <span class="text-disabled">禁用色</span> /
 ```
+
+### 参考
+
+- [Tailwind CSS 方案简介](https://mp.weixin.qq.com/s/YH3RCYGdvd67jkmN8DPIgg)
