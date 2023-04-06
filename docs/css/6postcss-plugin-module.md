@@ -1,6 +1,6 @@
 ---
 title: 实现 css-module(笔记)
-order: 1
+order: 6
 group:
   order: 0
   title: css
