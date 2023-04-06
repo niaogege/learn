@@ -22,10 +22,10 @@ jobs:
         uses: actions/setup-node@v3 # 作用：安装nodejs
         with:
           node-version: ${{ matrix.node-version }} # 版本
-
-      - run: npm install --frozen-lockfile
+          cache: 'pnpm'
+      - run: pnpm install
       - name: Build
-        run: npm run docs:build
+        run: pnpm run docs:build
 
       - name: Deploy Server
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
