@@ -69,7 +69,7 @@ type BuildArray<
 
 泛型中的**Result**就是构造出的一个空数组，定义的时候默认值为空数组，这个 Result 就负责收集所有的数据，然后返回即可
 
-- RemoveItem<A, Item, Result>
+- RemoveItem<A, Item, Result>, 删除指定的某一项
 
 ```ts
 type TR2 = RemoveItem<[1, 2, 3], 1>; // [2,3]
@@ -83,6 +83,9 @@ type RemoveItem<A extends unknown[], Item, Result extends unknown[] = []> = A ex
   : Result;
 
 type Equal<A, B> = (A extends B ? true : false) & (B extends A ? true : false);
+type isEquals<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+  ? true
+  : false;
 ```
 
 ### 定义泛型的时候构造新的字符串盛放结果值
@@ -94,6 +97,7 @@ type ReverseStr<T extends string, E extends string = ''> = T extends `${infer F}
   : `${E}`;
 
 type TP11 = ReverseStr<'hello'>;
+// type TP11 = "olleh"
 ```
 
 ReverseStr 泛型中的*E*也是构造出的一个默认空字符串的字符串类型值，结果也是保存所有的字符串，然后导出来
