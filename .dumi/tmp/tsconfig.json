@@ -1,0 +1,43 @@
+{
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "baseUrl": "../",
+    "strict": true,
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/*": [
+        "*"
+      ],
+      "@@/*": [
+        ".umi/*"
+      ],
+      "umi": [
+        "/Users/xmly/My/project/@cpp/main/node_modules/.pnpm/umi@4.0.64_hzbl6eeeucoz5gvcwyiezrdibe/node_modules/umi"
+      ],
+      "umi/typings": [
+        ".umi/typings"
+      ]
+    }
+  },
+  "include": [
+    "../.umirc.ts",
+    "../**/*.d.ts",
+    "../**/*.ts",
+    "../**/*.tsx"
+  ]
+}
