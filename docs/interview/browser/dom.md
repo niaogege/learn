@@ -21,7 +21,19 @@ nav:
 - target 和 currentTarget 区别
 - 自定义一个事件
 
-## DOM 事件处理程序
+## 事件传播机制
+
+一般的事件触发都会经历三个阶段：
+
+捕获阶段，事件从 window 开始，自上而下一直传播到目标元素的阶段。
+
+目标阶段，事件真正的触发元素处理事件的阶段。
+
+冒泡阶段，从目标元素开始，自下而上一直传播到 window 的阶段。
+
+如果想阻止事件的传播，可以在指定节点的事件监听器通过 event.stopPropagation()或 event.cancelBubble = true 阻止事件传播。
+
+> 有些事件是没有冒泡阶段的，如 scroll、blur、及各种媒体事件等
 
 ### DOM 0 级事件
 
@@ -49,6 +61,32 @@ addEventListener() 的工作原理是将实现 EventListener 的函数或对象�
 addEventListener(type, listener);
 addEventListener(type, listener, options);
 addEventListener(type, listener, useCapture);
+```
+
+实践：
+
+```js
+<div id="test">
+  test
+</div>
+<script>
+  let target = document.getElementById('test')
+  // 绑定事件
+  let funcA = function(){
+    // 一些处理代码..
+  }
+  let funcB = function(){
+    // 一些处理代码..
+  }
+  // 添加冒泡阶段监听器
+  target.addEventListener('click',funcA,false)
+
+  // 添加捕获阶段监听器
+  target.addEventListener('click',funcB,true)
+
+  // 移除监听器
+  target.removeEventListener('click', funcA)
+</script>
 ```
 
 - useCapture 参数(可选)
