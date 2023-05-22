@@ -54,7 +54,7 @@
     "@types/react": "^18.0.26",
     "@umijs/fabric": "^2.8.1",
     "@umijs/plugin-sass": "^1.1.1",
-    "@umijs/test": "^3.0.5",
+    "@umijs/test": "^4.0.69",
     "classnames": "^2.3.1",
     "dumi": "^1.1.0",
     "father-build": "^1.17.2",
