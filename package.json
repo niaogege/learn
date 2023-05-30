@@ -19,10 +19,10 @@
   ],
   "module": "es/index.js",
   "typings": "es/index.d.ts",
-  "homepage": "https://github.com/niaogege/cpp-ui",
-  "repository": "https://github.com/niaogege/cpp-ui",
+  "homepage": "https://github.com/niaogege/learn",
+  "repository": "https://github.com/niaogege/learn",
   "bugs": {
-    "url": "https://github.com/niaogege/cpp-ui/issues"
+    "url": "https://github.com/niaogege/learn/issues"
   },
   "keywords": [
     "react",

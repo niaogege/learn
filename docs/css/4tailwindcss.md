@@ -1,5 +1,5 @@
 ---
-title: tailwindcss相关积累
+title: tailwindcss用法累计
 order: 4
 group:
   order: 0

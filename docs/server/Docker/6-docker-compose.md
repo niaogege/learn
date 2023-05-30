@@ -70,7 +70,7 @@ services:		#docker容器
     container_name: nginx-1		#自定义启动后容器名
     restart: always				#设置为always，表明此容器应该在停止的情况下总是重启
     image: nginx:latest			#镜像名:版本号
-    ports:						#启动端口号
+    ports:						#启动端口号 宿主机端口:容器端口
       - 4433:80
     volumes:					#数据卷，将容器中的文件与服务器映射
       - ./conf.d:/etc/nginx/conf.d

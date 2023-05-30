@@ -18,7 +18,9 @@ nav:
 PostCSS 主要做了三件事：
 
 - **parse**：把 CSS 文件的字符串解析成抽象语法树（Abstract Syntax Tree）的框架，解析过程中会检查 CSS 语法是否正确，不正确会给出错误提示。
+
 - **transform**: 执行插件函数。PostCSS 本身不处理任何具体任务，它提供了**以特定属性或者规则命名**的事件。有特定功能的插件（如 autoprefixer、CSS Modules）会注册事件监听器。PostCSS 会在这个阶段，重新扫描 AST，**执行注册的监听器函数**。
+
 - **generate**: 插件对 AST 处理后，PostCSS 把处理过的 AST 对象转成 CSS string。
 
 ### postcss 插件写法
@@ -29,7 +31,6 @@ postcss 插件是工作在 runPlugin / transform 阶段，处理 ast 节点，�
 const plugin = (options = {}) => {
   return {
     postcssPlugin: '插件名字',
-
     Rule(node) {},
     Declaration(node) {},
     AtRule(node) {},
@@ -45,7 +46,7 @@ rem 的本质就是等比缩放，相对于 html 元素的 font-size。
 
 比如 html 的 font-size 设置为 100px，那 1rem 就等于 100px，之后的样式如果是 200px 就写为 2rem。
 
-这样我们只需要修改 html 的 font-size 就可以适配各种屏幕宽度的显示，具体的单位会做等比缩放。
+这样我们只需要修改 **html 的 font-size** 就可以适配各种屏幕宽度的显示，具体的单位会做等比缩放。
 
 我们要根据 html 的 font-size 值来把所有的 px 转换为 rem，一般都是手动来做这件事情的，但比较繁琐，知道了计算方式之后，完全可以用 postcss 插件来自动做。
 
