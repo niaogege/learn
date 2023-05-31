@@ -111,3 +111,33 @@ function getData2(id: string | string[]): DataType | DataType[] {
 }
 getData2('1111');
 getData2(['1111']);
+
+type Unique1<T, R extends any[] = []> = T extends [infer F, ...infer Rest]
+  ? IsInclude<R, F> extends true
+    ? Unique1<Rest, R>
+    : Unique1<Rest, [...R, F]>
+  : R;
+type TP1 = Unique1<[1, 2, 3, 3, 4]>;
+
+// A是否在数组里
+type IsInclude<A = [], V = unknown> = A extends [infer F, ...infer R]
+  ? Equal<F, V> extends true
+    ? true
+    : IsInclude<R, V>
+  : false;
+
+type Equal<A, B> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+  ? true
+  : false;
+
+type TP2 = Equal<1, 2>;
+type TP3 = Equal<unknown, any>;
+type TP4 = IsInclude<[1, 3, 3], 11>;
+
+type result = ConstructTuple<2>; // expect to be [unknown, unkonwn]
+type ConstructTuple<
+  L extends number,
+  V extends unknown = unknown,
+  Arr extends unknown[] = [],
+> = Arr['length'] extends L ? Arr : ConstructTuple<L, V, [V, ...Arr]>;
+type TP31 = ConstructTuple<999>;
