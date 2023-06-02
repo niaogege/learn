@@ -141,3 +141,8 @@ type ConstructTuple<
   Arr extends unknown[] = [],
 > = Arr['length'] extends L ? Arr : ConstructTuple<L, V, [V, ...Arr]>;
 type TP31 = ConstructTuple<999>;
+
+type Track<T extends unknown[] = []> = T extends [infer F, ...infer R]
+  ? Track<R> | [F, ...Track<R>]
+  : T;
+type PP2 = Track<[1, 2]>;

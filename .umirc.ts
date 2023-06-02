@@ -2,7 +2,7 @@
  * @Author: Chendapeng
  * @Date: 2022-04-12 22:23:54
  * @LastEditors: Chendapeng
- * @LastEditTime: 2023-05-31 15:20:25
+ * @LastEditTime: 2023-05-31 20:40:36
  * @Description:
  */
 import { defineConfig } from 'dumi';
@@ -26,7 +26,7 @@ export default defineConfig({
     },
     {
       title: 'Record',
-      path: 'https://bythewayer.com/love',
+      path: 'http://love.bythewayer.com/',
     },
   ],
   mode: 'site',

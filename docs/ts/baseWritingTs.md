@@ -13,6 +13,18 @@ nav:
 
 积累一些基础且重要的体操类型，多多练习
 
+```md
+- Equal<A, B>
+- UnionToIntersection3<T>
+- IndexToUnion<T>
+- Awaited<T>
+- SymmetricDifference<T, U>
+- FunctionKeys<T, Function>
+- MutableKeys<T>
+- OptionalKeys<T>
+- Intersection<T1, T2>
+```
+
 ### 比较两个类型是否相等
 
 ```ts
@@ -105,7 +117,7 @@ type A32 = AllAwaited<A3>;
 // }
 ```
 
-### SymmetricDifference
+### SymmetricDifference 没有同时存在 T 和 U 内的类型
 
 SymmetricDifference<T, U>获取没有同时存在于 T 和 U 内的类型。
 
@@ -113,6 +125,10 @@ SymmetricDifference<T, U>获取没有同时存在于 T 和 U 内的类型。
 type E16 = SymmetricDifference<1 | 2 | 3, 2 | 3 | 4>; // type E16 = 1 | 4
 type SymmetricDifference<A, B> = Exclude<A | B, A & B>;
 type Excludepp<T, U> = T extends U ? never : T;
+type TT121 = Excludepp<1 | 2 | 3, 1>; // type TT122 = 1
+type TT122 = Extract<1 | 2 | 3, 1>; // type TT122 = 1
+type ExtractPP<T, U> = T extends U ? T : never;
+type TT123 = ExtractPP<1 | 2 | 3, 1>; // type TT122 = 1
 ```
 
 总结一下就是，提取存在于 T 但不存在于 T & U 的类型，然后再提取存在于 U 但不存在于 T & U 的，最后进行联合。
@@ -163,6 +179,10 @@ type E17 = {
   hobby: string;
 };
 type E18 = MutableKeys<E17>;
+// type E18 = {
+//     age: number;
+//     hobby: string;
+// }
 type MutableKeys<T> = {
   [K in keyof T as Equals<Pick<T, K>, Readonly<Pick<T, K>>> extends true ? never : K]: T[K];
 };
@@ -184,7 +204,7 @@ type E20 = NotOptionalKeys<E19>;
     hobby: string;
 }
 */
-type E21 = OptionalKeys2<E19>;
+type E21 = OptionalKeys<E19>;
 // type E21 = {
 //     readonly name?: string | undefined;
 //     age?: number | undefined;
@@ -192,7 +212,7 @@ type E21 = OptionalKeys2<E19>;
 type NotOptionalKeys<T> = {
   [K in keyof T as T[K] extends {} ? K : never]: T[K];
 };
-type OptionalKeys2<T> = {
+type OptionalKeys<T> = {
   [K in keyof T as T[K] extends Required<T>[K] ? never : K]: T[K];
 };
 type Required1<T> = {
@@ -204,6 +224,30 @@ type E22 = Required1<E19>;
 //     age: number;
 //     hobby: string;
 // }
+```
+
+### PartialByKeys
+
+实现 PartialByKeys<T, K>，使 K 匹配的 Key 变成可选的定义，如果不传 K 效果与 Partial 一样：
+
+```ts
+interface User21 {
+  name: string;
+  age: number;
+  address: string;
+}
+
+type TT31 = Partial<User21>;
+type UserPartialName1 = PartialByKeys1<User21, 'name'>; // { name?:string; age:number; address:string }
+type PartialByKeys1<T, K = keyof T> = {
+  [P in keyof T as P extends K ? P : never]?: T[P];
+} & {
+  [P in keyof T as P extends K ? never : P]: T[P];
+} extends infer R
+  ? {
+      [P in keyof R]: R[P];
+    }
+  : never;
 ```
 
 ### Diff1
