@@ -589,3 +589,23 @@ type T15 = TransferObj<arr>;
 //     ccc: any;
 // }
 ```
+
+### Number Range
+
+实现 NumberRange<T, P>，生成数字为从 T 到 P 的联合类型：
+
+```ts
+type T17 = NumberRange<2, 9>; //  | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9
+
+type LengthTo<N extends number, R extends any[] = []> = R['length'] extends N
+  ? R
+  : LengthTo<N, [0, ...R]>;
+type T16 = LengthTo<5>; // type T16 = [0, 0, 0, 0, 0]
+
+type NumberRange<
+  T extends number,
+  P extends number,
+  U extends any[] = LengthTo<T>,
+  R extends number = never,
+> = U['length'] extends P ? R | U['length'] : NumberRange<T, P, [0, ...U], R | U['length']>;
+```

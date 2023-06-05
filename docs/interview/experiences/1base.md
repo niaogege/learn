@@ -69,7 +69,9 @@ console.log(test2);
 
 - call
 
-call() 方法使用一个指定的 this 值和单独给出的一个或多个参数来调用一个函数。 call() 提供新的 this 值给当前调用的函数/方法。你可以使用 call 来实现继承：写一个方法，然后让另外一个新的对象来继承它（而不是在新对象中再写一次这个方法）。
+call() **方法使用一个指定的 this 值和单独给出的一个或多个参数来调用一个函数**。
+
+call() 提供新的 this 值给当前调用的函数/方法。你可以使用 call 来实现继承：写一个方法，然后让另外一个新的对象来继承它（而不是在新对象中再写一次这个方法）。
 
 > 使用 call 方法调用函数并且不指定第一个参数（argument）
 
@@ -95,10 +97,28 @@ var name2 = mockCall(null, obj);
 - apply
 
 ```js
-
+Function.prototype.myApply = function (context, args) {
+  context = context || window;
+  var sym = Symbol();
+  context[sym] = this;
+  var res = context[sym](...args);
+  delete context[sym];
+  return res;
+};
 ```
 
 ### bind
+
+bind() 方法会创建一个新函数。当这个新函数被调用时，bind() 的第一个参数将作为它运行时的 this，之后的一序列参数将会在传递的实参前传入作为它的参数。(来自于 MDN ) 由此我们可以首先得出 bind 函数的两个特点：
+
+- 返回一个函数
+
+- 可以传入参数
+
+```js
+Function.
+
+```
 
 [Bind 模拟](https://segmentfault.com/a/1190000009271416)
 

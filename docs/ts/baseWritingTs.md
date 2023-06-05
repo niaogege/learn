@@ -23,6 +23,7 @@ nav:
 - MutableKeys<T>
 - OptionalKeys<T>
 - Intersection<T1, T2>
+- Unique<T>
 ```
 
 ### 比较两个类型是否相等
@@ -333,6 +334,24 @@ type Chunk<
     ? Chunk<Rest, ItemLen, [First], [...Res, CurItem]>
     : Chunk<Rest, ItemLen, [...CurItem, First], Res>
   : [...Res, CurItem];
+```
+
+### Unique 去重
+
+```ts
+type E29 = Unique<[1, 2, 3, 4, 3, 2]>; // [1,2,3,4]
+type HasInclude<Arr, One> = Arr extends [infer F, ...infer R]
+  ? Equal<One, F> extends true
+    ? true
+    : HasInclude<R, One>
+  : false;
+type E30 = HasIn<[1, 2, 3], 1>;
+
+type Unique<T, C extends unknown[] = []> = T extends [infer F, ...infer R]
+  ? HasInclude<C, F> extends true
+    ? Unique<R, C>
+    : Unique<R, [F, ...C]>
+  : C;
 ```
 
 ### 参考

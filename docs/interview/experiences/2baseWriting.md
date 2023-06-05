@@ -11,7 +11,13 @@ nav:
 ---
 
 - new 手写
-- bind 手写
 - apply 和 call 手写
+- bind 手写
 - es6 继承手写
 - 深浅拷贝
+
+### new 手写
+
+### apply 和 call 手写
+
+### bind 手写
