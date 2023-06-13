@@ -18,6 +18,9 @@ nav:
 - apply 和 call 手写
 - es6 继承手写
 - 深浅拷贝
+- 冒泡排序
+- 选择排序
+- 快速排序
 
 ## 基础概念
 
@@ -116,12 +119,135 @@ bind() 方法会创建一个新函数。当这个新函数被调用时，bind() 
 - 可以传入参数
 
 ```js
-Function.
+Function.prototype.myBind = function (context) {
+  var self = this;
+  return function () {
+    self.apply(context);
+  };
+};
+```
 
+- 传参模拟实现
+
+```js
+Function.prototype.myBind = function (context) {
+  var self = this;
+  var args = Array.prototype.slice.call(arguments, 1);
+  return function () {
+    var bindArg = Array.prototype.slice.call(arguments);
+    self.apply(context, args.concat(bindArg));
+  };
+};
+```
+
+- 构造函数效果的模拟实现
+
+```js
+// third
+Function.prototype.myBind = function (context) {
+  var self = this;
+  var args = Array.prototype.slice.call(arguments, 1);
+  var fbound = function () {
+    var bindArg = Array.prototype.slice.call(arguments);
+    self.apply(this instanceof self ? this : context, args.concat(bindArg));
+  };
+  fbound.prototype = this.prototype;
+  return fbound;
+};
+```
+
+- 最终代码
+
+```js
+Function.prototype.myBind = function (context) {
+  if (typeof this !== 'function') {
+    throw new Error('Function.prototype.bind - what is trying to be bound is not callable');
+  }
+  var self = this;
+  var args = Array.prototype.slice.call(arguments, 1);
+  var Bridge = function () {};
+  var fbound = function () {
+    var bindArg = Array.prototype.slice.call(arguments);
+    self.apply(this instanceof self ? this : context, args.concat(bindArg));
+  };
+  Bridge.prototype = this.prototype;
+  fbound.prototype = new Bridge();
+  return fbound;
+};
 ```
 
 [Bind 模拟](https://segmentfault.com/a/1190000009271416)
 
+### 函数柯里化
+
+- 第一种 参数不固定
+
+```js
+function curry(fn) {
+  var arr = [];
+  return function temp(...rest) {
+    if (rest.length) {
+      arr.push(...rest);
+      return temp;
+    } else {
+      var res = fn.apply(null, arr);
+      arr = [];
+      return res;
+    }
+  };
+}
+var map = (...rest) => rest.reduce((a, b) => a + b, 0);
+var tt1 = curry(map);
+tt1(1)(2)(3)();
+```
+
+- 第二种参数固定
+
+```js
+function curry2(fn) {
+  let judge = (...arg) => {
+    if (arg.length === fn.length) {
+      return fn(...arg);
+    }
+    return (...args) => judge(...args, ...arg);
+  };
+  return judge;
+}
+var map = (a, b, c) => a + b + c;
+var tt1 = curry2(map);
+tt1(1)(2)(3);
+```
+
 ### es6 继承
 
+```js
+
+```
+
 ### 如何使用 es5 实现继承
+
+### 深浅拷贝
+
+```js
+// 如果考虑数组
+function deepClone(obj) {
+  if (typeof obj !== 'object') return;
+  var res = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    if (obj.hasOwnproperty(key)) {
+      var val = obj[key];
+      res[key] = typeof val === 'object' ? deepClone(val) : val;
+    }
+  }
+  return res;
+}
+```
+
+### 冒泡排序
+
+```js
+function bubbleSort() {}
+function selectSort() {}
+
+function quickSort() {}
+```

@@ -10,6 +10,12 @@ nav:
   path: /interview
 ---
 
+- 虚拟 dom 转换为真实 dom
+- 大数相加
+- 数字通过千分位展示
+- 模板字符串解析
+- 十六进制转 rgb 或者 rgb 转十六进制
+
 ## 虚拟 dom 转换为真实 dom
 
 VDom 实现一般来说是这四个步骤
@@ -91,3 +97,11 @@ function isElementDom(vdom) {
 
 render(vnode, document.getElementById('app'));
 ```
+
+## 大数相加
+
+## 数字通过千分位展示
+
+## 模板字符串解析
+
+## 十六进制转 rgb 或者 rgb 转十六进制

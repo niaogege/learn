@@ -24,6 +24,24 @@ nav:
 - 数组随机访问时间复杂度 O(1),插入/删除时间复杂度 O(n)
 - 链表随机访问时间复杂度 O(n),插入/删除时间复杂度 O(1)
 
+## 环形链表 1
+
+```js
+/**
+ * Definition for singly-linked list.
+ * function ListNode(val) {
+ *     this.val = val;
+ *     this.next = null;
+ * }
+ */
+
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var hasCycle = function (head) {};
+```
+
 ## 反转链表
 
 ```js
@@ -188,3 +206,44 @@ var mergeTwoLists = function (list1, list2) {
 ```
 
 ### LRU
+
+```js
+class LRU {}
+```
+
+### 删除节点
+
+```js
+var deleteNode = function (head, val) {
+  let dummy = {
+    val: 0,
+    next: head,
+  };
+  let cur = head;
+  while (cur.next) {
+    if (cur.next.val === val) {
+      cur.next = cur.next.next;
+      break;
+    }
+    cur = cur.next;
+  }
+  return dummy.next;
+};
+var test = {
+  val: 1,
+  next: {
+    val: 2,
+    next: {
+      val: 3,
+      next: {
+        val: 4,
+        next: {
+          val: 5,
+          next: undefined,
+        },
+      },
+    },
+  },
+};
+deleteNode(test, 3);
+```
