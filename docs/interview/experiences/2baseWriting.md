@@ -35,6 +35,17 @@ nav:
 
 ### mockMap/mockFilter 数组方法重写
 
+```js
+Array.prototype.mockMap = function (fn, context) {
+  var arr = Array.prototype.slice.call(this) || []
+  var res = []
+  for (let i = 0; i < arr.length; i ++) {
+    res.push(fn.call(context, arr[i], i, arr)))
+  }
+  return res
+}
+```
+
 ### myReduce 重写
 
 ```js
@@ -50,4 +61,23 @@ var sum = [1, 2].reduce((a, b) => a + b, 10);
 console.log(sum, 'sum');
 var sum2 = [1, 2].myReduce((a, b) => a + b, 10);
 console.log(sum2, 'sum');
+```
+
+### myFlat
+
+```js
+Array.prototype.myFlat = function (num = 1) {
+  var arr = Array.prototype.slice.call(this) || [];
+  var i = 0;
+  while (arr.some((e) => Array.isArray(e))) {
+    console.log(arr, 'before');
+    arr = [].concat(...arr);
+    console.log(arr, 'after');
+    i++;
+    if (i >= num) break;
+  }
+  return arr;
+};
+var test = [1, [2, 3, 4], [[5, 6, 7]]];
+test.myFlat();
 ```

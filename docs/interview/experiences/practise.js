@@ -10,6 +10,12 @@
  9.16进制转rgb or rgb转16进制
  10.mockMap/mockFilter 数组方法重写
  11.mockMap
+ //////////
+ 12.mockReduce
+ 13.pipe
+ 14.ajax
+ 15.EventEmitter
+ 16.flatten/mockFlat
  */
 
 Function.prototype.myCall = function (context, ...rest) {

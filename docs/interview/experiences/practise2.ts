@@ -41,7 +41,7 @@ type Required1<T> = {
 };
 type E20 = Required1<TT2>;
 
-type E22 = Subsequence<[1, 2, 3]>;
+type E22 = Subsequence2<[1, 2, 3]>;
 type Subsequence2<T> = T extends [infer F, ...infer R]
   ? Subsequence2<R> | [F, ...Subsequence2<R>]
   : T;
