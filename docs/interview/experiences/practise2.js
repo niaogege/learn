@@ -46,6 +46,7 @@ function rgbToHex(str) {
   };
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
+rgbToHex('rgb(255,255,255)');
 
 Function.prototype.mockNew = (fn, ...rest) => {
   var target = Object.create(fn.prototype);

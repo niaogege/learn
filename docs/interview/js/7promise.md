@@ -13,6 +13,57 @@ nav:
 
 面试常考题，手写 Promise 以及相关 api
 
+```js
+class MyPromise {
+  constructor(executor) {
+    this.cbs = []
+    this.data = undefined
+    const onResolve = (val) => {
+      setTimeout(() => {
+        this.data = val
+        this.cbs.forEach((cb) => {
+          cb(val)
+        })
+     }, 0)
+    }
+    executor(onResolve)
+  }
+  then((onResolved) {
+    return new MyPromise((resolve) => {
+      this.cbs.push(() => {
+        const res = onResolved(this.data)
+        if (res instanceof MyPromise) {
+          res.then(resolve)
+        } else {
+          resolve(res)
+        }
+      })
+    })
+  })
+  static resolve(val) {}
+  static reject(reason) {}
+  static all(promiseList) {}
+  static race(promiseList) {}
+}
+new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(1);
+  }, 500);
+})
+  .then((res) => {
+    console.log(res);
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(2);
+      }, 500);
+    });
+  })
+  .then(console.log);
+  // 500s后输出 1
+  // 500s后输出 2
+
+```
+
 JavaScript 中存在很多异步操作,Promise 将异步操作队列化，按照期望的顺序执行，返回符合预期的结果。可以通过链式调用多个 Promise 达到我们的目的。
 
 Promise 是一个拥有 then 函数的对象或者方法,
