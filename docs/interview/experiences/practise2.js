@@ -114,7 +114,7 @@ function compose(middlewares) {
       if (!fn) fn = next;
       if (middlewares.length >= i) return Promise.resolve();
       try {
-        return Promise.resolve(fn.apply(context, () => dispatch(i + 1)));
+        return Promise.resolve(fn(context, () => dispatch(i + 1)));
       } catch (e) {
         return Promise.reject(e);
       }

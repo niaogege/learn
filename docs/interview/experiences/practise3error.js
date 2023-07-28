@@ -127,7 +127,7 @@ function compose(middlewares) {
       if (!fn) fn = next;
       if (i >= middlewares.length) return Promise.reject();
       try {
-        return Promise.resolve(fn.call(ctx, () => dispatch(i + 1)));
+        return Promise.resolve(fn(ctx, () => dispatch(i + 1)));
       } catch (e) {
         return Promise.reject(e);
       }

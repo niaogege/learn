@@ -19,11 +19,19 @@
  * 18.手写防抖和节流
  * 19.反转链表
  * 20.手写Promise
- * 21.手写vue版render // 0725
+ * 21.手写vue版render
  * 22.手写数字的千分位分割法
  * 23.实现promisify
  * 24.封装一个类使对象可以被 for of 遍历
- * 25.
+ * 25.数字千分位展示
+ * 26.手写async/await
+ * 27.手写pipe compose
+ * 28.Promise.all/any/race/allSettled
+ * 29.手写并发控制器
+ * 30.手写ajax
+ * 31.手写jsonp
+ * 33.URL参数解析
+ * 34.手写去重
  **/
 
 class MakeIterator {}
