@@ -7,10 +7,54 @@
  * 5.js 如何实现函数重载
  * 6.compose1/compose2/pipe
  * 7.实现 es6 中的 flatten()
- * 8.实现一个 useRequest Hook
+ * 8.实现一个 useRequest/useFetch Hook
  * 9.实现一个useEvent,封装事件处理函数
  * 10.手写memo 缓存函数
  */
+
+function compose(middlewares) {
+  return function (ctx, next) {
+    return dispatch(0);
+    function dispatch(i) {
+      let fn = middlewares[i];
+      if (fn.length === middlewares.length) return Promise.reject('');
+      if (!fn) {
+        fn = next;
+      }
+      try {
+        return Promise.resolve(fn(ctx, () => dispatch(i + 1)));
+      } catch (e) {
+        return Promise.reject('error');
+      }
+    }
+  };
+}
+// 右到左
+function compose1(...rest) {
+  if (rest.length === 0) return (num) => num;
+  if (rest.length === 1) return rest[0];
+  return rest.reduce((pre, cur) => {
+    return (...arg) => pre(cur(...arg));
+  });
+}
+
+// 从左到右
+function pipe(...rest) {
+  return function (val) {
+    return rest.reduce((pre, cur) => cur(pre), val);
+  };
+}
+
+var sum1 = (x) => x + 1;
+var sum2 = (x) => x * 2;
+var sum3 = (x) => x * 3;
+
+var t1 = compose1(sum1, sum2, sum3);
+t1(10); // 61
+
+var t2 = pipe(sum1, sum2, sum3);
+t2(10); // 66
+
 // 将123456789转化为123,456,789
 function thousand(str) {
   var reg = /(?!^)(?=(\d{3})+$)/g;
@@ -205,9 +249,8 @@ function heavyLoad(obj, name, fn) {
   var old = obj[name];
   obj[name] = function () {
     let arg = Array.prototype.slice.call(arguments);
-    console.log(fn.length, 'fn.length');
-    console.log(arg);
     if (fn.length === arg.length) {
+      console.log(arg);
       fn.apply(this, arg);
     } else {
       old.apply(this, arg);
@@ -229,6 +272,7 @@ heavyLoad(person, 'show', function (a, b) {
 
 person.show();
 person.show('cpp');
+person.show('33', '44');
 
 // 请求并发控制
 
@@ -285,3 +329,51 @@ function insertSort(arr) {
 }
 
 insertSort([1, 22, 33, 4, 5, 0, 6]);
+
+//实现一个useEvent,封装事件处理函数
+import { useRef, useLayoutEffect, useCallback } from 'react';
+const useEvent = (handler) => {
+  const handleRef = useRef();
+  useLayoutEffect(() => {
+    handleRef.current = handler;
+  });
+  return useCallback((...arg) => {
+    handleRef.current && handleRef.current(...arg);
+  }, []);
+};
+
+import { useState, useEffect } from 'react';
+// https://www.30secondsofcode.org/react/s/use-fetch/
+const useFetch = (url, option) => {
+  const [response, setResponse] = useState(null);
+  const [error, setError] = useState(null);
+  const [abort, setAbort] = useState(() => {});
+  useCallback(() => {
+    const fetchData = async () => {
+      try {
+        const abortController = new AbortController();
+        const signal = abortController.signal;
+        setAbort(signal);
+        const res = await fetch(url, {
+          ...option,
+          signal,
+        });
+        const json = await res.json();
+        setResponse(json);
+      } catch (e) {
+        setError(e);
+      }
+    };
+    fetchData();
+    return () => {
+      abort();
+    };
+  });
+  return {
+    response,
+    error,
+    abort,
+  };
+};
+
+useFetch('', {});

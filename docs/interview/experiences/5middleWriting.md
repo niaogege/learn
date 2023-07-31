@@ -14,6 +14,7 @@ nav:
 - 大数相加
 - 数字通过千分位展示
 - 模板字符串解析
+- 驼峰转化
 - 十六进制转 rgb 或者 rgb 转十六进制
 
 ## 虚拟 dom 转换为真实 dom
@@ -100,8 +101,68 @@ render(vnode, document.getElementById('app'));
 
 ## 大数相加
 
+```js
+function bigInt(a, b) {}
+```
+
 ## 数字通过千分位展示
+
+```js
+function thousand(str) {
+  var reg = /(?!^)(?=(\d{3})+$)/g;
+  return str.replace(reg, ',');
+}
+thousand('123456789');
+```
+
+## 手机号 3-4-4 分割
+
+```js
+// 18724009609 =》 187-2400-9609
+function splitTel(str) {
+  var reg = /(?=(\d{4})+$)/g;
+  return str.replace(reg, '-');
+}
+splitTel('18724009609');
+```
 
 ## 模板字符串解析
 
+```js
+function render(str, data) {
+  var reg = /\{\{(\w+)\}\}/;
+  if (reg.test(str)) {
+    var name = RegExp.$1.trim(); // reg.exec(str)[1]
+    str = str.replace(reg, data[name]);
+    return render(str, data);
+  }
+  return str;
+}
+render(`{{msg}}-{{name}}`, { msg: 'chendap', name: 'wmh' });
+```
+
+## 驼峰转化
+
+```js
+function uppercase(str) {
+  return str.replace(/[-|_|@]([\w])/, (match, p) => p && p.toUpperCase());
+}
+uppercase('cpp-wmh');
+```
+
 ## 十六进制转 rgb 或者 rgb 转十六进制
+
+```js
+// rgb(255, 255, 255) => #ffffff
+function rgbToHex(str) {
+  var hex = str.split(/[^\d]+/g);
+  console.log(hex, 'hex');
+  var [, r, g, b] = hex;
+  var toHex = (val) => {
+    var hex = (+val).toString(16);
+    return hex.length === 1 ? `0${hex}` : hex;
+  };
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+rgbToHex(`rgb(255, 255, 255)`);
+```
