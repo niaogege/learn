@@ -11,9 +11,17 @@ nav:
   path: /interview
 ---
 
+[二叉树](https://programmercarl.com/%E4%BA%8C%E5%8F%89%E6%A0%91%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80.html#%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86%E6%96%B9%E5%BC%8F)
+
 ## DFS
 
 depth First Search
+
+这里前中后，其实指的就是中间节点的遍历顺序，只要大家记住 前中后序指的就是中间节点的位置就可以了。
+
+前序遍历：中左右中序遍历：左中右后序遍历：左右中
+
+![前中后序遍历](https://code-thinking-1253855093.file.myqcloud.com/pics/20200806191109896.png)
 
 测试案例
 
@@ -49,7 +57,7 @@ var node = {
 };
 ```
 
-- 前序遍历 **根左右**
+- 前序遍历 **根左右** 先访问根节点，在访问左右节点
 
 ```js
 var preTraversal = (root) => {
@@ -77,10 +85,8 @@ function inorderTraversal(root) {
   let num = 1;
   var inorder = (node) => {
     if (node) {
-      console.log(node, num++);
       inorder(node.left);
       arr.push(node.val);
-      debugger;
       inorder(node.right);
     }
   };

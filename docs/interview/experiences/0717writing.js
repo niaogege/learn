@@ -39,6 +39,14 @@
  * 39.手写函数重载
  * 40.二叉树前中后序遍历(迭代方式)
  * 41.冒泡排序和归并排序
+ * 42.滑动窗口，无重复字符的最长子串
+ * 43.实现一个带缓存斐波那契数列
+ * 44.最大子序和
+ * 45.实现简单的hash路由跟history路由
+ * 46.二叉树的层序遍历
+ * 47.二叉树前中后序遍历(递归方式)
+ * 48.如何实现无限累加的一个函数
+ * 49.手写NOSSR
  **/
 
 // > 定个小目标100个手写提
@@ -75,4 +83,62 @@ var obj = {
 };
 for (var item of new MakeIterator(obj)) {
   console.log(item);
+}
+
+// 6.函数柯里化curry(参数固定和不固定)
+// 参数不固定curry(1,2,3)
+function curry(fn) {
+  var arr = [];
+  return function temp(...arg) {
+    if (arg.length) {
+      arr.push(...arg);
+      return temp;
+    } else {
+      var res = fn.apply(this, arr);
+      arr = [];
+      return res;
+    }
+  };
+}
+// 参数固定 curry(1)(2)(3)()
+function curry2(fn) {
+  var judge = (...rest) => {
+    if (rest.length === fn.length) {
+      fn.apply(this, rest);
+    } else {
+      return (...arg) => judge(...arg, ...rest);
+    }
+  };
+  return judge;
+}
+
+// 48 如何实现无限累加的一个函数
+function sum(...rest) {
+  var f = (...arg) => sum(...arg, ...rest);
+  f.valueOf = () => rest.reduce((a, b) => a + b, 0);
+  return f;
+}
+
+sum(1, 2, 3).valueOf(); //6
+sum(2, 3)(2).valueOf(); //7
+sum(1)(2)(3)(4).valueOf(); //10
+sum(2)(4, 1)(2).valueOf(); //9
+sum(1)(2)(3)(4)(5)(6).valueOf(); // 21
+
+// 49.手写NOSSR
+import { useEffect, useState } from 'react';
+
+function NoSSR(props) {
+  const { children } = props;
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) {
+    return null;
+  } else {
+    return <div>{children}</div>;
+  }
 }

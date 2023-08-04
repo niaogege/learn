@@ -1186,7 +1186,7 @@ function makeGetRequest(url, cb) {
   // step two
   httpRequest.onreadystatechange = () => {
     // 检查请求的状态 4
-    if (httpRequest.readyState === XMLHttpRequest.done) {
+    if (httpRequest.readyState === XMLHttpRequest.DONE) {
       // 检查请求状态码
       if (httpRequest.status === 200) {
         cb(httpRequest.responsText);
@@ -1195,12 +1195,14 @@ function makeGetRequest(url, cb) {
   };
   // step two
   httpRequest.open('GET', url, true);
-  // 第三个参数可选，用于设置请求是否是异步的。如果设为 true (默认值)，即开启异步，JavaScript就不会在此语句阻塞，使得用户能在服务器还没有响应的情况下与页面进行交互。
+  // 第三个参数可选，表示是否执行异步操作，默认为true。如果设为 true (默认值)，即开启异步，JavaScript就不会在此语句阻塞，使得用户能在服务器还没有响应的情况下与页面进行交互。如果值为 false，send() 方法直到收到答复前不会返回
   httpRequest.send();
 }
 ```
 
-如果你使用 POST 数据，那就需要设置请求的 MIME 类型。比如，在调用 send() 方法获取表单数据前要有下面这个：
+如果你使用 POST 数据，那就需要设置请求的 **MIME** 类型。比如，在调用 send() 方法获取表单数据前要有下面这个：
+
+`httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')`
 
 ```js
 function makePostRequest(url, cb, userName) {
@@ -1212,7 +1214,7 @@ function makePostRequest(url, cb, userName) {
       }
     }
   }
-  httpRequest.open('Post', url, true);
+  httpRequest.open('POST', url, true);
   httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   httpRequest.send('userName=' + encodeURIComponent(userName));
 ```

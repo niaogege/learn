@@ -156,3 +156,19 @@ function promisify(fn) {
     };
   });
 }
+
+// ?name=cpp&age=30&sex=huamn
+// http://ops.ximalaya.com/api-manager-backend/router-page/projectApiLook/2161/103995?activeTab=0&name=cpp&age=30&sex=huamn
+function UrlParam(url) {
+  var str = url.split('?')[1];
+  var arr = str.split('&');
+  var res = {};
+  for (let i = 0; i < arr.length; i++) {
+    var item = arr[i].split('=');
+    res[item[0]] = item[1];
+  }
+  return res;
+}
+UrlParam(
+  `http://ops.ximalaya.com/api-manager-backend/router-page/projectApiLook/2161/103995?activeTab=0&name=cpp&age=30&sex=huamn`,
+);
