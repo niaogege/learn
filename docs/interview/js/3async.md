@@ -365,6 +365,107 @@ async function callAll() {
 
 ### 手写 async/await 使其实现相似的功能
 
+```js
+const getData = () => new Promise((resolve) => setTimeout(() => resolve('data'), 1000));
+
+async function test() {
+  const data = await getData();
+  console.log('data: ', data);
+  const data2 = await getData();
+  console.log('data2: ', data2);
+  return 'success';
+}
+
+// 这样的一个函数 应该再1秒后打印data 再过一秒打印data2 最后打印success
+test().then((res) => console.log(res));
+```
+
+对于这个简单的案例来说，如果我们把它用 generator 函数表达，会是怎么样的呢？
+
+```js
+function* testG() {
+  const data = yield getData();
+  console.log(data, 'data');
+  var data2 = yield getData();
+  console.log(data2, 'data2');
+  return 'success';
+}
+```
+
+我们知道，generator 函数是不会自动执行的，每一次调用它的 **next** 方法，会停留在下一个 yield 的位置。
+
+利用这个特性，我们只要编写一个**自动执行**的函数，就可以让这个 **generator 函数完全实现 async 函数**的功能。
+
+```js
+const getData = () => new Promise((resolve) => setTimeout(() => resolve('data'), 1000));
+
+var test = asyncToGenerator(function* testG() {
+  // await被编译成了yield
+  const data = yield getData();
+  console.log('data: ', data);
+  const data2 = yield getData();
+  console.log('data2: ', data2);
+  return 'success';
+});
+
+test().then((res) => console.log(res));
+```
+
+`asyncToGenerator`接受一个**generator 生成器**函数，返回一个 promise，关键就在于，里面用 yield 来划分的异步流程，应该如何自动执行。
+
+```js
+function generatorToAsync(G) {
+  return function () {
+    //  对应 var gen = testG()
+    const gen = G.apply(this, arguments);
+    // var test = asyncToGenerator(testG)
+    // test().then(res => console.log(res))
+    return new Promise((resolve, reject) => {
+      function step(key, arg) {
+        let genResult;
+        try {
+          genResult = gen[key](arg); // gen.next(arg)
+        } catch (e) {}
+        const { done, value } = genResult;
+        if (done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(
+            (val) => step('next', val),
+            (err) => step('throw', err),
+          );
+        }
+      }
+      step('next');
+    });
+  };
+}
+
+function asyncToGenerator(G) {
+  return function (...arg) {
+    var g = G.apply(this, arg);
+    return new Promise((resolve, reject) => {
+      function runGenerator(res = undefined) {
+        var { done, value } = g.next(res);
+        if (done) {
+          resolve(value);
+        } else {
+          return Promise.resolve(value).then(
+            (res) => {
+              runGenerator(res);
+            },
+            (err) => {
+              reject(err);
+            },
+          );
+        }
+      }
+      runGenerator();
+    });
+  };
+}
+```
+
 ## 面试中如何回答三者之间的关系
 
 Last: Promise + async 的操作最为常见。因为 Generator 被 async 替代了呀~
@@ -385,6 +486,8 @@ var p2 = new Promise((resolve, reject) => {
 ### 接口什么时候会 canceled
 
 ## 参考
+
+- [手写 async await 的最简实现（20 行）](https://juejin.cn/post/6844904102053281806?searchId=20230806150735CBE06003782DFB41F93F)
 
 - [js 四种异步解决方案](https://mp.weixin.qq.com/s/eHB1eDwEt93FzSmsX4BSzg)
 - [mdn/async](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Statements/async_function)

@@ -1221,26 +1221,36 @@ function makePostRequest(url, cb, userName) {
 
 ## 手写 jsonp
 
-实现
+事先定义一个用于获取跨域响应数据的回调函数，并通过没有同源策略限制的 script 标签发起一个请求（将回调函数的名称放到这个请求的 query 参数里），然后服务端返回这个回调函数的执行，并将需要响应的数据放到回调函数的参数里，前端的 script 标签请求到这个执行的回调函数后会立马执行，于是就拿到了执行的响应数据。
 
 ```js
-function jsonp(url, callBack) {
-  var funcName = 'jsonp_' + Date.now();
+function jsonp({ url, option = {}, callback = 'callback' }) {
+  var funcName = callback;
   const script = document.createElement('script');
-  script.src = url;
+  var params = [];
+  for (var key in data) {
+    params.push(encodeURIComponent(key) + '=' + encodeURIComponent(data[key]));
+  }
+  url = url.indexOf('?') > 0 ? url + '&' : url + '?';
+  url += params.join('&');
+  scriptNode.src = url + '?callback=' + callback;
   script.async = true;
   script.type = 'text/javascript';
   document.body.appendChild(script);
   window[funcName] = function (data) {
-    callBack && callBack(data);
+    callback && callback(data);
     // 重点清除全局函数和script标签
     delete window[funcName];
     document.body.removeChild(script);
   };
 }
 // test
-jsonp('http://127.0.0.1:8080/api', function (res) {
-  console.log(res);
+jsonp({
+  url: 'http://127.0.0.1:8080/api',
+  data: { name: 'cpp' },
+  callback: function (res) {
+    console.log(res);
+  },
 });
 ```
 
@@ -1398,6 +1408,8 @@ function factorialTail(n, total = 1) {
 ## 实现一个带缓存斐波那契数列
 
 ```js
+// // 1、1、2、3、5、8、13、21、34
+// fb(n) = fb(n-1) + fb(n-2)
 // 第一版
 function fibonacci(n) {
   if (n < 1) return 0;

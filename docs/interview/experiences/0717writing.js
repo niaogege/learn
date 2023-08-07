@@ -47,6 +47,7 @@
  * 47.二叉树前中后序遍历(递归方式)
  * 48.如何实现无限累加的一个函数
  * 49.手写NOSSR
+ * 50.数组随机展示以及随机取一个数字展示
  **/
 
 // > 定个小目标100个手写提
@@ -142,3 +143,14 @@ function NoSSR(props) {
     return <div>{children}</div>;
   }
 }
+
+// 50.随机展示 以及随机取一个数字展示
+function randomArr(arr) {
+  return arr.sort(() => 0.5 - Math.random());
+}
+randomArr(['哈哈', '嘟嘟', '嘎嘎', 'wqreqw', '戈戈', '戈戈22', 'ccc', '卧槽', '武侠', '女生']);
+
+function randomArrOne(arr) {
+  return arr[Math.floor(Math.random * arr.length)];
+}
+randomArrOne(['哈哈', '嘟嘟', '嘎嘎', 'wqreqw', '戈戈', '戈戈22', 'ccc', '卧槽', '武侠', '女生']);
