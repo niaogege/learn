@@ -13,6 +13,11 @@ nav:
 ## 数组相关 API
 
 - 手写 instanceof
+- Array.prototype.reduce
+- Array.prototype.map
+- Array.prototype.filter
+- Array.prototype.some
+- Array.prototype.every
 
 ### 手写 instanceof
 

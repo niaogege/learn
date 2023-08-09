@@ -363,7 +363,11 @@ async function callAll() {
 // callAll() 5
 ```
 
-### 手写 async/await 使其实现相似的功能
+### 手写 async/await 使其实现相似的功能(or CO 协程 函数)
+
+async/await 是生成器函数的语法糖
+
+> co 接受一个生成器函数，当遇到 yield 时就暂停执行，交出控制权，当其他程序执行完毕后，将结果返回并从中断的地方继续执行，如此往复，一直到所有的任务都执行完毕，最后返回一个 Promise 并将生成器函数的返回值作为 resolve 值。
 
 ```js
 const getData = () => new Promise((resolve) => setTimeout(() => resolve('data'), 1000));

@@ -86,6 +86,23 @@ var reverseList = function (head) {
 };
 ```
 
+### 链表是否有环
+
+```js
+function hasCycle(head) {
+  var fast = head;
+  var slow = head;
+  while (fast && fast.next) {
+    if (slow === fast) {
+      return true;
+    }
+    slow = slow.next;
+    fast = fast.next.next;
+  }
+  return false;
+}
+```
+
 ### 链表有环的话返回入口节点
 
 ```js
