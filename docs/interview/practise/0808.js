@@ -11,6 +11,24 @@
  * 10.手写驼峰转换
  */
 
+function reverseNode(root) {
+  var cur = root;
+  var pre = null;
+  while (cur) {
+    var next = cur.next;
+    cur.next = pre;
+    pre = cur;
+    cur = next;
+  }
+  return pre;
+}
+
+function thousand(str) {
+  var reg = /(?!^)(?=(\d{3})+$)/g;
+  return str.replace(reg, ',');
+}
+thousand('123456789');
+
 function deleteNode(head, val) {
   var dummy = {
     val: 0,

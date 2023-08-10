@@ -27,27 +27,31 @@ nav:
 
 ### 函数柯里化
 
-当函数有多个参数的时候，我们可以对函数进行改造，只接收部分参数，然后返回一个函数继续等待接收剩余参数，并且返回相应的结果。
+柯里化的定义: **接收一部分参数，返回一个函数接收剩余参数，接收足够参数后，执行原函数**。
+
+当柯里化函数接收到足够参数后，就会执行原函数，如何去确定何时达到足够的参数呢？
+
+有两种思路：
+
+1.通过函数的 length 属性，获取函数的形参个数，形参的个数就是所需的参数个数 2.在调用柯里化工具函数时，手动指定所需的参数个数,所以需要判断形参和 fn.length
 
 ```js
-function curry(fn) {
+function curry2(fn) {
   var arr = [];
-  return function judge(...rest) {
-    console.log(fn.lengt, 'fn.lengt');
-    console.log(rest.length, 'rest.length');
-    if (fn.length === rest.length) {
-      var val = fn.apply(this, arr);
-      arr = [];
-      return val;
-    } else {
+  return function temp(...rest) {
+    if (rest.length) {
       arr.push(...rest);
-      return judge;
+      return temp;
+    } else {
+      var res = fn.apply(this, arr);
+      arr = [];
+      return res;
     }
   };
 }
-var add = (...rest) => rest.reduce((a, b) => a + b, 0);
-var sum = curry(add);
-sum(1)(2)(3)();
+var sum = (...rest) => rest.reduce((a, b) => a + b, 0);
+var fn = curry2(sum);
+fn(1)(2)(3)(4)();
 ```
 
 ## 参考
