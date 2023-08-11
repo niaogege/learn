@@ -12,6 +12,24 @@
  * 11. 手写reduce以及利用reduce实现数组的map方法
  */
 
+function mockAjax(url, options) {
+  var xhr = new XMLHttpRequest();
+  return new Promise((resolve, reject) => {
+    xhr.open(url, options, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === xhr.DONE) {
+        if (xhr.status === 200) {
+          res = JSON.parse(xhr.responseText);
+          resolve(res);
+        } else {
+          reject('error');
+        }
+      }
+    };
+    xhr.send();
+  });
+}
+
 function asyncToGenerator(G) {
   return function (...rest) {
     var gen = G.apply(this, rest);

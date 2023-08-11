@@ -151,16 +151,73 @@ var lengthOfLongestSubstring = function(s) {
 lengthOfLongestSubstring('abcabcbb')
 ```
 
-### [盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
+### [11.盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)
+
+给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。
+
+找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
+
+返回容器可以储存的最大水量。
+
+```js
+/**
+ * 两条垂直线的距离越远越好，两条垂直线的最短长度也要越长越好。
+ * 若要下一个矩阵面积比当前面积来得大，必须要把 height[left] 和 height[right] 中较短的垂直线往中间移动，看看是否可以找到更长的垂直线
+ * @param {number[]} height
+ * @return {number}
+ */
+var maxArea = function (height) {
+  var maxArea = null;
+  var start = 0;
+  var end = height.length - 1;
+  while (start <= end) {
+    var w = end - start;
+    var h = Math.min(arr[start], arr[end]);
+    maxArea = Math.max(maxArea, w * h);
+    if (height[start] < height[end]) {
+      start++;
+    } else {
+      end--;
+    }
+  }
+  return maxArea;
+};
+```
 
 ### [20. 有效的括号](https://leetcode.cn/problems/valid-parentheses/)
+
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+
+有效字符串需满足：
+
+- 左括号必须用相同类型的右括号闭合。
+- 左括号必须以正确的顺序闭合。
+- 每个右括号都有一个对应的相同类型的左括号。
+
+  1.输入：s = "()[]{}" 输出：true 2.输入：s = "[()]" 输出：true
 
 ```js
 /**
  * @param {string} s
  * @return {boolean}
  */
-var isValid = function (s) {};
+var isValid = function (s) {
+  var m = new Map([
+    [')', '('],
+    ['}', '{'],
+    [']', '['],
+  ]);
+  var data = [];
+  for (let i = 0; i < s.length; i++) {
+    var item = s[i];
+    if (m.has(item) && m.get(item) === data[data.length - 1]) {
+      data.pop();
+    } else {
+      data.push(item);
+    }
+  }
+  return data.length === 0;
+};
 ```
 
 ### 删除链表的一个节点
@@ -193,6 +250,7 @@ var deleteNode = function (head, val) {
 1.递归解法
 
 ```js
+// 前序 根左右
 function preorder(tree) {
   var res = []
   var dfs = (node) {
@@ -200,10 +258,66 @@ function preorder(tree) {
   }
   return res
 }
+// 中序 左根右
+
+// 后序 左右根
 ```
 
 2.迭代解法
 
 ```js
+// 前序 根左右
+// 进栈 右 左
+// 出栈 左 右
+function preOrder(root, res = []) {
+  if (!root) return res;
+  var stack = [root];
+  while (stack.length) {
+    var cur = stack.pop();
+    res.push(cur.val);
+    if (cur.right) {
+      stack.push(cur.right);
+    }
+    if (cur.left) {
+      stack.push(cur.left);
+    }
+  }
+  return res;
+}
 
+// 中序 左根右
+function preOrder(root, res = []) {
+  if (!root) return res;
+  var stack = [];
+  let cur = root;
+  while (cur || stack.length) {
+    if (cur) {
+      cur = cur.left;
+      stack.push(cur);
+    } else {
+      cur = stack.pop();
+      res.push(cur.val);
+      cur = cur.right;
+    }
+  }
+}
+
+// 后序 左右根
+function preOrder(root, res = []) {
+  if (!root) return res;
+  var stack = [root];
+  while (stack.length) {
+    var cur = stack.pop();
+    res.push(cur.val);
+    if (cur.left) {
+      stack.push(cur.left);
+    }
+    if (cur.right) {
+      stack.push(cur.right);
+    }
+  }
+  return res.reverse();
+}
 ```
+
+### 二叉树层序遍历
