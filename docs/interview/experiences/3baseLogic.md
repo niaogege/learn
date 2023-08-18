@@ -321,3 +321,10 @@ function preOrder(root, res = []) {
 ```
 
 ### 二叉树层序遍历
+
+```js
+/**
+ *
+ */
+function levelOrder(root) {}
+```

@@ -79,5 +79,20 @@ Array.prototype.myFlat = function (num = 1) {
   return arr;
 };
 var test = [1, [2, 3, 4], [[5, 6, 7]]];
+
+Array.prototype.myFlatten2 = function () {
+  var arr = Array.prototype.slice.call(this) || [];
+  var stack = [...arr];
+  var res = [];
+  while (stack.length) {
+    var cur = stack.pop();
+    if (Array.isArray(cur)) {
+      stack.push(...cur);
+    } else {
+      res.push(cur);
+    }
+  }
+  return res;
+};
 test.myFlat();
 ```

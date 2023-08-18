@@ -263,4 +263,37 @@ function hashrouter() {
 2.通过pushState 去改变浏览器的 location.pathname 属性值
 3.通过监听popstate事件，手动执行回调函数，匹配相应路由
  */
-function historyRouter() {}
+function historyRouter() {
+  // 第一次加载的时候，不会执行 hashchange 监听事件，默认执行一次
+  // DOMContentLoaded 为浏览器 DOM 加载完成时触发
+  window.addEventListener('DOMContentLoaded', load);
+  window.addEventListener('popstate', popStateChange);
+  let routerView = '';
+  function load() {
+    routerView = document.getElementById('route-view');
+    popStateChange();
+    var aList = document.querySelectorAll('a[href]');
+    aList.forEach((e) => {
+      e.addEventListener('click', function (target) {
+        target.preventDefault();
+        var href = e.getAttribute('href');
+        // pushstate方法能改变浏览器url pathName 且不会刷新页面
+        history.pushState(null, '', href);
+        // popstate只能监听到手动点击浏览器的前进或者返回
+        popStateChange();
+      });
+    });
+  }
+  function popStateChange() {
+    switch (location.pathname) {
+      case '/page1':
+        routerView.innerText = 'this is Page1';
+        break;
+      case '/page2':
+        routerView.innerText = 'this is Page2';
+        break;
+      default:
+        routerView.innerText = 'this is Page default';
+    }
+  }
+}

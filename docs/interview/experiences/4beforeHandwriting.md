@@ -422,7 +422,13 @@ Function.prototype.mockCall = function (context, ...args) {
 
 ## new
 
-step one: 创建一个空对象 obj; step two: 将空对象的隐式原型（proto）指向构造函数的 prototype。 step three: 使用 apply 改变 this 的指向 step four: 如果无返回值或者返回一个非对象值，则将 obj 返回作为新对象；如果返回值是一个新对象的话那么直接返回该对象。
+step one: 创建一个空对象 obj;
+
+step two: 将空对象的隐式原型（proto）指向构造函数的 prototype。
+
+step three: 使用 apply 改变 this 的指向
+
+step four: 如果无返回值或者返回一个非对象值，则将 obj 返回作为新对象；如果返回值是一个新对象的话那么直接返回该对象。
 
 ```js
 function mockNew(con, ...rest) {
@@ -449,16 +455,21 @@ console.log(test1);
 
 ```js
 function mockInstanceof(target, origin) {
+  target = Object.getPrototypeOf(target);
   while (target) {
-    if (target.__proto__ === origin.prototype) {
+    if (target === origin.prototype) {
       return true;
     }
-    target = target.__proto__;
+    target = Object.getPrototypeOf(target);
   }
   return false;
 }
 console.log([1, 2] instanceof Array); // true
 mockInstanceof([1, 2], Array); // true
+
+function mockInstanceOf(l, r) {
+  return r.prototype.isPrototypeof(l);
+}
 ```
 
 ## curry 函数柯里化
