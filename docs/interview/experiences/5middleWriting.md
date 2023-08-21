@@ -16,6 +16,8 @@ nav:
 - 模板字符串解析
 - 驼峰转化
 - 十六进制转 rgb 或者 rgb 转十六进制
+- 手写 es6 中的 class
+- 手写 es6 中的 extends
 
 ## 虚拟 dom 转换为真实 dom
 
@@ -27,6 +29,10 @@ VDom 实现一般来说是这四个步骤
 - 将两个虚拟 DOM 对象的差异应用到真正的 DOM 树
 
 前端框架就是通过这样的对象结构来描述界面的，然后把它渲染到真实 DOM 上
+
+**通过 DOM 不同的 api (比如 document.createElement/document.createTextNode) 递归创建 dom 和设置属性(比如 dom.addEventListener/dom.setAttribute)，这就是 vdom 的渲染流程。」**
+
+通过不同的 DOM API 创建和设置属性，返回最终的真实 DOM
 
 ```js
 const vnode = {
@@ -66,10 +72,11 @@ const vnode = {
  * tag = text 生成文本节点 如果是文本类型，那么就要用 document.createTextNode 来创建文本节点。
  */
 function render(vnode, parent = null) {
+  const mount = parent ? (el) => parent.appendChild(el) : (el) => el;
   if (isTextdom(vnode)) {
-    return document.createTextNode(vnode);
+    return mount(document.createTextNode(vnode));
   } else if (isElementDom(vnode)) {
-    const dom = document.createElement(vnode);
+    const dom = mount(document.createElement(vnode));
     for (const child of vnode.children) {
       render(child, dom);
     }
@@ -165,4 +172,77 @@ function rgbToHex(str) {
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
 rgbToHex(`rgb(255, 255, 255)`);
+
+// #ffffff => rgb(255,255,255)
+```
+
+## 手写 es6 中的 class
+
+## 手写 es6 中的 extends
+
+1.类的属性和方法以及原型上的属性和方法需要继承 2.类的静态属性和方法需要子类继承
+
+```js
+function extend(Child, Parent, proto) {
+  var prototype = Object.create(Parent.prototype); // 1
+  prototype.constructor = Child; // 2 父类的构造函数指向子类
+  Child.prototype = prototype; // 3 子类的原型执行父类原型
+  Object.setPrototypeOf(Child, Parent); // 类的静态属性需要子类继承
+  for (var k in proto) {
+    Child.prototype[k] = proto[k];
+  }
+}
+// test
+function Par(name) {
+  this.name = name;
+}
+Par.prototype.logName = function () {
+  console.log(`My name is ${this.name}`);
+};
+
+Par.staticFn = function () {
+  return 'staticFn';
+};
+
+function Child(name, age) {
+  Par.call(this, name);
+  this.age = age;
+}
+
+extend(Child, Par, {
+  logAge() {
+    console.log(`my age is ${this.age}`);
+  },
+});
+var c1 = new Child('cpp', 32);
+c1.age;
+c1.logAge();
+Child.staticFn();
+
+class A {
+  constructor(name) {
+    this.name = name;
+  }
+  logName() {
+    console.log('My name is ' + this.name + '.');
+  }
+  static staticFn() {
+    return 'staticFn';
+  }
+}
+
+class AA extends A {
+  constructor(name, age) {
+    super(name);
+    this.age = age;
+  }
+
+  logAge() {
+    console.log("I'm " + this.age + ' years old.');
+  }
+}
+var a = new AA('xiaolan', 10);
+a.logName(); //My name is xiaolan
+a.logAge(); //I'm 10 years old.
+a.staticFn();
 ```

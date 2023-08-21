@@ -65,17 +65,22 @@ console.log(test.prop);
 
 ### 静态方法
 
-类相当于实例的原型，所有在类中定义的方法，都会被实例继承。如果在一个方法前，加上**static**关键字，就表示该方法**不会被实例继承**，而是直接通过类来调用，这就称为“静态方法”。
+类相当于实例的原型，**所有在类中定义的方法，都会被实例继承**。如果在一个方法前，加上**static**关键字，就表示该方法**不会被实例继承**，而是直接通过类来调用，这就称为“静态方法”。
+
+> 类的静态方法会被子类继承
 
 ```js
 class Foo {
   static getName() {
     return 'cpp';
   }
+  getName() {
+    return 'wmh';
+  }
 }
 Foo.getName(); // cpp
 var test1 = new Foo();
-test1.getName(); // VM486:2 Uncaught TypeError: test1.getName is not a function
+test1.getName(); // wmh
 ```
 
 注意，如果静态方法包含 this 关键字，这个 this 指的是类，而不是实例。
@@ -97,7 +102,7 @@ Foo.getName(); // static
 
 ### 静态属性
 
-静态属性指的是 Class 本身的属性，即**Class.propName**，而不是定义在实例对象（this）上的属性。
+静态属性指的是 Class 本身的属性，即**Class.propName**，而不是定义在**实例对象（this）**上的属性。
 
 ```js
 // 老写法
@@ -133,7 +138,7 @@ tt.#count; // Uncaught SyntaxError: Private field '#count' must be declared in a
 
 ## 继承
 
-[](../js/5extend.md)
+[js 继承](../js/5extend.md)
 
 ## 作用域以及作用域链以及上下文
 

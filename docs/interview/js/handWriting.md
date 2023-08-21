@@ -333,7 +333,7 @@ function debounce(fn, delay) {
 function mockFlatten(res) {
   return res.reduce((acc, cur) => {
     if (Array.isArray(cur)) {
-      var anther = mockFlatter(cur);
+      var anther = mockFlatten(cur);
       return [...acc, ...anther];
     }
     return [...acc, cur];

@@ -31,7 +31,7 @@ nav:
 
 ### prototype
 
-每个函数都有一个 prototype 属性，就是我们经常在各种例子中看到的那个 prototype ，比如：
+每个**函数**都有一个 prototype 属性，就是我们经常在各种例子中看到的那个 prototype ，比如：
 
 ```js
 function Person() {}
@@ -54,7 +54,7 @@ console.log(person2.name); // Kevin
 
 ### `__proto__`(实例与实例原型关系)
 
-这是每一个 JavaScript 对象(除了 null )都具有的一个属性，叫`__proto__`，这个属性会指向该对象的原型。
+这是每一个 JavaScript 对象(除了 null )都具有的一个属性，叫`__proto__`，实例属性会指向该对象的原型。
 
 ```js
 function Person() {}
@@ -84,7 +84,7 @@ var person = new Person();
 console.log(person.__proto__ === Person.prototype); // true
 console.log(Person.prototype.contructor === Person); // true
 // es5方法 Object.getPrototypeof(person) 相当于person.__proto__
-console.log(Object.getPrototypeof(person) === Person.prototype);
+console.log(Object.getPrototypeOf(person) === Person.prototype);
 ```
 
 注意一个细节
@@ -421,7 +421,7 @@ ES6 提供了 Class 关键字来实现类的定义，Class 可以通过 **extend
 - super
 - extends
 
-对于该继承的效果和寄生组合继承方式一样
+对于该继承的效果和**寄生组合**继承方式一样
 
 ```js
 class Parent {
