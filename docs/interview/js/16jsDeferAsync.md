@@ -103,7 +103,7 @@ async 脚本： `<script src="***.js" charset="utf-8" async></script>`
 
 一句话概括：
 
--async 是异步加载，加载完会立即执行，执行的时候会阻塞 html 文档解析。
+- async 是异步加载，加载完会立即执行，执行的时候会阻塞 html 文档解析。
 
 - defer 也是异步加载脚本，等 Html 文档解析完成之后再去执行脚本
 
@@ -111,7 +111,7 @@ async 脚本： `<script src="***.js" charset="utf-8" async></script>`
 
 CRP: critical Render Path 指与当前用户操作有关的内容。例如用户刚刚打开一个页面，首屏的显示就是当前用户操作相关的内容，具体就是从浏览器收到 HTML、CSS 和 JavaScript 等资源并对其进行处理从而渲染出 Web 页面。
 
-另一种大白话：关键渲染路径(Critical Rendering Path)是浏览器将 HTML，CSS 和 JavaScript 转换为屏幕上的像素所经历的步骤序列。**优化关键渲染路径(CRP)可提高渲染性能**。
+另一种大白话：关键渲染路径(Critical Rendering Path)是浏览器将 HTML，CSS 和 JavaScript 转换为屏幕上的像素所经历的**步骤序列**。**优化关键渲染路径(CRP)可提高渲染性能**。
 
 ## DOMContentLoaded 跟 load
 
