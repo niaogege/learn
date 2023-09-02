@@ -11,6 +11,8 @@ nav:
   path: /interview
 ---
 
+[唤起 App 在转转的实践](https://zhuanlan.zhihu.com/p/479355506)
+
 <!-- 面试中的重点，划重点 -->
 <!-- 工作中有接触，算是一种回归和总结 -->
 

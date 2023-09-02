@@ -12,6 +12,22 @@
  * 11.二叉树迭代遍历
  */
 
+function minDepth(root) {
+  if (root == null) return 0;
+  var leftDepth = minDepth(root.left);
+  let rightDepth = minDepth(root.right);
+
+  // 如果左子树为空 右子树不为空  1+右子树深度
+  if (root.left == null && root.right) {
+    return 1 + rightDepth;
+  }
+  if (root.left && root.right == null) {
+    return 1 + leftDepth;
+  }
+  let res = Math.min(leftDepth, rightDepth) + 1;
+  return res;
+}
+
 function treeMaxHeight(root) {
   if (root == null) return 0;
   let leftDepth = treeMaxHeight(root.left); // 左
