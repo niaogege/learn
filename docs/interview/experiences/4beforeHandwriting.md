@@ -1236,7 +1236,8 @@ function makePostRequest(url, cb, userName) {
 
 ```js
 function jsonp({ url, option = {}, callback = 'callback' }) {
-  var funcName = callback;
+  // 防止全局污染 随用随记一个函数名
+  var funcName = 'JSONP_CB' + Math.random().toString().slice(2);
   const script = document.createElement('script');
   var params = [];
   for (var key in data) {
@@ -1244,9 +1245,7 @@ function jsonp({ url, option = {}, callback = 'callback' }) {
   }
   url = url.indexOf('?') > 0 ? url + '&' : url + '?';
   url += params.join('&');
-  scriptNode.src = url + '?callback=' + callback;
-  script.async = true;
-  script.type = 'text/javascript';
+  scriptNode.src = url + '?callback=' + funcName;
   document.body.appendChild(script);
   window[funcName] = function (data) {
     callback && callback(data);

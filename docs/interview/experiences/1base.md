@@ -16,7 +16,8 @@ nav:
 - new 手写
 - bind 手写
 - apply 和 call 手写
-- es6 继承手写
+- 如何实现 es6 中的 class
+- es5 继承手写
 - 深浅拷贝
 - 冒泡排序
 - 选择排序
@@ -218,13 +219,43 @@ var tt1 = curry2(map);
 tt1(1)(2)(3);
 ```
 
-### es6 继承
+### 如何实现 es6 中的 class
 
 ```js
+function checkNew(instance, con) {
+  if (!(instance instanceof con)) {
+    throw new TypeError('new must be invoked')
+  }
+}
+
+function setDefine(target, obj) {}
+
+function mockClass(con, proto, staticArr)
 
 ```
 
-### 如何使用 es5 实现继承
+### 如何用 es5 实现继承
+
+第一步： 创建对象，基于父类原型创建一个副本 prototype
+
+第二步： 增强对象，弥补因重写原型而失去的默认的 constructor 属性
+
+第三步： 指定对象，将副本 prototype 赋值给子类型的原型属性
+
+第四步： 父类的静态属性需要子类继承
+
+```js
+function mockExtends(child, parent, proto) {
+  var parentProto = Object.create(parent.proptype); // 1
+  parentProto.constructor = child; // 2
+  child.prototype = parentProto; // 3
+  // 继承静态属性
+  Object.setPrototypeOf(child, parent);
+  for (let key in proto) {
+    child.proptype[key] = proto[key];
+  }
+}
+```
 
 ### 深浅拷贝
 

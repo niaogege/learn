@@ -175,13 +175,14 @@ function postorder(root, res = []) {
 }
 postorder(node);
 
-function jsonp(url, cb = 'callback') {
+function jsonp(url, cb) {
+  const funName = 'JSONP_callBack';
   var srcipt = document.createElement('script');
-  url = url + '?callback=' + cb;
+  url = url + '?callback=' + funName;
   srcipt.src = url;
   script.type = 'text/javascript';
   document.body.appendChild(srcipt);
-  window[cb] = function (data) {
+  window[funName] = function (data) {
     cb && cb(data);
     delete window[cb];
     document.body.removeChild(srcipt);
