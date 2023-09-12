@@ -22,7 +22,7 @@ nav:
 
 > 然后所有的这些都是基本，只是合格工程师需要掌握的基础知识而已 !
 
-![interview.png](https://www.bythewayer.com/img/interview0105.png)
+![前端面试.png](https://s2.loli.net/2022/06/23/Z5V4FuNXb7GdrhE.png)
 
 ## 面试
 
