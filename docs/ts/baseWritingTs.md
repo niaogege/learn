@@ -24,6 +24,7 @@ nav:
 - OptionalKeys<T>
 - Intersection<T1, T2>
 - Unique<T>
+- TupleToUnion<T>
 ```
 
 ### 比较两个类型是否相等

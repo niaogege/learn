@@ -11,6 +11,8 @@ nav:
   path: /interview
 ---
 
+简单手写版
+
 ```js
 var dispatch = (config) => {
   return new Promise((resolve, reject) => {
