@@ -28,7 +28,7 @@ class MyPromise {
     }
     executor(onResolve)
   }
-  then((onResolved) {
+  then(onResolved) {
     return new MyPromise((resolve) => {
       this.cbs.push(() => {
         const res = onResolved(this.data)
@@ -525,7 +525,7 @@ let p3 = new PromiseTest((resolve, reject) => {
   });
 ```
 
-### promise 异常捕获
+### Promise 异常捕获
 
 ```js
 var p1 = new Promise((resolve, reject) => {
@@ -542,7 +542,13 @@ p1.then((res) => {
   })
   .catch((err) => {
     console.log('p1 catch:', err);
+  })
+  .finally((e) => {
+    console.log('cpp finally');
   });
+
+// p1 catch: p1 is rejected
+// cpp finally
 ```
 
 ## 参考

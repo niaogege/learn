@@ -30,13 +30,17 @@ nav:
 - 如何调试 ssr?
 - 如何调试 vite+ts 配置出来的 ssr 项目
 
+## 渲染
+
+以现在前端流行的 react 和 vue 框架为例。react 中的 jsx 和 vue 里面的模板，都是是无法直接在浏览器运行的。将它们转换成可在浏览器中运行的 html，这个过程被称为渲染。
+
 ## 什么是服务端渲染
 
 服务器端渲染（Server-Side Rendering）是指由服务端完成页面的 HTML 结构拼接的页面处理技术，发送到浏览器，然后为其绑定状态与事件，成为完全可交互页面的过程。
 
 csr 和 ssr 最大的区别在于前者页面渲染是由 js 负责进行的，而后者则是由服务端直接返回 html 让浏览器直接渲染
 
-服务器端渲染和客户端渲染的差异，决定了服务器端渲染在**爬虫** 关键词爬取的精准度上会远胜客户端渲染，使得站点更容易获得相关关键词更高的排名。
+服务器端渲染和客户端渲染的差异，决定了服务器端渲染在 **爬虫** 关键词爬取的精准度上会远胜客户端渲染，使得站点更容易获得相关关键词更高的排名。
 
 ### 同构
 
@@ -51,7 +55,7 @@ csr 和 ssr 最大的区别在于前者页面渲染是由 js 负责进行的，�
 
 如果用服务端渲染，务必保持服务端塞给 react 组件的数据跟浏览器端数据保持一致
 
-所谓同构，通俗的讲，就是一套 React 代码在服务器上运行一遍，到达浏览器又运行一遍。**服务端渲染完成页面结构,DOM 拼接**，**浏览器端渲染完成事件绑定**, 不仅是**模板页面渲染**，后面的**路由**，**数据的请求**都涉及到同构的概念。可以理解成，服务器端渲染都是基于同构去展开的
+所谓同构，通俗的讲，就是一套 React 代码在服务器上运行一遍，到达浏览器又运行一遍。**服务端渲染完成页面结构,DOM 拼接**，**浏览器端渲染完成事件绑定**, 不仅是**模板页面渲染**，后面的**路由**，**数据的请求**都涉及到同构的概念。可以理解成，服务端渲染都是基于同构去展开的
 
 > 服务端负责静态 dom 的拼接，而客户端负责事件的绑定
 
@@ -185,7 +189,7 @@ module.exports = merge(common, {
 
 ### 脱水 Dehydrate
 
-window 绑定的数据给到客户端 store 客户端的 store 初始数据从 **window.context** 里面拿,然后放到 redux 注入到 app.js 这样所有的组件都能拿到 redux 里的数据
+window 绑定的数据给到客户端 store, 客户端的 store 初始数据从 **window.context** 里面拿,然后放到 redux 注入到 app.js,这样所有的组件都能拿到 redux 里的数据
 
 ```js
 // store/index.js
@@ -227,7 +231,7 @@ ReactDom.hydrate(<App />, document.getElementById('app'));
 </script>
 ```
 
-非常容易遭受 XSS 攻击，JSON.stringify 可能会造成 script 注入,使用 serialize-javascript 库进行处理，这也是同构应用中最容易被忽视的细节。另一个规避这种 XSS 风险的做法是：将数据传递个页面中一个隐藏的 textarea 的 value 中，textarea 的 value 自然就不怕 XSS 风险了。
+非常容易遭受 XSS 攻击，**JSON.stringify** 可能会造成 script 注入,使用 **serialize-javascript** 库进行处理，这也是同构应用中最容易被忽视的细节。另一个规避这种 XSS 风险的做法是：将数据传递个页面中一个隐藏的 textarea 的 value 中，textarea 的 value 自然就不怕 XSS 风险了。
 
 [ssr api](https://www.cnblogs.com/ayqy/p/react-ssr-api.html)
 
