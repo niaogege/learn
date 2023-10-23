@@ -7,6 +7,11 @@
  * 6.Promisify手写
  */
 
+function thousand(str) {
+  return str.replace(/(?!^)(?=(\d{3})+$)/gi, ',');
+}
+thousand('123456789');
+
 function OutputSecond() {
   var arr = [1, 2, 3];
   return arr.reduce((p, cur) => {
@@ -116,3 +121,8 @@ function Promisify(fn) {
     });
   };
 }
+
+function thousand2(str) {
+  return str.replace(/(?!^)(?=(\d{3})+$)/g, ',');
+}
+thousand2('123456789');
