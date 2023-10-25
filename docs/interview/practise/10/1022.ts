@@ -17,7 +17,7 @@ var tree = {
   ],
 };
 function render2(vnode, parent) {
-  var mount = parent ? (el) => parent.appenChild(el) : (el) => el;
+  var mount = parent ? (el) => parent.appendChild(el) : (el) => el;
   if (typeof vnode === 'string' || typeof vnode === 'number') {
     return mount(document.createTextNode(vnode));
   } else {
@@ -29,7 +29,7 @@ function render2(vnode, parent) {
       });
     }
     vnode.children.forEach((child) => {
-      dom.appenChild(render(child));
+      dom.appendChild(render(child));
     });
   }
 }
