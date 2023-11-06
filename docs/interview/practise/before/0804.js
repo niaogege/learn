@@ -139,7 +139,7 @@ function inorder(root, res = []) {
   if (!root) return res;
   var cur = root;
   var stack = [];
-  while (cur && stack.length) {
+  while (cur || stack.length) {
     if (cur) {
       stack.push(cur);
       // 左
@@ -161,7 +161,7 @@ function inorder(root, res = []) {
 function postorder(root, res = []) {
   if (!root) return res;
   var stack = [root];
-  while (cur && stack.length) {
+  while (stack.length) {
     var cur = stack.pop();
     res.push(cur.val);
     if (cur.left) {

@@ -67,6 +67,25 @@ const inorderTraversal = (root) => {
   return res;
 };
 inorderTraversal(node);
+
+function inorder(root, res = []) {
+  if (!root) return res;
+  var cur = root;
+  var stack = [];
+  while (cur || stack.length) {
+    if (cur) {
+      stack.push(cur);
+      // 左
+      cur = cur.left;
+    } else {
+      cur = stack.pop();
+      // 根
+      res.push(cur.val);
+      // 右
+      cur = cur.right;
+    }
+  }
+}
 ```
 
 ### 前序遍历
@@ -85,6 +104,19 @@ function preTraversal(root) {
     }
     root = stack.pop();
     root = root.right;
+  }
+  return res;
+}
+function tarversePre(node) {
+  var res = [];
+  var stack = [node];
+  while (stack && stack.length) {
+    var first = stack.pop();
+    if (first) {
+      res.push(first.val);
+    }
+    first.right && stack.push(first.right);
+    first.left && stack.push(first.left);
   }
   return res;
 }
@@ -108,6 +140,20 @@ function postOrderTraversal(root) {
     root = root.left;
   }
   return res;
+}
+
+function tarversePost(node) {
+  var res = [];
+  var stack = [node];
+  while (stack && stack.length) {
+    var first = stack.pop();
+    if (first) {
+      res.push(first.val);
+    }
+    first.left && stack.push(first.left);
+    first.right && stack.push(first.right);
+  }
+  return res.reverse();
 }
 ```
 
