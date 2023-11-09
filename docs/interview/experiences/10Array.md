@@ -21,7 +21,7 @@ nav:
 
 ### 手写 instanceof
 
-用于检测构造函数的原型是否在某一个实例的原型链上
+用于检测构造函数的原型是否在某一个实例的**原型链上**
 
 ```js
 function mockInstanceof(left, right) {

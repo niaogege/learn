@@ -204,3 +204,4 @@ Backend For Frontend，简称 BFF，**服务于前端的后端**，并非是一�
 ### 参考资料
 
 - [nodejs 学习笔记](https://github.com/chyingp/nodejs-learning-guide)
+- [谈谈 node 架构中的线程进程的应用场景、事件循环及任务队列](https://mp.weixin.qq.com/s/huyn95OyOz45J93B3WGXdA)

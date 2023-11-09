@@ -3,7 +3,7 @@ title: nodejs cluster
 order: 1
 group:
   title: node
-  order: 0
+  order: 2
 nav:
   order: 5
   title: 'node'

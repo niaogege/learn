@@ -3,7 +3,7 @@ title: Node学习笔记
 order: 2
 group:
   title: study
-  order: 0
+  order: 1
   path: /study
 nav:
   order: 1

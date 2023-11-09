@@ -12,20 +12,33 @@ nav:
 
 # js 基础
 
-## 手写 const
+## 手写 let/const
+
+> const 实际上保证的，并不是变量的值不得改动，而是变量指向的那个内存地址不得改动。
+
+对于简单类型的数据（数值、字符串、布尔值），值就保存在变量指向的那个内存地址，因此等同于常量。
+
+但对于复合类型的数据（主要是对象和数组），变量指向的内存地址，保存的只是一个指向实际数据的指针，const 只能保证这个指针是固定的（即总是指向另一个固定的地址），至于它指向的数据结构是不是可变的，就完全不能控制了。
 
 ```js
-function _const(obj, key, value) {
-  const desc = {
-    value,
+// let 在 es6 出现以前我们一般使用无限接近闭包的形式或者立即执行函数的形式来定义不会被污染的变量。
+(function () {
+  var a = 'cpp';
+  console.log(a);
+})();
+// const 声明一个只读的常量。一旦声明，常量的值就不能改变
+function mockConst(key, val) {
+  window.key = val;
+  Object.defineProperty(window, key, {
+    value: val,
     writable: false,
-  };
-  Object.defineProperty(obj, key, desc);
+    enumerable: false,
+    configurable: false,
+  });
 }
-
-_const({}, 'obj', { i: 1 }); //定义obj
-obj.b = 3; //可以正常给obj的属性赋值
-obj = {};
+mockConst('obj', { i: 1 }); //定义obj
+console.log('obj');
+obj.i = 3; //可以正常给obj的属性赋值
 ```
 
 ## mock Promise(精简，重点是明白其中异步调用原理）
