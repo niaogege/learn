@@ -4,10 +4,68 @@
  * 3.函数重载
  * 4.vue解析模板
  * 5.链接符大小写
+ * 6.curryFn
  */
+
+function curryFn(fn) {
+  var arr = [];
+  return function temp(...rest) {
+    if (rest.length) {
+      arr.push(...rest);
+      return temp;
+    } else {
+      var val = fn.apply(this, arr);
+      arr = [];
+      return val;
+    }
+  };
+}
+var sum = (...rest) => rest.reduce((pre, cur) => cur + pre, 0);
+var getCurry = curryFn(sum);
+getCurry(1)(2)(3)();
+
+function curryFn1(fn) {
+  function temp(...rest) {
+    if (rest.length === fn.length) {
+      return fn.apply(this, rest);
+    } else {
+      return (...arg) => temp(...rest.concat(arg));
+    }
+  }
+  return temp;
+}
+
+var sum1 = (a, b, c) => a + b + c;
+var getCurry2 = curryFn1(sum1);
+getCurry2(22)(11)(33);
+
+/**
+ * 根据不同参数得到不同结果
+ * @param obj
+ * @param fn
+ */
+function heavyLoad(obj, name, fn) {
+  var oldFn = obj[name];
+  obj[name] = function (...rest) {
+    if (fn.length === rest.length) {
+      fn.apply(this, rest);
+    } else {
+      oldFn.apply(this, rest);
+    }
+  };
+}
+var person = { name: 'cpp' };
+heavyLoad(person, 'fn', () => {
+  console.log('cpp');
+});
+heavyLoad(person, 'fn', (a, b) => {
+  console.log(a, b);
+});
+person.fn();
+person.fn('11', '222');
+
 function chartUppercase(str) {
   return str.replace(/[-|@](^\w)/g, (m, p) => {
-    console.log(p, 'ppp');
     return p.toUpperCase();
   });
 }

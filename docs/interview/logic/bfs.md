@@ -85,6 +85,7 @@ function inorder(root, res = []) {
       cur = cur.right;
     }
   }
+  return res;
 }
 ```
 
@@ -112,9 +113,7 @@ function tarversePre(node) {
   var stack = [node];
   while (stack && stack.length) {
     var first = stack.pop();
-    if (first) {
-      res.push(first.val);
-    }
+    res.push(first.val);
     first.right && stack.push(first.right);
     first.left && stack.push(first.left);
   }
@@ -147,9 +146,7 @@ function tarversePost(node) {
   var stack = [node];
   while (stack && stack.length) {
     var first = stack.pop();
-    if (first) {
-      res.push(first.val);
-    }
+    res.push(first.val);
     first.left && stack.push(first.left);
     first.right && stack.push(first.right);
   }
