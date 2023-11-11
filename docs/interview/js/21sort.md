@@ -68,7 +68,7 @@ var insertSort2 = (arr) => {
       arr[prev + 1] = arr[prev];
       prev--;
     }
-    arr[prev] = temp;
+    arr[prev + 1] = temp;
   }
   return arr;
 };

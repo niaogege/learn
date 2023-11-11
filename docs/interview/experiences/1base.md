@@ -265,7 +265,7 @@ function deepClone(obj) {
   if (typeof obj !== 'object') return;
   var res = Array.isArray(obj) ? [] : {};
   for (let key in obj) {
-    if (obj.hasOwnproperty(key)) {
+    if (obj.hasOwnProperty(key)) {
       var val = obj[key];
       res[key] = typeof val === 'object' ? deepClone(val) : val;
     }
@@ -277,8 +277,54 @@ function deepClone(obj) {
 ### 冒泡排序
 
 ```js
-function bubbleSort() {}
-function selectSort() {}
+function bubbleSort(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    for (let j = 0; j < arr.length - i; j++) {
+      if (arr[j] > arr[j + 1]) {
+        let temp = arr[j + 1];
+        arr[j + 1] = arr[j];
+        arr[j] = temp;
+      }
+    }
+  }
+  return arr;
+}
+bubbleSort([2, 33, 44, 1, 7, 999]);
+// 选择最小的放前面
+function selectSort(arr) {
+  var min = 0;
+  for (let i = 0; i < arr.length; i++) {
+    min = i;
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[min] > arr[j]) {
+        min = j;
+      }
+    }
+    var temp = arr[i];
+    arr[i] = arr[min];
+    arr[min] = temp;
+  }
+  return arr;
+}
+selectSort([2, 33, 44, 1, 7, 999]);
+// 插入排序
+function insertSort(arr) {
+  var pre;
+  for (let i = 1; i < arr.length; i++) {
+    pre = i - 1;
+    var cur = arr[i];
+    while (pre >= 0 && arr[pre] >= cur) {
+      arr[pre + 1] = arr[pre];
+      pre--;
+    }
+    arr[pre] = cur;
+  }
+  return arr;
+}
+insertSort([2, 33, 44, 1, 7, 999]);
 
-function quickSort() {}
+function quickSort(arr) {
+  var res = [];
+  return res;
+}
 ```
