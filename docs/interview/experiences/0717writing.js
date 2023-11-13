@@ -151,6 +151,6 @@ function randomArr(arr) {
 randomArr(['哈哈', '嘟嘟', '嘎嘎', 'wqreqw', '戈戈', '戈戈22', 'ccc', '卧槽', '武侠', '女生']);
 
 function randomArrOne(arr) {
-  return arr[Math.floor(Math.random * arr.length)];
+  return arr[Math.floor(Math.random() * arr.length)];
 }
 randomArrOne(['哈哈', '嘟嘟', '嘎嘎', 'wqreqw', '戈戈', '戈戈22', 'ccc', '卧槽', '武侠', '女生']);
