@@ -13,19 +13,19 @@ nav:
 
 ### i++和++i
 
--前缀版（++i）：操作符位于变量的前面，表示**先递增(递减)**，后执行语句； -后缀版（i++）：操作符位于变量的后面，表示**先执行语句**，后递增(递减)；
+-前缀版（++i）：操作符位于变量的前面，表示**先递增(递减)**，后执行语句；
+
+-后缀版（i++）：操作符位于变量的后面，表示**先执行语句**，后递增(递减)；
 
 ```js
 var i = 0;
 console.log(++i); // 先递增在执行console 1
 var num = 0;
 console.log(num++); // 先执行console 在递增 0
-```
 
-- 手写二叉树的层序遍历（DFS）
-
-```js
-var levelOrder = function (root) {};
+for (let i = 0; i < 5; i++) {
+  console.log(i);
+}
 ```
 
 - 打印题
@@ -228,4 +228,43 @@ var {
 }
 console.log(key, 'key') // {name: 'cpp'}
 console.log(keys, 'keys') // cpp
+```
+
+### print(fb) 执行后打印什么
+
+```js
+function print(fb) {
+  const b = 200;
+  fb();
+}
+const b = 100;
+function fb() {
+  console.log(b); // 100
+}
+print(fb);
+
+function create() {
+  let a = 100;
+  return function () {
+    console.log(a);
+  };
+}
+const fn = create();
+const a = 200;
+fn();
+```
+
+## 生成器函数打印
+
+```js
+function* test(x) {
+  const y = 2 * (yield x + 1);
+  const z = yield y / 3;
+  console.log('x', x, 'y', y, '2', z);
+  return x + y + z;
+}
+const b = test(5);
+console.log(b.next());
+console.log(b.next(12));
+console.log(b.next(13));
 ```

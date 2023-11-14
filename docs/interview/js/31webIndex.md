@@ -11,6 +11,42 @@ nav:
   path: /interview
 ---
 
+[PerformanceNavigationTiming](https://developer.mozilla.org/zh-CN/docs/Web/API/PerformanceNavigationTiming/timestamp-diagram.svg)
+
+## 常用指标说明
+
+- [前端性能优化技术指标](https://www.developers.pub/article/1141491)
+
+- FCP: First contentful paint 首次内容绘制 这个指标用于记录页面首次绘制**文本、图片、非空白 Canvas 或 SVG 的**时间。
+
+- LCP: largest contentful Paint 最大内容绘制，用于记录视窗内**最大的元素绘制的时间**，该时间会随着页面渲染变化而变化，因为页面中的最大元素在渲染过程中可能会发生改变
+
+- FID: first input delay 首次输入延迟，记录在 FCP 和 TTI 之间用户首次与页面交互时响应的延迟
+
+- TTI: time to interactive 首次可交互时间，测量页面**所有资源加载成功**并能够可靠地快速响应用户输入的时间
+
+- TBT: total block time 阻塞总时间，记录在 FCP 到 TTI 之间所有长任务的阻塞时间总和
+
+- CLS: cumulative layout shift 累计布局偏移，**记录了页面上非预期的位移波动**
+
+Time To First Byte (TTFB) ：**发出页面请求到接收到应答数据第一个字节所花费的时间**；
+
+First Paint (FP) ：第一个像素对用户可见的时间。
+
+First Contentful Paint (FCP)： 第一条内容可见所需的时间。
+
+Largest Contentful Paint (LCP) ：加载页面主要内容所需的时间。
+
+Time To Interactive (TTI)： 页面变为交互并可靠响应用户事件的时间。
+
+关键指标：
+
+- LCP 代表了页面的速度指标，虽然还存在其他的一些体现速度的指标，但是上文也说过 LCP 能体现的东西更多一些。一是指标实时更新，数据更精确，二是代表着页面最大元素的渲染时间，通常来说页面中最大元素的快速载入能让用户感觉性能还挺好。
+
+- FID 代表了页面的交互体验指标，毕竟没有一个用户希望触发交互以后页面的反馈很迟缓，交互响应的快会让用户觉得网页挺流畅。
+
+- CLS 代表了页面的稳定指标，尤其在手机上这个指标更为重要。因为手机屏幕挺小，CLS 值一大的话会让用户觉得页面体验做的很差。
+
 ## H5 可用性指标
 
 ### 白屏率
@@ -48,3 +84,70 @@ nav:
 8.资源加载时间(resourceLoad) 资源加载时间(resourceLoad)，表示了页面 domContentLoad 事件触发之后至页面 onLoad 事件触发中加载外部资源(图片，CSS 等)所花费的时间
 
 9.页面完全加载(load) 页面完全加载(load)，表示页面从开始加载至 onload 事件触发的时间，越短越好
+
+## 如何计算 FCP 和 LCP
+
+### 白屏时间计算 FCP
+
+白屏时间指的是，从网页开始加载，到你网页第一个字节出现，这段时间称为 白屏时间，也叫 First Content Paint，也就是第一次内容渲染出来的时候，简称 FCP
+
+### LCP
+
+首屏时间指的是，从网页加载，到你网页第一屏渲染完成，这段时间称为 首屏时间，很多项目都是用 Larget Content Paint 来衡量，也就是最大内容渲染出来的时候，简称 LCP
+
+### 区别
+
+其实也就是 FCP、LCP 的区别
+
+FCP： 第一个字节渲染出来的时间，这时候用户看不到主体网页结构 LCP： 最大内容渲染出来的时间，这时候用户已经能看到主体网页的结构了
+
+### 如何计算
+
+如何计算网页开始加载的时间呢？我们可以通过 `performance.timing.navigationStart`去获取到 网页开始加载的时间
+
+```js
+1. 计算白屏时间
+const navigationStart = performance.timing.navigationStart;
+let FCP = 0;
+const observer = new PerformanceObserver(function (list, obj) {
+  const entries = list.getEntries();
+  entries.forEach((entry) => {
+    if (entry.name === 'first-contentful-paint') {
+      // 计算 FCP
+      FCP = Math.max(entry.startTime - navigationStart, 0);
+      console.log(FCP, 'fcp');
+      // 计算完立即取消监听
+      observer.disconnect();
+    }
+  });
+});
+observer.observe({
+  type: 'paint', // paint
+  buffered: true,
+});
+```
+
+### 计算最大内容绘制时间 LCP
+
+```js
+const navigationStart = performance.timing.navigationStart;
+let LCP = 0;
+const observer = new PerformanceObserver(function (list, obj) {
+  const entries = list.getEntries();
+  entries.forEach((entry) => {
+    LCP = Math.max(entry.startTime - navigationStart, 0);
+    console.log(LCP, 'LCP');
+    // 计算完立即取消监听
+    observer.disconnect();
+  });
+});
+observer.observe({
+  type: 'largest-contentful-paint',
+  buffered: true,
+});
+```
+
+## 参考
+
+- [如何计算 FCP 白屏时间和 LCP 首屏渲染，或者叫最大内容渲染](https://mp.weixin.qq.com/s/66_ssrmZpzeddm3FugiMFQ)
+- [Navigation Timing API](https://developer.mozilla.org/zh-CN/docs/Web/API/Performance_API/Navigation_timing)
