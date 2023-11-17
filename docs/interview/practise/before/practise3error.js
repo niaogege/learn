@@ -27,8 +27,8 @@ Array.prototype.myMap = function (fn, context) {
 Array.prototype.myReduce = function (fn, init) {
   let arr = Array.prototype.slice.call(this) || [];
   let res = init ? init : arr[0];
-  for (let i = 0; i < arr.length; i++) {
-    res = fn.call(res, arr[i], i, arr);
+  for (let i = init ? 0 : 1; i < arr.length; i++) {
+    res = fn.call(null, res, arr[i], i, arr);
   }
   return res;
 };

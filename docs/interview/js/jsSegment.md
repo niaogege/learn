@@ -11,6 +11,25 @@ nav:
   path: /interview
 ---
 
+### check 数据类型
+
+```js
+function checkDataType(obj) {
+  return Object.prototype.toString.call(obj).slice(8, -1).toLocaleLowerCase();
+}
+checkDataType('chenpp');
+```
+
+### 手机脱敏
+
+```js
+// 展示前三位和后四位
+function safe(str) {
+  return str.replace(/^(\d{3})(\d{4})(\d{4})$/, '$1****$2');
+}
+safe('18551602693');
+```
+
 ### i++和++i
 
 -前缀版（++i）：操作符位于变量的前面，表示**先递增(递减)**，后执行语句；
