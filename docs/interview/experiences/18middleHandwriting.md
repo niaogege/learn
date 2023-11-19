@@ -415,53 +415,6 @@ const inputArray = [
   { id: 5, parentId: null, name: 'Node 2' },
   { id: 6, parentId: 5, name: 'Node 2.1' },
 ];
-
-// 递归
-function getChild(arr, res, pid) {
-  for (let item of arr) {
-    if (item.parentId === pid) {
-      var newItem = {
-        ...item,
-        children: [],
-      };
-      res.push(newItem);
-      getChild(arr, newItem.children, item.id);
-    }
-  }
-}
-
-function arrToTree(arr, pid = null) {
-  var res = [];
-  getChild(arr, res, pid);
-  return res;
-}
-arrToTree(inputArray);
-// 遍历
-function mapArrToTree(arr) {
-  var res = [];
-  var map = {};
-  for (let item of arr) {
-    var id = item.id;
-    var pid = item.parentId;
-    if (!map[id]) {
-      map[id] = {
-        children: [],
-      };
-    }
-    map[id] = {
-      ...item,
-      children: map[id]['children'],
-    };
-    var temp = map[id];
-    if (pid === null) {
-      res.push(temp);
-    } else {
-      map[pid].children.push(temp);
-    }
-  }
-  return res;
-}
-mapArrToTree(inputArray);
 ```
 
 ## 12.使用 Promise 封装异步加载图片的方法
@@ -701,7 +654,7 @@ class MockIterator {
 
 ```js
 var cards = ({
-  suits: ["♣️", "♦️", "♥️", "♠️"],
+  suits:["♣️", "♦️", "♥️", "♠️"],
   court: ['J', 'Q', 'K', 'A'],
   [Symbol.iterator]: function*() {
     for (let suit of this.suits) {
