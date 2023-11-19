@@ -55,11 +55,11 @@ Dom 直出： 所有的页面返回的 html 都是最终呈现的结果，并且
 
 ## Hash
 
-浏览器地址上 # 后面的变化，是可以被监听的，浏览器为我们提供了原生监听事件 hashchange ，它可以监听到如下的变化：
+浏览器地址上 # 后面的变化，是可以被监听的，浏览器为我们提供了原生监听事件 **hashchange** ，它可以监听到如下的变化：
 
 - 点击 a 标签，改变了浏览器地址
 - 浏览器的前进后退行为
-- 通过 window.location 方法，改变浏览器地址
+- 通过 window.location.hash 属性，改变当前页面展示
 
 ```html
 <!DOCTYPE html>
@@ -104,7 +104,7 @@ Dom 直出： 所有的页面返回的 html 都是最终呈现的结果，并且
 
 [MDN History](https://developer.mozilla.org/zh-CN/docs/Web/API/History_API) [MDN popstate](https://developer.mozilla.org/zh-CN/docs/Web/API/Window/popstate_event)
 
-history 模式依赖的是原生事件 popstate ，下面是来自 MDN 的解释：
+history 模式依赖的是原生事件 **popstate** ，下面是来自 MDN 的解释：
 
 每当激活同一文档中不同的历史记录条目时，popstate 事件就会在对应的 window 对象上触发。如果当前处于激活状态的历史记录条目是由 history.pushState() 方法创建的或者是由 history.replaceState() 方法修改的，则 popstate 事件的 state 属性包含了这个历史记录条目的 state 对象的一个拷贝。**调用 history.pushState() 或者 history.replaceState() 不会触发 popstate 事件**。popstate 事件只会在浏览器某些行为下触发，比如点击后退按钮（或者在 JavaScript 中调用 history.back() 方法）。即，在同一文档的两个历史记录条目之间导航会触发该事件。
 
@@ -155,10 +155,10 @@ history.replaceState() 的使用与 history.pushState() 非常相似，区别在
 
 #### 实现历史模式
 
-问题：
+history 模式依赖的是原生事件 **popstate** ，每当激活同一文档中不同的历史记录条目时，popstate 事件就会在对应的 window 对象上触发问题：
 
 - a 标签的点击事件也是不会被 popstate 监听
-- 调用 history.pushState() 或者 history.replaceState() 不会触发 popstate 事件
+- 调用 **history.pushState()** 或者 **history.replaceState()** 不会触发 popstate 事件
 
 方案：
 
@@ -170,7 +170,7 @@ history.replaceState() 的使用与 history.pushState() 非常相似，区别在
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>hash</title>
+    <title>History</title>
   </head>
   <body>
     <div>
@@ -204,11 +204,12 @@ history.replaceState() 的使用与 history.pushState() 非常相似，区别在
       });
     }
     function popStateChange() {
-      switch (location.pathname) {
-        case '/page1':
+      const lastPathName = location.pathname.split('/').pop();
+      switch (lastPathName) {
+        case 'page1':
           routerView.innerText = 'this is Page1';
           break;
-        case '/page2':
+        case 'page2':
           routerView.innerText = 'this is Page2';
           break;
         default:
@@ -218,6 +219,8 @@ history.replaceState() 的使用与 history.pushState() 非常相似，区别在
   </script>
 </html>
 ```
+
+> 这里注意，不能在浏览器直接打开静态文件，需要通过 web 服务，启动端口去浏览网址。
 
 ## 其他方式实现简单路由
 
