@@ -487,7 +487,7 @@ var p2 = new Promise((resolve, reject) => {
 });
 ```
 
-### 接口什么时候会 canceled
+### 接口什么时候会 canceled?
 
 ## 参考
 

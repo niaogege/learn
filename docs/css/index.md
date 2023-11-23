@@ -11,7 +11,7 @@ nav:
   path: /interview
 ---
 
-## flex 相关
+## 1.flex 相关
 
 ### 常用用法
 
@@ -59,7 +59,7 @@ flex-basis: 0%;
 
 ### flex 布局优缺点
 
-## BFC， 介绍下 BFC、IFC、GFC 和 FFC
+## 2.BFC， 介绍下 BFC、IFC、GFC 和 FFC
 
 块级格式化上下文，是 web 页面盒模型布局里的 css 渲染模式，指一个独立的渲染区域或指一个隔离的独立容器。
 
@@ -94,15 +94,59 @@ flex-basis: 0%;
 
 Inline Formate Context 行内格式化上下文
 
-## float 如何清除浮动
+## 3.float 如何清除浮动
 
-## 怎么让一个 div 水平垂直居中
+## 4.怎么让一个 div 水平垂直居中
 
-## 第 57 题：分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景。
+```js
+div {
+  display: grid;
+  place-items: center;
+}
+```
 
-## 如何解决移动端 Retina 屏 1px 像素问题
+## 5.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景。
 
-## 介绍下重绘和回流（Repaint & Reflow），以及如何进行优化
+## 6.使用 css 实现无线循环的动画
+
+想要实现 CSS 动画的无限循环，其实主要就是要使用 **animation-iteration-count** 这个属性，将其设置为 **infinite**，动画就会一直循环播放
+
+```html
+<image class="anima" mode="widthFix" @click="nav" src="@/static/1_btn.png"></image>
+```
+
+```css
+.anima {
+  animation-name: likes; // 动画名称
+  animation-direction: alternate; // 动画在奇数次（1、3、5...）正向播放，在偶数次（2、4、6...）反向播放。
+  animation-timing-function: linear; // 动画执行方式，linear：匀速；ease：先慢再快后慢；ease-in：由慢速开始；ease-out：由慢速结束；ease-in-out：由慢速开始和结束；
+  animation-delay: 0s; // 动画延迟时间
+  animation-iteration-count: infinite; //  动画播放次数，infinite：一直播放
+  animation-duration: 1s; // 动画完成时间
+}
+
+@keyframes likes {
+  0% {
+    transform: scale(1);
+  }
+  25% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(0.85);
+  }
+  75% {
+    transform: scale(0.9);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+```
+
+## 7.如何解决移动端 Retina 屏 1px 像素问题
+
+## 8.介绍下重绘和回流（Repaint & Reflow），以及如何进行优化
 
 [【面试系列一】如何回答如何理解重排和重绘](https://mp.weixin.qq.com/s/x7Z4kHxgtTK4GtemqyOy5Q)
 
@@ -120,7 +164,7 @@ Inline Formate Context 行内格式化上下文
 
 重绘(Repaint): 元素的 **样式发生变动** ，但是位置没有改变。此时在关键渲染路径中的 **Paint** 阶段，**将渲染树中的每个节点转换成屏幕上的实际像素**，这一步通常称为绘制或栅格化。
 
-## 涉及 css 的性能优化
+## 9.涉及 css 的性能优化
 
 - 减少 DOM 树渲染时间（譬如降低 HTML 层级、标签尽量语义化等等）
 - 减少 CSSOM 树渲染时间（降低选择器层级等等）
@@ -131,11 +175,11 @@ Inline Formate Context 行内格式化上下文
 - 如果页面 css 较少，尽量使用内嵌式
 - 为了减少白屏时间，页面加载时先快速生成一个 DOM 树
 
-## 已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改。
+## 10.已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改。
 
 `<img src="1.jpg" style="width:480px!important;”>`
 
-## 说说 CSS 选择器以及这些选择器的优先级
+## 11.说说 CSS 选择器以及这些选择器的优先级
 
 - !important
 - 内联样式（1000）
@@ -144,7 +188,7 @@ Inline Formate Context 行内格式化上下文
 - 元素选择器(p/span)/伪元素选择器（0001）(:afrer/before)
 - 关系选择器(兄弟 后代 A + B 紧邻组合)/通配符选择器（0000）
 
-## link 和@import 区别
+## 11.link 和@import 区别
 
 ## 参考
 

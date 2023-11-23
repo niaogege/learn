@@ -21,9 +21,17 @@ nav:
 
 ## 核心概念
 
-state: 全局的状态对象，唯一且不可变。 store: 调用 createStore 函数生成的对象，里面封入了定义在 createStore 内部用于操作全局状态的方法，用户通过这些方法使用 Redux。 action: 描述状态如何修改的对象，固定拥有一个 type 属性，通过 store 的 dispatch 方法提交。 reducer: 实际执行状态修改的纯函数，由用户定义并传入，接收来自 dispatch 的 action 作为参数，计算返回全新的状态，完成 state 的更新，然后执行订阅的监听函数。
+state: 全局的状态对象，唯一且不可变。
 
-storeEnhancer: createStore 的高阶函数封装，用于加强 store 的能力，redux 提供的 applyMiddleware 是官方实现的一个 storeEnhancer。 middleware: dispatch 的高阶函数封装，由 applyMiddleware 把原 dispatch 替换为包含 middleware 链式调用的实现。
+store: 调用 createStore 函数生成的对象，里面封入了定义在 createStore 内部用于操作全局状态的方法，用户通过这些方法使用 Redux。
+
+action: 描述状态如何修改的对象，固定拥有一个 type 属性，通过 store 的 dispatch 方法提交。
+
+reducer: 实际执行状态修改的纯函数，由用户定义并传入，接收来自 dispatch 的 action 作为参数，计算返回全新的状态，完成 state 的更新，然后执行订阅的监听函数。
+
+storeEnhancer: createStore 的高阶函数封装，用于加强 store 的能力，redux 提供的 applyMiddleware 是官方实现的一个 storeEnhancer。
+
+middleware: dispatch 的高阶函数封装，由 **applyMiddleware** 把原 dispatch 替换为包含 middleware 链式调用的实现。
 
 ## 核心 api
 
@@ -283,11 +291,12 @@ export default function compose(...funs) {
   );
 }
 // demo
-// var double = (x) => x * 2;
-// var three = (x) => x * 3;
-// var sum = compose(double, three);
-// var total = sum(10);
-// console.log(total); // 60
+var double = (x) => x * 2;
+var three = (x) => x * 3;
+var one = (x) => x;
+var sum = compose(one, double, three);
+var total = sum(10);
+console.log(total); // 60
 ```
 
 - demo
@@ -341,7 +350,7 @@ const App = () => {
 
 ### 什么是 thunk
 
-calculation delay 延迟计算，看下 demo 就明白了
+calculation delay **延迟计算**，看下 demo 就明白了
 
 ```js
 function wrapped(arg) {
@@ -357,9 +366,10 @@ thunk('wmh');
 
 ### react-thunk
 
-dispatch 派发 action 的时候阔以传一个 function，就是一个标准的 redux middleware
+dispatch 派发 action 的时候阔以传一个 function，就是一个标准的 **redux middleware**
 
 ```js
+// redux-thunk 源码
 const createThunkMiddleware(extra) {
   return ({dispatch, getState}) => next => action => {
     if (typeof action === 'function') {

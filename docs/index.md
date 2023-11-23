@@ -26,11 +26,11 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 - [@个人博客](https://bythewayer.com/) ｜ [www 个人博客](https://www.bythewayer.com/)
 - [个人站点老的](http://niaogege.cn/)
-- [爱我所爱](https://bythewayer.com/love)
-- [保持热爱技术的心](https://bythewayer.com/learn)
+- [爱我所爱](http://love.bythewayer.com/)
+- [保持热爱技术的心](http://learn.bythewayer.com/)
 - [后端接口测试 nestjs 项目](https://bythewayer.com/api/v1/cats/query?id=890)
 - [react 源码调试](http://niaogege.cn/debugger-react-resource/)
-- [nextjs 项目](https://bythewayer.com/next)
+<!-- - [nextjs 项目](https://bythewayer.com/next) -->
 
 <!-- ![interview.png](https://s2.loli.net/2022/07/21/ZIaF8mitBkeSwfq.png) -->
 

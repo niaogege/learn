@@ -132,7 +132,6 @@ import MagicString from 'magic-string';
 export default function replace(options = {}) {
   return {
     name: 'replace',
-
     renderChunk(code, chunk) {
       const id = chunk.fileName;
       if (!keys.length) return null;
@@ -171,7 +170,7 @@ transform 钩子的入参分别为**模块代码、模块 ID**，返回一个包
 
 这里我们把关注点放到 renderChunk 函数本身，可以看到有两个入参，分别为 **chunk 代码内容、chunk 元信息**，返回值跟 transform 钩子类似，既可以返回包含 code 和 map 属性的对象，也可以通过返回 null 来跳过当前钩子的处理。
 
-## 产物生成最后一步 generateBundle
+## 产物生成最后一步 **generateBundle**
 
 generateBundle 也是 **Async + Sequential** 异步串行的钩子，你可以在这个钩子里面自定义删除一些无用的 chunk 或者静态资源，或者自己添加一些文件。这里我们以 Rollup 官方的 html 插件来具体说明，这个插件的作用是通过拿到 Rollup 打包后的资源来生成包含这些资源的 HTML 文件，源码简化后如下所示:
 
