@@ -64,6 +64,8 @@ export default defineConfig({
 
 ### 发布到个人一级站点 bytheway.com
 
+阿里云和腾讯云部署
+
 切记需要切换到 bytheway 分支，然后手动上次静态资源，如何做到，如果是打包能自动部署，也就是自动把打包后的资源上传到服务器的指定路径就好了？ ———————— 已解决，通过 githubAction 进行自动化部署,请看 **/.github/workflows/deploy.yml**文件
 
 ```js
