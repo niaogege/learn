@@ -11,7 +11,25 @@ nav:
   path: /interview
 ---
 
-回一下链表的数据结构：
+需要干掉的归纳：
+
+- 1.反转链表
+- 2.回文链表
+- 3.环形链表
+- 4.两两交换链表中的节点
+- 5.链表中倒数第 k 个节点
+- 7.从尾到头打印链表
+- 8.合并两个有序链表
+- 9.相交链表
+- 10.链表中环的入口节点
+- 11.删除链表的节点
+- 12.删除链表的倒数第 N 个结点
+- 13.移除链表元素
+- 14.两数相加
+- 15.二叉搜索树转链表
+- [16.K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/description/)
+
+## 回一下链表的数据结构：
 
 数组跟链表的区别
 
@@ -78,7 +96,7 @@ var reverseList = function (head) {
 };
 ```
 
-### 排序链表
+## 排序链表
 
 最初的最笨的方法
 
@@ -126,7 +144,7 @@ var deleteDuplicates = function (head) {
 };
 ```
 
-### [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+## [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
 
 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
 
@@ -205,13 +223,7 @@ var mergeTwoLists = function (list1, list2) {
 };
 ```
 
-### LRU
-
-```js
-class LRU {}
-```
-
-### 删除节点
+## 删除节点
 
 ```js
 var deleteNode = function (head, val) {
@@ -247,3 +259,5 @@ var test = {
 };
 deleteNode(test, 3);
 ```
+
+## [16.K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/description/)

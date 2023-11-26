@@ -16,3 +16,5 @@ nav:
 - [换肤](../common/changeTheme.md)
 - [骨架屏](../common/skeleton.md)
 - [工具函数](../common/tools.md)
+- [前端监控系统](../common/5monitor.md)
+- [长列表滚动](../common/6virtualSrcoll.md)

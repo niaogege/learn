@@ -1,5 +1,5 @@
 ---
-title: 202311手写汇总(7)-手撕热门算法题
+title: 手撕热门算法题1
 order: 19
 group:
   order: 0
@@ -10,7 +10,13 @@ nav:
   path: /interview
 ---
 
+汇总题目来源于[codetop](https://codetop.cc/home)
+
 > 如果能积累 hot100 道题，基本面试算法没啥大问题 1120
+
+> [Hot 100](https://leetcode.cn/studyplan/top-100-liked/)
+
+> [面试经典 150 题](https://leetcode.cn/studyplan/top-interview-150/)
 
 ```js
 /**

@@ -10,3 +10,5 @@ nav:
   title: 'interview'
   path: /interview
 ---
+
+[如何整出一个前端监控系统？](https://mp.weixin.qq.com/s/c2kLRyKuZsiXE-nqwEukow)

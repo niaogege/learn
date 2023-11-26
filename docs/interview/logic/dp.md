@@ -15,7 +15,9 @@ nav:
 
 [三叶](https://mp.weixin.qq.com/s/xmgK7SrTnFIM3Owpk-emmg)
 
-> 接下来的重点刷题对象
+> 接下来的重点刷题对象 202207
+
+> 在看 DP 已经是 202311，过去了 16 个月
 
 - [746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
 - [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
@@ -54,6 +56,60 @@ var fib = function (n) {
     dp[i] = dp[i - 1] + dp[i - 2];
   }
   return dp[n];
+};
+```
+
+### [买卖股票的最佳时机](https://programmercarl.com/0121.%E4%B9%B0%E5%8D%96%E8%82%A1%E7%A5%A8%E7%9A%84%E6%9C%80%E4%BD%B3%E6%97%B6%E6%9C%BA.html#%E6%80%9D%E8%B7%AF)
+
+解题思路：动规五部曲分析如下：
+
+#### 1.确定 dp 数组（dp table）以及下标的含义
+
+dp[i][0] 表示第 i 天持有股票所得最多现金
+
+dp[i][1] 表示第 i 天不持有股票所得最多现金
+
+#### 2.确定递归公式
+
+如果第 i 天持有股票即 dp[i][0]， 那么可以由两个状态推出来
+
+- 第 i-1 天就持有股票，那么就保持现状，所得现金就是昨天持有股票的所得现金 即：dp[i - 1][0]
+- 第 i 天买入股票，所得现金就是买入今天的股票后所得现金即：-prices[i] 那么 dp[i][0]应该选所得现金最大的，so: dp[i][0] = Math.max(dp[i - 1][0], -prices[i])
+
+如果第 i 天不持有股票即 dp[i][1]， 也可以由两个状态推出来
+
+- 第 i-1 天就不持有股票，那么就保持现状，所得现金就是昨天不持有股票的所得现金 即：dp[i - 1][1]
+- 第 i 天卖出股票，所得现金就是按照今天股票价格卖出后所得现金即：prices[i] + dp[i - 1][0]
+
+dp[i][1] = Math.max(dp[i-1][1], prices[i]+dp[i-1][0])
+
+#### 3.dp 数组初始化
+
+由递推公式 dp[i][0] = max(dp[i - 1][0], -prices[i]); 和 dp[i][1] = max(dp[i - 1][1], prices[i] + dp[i - 1][0]);可以看出
+
+其基础都是要从 dp[0][0]和 dp[0][1]推导出来。
+
+dp[0][0]表示第 0 天持有的股票，此时的持有股票就一定是买入股票了，因为不可能有前一天推出来，所以 dp[0][0] -= prices[0];
+
+dp[0][1]表示第 0 天不持有的股票，不持有股票那么现金就是 0，所以 dp[0][1] = 0;
+
+#### 4.确定遍历顺序从递推公式可以看出 dp[i]都是由 dp[i - 1]推导出来的，那么一定是从前向后遍历。
+
+#### 5. 举例推导 dp 数组以示例 1，输入：[7,1,5,3,6,4]为例，dp 数组状态如下：
+
+[dp[i][j]](https://code-thinking-1253855093.file.myqcloud.com/pics/20210224225642465.png)
+
+```js
+var maxProfit = (prices) => {
+  var len = prices.length;
+  var dp = new Array(len).fill([0, 0]);
+  dp[0] = [-prices[0], 0];
+  for (let i = 1; i < len; i++) {
+    dp[i][0] = Math.max(dp[i - 1][0], -prices[i]);
+    dp[i][1] = Math.max(dp[i - 1][0] + prices[i], dp[i - 1][1]);
+  }
+  console.table(dp);
+  return dp[len - 1][1];
 };
 ```
 
