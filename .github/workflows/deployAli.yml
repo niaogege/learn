@@ -1,4 +1,4 @@
-name: Deploy
+name: DeployAli
 
 on:
   push:
@@ -36,7 +36,7 @@ jobs:
         with:
           host: '47.101.50.136'
           user: 'root'
-          pass: ${{ secrets.ALI_ }}
+          pass: ${{ secrets.ALI_PASSWORD }}
           connect_timeout: 20s
           first_ssh: |-
             rm -rf $TARGET_DIR
