@@ -11,6 +11,8 @@ nav:
   path: /node
 ---
 
+![Babel编译流程.png](https://s2.loli.net/2023/11/27/Tapqvt1ChNwRzj6.png)
+
 接触 babel，主要有几个小目标：
 
 - AST 语法熟悉

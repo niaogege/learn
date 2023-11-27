@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hover mouse</title>
+  </head>
+  <style>
+    @property --r {
+      syntax: "<length-percentage>";
+      initial-value: 0;
+      inherits: false;
+    }
+
+    html,
+    body {
+      display: grid;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    button {
+      place-self: center;
+      border: 2px solid white;
+      padding: 0 1em;
+      border-radius: 2em;
+      background: radial-gradient(
+          circle at var(--x, 0%) var(--y, 0%),
+          #fffce1 calc(var(--r) - 1px),
+          orange var(--r)
+        )
+        border-box;
+      color: white;
+      font: 1.5em/2.25 ubuntu;
+      transition: --r 0.35s;
+    }
+
+    button:hover {
+      --r: 100%;
+      color: black;
+    }
+  </style>
+  <body>
+    <button>Button</button>
+  </body>
+  <script>
+    /**
+     * e为MouseEvent实例，包含
+     * {clientX: 161,clientY: 108}等属性
+     **/
+    function update_position(e) {
+      let _t = e.target;
+      if (_t.tagName.match(/^button$/i)) {
+        // r为DOMRect实例，包含x/y/top/bottom/left/right等属性
+        let r = _t.getBoundingClientRect();
+        ["x", "y"].forEach((c) => {
+          console.log(`${e[`client${c.toUpperCase()}`] - r[c]}px`);
+          _t.style.setProperty(
+            `--${c}`,
+            `${e[`client${c.toUpperCase()}`] - r[c]}px`
+          );
+        });
+      }
+    }
+
+    addEventListener("mouseover", update_position);
+    addEventListener("mouseout", update_position);
+  </script>
+</html>

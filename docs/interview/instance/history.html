@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>History</title>
+  </head>
+  <body>
+    <div>
+      <ul>
+        <li><a href="./page1">page1</a></li>
+        <li><a href="./page2">page2</a></li>
+      </ul>
+      <!--渲染对应组件的地方-->
+      <div id="route-view"></div>
+    </div>
+  </body>
+
+  <script>
+    // historyRouter 历史模式
+    // 基于popstate时间 手动点击和浏览器回退
+    function historyRouter() {
+      window.addEventListener("DOMContentLoaded", load);
+      window.addEventListener("popstate", historyChange);
+      var routerView = document.getElementById("route-view");
+      function load() {
+        var aList = document.querySelectorAll("a");
+        historyChange();
+        for (let aTage of aList) {
+          aTage.addEventListener("click", function (taget) {
+            taget.preventDefault();
+            var href = aTage.getAttribute("href");
+            // 改变路径 同时不会刷新页面
+            history.pushState(null, "", href);
+            historyChange();
+          });
+        }
+      }
+      function historyChange() {
+        var pathName = window.location.pathname.split("/").pop();
+        switch (pathName) {
+          case "page1":
+            routerView.innerHTML = "This is page1";
+            break;
+          case "page2":
+            routerView.innerHTML = "This is page2";
+            break;
+          default:
+            routerView.innerHTML = "This is default";
+        }
+      }
+    }
+    historyRouter();
+  </script>
+</html>
