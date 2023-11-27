@@ -105,6 +105,7 @@ selectSort(tt);
 ## 快速排序
 
 ```js
+// first version
 var quickSort = (arr) => {
   if (arr.length < 2) return arr;
   var base = arr[0]
@@ -121,6 +122,30 @@ var quickSort = (arr) => {
 }
 var tt = [11,3, 2,111,5,6]
 quickSort(tt)
+
+// second verison
+var findLargest = (nums, k) => {
+ var n = nums.length
+ var quickSort = (l,r, k) => {
+  if (l === r) return nums[k]
+  let x = nums[l],i = l-1, j = r+1
+  while(i < j) {
+    while(nums[i] < x) {i++}
+    while(nums[j]>x) {j--}
+    if (i<j) {
+      var temp = nums[i]
+      nums[i] = nums[j]
+      nums[i] = temp
+    }
+  }
+  if (k <= j) {
+    return quickSort(l,j,k)
+  } else {
+    return quickSort(j+1,r, k)
+  }
+ }
+ return quickSort(0, n-1, n-k)
+}
 ```
 
 ## 归并排序
@@ -152,6 +177,48 @@ mergerSort(tt);
 ## 基数排序
 
 ## 堆排序
+
+[215. 数组中的第 K 个最大元素 ](https://leetcode.cn/problems/kth-largest-element-in-an-array/description/)
+
+```js
+function swap(arr, i, j) {
+  var temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+}
+
+function heapify(arr, x, length) {
+  var l = 2 * x + 1;
+  var r = 2 * x + 2;
+  var largest = x;
+  if (l < length && arr[l] > arr[largest]) {
+    largest = l;
+  }
+  if (r < length && arr[r] > arr[largest]) {
+    largest = r;
+  }
+  if (largest != x) {
+    swap(arr, x, largest);
+    // 递归交换以下的是否也建好堆.
+    heapify(arr, largest, length);
+  }
+}
+
+var findKthLargest = function (nums, k) {
+  var size = nums.length;
+  // 建立堆
+  for (var i = parseInt(size / 2) + 1; i >= 0; i--) {
+    heapify(nums, i, size);
+  }
+  // 排序
+  for (var j = size - 1; j >= size - k; j--) {
+    // 得到本次的最大，将最大的与最后一个交换位子
+    swap(nums, 0, j);
+    heapify(nums, 0, j);
+  }
+  return nums[size - k];
+};
+```
 
 ## 参考
 

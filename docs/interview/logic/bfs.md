@@ -154,9 +154,10 @@ function tarversePost(node) {
 }
 ```
 
-### 层序遍历
+### [层序遍历](https://leetcode.cn/problems/binary-tree-level-order-traversal/)
 
 ```js
+// bfs 迭代遍历
 function levelNode(root) {
   if (!root) return [];
   let queue = [root];
@@ -176,6 +177,28 @@ function levelNode(root) {
     }
     res.push(arr);
   }
+  return res;
+}
+
+// dfs
+function dfsLevel(root) {
+  if (!tree) return [];
+  var res = [];
+  var dfs = (node, step, res) => {
+    if (node != null) {
+      if (!res[step]) {
+        res[step] = [];
+      }
+      res[step].push(node.val);
+      if (node.left) {
+        dfs(node.left, step + 1, res);
+      }
+      if (node.right) {
+        dfs(node.right, step + 1, res);
+      }
+    }
+  };
+  dfs(root, 0, res);
   return res;
 }
 ```

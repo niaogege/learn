@@ -73,7 +73,57 @@ nav:
  */
 ```
 
+## 2.反转链表
+
+```js
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var reverseList = function (head) {
+  var pre = null;
+  var cur = head;
+  while (cur) {
+    var next = cur.next;
+    cur.next = pre;
+    pre = cur;
+    cur = next;
+  }
+  return pre;
+};
+```
+
 ## 4.数组中的第 K 个最大元素
+
+## 5.K 个一组链表反转
+
+```js
+var reverseKGroup = function (head, k) {
+  var dummy = {
+    next: null,
+    val: 0,
+  };
+  var prev = dummy;
+  var cur = head;
+  dummy.next = head;
+  let length = 0;
+  while (head !== null) {
+    length++;
+    head = head.next;
+  }
+  for (let i = 0; i < Math.floor(length / k); i++) {
+    for (let j = 0; j < k - 1; j++) {
+      let next = cur.next;
+      cur.next = next.next;
+      next.next = prev.next;
+      prev.next = next;
+    }
+    prev = cur;
+    cur = prev.next;
+  }
+  return dummy.next;
+};
+```
 
 ## 6.三数之和(排序 双指针 去重)
 
