@@ -11,6 +11,24 @@ nav:
   path: /interview
 ---
 
+## 汇总
+
+- 1.flex
+- 2.BFC
+- 3.如何清除浮动
+- 4.怎么让一个 div 水平垂直居中
+- 5.5.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景
+- 6.使用 css 实现无线循环的动画
+- 7.如何解决移动端 Retina 屏 1px 像素问题
+- 8.介绍下重绘和回流（Repaint & Reflow），以及如何进行优化
+- 9.涉及 css 的性能优化
+- 10.已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改。
+- 11.link 和@import 区别
+- 12.如何将文字超出元素的部分变成省略号（...）
+- 13.伪元素和伪类的区别
+
+> 20231129
+
 ## 1.flex 相关
 
 ### 常用用法
@@ -61,7 +79,7 @@ flex-basis: 0%;
 
 ## 2.BFC， 介绍下 BFC、IFC、GFC 和 FFC
 
-块级格式化上下文，是 web 页面盒模型布局里的 css 渲染模式，指一个独立的渲染区域或指一个隔离的独立容器。
+块级格式化上下文，是 web 页面盒模型布局里的 css 渲染模式，指一个独立的渲染区域或指一个**隔离的独立容器**。
 
 > 这块太重要了！！！什么是 BFC,如何触发 BFC,Block Formate Context 块级格式化上下文,一个独立的渲染区域或指一个隔离的独立容器
 
@@ -71,7 +89,7 @@ flex-basis: 0%;
 
 - 浮动元素 float 除了 none 以外的值
 - 定位元素,position(absolute, fixed)
-- overflow 除了 visible 以外的值(hidden/scroll/auto)
+- overflow 除了 **visible** 以外的值(hidden/scroll/auto)
 - display 为下列其中一个(inline-block/table-cell/tabel-caption) / flex /gird
 - html 就是属于一个 BFC
 - 弹性元素（display 为 flex 或 inline-flex 元素的直接子元素）
@@ -94,7 +112,24 @@ flex-basis: 0%;
 
 Inline Formate Context 行内格式化上下文
 
-## 3.float 如何清除浮动
+## 3.如何清除浮动
+
+- 1：给浮动元素的父元素添加高度（扩展性不好）
+- clear:both; 父级元素的最后一个子元素增加一个冗余元素，而且必须是块级元素，否则会无效
+
+```html
+<div class="parent">
+  <div class="child"></div>
+  <div class="child"></div>
+  <div class="child"></div>
+  <div></div>
+  // style: clear: both
+</div>
+```
+
+- 伪元素清除浮动
+
+- 给父元素使用 overflow:hidden;
 
 ## 4.怎么让一个 div 水平垂直居中
 
@@ -152,7 +187,7 @@ div {
 
 > 跟关键渲染路径有什么关系？
 
-关键渲染路径(Critical Rendering Path)是浏览器将 HTML，CSS 和 JavaScript 转换为屏幕上的像素所经历的步骤序列。优化关键渲染路径(CRP)可提高渲染性能。
+**关键渲染路径**(Critical Rendering Path)是浏览器将 HTML，CSS 和 JavaScript 转换为屏幕上的像素所经历的步骤序列。优化关键渲染路径(CRP)可提高渲染性能。
 
 大致步骤是这样：在解析 HTML 时会创建 DOM，HTML 可以请求 JavaScript，而 JavaScript 反过来，又可以更改 DOM。HTML 包含或请求样式，依次来构建 CSSOM。
 
@@ -189,6 +224,42 @@ div {
 - 关系选择器(兄弟 后代 A + B 紧邻组合)/通配符选择器（0000）
 
 ## 11.link 和@import 区别
+
+- 从属关系区别：link 是 HTML 方式， @import 是 CSS 方式即 @import 是 CSS 提供的语法规则，只有导入样式表的作用；link 是 HTML 提供的标签，不仅可以加载 CSS 文件，还可以定义 RSS、rel 连接属性等。
+
+- 加载顺序: css 资源加载时，link 并行加载，@import 浏览器必须下载 CSS 文件来发现导入的资源，然后在渲染之前发起另一个请求来下载它。@import 会降低渲染速度 (link 最大限度支持并行下载，@import 过多嵌套导致串行下载，出现 FOUC)
+
+- 兼容性: 浏览器对 link 支持早于@import，link 作为标签不存在兼容性，@import 是 CSS2.1 才有的语法，故只可在 IE5+ 才能识别
+
+- DOM 可控性区别，可以通过 JS 操作 DOM ，插入 link 标签来改变样式；由于 DOM 方法是基于文档的，无法使用@import 的方式插入样式
+
+## 12.如何将文字超出元素的部分变成省略号（...）
+
+- 单行超出
+
+```css
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+```
+
+- 多行超出
+
+```css
+.mul {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+```
+
+## 13.伪元素和伪类的区别
+
+伪元素: 用于创建一些不在文档树中的元素，并为其添加样式。比如说，我们可以通过:before 来在一个元素前增加一些文本，并为这些文本添加样式。虽然用户可以看到这些文本，但是这些文本实际上不在文档树中。
+
+伪类: 用于给已有元素处于的某个状态时，为其添加对应的样式，这个状态是根据用户行为而动态变化的,比如：hover
 
 ## 参考
 

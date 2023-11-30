@@ -171,3 +171,48 @@ var threeSum = function (nums) {
 };
 threeSum([-1, 0, 1, 2, -1, -4]);
 ```
+
+## [12.搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/description/)
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var search = function (nums, target) {
+  var len = nums.length;
+  if (len == 0) return -1;
+  if (len === 1) return nums[0] === target ? 0 : -1;
+  var l = 0,
+    r = len - 1;
+  while (l < r) {
+    var mid = Math.floor((r - l) / 2 + l);
+    if (nums[mid] === target) return mid;
+    if (nums[0] < nums[mid]) {
+      if (nums[0] < target && target < nums[mid]) {
+        r = mid - 1;
+      } else {
+        l = mid + 1;
+      }
+    } else {
+      if (nums[mid] < target && target < nums[len - 1]) {
+        l = mid + 1;
+      } else {
+        r = mid - 1;
+      }
+    }
+  }
+};
+```
+
+## [17.合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
+
+```js
+function merge(num1, m, num2, n) {
+  for (let i = m; i < m + n; i++) {
+    num1[i] = nums2[i - m];
+  }
+  num1.sort((a, b) => a - b);
+}
+```

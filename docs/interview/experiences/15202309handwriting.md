@@ -46,8 +46,8 @@ nav:
  * 26.解析二维码
  * 27.react中的浅比较
  * 28.获取设备电池信息
- * 29.
- * 30.
+ * 29.js实现一个可移除的监听器
+ * 30.如何自定义一个事件，使某一个对象能够捕获到？
  */
 ```
 
@@ -545,7 +545,7 @@ function promiseLoadImg(src) {
     });
   });
 }
-promiseLoadImg('http://')
+promiseLoadImg('http://www.baidu.com')
   .then((res) => {
     console.log(res);
   })
@@ -751,12 +751,8 @@ const array = [1, 2, 3, 4, 5]; // 4 5 1 2 3
 const k = 2;
 const rotatedArray = rotateArray(inputArray, k);
 console.log(rotatedArray); // 输出: [4, 5, 1, 2, 3]
+
 // first 使用额外的数组
-/**
- * @param {number[]} nums
- * @param {number} k
- * @return {void} Do not return anything, modify nums in-place instead.
- */
 var rotate = function (nums, k) {
   var len = num.length;
   var arr = new Array(len);
@@ -790,7 +786,9 @@ rotate2([1, 2, 3, 4, 5, 6], 2);
 
 ## 21.三数之和
 
-## 24.自定义迭代器遍历斐波那契数列
+> 贼难的一道题
+
+## 24.自定义迭代器遍历斐波那契数列(**Symbol.iterator**)
 
 ```js
 var fibonacci = {
@@ -885,7 +883,7 @@ function parseQrcode() {
 }
 ```
 
-## 27.浅比较
+## 27.shallow 浅比较
 
 ```js
 function shallow(obj1, obj2) {
@@ -921,6 +919,54 @@ navigator.getBattery().then(function (battery) {
 });
 ```
 
-## 参考
+## 29.js 实现一个可移除的监听器(**Controller.abort**)
 
-- []()
+```html
+<body>
+  <table id="outside">
+    <tr>
+      <td id="t1">one</td>
+    </tr>
+    <tr>
+      <td id="t2">two</td>
+    </tr>
+  </table>
+  <script>
+    var controller = new Controller();
+    function modify() {
+      var t2 = document.getElementById('t2');
+      var isFirstT2 = t2.firstChild.nodeValue === 'two';
+      t2.firstChild.nodeValue = isFirstT2 ? 'two' : 'three';
+      if (t2.firstChild.nodeValue === 'three') {
+        controller.abort();
+      }
+    }
+    var ele = documment.getElementById('outside');
+    ele.addEvenetListener('clicl', modify, {
+      signal: controller.signal,
+    });
+  </script>
+</body>
+```
+
+## 30.如何自定义一个事件，使某一个对象能够捕获到？
+
+> 自定义事件需要使用 el.dispatchEvent(event) 方法来触发事件。
+
+```html
+<button type="button" id="btn">点我</button>
+<script>
+  var btn = document.getElementById('btn');
+  var eve = new Event('msg', {});
+  btn.addEvenetListener(
+    'msg',
+    function (e) {
+      console.log('hello');
+    },
+    false,
+  );
+  btn.dispatchEvent(eve); // hello
+</script>
+```
+
+## 参考

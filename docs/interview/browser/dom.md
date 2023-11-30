@@ -332,7 +332,7 @@ w3c 的方法是 **e.preventDefault**()，IE 则是使用 e.returnValue = false;
 
 - mousemove、mouseout 这样的事件，虽然有事件冒泡，但是只能不断通过位置去计算定位，对性能消耗高，因此也是不适合于事件委托
 
-## 如何自定义一个事件，是某一个对象能够捕获到？
+## 如何自定义一个事件，使某一个对象能够捕获到？
 
 ### new Event(type, options)
 

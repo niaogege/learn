@@ -38,7 +38,7 @@ nav:
  * 20.实现数组中的findIndex/find/include
  * 21.[实现对象中的entries/fromEntries/assign](https://mp.weixin.qq.com/s/S-7w8KgG0R5mdFIcCT0Keg)
  * 22.二叉树的最小深度/最大深度(https://programmercarl.com/)
- * 23.TS手写IndexToUnion索引转联合类型/
+ * 23.TS手写IndexToUnion索引转联合类型
  * 24.TS手写Unique 去重
  * 25.[手写axios以及核心组件拦截器](https://mp.weixin.qq.com/s/nmKU-Z1Ewc75HH0NxgvcCw)
  * 26.手写Object.create()的实现
@@ -54,7 +54,7 @@ nav:
  * 36.TS实现内置函数Parameters和ReturnTypes
  * 37.滚动到页面顶部
  * 38.滚动到元素位置
- * 39.桶排序
+ * 39.偏函数
  * 40.如何实现上拉加载下拉刷新
  * 41.私有变量的实现
  * 42.洗牌算法
@@ -245,6 +245,15 @@ function memo(fn) {
     return cache[args] || cache[args] = fn.apply(this, rest)
   }
 }
+
+let complexCalc = (a, b) => {
+  // 执行复杂的计算
+};
+
+let memoCalc = memorize(complexCalc);
+memoCalc(666, 888);
+memoCalc(666, 888); // 从缓存中获取
+
 const once = (fn) => {
   let res, isFirst = true
   return function (...args) {
@@ -524,7 +533,43 @@ maxCount('abcabcabcbbccccc');
 
 ## 32.实现一个 immutable
 
+> 暂时放弃
+
 ## 32.惰性函数
+
+我们现在需要写一个 foo 函数，这个函数返回首次调用时的 Date 对象，注意是首次。
+
+```js
+var foo = function () {
+  var t = new Date();
+  foo = () => {
+    return t;
+  };
+  return foo();
+};
+foo();
+```
+
+由于不同浏览器之间存在一些兼容性问题，这导致了我们在使用一些 Web API 时，需要进行判断. 所谓的惰性载入就是当第 1 次根据条件执行函数后，在第 2 次调用函数时，就不再检测条件，直接执行函数。要实现这个功能，我们可以在第 1 次条件判断的时候，在满足判断条件的分支中覆盖掉所调用的函数，具体的实现方式如下所示：
+
+```js
+function addHandler(ele, type, handler) {
+  if (ele.addEventListener) {
+    addHandler = function (ele, type, handler) {
+      ele.addEventListener(type, handler, false);
+    };
+  } else if (ele.attachEvent) {
+    addHandler = function (ele, type, handler) {
+      ele.attachEvent('on' + type, handler);
+    };
+  } else {
+    addHandler = function (ele, type, handler) {
+      ele['on' + type] = handler;
+    };
+  }
+  return addHandler(ele, type, handler);
+}
+```
 
 ## 33.红灯 3 秒亮一次，黄灯 2 秒亮一次，绿灯 1 秒亮一次；如何让三个灯不断交替重复亮灯？
 
@@ -632,7 +677,47 @@ function smoothScroll(ele) {
 }
 ```
 
-## 39.请求超时设置
+## 39.偏函数
+
+在计算机科学中，偏函数应用（Partial Application）是指固定一个函数的某些参数，然后产生另一个更小元的函数。而所谓的元是指函数参数的个数，比如含有一个参数的函数被称为一元函数。偏函数应用（Partial Application）很容易与函数柯里化混淆，它们之间的区别是：
+
+- 偏函数应用是**固定一个函数的一个或多个参数**，并返回一个可以接收剩余参数的函数；
+- 柯里化是将函数转化为多个嵌套的一元函数，也就是每个函数只接收一个参数。
+
+了解偏函数的使用
+
+```js
+function url(scheme, domain, path) {
+  return `${scheme}://${domain}/${path}`;
+}
+const myGithubPath = partial(url, 'https', 'github.com');
+const profilePath = myGithubPath('semlinker/semlinker');
+const awesomeTsPath = myGithubPath('semlinker/awesome-typescript');
+// https://github.com/semlinker/semlinker
+// https://github.com/semlinker/awesome-typescript
+```
+
+实现一个偏函数：偏函数用于固定一个函数的**一个或多个参数**，并返回一个可以接收剩余参数的函数。基于上述的特点，我们就可以自己实现一个 partial 函数：
+
+```js
+function partial(fn) {
+  let arg = [].slice.call(arguments, 1);
+  return function () {
+    var newArgs = arg.concat([].slice.call(arguments));
+    return fn.apply(this, newArgs);
+  };
+}
+
+// 简单复习下 curry
+function curry(fn) {
+  return function temp(...arg) {
+    if (fn.length === arg.length) {
+      return fn.apply(this, arg);
+    }
+    return (...args) => temp(...args, ...arg);
+  };
+}
+```
 
 ## 40. 下拉刷新和上拉加载
 
@@ -1015,3 +1100,4 @@ thounsand('1878888999');
 - [一文帮你搞定 90% 的 JS 手写题](https://mp.weixin.qq.com/s/uKPVedfQkgEPYoRUtwyeQQ)
 - [前端手写并理解面试常考 code 的思路和运行过程](https://mp.weixin.qq.com/s/Z9tiY0bbpwmEqLEtKmDWOg)
 - [前端设计模式](https://mp.weixin.qq.com/s/9UNJG0MJrAsYKjQK4MAoyg)
+- [这些高阶的函数技术，你掌握了么](https://juejin.cn/post/6892886272377880583?searchId=20231128205315E68CD3641D010A87C8E3#heading-9)

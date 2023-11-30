@@ -152,24 +152,44 @@ var findLargest = (nums, k) => {
 
 顾名思义，分而治之。一般分为以下三个过程：
 
-分解：将原问题分解成一系列子问题。解决：递归求解各个子问题，若子问题足够小，则直接求解。合并：将子问题的结果合并成原问题。
+分解：将原问题分解成一系列子问题。
+
+解决：递归求解各个子问题，若子问题足够小，则直接求解。
+
+合并：将子问题的结果合并成原问题。
 
 ```js
-var mergerSort = (arr) => {
-  var merge = (a, b) => {};
-  var sort = (arr) => {
-    if (arr.length < 2) {
-      return arr;
+function mergerSort(arr) {
+  var merge = (left, right) => {
+    var res = [];
+    var i = 0,
+      j = 0;
+    while (i < left.length && j < right.length) {
+      if (left[i] < right[j]) {
+        res.push(left[i++]);
+      } else {
+        res.push(right[j++]);
+      }
     }
-    let middle = arr.length >> 1;
-    let left = arr.slice(0, middle);
-    let right = arr.slice(middle + 1);
+    while (i < left.length) {
+      res.push(left[i++]);
+    }
+    while (j < right.length) {
+      res.push(right[j++]);
+    }
+    return res;
+  };
+  var sort = (arr) => {
+    if (arr.length < 2) return arr;
+    var mid = Math.floor(arr.length / 2);
+    var left = arr.slice(0, mid);
+    var right = arr.slice(mid);
     return merge(mergerSort(left), mergerSort(right));
   };
   return sort(arr);
-};
-var tt = [11, 3, 2, 111, 5, 6];
-mergerSort(tt);
+}
+
+mergerSort([111, 22, 3, 1, 22, 333]);
 ```
 
 ## 桶排序

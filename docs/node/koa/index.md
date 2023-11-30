@@ -82,6 +82,8 @@ app.listen(9000, '0.0.0.0', () => {
 
 ### koa 中间件实现
 
+[compose 函数](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/0c4f7c41d1b94f379917d0f9bc76064e~tplv-k3u1fbpfcp-zoom-in-crop-mark:1512:0:0:0.awebp)
+
 ```js
 var list = [{ function(next) {} }];
 
@@ -346,3 +348,4 @@ function serve (root, opts) {
 
 - [【Node】深入浅出 Koa 的洋葱模型](https://mp.weixin.qq.com/s/uO-M7VePpBJIUjwHMybfVw)
 - [如何更好地理解中间件和洋葱模型](https://juejin.cn/post/6890259747866411022#heading-3)
+- [这些高阶的函数技术，你掌握了么](https://juejin.cn/post/6892886272377880583?searchId=20231128205315E68CD3641D010A87C8E3)
