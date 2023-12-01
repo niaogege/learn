@@ -42,11 +42,11 @@ nav:
  * 24.TS手写Unique 去重
  * 25.[手写axios以及核心组件拦截器](https://mp.weixin.qq.com/s/nmKU-Z1Ewc75HH0NxgvcCw)
  * 26.手写Object.create()的实现
- * 27.[写一个通用的事件侦听器函数](https://mp.weixin.qq.com/s/uKPVedfQkgEPYoRUtwyeQQ)
+ * 27.写一个通用的事件侦听器函数
  * 28.怎么实现一个sleep
  * 29.对象数组去重
  * 30.查找字符串中出现最多的字符和个数
- * 31.实现一个 immutable
+ * 31.实现一个 immutable!!
  * 32.惰性函数
  * 33.使用睡眠函数实现红绿灯代码，红灯2秒，黄灯1秒，绿灯3秒，循环改变颜色。
  * 34.1s后输出1 2s后输出2 3s后输出3
@@ -463,6 +463,70 @@ function MyObject(target) {
   function F() {}
   F.prototype = target;
   return new F();
+}
+```
+
+## 27.[写一个通用的事件侦听器函数](https://mp.weixin.qq.com/s/uKPVedfQkgEPYoRUtwyeQQ)
+
+```js
+const EventUtils = {
+  // 视能力分别使用dom0||dom2||IE方式 来绑定事件
+  // 添加事件
+  addEvent: function (element, type, handler) {
+    if (element.addEventListener) {
+      element.addEventListener(type, handler, false);
+    } else if (element.attachEvent) {
+      element.attachEvent('on' + type, handler);
+    } else {
+      element['on' + type] = handler;
+    }
+  },
+  // 移除事件
+  removeEvent: function (element, type, handler) {
+    if (element.removeEventListener) {
+      element.removeEventListener(type, handler, false);
+    } else if (element.detachEvent) {
+      element.detachEvent('on' + type, handler);
+    } else {
+      element['on' + type] = null;
+    }
+  },
+  // 获取事件目标
+  getTarget: function (event) {
+    return event.target || event.srcElement;
+  },
+  // 获取 event 对象的引用，取到事件的所有信息，确保随时能使用 event
+  getEvent: function (event) {
+    return event || window.event;
+  },
+  // 阻止事件（主要是事件冒泡，因为 IE 不支持事件捕获）
+  stopPropagation: function (event) {
+    if (event.stopPropagation) {
+      event.stopPropagation();
+    } else {
+      event.cancelBubble = true;
+    }
+  },
+  // 取消事件的默认行为
+  preventDefault: function (event) {
+    if (event.preventDefault) {
+      event.preventDefault();
+    } else {
+      event.returnValue = false;
+    }
+  },
+};
+```
+
+## 28.怎么实现一个 sleep
+
+```js
+function sleep(fn, timer) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(fn());
+    }, timer);
+  });
 }
 ```
 

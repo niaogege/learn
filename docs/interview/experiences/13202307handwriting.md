@@ -366,9 +366,13 @@ flatten([1, 2, [3, 4, [5, 9]]]);
 
 ## 13.手写发布订阅模式
 
+发布订阅模式：订阅者把自己想要订阅的事件注册到调度中心，当发布者发布事件到调度中心（就是该事件被触发），再由调度中心统一调度订阅者注册到调度中心的处理代码。
+
 发布订阅模式跟观察者模式很像，他们其实都有发布者和订阅者，但是他们是有区别的
 
-1.观察者模式的发布和订阅是互相依赖的 2.发布订阅模式的发布和订阅是不互相依赖的，因为有一个统一调度中心
+1.观察者模式的发布和订阅是互相依赖的
+
+2.发布订阅模式的发布和订阅是不互相依赖的，因为有一个统一调度中心
 
 ```js
 class Event {
@@ -1052,6 +1056,18 @@ function mockJsonp(url, cb) {
 mockJsonp('http://xx', (res) => {
   console.log(res);
 });
+
+// 动态加入脚本 并执行回调函数
+function loadScript(url, callback) {
+  const node = document.createElement('script');
+  node.setAttribute('type', 'text/javascript');
+  node.defer = true;
+  node.src = url;
+  node.addEventListener('load', () => {
+    callback && callback();
+  });
+  document.body.appendChild(node);
+}
 ```
 
 ## 33.URL 参数解析

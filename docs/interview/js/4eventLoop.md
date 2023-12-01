@@ -140,9 +140,36 @@ JS 的执行机制是
 
 ## 从 Event Loop 谈 JS 的运行机制
 
-## 事件循环进阶：macrotask 与 microtask
+在浏览器的 Event Loop 中是有多个任务队列的，每个任务队列的执行时机是不一样的，下面直接上干货，说说浏览器执行任务的顺序
+
+- 1.从 task 任务队列中取第一个 task（比如 setTimeout、setIntervel 的回调，也可以将同一轮循环中的所有同步代码看作是一个宏任务），执行它。
+- 2.执行微任务队列里的所有微任务。
+- 3.浏览器判断是否更新渲染屏幕，如果需要重新绘制，则执行步骤 4-13，如果不需要重新绘制，则流程回到步骤 1，这样不断循环。
+- 4.触发 resize、scroll 事件，建立媒体查询。
+- 5.建立 css 动画。
+- 6.执行 requestAnimationFrame 回调。
+- 7.执行 IntersectionObserver 回调。
+- 8.更新渲染屏幕。
+- 9.浏览器判断当前帧是否还有空闲时间，如果有空闲时间，则执行步骤 10-12。
+- 10.从 requestIdleCallback 回调函数队列中取第一个，执行它。
+- 11 执行微任务队列里的所有微任务。
+- 12 流程回到步骤 9，直到 requestIdleCallback 回调函数队列清空或当前帧没有空闲时间。
+- 13 流程回到步骤 1，这样不断循环。
+
+## 浏览器在每一轮 Event Loop 事件循环中都会去渲染屏幕吗？
+
+浏览器在每一轮 Event Loop 事件循环中不一定会去重新渲染屏幕，会根据**浏览器刷新率以及页面性能或是否后台运行**等因素判断的，浏览器的每一帧是比较固定的，会尽量保持 60Hz 的刷新率运行，每一帧中间可能会进行**多轮事件循环**。
+
+## requestAnimationFrame 在哪个阶段执行，是在渲染前还是渲染后？是在微任务执行前还是执行后？
+
+requestAnimationFrame 回调的执行与微任务和宏任务无关，而是与浏览器是否渲染相关联的。它是在**浏览器渲染前**，在微任务执行后执行。
+
+## requestIdleCallback 在哪个阶段执行，是在渲染前还是渲染后？是在微任务执行前还是执行后？
+
+requestIdleCallback 是在浏览器渲染后**有空闲时间**时执行，如果 requestIdleCallback 设置了第二个参数 timeout，则会在超时后的下一帧**强制执行**。
 
 ## 参考
 
 - [JS 运行机制最全面的一次梳理](https://mp.weixin.qq.com/s/cJEMlXv0wPPXs5KV_0Smag)
 - [图解搞懂 JavaScript 引擎 Event Loop](https://juejin.cn/post/6844903553031634952)
+- [requestAnimationFrame 和 requestIdleCallback 是宏任务还是微任务](https://mp.weixin.qq.com/s/grYOnnj9T0l4anQgBXk3bA)

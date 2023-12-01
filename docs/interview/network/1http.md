@@ -13,11 +13,23 @@ nav:
 
 ## 本章需要了解的的知识点
 
-## 七层网络模型/4 层 TCP/IP
+## 七层网络模型/四层 TCP/IP
 
-OSI(Open Systems Interconncection，开放系统互联)网络分层,从上到下依次是：
+**OSI**(Open Systems Interconncection，开放系统互联)网络分层,从上到下依次是：
 
-7.应用层(Application) // Http/ssl 6.表示层(Presentation) 5.会话层(Session) 4.传输层(Transport) // tcp/udp 3.网络层(Network) -- 路由器 2.数据链路层(Data Link) -- 交换机 1.物理层(Physical) -- 网卡、集线器（Hub）
+7.应用层(Application) // Http/ssl
+
+6.表示层(Presentation)
+
+5.会话层(Session)
+
+4.传输层(Transport) // tcp/udp
+
+3.网络层(Network) -- 路由器
+
+2.数据链路层(Data Link) -- 交换机
+
+1.物理层(Physical) -- 网卡、集线器（Hub）
 
 ## http1.x
 

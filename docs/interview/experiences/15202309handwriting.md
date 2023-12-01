@@ -48,6 +48,7 @@ nav:
  * 28.获取设备电池信息
  * 29.js实现一个可移除的监听器
  * 30.如何自定义一个事件，使某一个对象能够捕获到？
+ * 31.如何实现一个 ORM 类似的 find 链式调用
  */
 ```
 
@@ -60,6 +61,8 @@ var handle = window.requestIdleCallback(cb[,options])
 ```
 
 手写简单版：
+
+维护一个队列，将在浏览器空闲时间内执行。它属于 Background Tasks API[2]，你可以使用 setTimeout 来模拟实现:
 
 ```ts
 export const requestIdleCallback =
@@ -88,7 +91,17 @@ export const cancelIdleCallback =
   };
 ```
 
-## 2.手写 observe
+在 rIC 中执行任务时需要注意以下几点：
+
+- 执行重计算而非紧急任务
+- 空闲回调执行时间应该小于 50ms，最好更少
+- 空闲回调中不要操作 DOM，因为它本来就是利用的重排重绘后的间隙空闲时间，重新操作 DOM 又会造成重排重绘
+
+React 的**时间分片**便是基于类似 rIC 而实现，然而因为 rIC 的兼容性及 50ms 流畅问题,react 自制实现了一个 **scheduler** 调度器
+
+## 2.手写观察者模式 Observer
+
+观察者模式：一个对象（观察者**Observer**）订阅另一个对象（主题**Subject**），当主题被激活的时候，触发观察者里面的事件。
 
 ```js
 // 哈哈 不知道咋写
@@ -102,7 +115,7 @@ class Subject {
   addObserver(observer) {
     this.observers.push(observer);
   }
-  // 改变被观察者的状态
+  // 主题通知观察者改变状态
   notify(newstate) {
     this.state = newstate;
     this.observers.forEach((o) => o.update(newstate));
@@ -121,7 +134,7 @@ class Observer {
 var sub = new Subject('iphone');
 var watcher1 = new Observer('wmh');
 var watcher2 = new Observer('cpp');
-// 订阅观察者
+// 观察者订阅主题(被观察者)
 sub.addObserver(watcher1);
 sub.addObserver(watcher2);
 
@@ -788,6 +801,76 @@ rotate2([1, 2, 3, 4, 5, 6], 2);
 
 > 贼难的一道题
 
+## 22.连续正整数之和
+
+## 23.手写 ts 版方法调用的注解(装饰器)
+
+```ts
+// 统计方法调用时间的方法装饰器
+function timeLog(target: any, name: string, descriptor: any) {
+  var func = descriptor.value;
+  const decoratedFn = function () {
+    if (typeof func === 'function') {
+      console.time(name);
+      const res = func.apply(target, arguments);
+      console.timeEnd(name);
+      return res;
+    }
+  };
+  descriptor.value = decoratedFn;
+  return descriptor;
+}
+```
+
+看看如何调用这个 timeLog 注解
+
+```ts
+// class Person {
+//   @timeLog
+//   say() {
+//     console.log('hello');
+//   }
+// }
+// const person1 = new Person();
+// person1.say();
+```
+
+在写一个节流版的装饰器
+
+```ts
+const throttle3 = (timer: number) => {
+  let prev: number;
+  return (target: any, name: string, descriptor: any) => {
+    var func = descriptor.value;
+    if (typeof func === 'function') {
+      descriptor.value = function () {
+        let now = new Date().getTime();
+        if (now - prev > timer) {
+          func.apply(target, arguments);
+          prev = now;
+        }
+      };
+    }
+  };
+};
+```
+
+组件使用
+
+```ts
+// import throttle from 'throttle';
+// class App extends React.Component {
+//   componentDidMount() {
+//     window.addEveneListener('scroll', this.scroll);
+//   }
+//   componentWillUnmount() {
+//     window.removeEveneListener('scroll', this.scroll);
+//   }
+//   @throttle(50)
+//   scroll() {}
+// }
+```
+
 ## 24.自定义迭代器遍历斐波那契数列(**Symbol.iterator**)
 
 ```js
@@ -967,6 +1050,57 @@ navigator.getBattery().then(function (battery) {
   );
   btn.dispatchEvent(eve); // hello
 </script>
+```
+
+## 31.如何实现一个 ORM 类似的 find 链式调用
+
+如下代码所示，使用 find 函数实现链式调用
+
+```js
+var data = [
+  { userId: 8, title: 'title1' },
+  { userId: 11, title: 'other' },
+  { userId: 15, title: null },
+  { userId: 19, title: 'title2' },
+];
+
+function find(data) {
+  this.value = [];
+  return {
+    data,
+    value: this.value,
+    where(obj) {
+      this.value = this.data.filter((item) => {
+        if (obj.title.test(item.title)) {
+          return item;
+        }
+      });
+      return this;
+    },
+    orderBy(name, sign) {
+      // 倒序
+      if (sign === 'desc') {
+        this.value.sort((a, b) => b[name] - a[name]);
+      } else {
+        this.value.sort((a, b) => a[name] - b[name]);
+      }
+      return this;
+    },
+    execute() {
+      return this;
+    },
+  };
+}
+
+// 查找data中，符合where中条件的数据，并根据orderBy中的条件进行排序
+var result = find(data)
+  .where({
+    title: /\d$/, // 这里意思是过滤出数组中，满足title字段中符合 /\d$/的项
+  })
+  .orderBy('userId', 'desc'); // 这里的意思是对数组中的项按照userId进行倒序排列
+
+//=> 返回 [{ userId: 19, title: 'title2'}, { userId: 8, title: 'title1' }];
+console.log(result);
 ```
 
 ## 参考
