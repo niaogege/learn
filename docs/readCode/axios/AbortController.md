@@ -44,7 +44,7 @@ function testAbort() {
     }
   };
   xhr.send();
-  xhr.abort();
+  xhr.abort(); // 直接取消请求
 }
 ```
 
