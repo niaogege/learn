@@ -24,9 +24,11 @@ JS 的运行机制就是**事件循环**
 
 宏任务：js 引擎会将其添加到任务队列（task queue）中，在当前任务执行完毕后按顺序依次执行.宏任务队列**由事件触发线程**维护
 
-微任务：js 引擎也会将其添加到任务队列中，但是微任务的执行在当前宏任务执行结束后立即进行，也就是说微任务具有更高的执行优先级，可以优先于下一个宏任务执行. 微任务队列是由**JS 引擎线程**维护
+微任务：js 引擎也会将异步任务添加到微任务队列中，但是微任务的执行在当前宏任务执行结束后立即进行，也就是说微任务具有更高的执行优先级，可以优先于下一个宏任务执行. 微任务队列是由**JS 引擎线程**维护
 
-### JS 执行/运行机制(!!!)
+### 宏任务和微任务的执行过程(简单!!!)
+
+![micro || macro](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/1/18/16fb7adf5afc036d~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.awebp)
 
 - 1.执行栈执行宏任务(执行栈么有就从事件队列中获取)
 
@@ -34,13 +36,13 @@ JS 的运行机制就是**事件循环**
 
 - 3.当前宏任务执行完执行栈为空时，查询是否有异步任务(分宏任务和微任务)需要执行，如有则立即依次执行当前微任务队列中的微任务
 
-- 4.当前微任务执行完成之后，开始检查是否有必要渲染，如有需要 则 GUI 线程接管
+- 4.当前微任务执行完成之后，开始检查是否有必要渲染，如有需要 则 **GUI 线程**接管
 
 - 5.渲染完毕后，JS 引擎线程接管，开启下一次事件循环，执行下一个宏任务(从事件队列中获取)
 
 > 死记硬背 也要完全记下来
 
-### 图解完整的事件循环
+### 图解完整的事件循环(完全背下来)
 
 ![Event Loop](https://p1-jj.byteimg.com/tos-cn-i-t2oaga2asx/gold-user-assets/2020/1/18/16fb7ae3b678f1ea~tplv-t2oaga2asx-jj-mark:3024:0:0:0:q75.awebp)
 
@@ -104,19 +106,94 @@ console.log('console');
 
 ### Node 中的事件循环
 
-- 1.Node 会先执行所有类型为 timers 的 MacroTask 宏任务，然后执行所有的 微任务(NextTick 例外)
+- 1.Node 会先执行所有类型为 timers 的 MacroTask(执行 setTimeout 以及 setInterval 的回调) 宏任务，然后执行所有的 微任务(NextTick 例外)
 
-- 2.进入 poll 阶段，执行几乎所有 宏任务，然后执行所有的 微任务
+- 2.处理 I/O 回调：处理网络、流、tcp 错误等回调
 
-- 3.再执行所有类型为 check 的 宏任务，然后执行所有的 微任务
+- 3.idle 空转和 prepare 阶段：node 内部使用
 
-- 4.再执行所有类型为 close callbacks 的 宏任务，然后执行所有的 微任务
+- 4.进入 poll 阶段，执行 poll 中的 I/O 队列,检查定时器是否到时
+
+- 5.再执行所有类型为 check 的 宏任务，然后执行所有的 微任务
+
+- 6.再执行所有类型为 close callbacks 关闭回调 的 宏任务，然后执行所有的 微任务
 
 至此，完成一个 Tick，回到 timers 阶段
 
 ……
 
+> 主要的是 timer 定时器、poll 轮询、check 检查三大部分
+
+### 事件循环过程：
+
+- 执行全局 Script 的同步代码。
+- 执行完同步代码调用栈清空后，执行微任务。先执行 NextTick 队列（NextTick Queue）中的所有任务，再执行其他微任务队列中的所有任务。
+- 开始执行宏任务，上面 6 个阶段。从第 1 个阶段开始，执行相应每一个阶段的宏任务队列中所有任务。（每个阶段的宏任务队列执行完毕后，开始执行微任务），然后在开始下一阶段的宏任务，依次构成事件循环。
+- timers Queue -> 执行微任务 -> I/O Queue -> 执行微任务 -> Check Queue 执行微任务 -> Close Callback Queue -> 执行微任务
+
+在 node 环境下，**process.nextTick**的优先级高于 Promise.then，可以简单理解为在宏任务结束后会先执行微任务队列中的 nextTickQueue 部分，然后才会执行微任务中的 Promise.then 部分
+
 如此反复，无穷无尽……
+
+### 浏览器和 Node 端事件循环的差别
+
+- 两者的运行机制完全不同，实现机制也不同。
+- node.js 可以理解成 4 个宏任务队列（timer、I/O、check、close）和 2 个微任务队列。但是执行宏任务时有 6 个阶段。
+- node.js 在开始宏任务 6 个阶段时，每个阶段都将该宏任务队列中所有任务都取出来执行，每个阶段的宏任务执行完毕后，开始执行微任务。但是浏览器中的事件循环，是只取一个宏任务执行，然后看微任务队列是否存在，存在执行微任务，然后再取一个宏任务，构成循环。
+
+### 通过实例加深印象
+
+```js
+console.log('1');
+setTimeout(function () {
+  console.log('2');
+  process.nextTick(function () {
+    console.log('3');
+  });
+  new Promise(function (resolve) {
+    console.log('4');
+    resolve();
+  }).then(function () {
+    console.log('5');
+  });
+});
+process.nextTick(function () {
+  console.log('6');
+});
+new Promise(function (resolve) {
+  console.log('7');
+  resolve();
+}).then(function () {
+  console.log('8');
+});
+
+setTimeout(function () {
+  console.log('9');
+  process.nextTick(function () {
+    console.log('10');
+  });
+  new Promise(function (resolve) {
+    console.log('11');
+    resolve();
+  }).then(function () {
+    console.log('12');
+  });
+});
+// 1 7 6 8 2 4 3 5 9 11 10 12
+```
+
+- 1.主代码块作为第一个宏任务开始执行，遇到 console.log(1)则打印 1
+- 2.遇到 setTimeout 则将 setTimeout 移到宏任务队列,macroTask1
+- 3.process.nextTick 微任务，移到微任务队列 microTask1
+- 4.Promise 中的同步函数执行，打印 7
+- 5.然后将 Promise.then 移到微任务队列 microTask2
+- 6.又遇到一个 setTimeout 移到宏任务队列 MacroTask2
+- 7.接下来开始执行当前宏任务产生的微任务队列，首先执行 process.nextTick，打印 6
+- 8.继续执行微任务队列 microTask2，打印 8
+- 9.当前宏任务执行完，开始执行下一个宏任务，首先第一个宏任务 macroTask1，打印 2，然后将 process.nextTick 添加到微任务队列中，执行 Promise 同步代码，打印 4，将 Promise.then 移入到微任务队列
+- 10.先执行第一个微任务 打印 3 接着执行第二个微任务 打印 5
+- 11.当前第二轮宏任务执行完成，继续执行下一个宏任务 MacroTask2
+- 12.打印 9/11/10/12
 
 ## Node 环境下的事件循环机制
 

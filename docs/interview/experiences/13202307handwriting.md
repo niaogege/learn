@@ -166,7 +166,9 @@ Function.prototype.myBind = function (context, ...rest) {
     // 当作为普通函数时，this 指向 window，self 指向绑定函数，此时结果为 false，当结果为 false 的时候，this 指向绑定的 context。
     self.apply(this instanceOf self ? this : context, args.concat(bindArgs))
   };
-  fbind.prototype = this.prototype
+  var fBrifge = function() {}
+  fBrifge.prototype = this.prototype
+  fbind.prototype = new fBrideg()
   return fbind
 };
 ```
