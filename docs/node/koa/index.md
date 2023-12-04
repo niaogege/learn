@@ -113,6 +113,7 @@ let mw2 = async function (ctx, next) {
 let mw3 = async function (ctx, next) {
   console.log('第三个中间件before', ctx);
   await next();
+  await delay();
   console.log('第三个中间件after', ctx);
 };
 function use(mw) {
@@ -139,7 +140,7 @@ use(mw2);
 use(mw3);
 let fn = compose(middleware);
 fn({ name: 'cpp' }, function print() {
-  console.log(this, 'Print');
+  console.log(this, 'Print 然后是Promise.resolve');
 });
 ```
 
@@ -165,7 +166,7 @@ function compose(mw) {
 }
 ```
 
-![核心架构](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/acc44bd2385740f4ab847cf7027552b1~tplv-k3u1fbpfcp-zoom-in-crop-mark:4536:0:0:0.image)
+![next.png](https://s2.loli.net/2023/12/03/FPrTasOQefSvYlo.png)
 
 每个中间件执行到 **await next()** 语句的时候，都会调用下一层的中间件。你也可以将代码理解为
 

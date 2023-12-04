@@ -25,7 +25,9 @@ useEffect: 用于在函数组件中执行 side effects，例如获取数据或�
 
 useContext: 用于访问函数组件当中 React 上下文的值。
 
-useRef: 用于为跨渲染持续存在的元素或值创建可变引用。
+useRef: 当该需要持久化的数据不会跟 UI 变化产生关系时，我们就需要用到 useRef。useRef 是一个返回**可变引用对象**的函数。该对象 **.current** 属性的初始值为 useRef 传入的参数 initialValue，**返回的对象将在组件整个生命周期中持续存在**。
+
+> 返回可变引用对象的函数
 
 useCallback: 用于记忆函数，以防止不必要的重新渲染。
 
@@ -33,7 +35,7 @@ useMemo: 用于记忆值，即将成本高昂的计算结果缓存起来以提�
 
 useReducer: 负责使用 reducer 函数管理状态，原理类似于 Redux。
 
-useLayoutEffect: 与 useEffect 类似，但效果会在所有 DOM 更改之后再同步运行。
+useLayoutEffect: 与 useEffect 类似，但效果会在所有 DOM 更改之后再*同步运行*。
 
 这些 hooks 提供强大的工具，可用于管理状态、处理 side effects 和重用 React 函数组件当中的逻辑。
 

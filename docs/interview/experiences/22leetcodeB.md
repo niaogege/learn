@@ -20,6 +20,46 @@ nav:
 
 ```js
 /**
- 
+ 1. 二叉树路径和
+ 2. 二叉树路径和II
  */
+```
+
+## 路径和 II
+
+```js
+var pathSum = function (root, targetSum) {
+  if (!root) return [];
+  var res = [];
+  var backTrack = (root, path) => {
+    if (root == null) return;
+    path.push(root.val);
+    if (root.right == null && root.left == null) {
+      if (path.reduce((a, b) => a + b) === targetSum) {
+        res.push(path.slice());
+      }
+    }
+    backTrack(root.left, path);
+    backTrack(root.right, path);
+    path.pop();
+  };
+  backTrack(root, []);
+  return res;
+};
+// dfs
+var pathSum = function (root, targetSum) {
+  if (!root) return [];
+  var res = [];
+  var dfs = (root, path, sum) => {
+    if (!root) return;
+    sum = sum + root.val;
+    var tempPath = [...path, root.val];
+    if (sum === targetSum && root.left == null && root.right == null) {
+      res.push(tempPath);
+    }
+    dfs(root.left, tempPath, sum);
+    dfs(root.right, tempPath, sum);
+  };
+  dfs(root, [], 0);
+};
 ```

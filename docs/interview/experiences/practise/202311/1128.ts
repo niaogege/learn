@@ -11,9 +11,33 @@
  * 10.Exclude/Extract/Omit
  * 11.Required
  * 12.OptionalKeys提取 T 中所有可选类型的 key 组成的联合类型。
- * 13.
+ * 13.提取函数类型的索引类型
  * 14.
  */
+
+type Filter<T, K> = {
+  [P in keyof T as T[P] extends K ? P : never]: T[P];
+};
+
+type TT3 = {
+  name: string;
+  age: number;
+  getName: () => void;
+};
+
+type TT4 = Filter<TT3, Function | string>;
+
+type UnionToSection<T> = (T extends T ? (x: T) => unknown : never) extends (x: infer R) => unknown
+  ? R
+  : never;
+
+type Index =
+  | {
+      name: string;
+    }
+  | { age: number };
+
+type TT2 = UnionToSection<Index>;
 
 type Equal<A, B = A> = (<T>(arg: A) => T extends A ? 1 : 2) extends <T>(
   arg: B,

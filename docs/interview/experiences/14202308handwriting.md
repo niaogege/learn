@@ -274,7 +274,9 @@ onceF(4);
 ## 10.TS 练习体操之 Equal
 
 ```ts
-type isEqual<A, B = A> = (<T>() => T extends A ? 1 : 2) extends <T>() => T extends B ? 1 : 2
+type isEqual<A, B = A> = (<T>(arg: A) => T extends A ? 1 : 2) extends <T>(
+  arg: B,
+) => T extends B ? 1 : 2
   ? true
   : false;
 type E11 = isEqual<1, 2>; // false
@@ -283,6 +285,23 @@ type E13 = isEqual<string, string>; // true
 ```
 
 ## 11.滚动到底部懒加载数据 Hooks 实现
+
+```js
+const useLazyBottom = (fn) => {
+  // 判断到底部
+  // 滚动的距离
+  const scrollH = window.scrollTop || document.documentElement.scrollTop;
+  // 视图的高度
+  const clientH = window.innerHeight || document.body.clientHeight;
+  // 滚动的总距离
+  const scrollAllH = document.documentElement.scrollHeight;
+  if (scrollH + clientH > scrollAllH) {
+    fn.apply(this, arguments);
+  }
+};
+
+export default useLazyBottom;
+```
 
 ## 12.TS 练习之 Pick
 

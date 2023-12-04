@@ -57,3 +57,18 @@ subject.addObserver(wather1);
 subject.addObserver(wather2);
 
 subject.notify('change name');
+
+/**
+ * 1.eventEmitter
+ */
+
+class EventEmitter {
+  constructor() {}
+  once(type, cb) {
+    const fn = () => {
+      cb();
+      this.off(type, fn);
+    };
+    this.on(type, fn);
+  }
+}

@@ -172,6 +172,85 @@ var threeSum = function (nums) {
 threeSum([-1, 0, 1, 2, -1, -4]);
 ```
 
+## [7.最大子序和](https://leetcode.cn/problems/maximum-subarray/description/)
+
+```js
+// 迭代方式
+var maxSubArray = function (nums) {
+  var max = 0;
+  var total = nums[0];
+  for (let i of nums) {
+    if (total > 0) {
+      total = total + i;
+    } else {
+      total = i;
+    }
+    max = Math.max(max, total);
+  }
+  return max;
+};
+maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]);
+
+// dp 方式
+var maxSubArray = function (nums) {
+  var len = nums.length;
+  var max = nums[0];
+  var dp = new Array(len);
+  dp[0] = nums[0];
+  for (let i = 1; i < len; i++) {
+    if (dp[i - 1] > 0) {
+      dp[i] = dp[i - 1] + i;
+    } else {
+      dp[i] = i;
+    }
+    max = Math.max(dp[i], max);
+  }
+  return max;
+};
+```
+
+## [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+
+```js
+/**
+ * 迭代
+ */
+var mergeTwoLists = function (l1, l2) {
+  var dummy = {
+    next: null,
+    val: 0,
+  };
+  var cur = dummy;
+  while (l1 && l2) {
+    if (l1.val > l2.val) {
+      cur.next = l2;
+      l2 = l2.next;
+    } else {
+      cur.next = l1;
+      l1 = l1.next;
+    }
+    cur = cur.next;
+  }
+  cur.next = l1 || l2;
+  return dummy.next;
+};
+
+// dfs
+var mergeTwoLists = function (l1, l2) {
+  if (l1 == null) {
+    return l2;
+  } else if (l2 == null) {
+    return l1;
+  } else if (l1.val > l2.val) {
+    l2.next = mergeTwoLists(l1, l2.next);
+    return l2;
+  } else {
+    l1.next = mergeTwoLists(l1.next, l2);
+    return l1;
+  }
+};
+```
+
 ## [12.搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/description/)
 
 ```js
@@ -215,4 +294,41 @@ function merge(num1, m, num2, n) {
   }
   num1.sort((a, b) => a - b);
 }
+```
+
+## 21.二叉树的锯齿形层序遍历
+
+```js
+var zigzagLevelOrder = function (root) {
+  if (!root) return [];
+  let res = [];
+  let stack = [root];
+  let j = 0;
+  while (stack.length) {
+    let arr = [];
+    let len = stack.length;
+    for (let i = 0; i < len; i++) {
+      const cur = stack.shift();
+      arr.push(cur.val);
+      if (cur.left) {
+        stack.push(cur.left);
+      }
+      if (cur.right) {
+        stack.push(cur.right);
+      }
+    }
+    if (arr.length) {
+      j++;
+      console.log(j, j % 2);
+      res.push(j % 2 == 0 ? arr.reverse() : arr);
+    }
+  }
+  return res;
+};
+```
+
+## [32.二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
+
+```js
+
 ```
