@@ -11,11 +11,13 @@ nav:
   path: /node
 ---
 
-## 1.[node 端 debugger 调试技巧](./tool/debugger.md)
+## 1.[node 端 debugger 调试技巧](./debugger.md)
 
-## 2.[npm/yarn/pnpm](./tool/yarn%E5%92%8Cnpm.md)
+## 2.[npm/yarn/pnpm](./yarn%E5%92%8Cnpm.md)
 
-## 3.[monoRepo](./tool/monorepo%E5%AE%9E%E6%88%98.md)
+## 3.[monoRepo](./monorepo%E5%AE%9E%E6%88%98.md)
+
+## 8.[changesets](./8.changesets.md)
 
 ## 参考
 

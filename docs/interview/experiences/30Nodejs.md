@@ -19,12 +19,18 @@ nav:
 - 5.说说 commonjs 跟 esmodule 区别
 - 6.说说 tree Shaking 原理
 - 7.说说 nodejs 中的 EventEmitter 事件订阅机制,如何实现一个 eventEmitter
-- 8.pm2 守护进程原理是什么
-- 9.Nodejs 中的 cluster 和 fork 模式区别
+- 8.Nodejs 如何利用多核 CPU
+- 9.pm2 守护进程原理是什么
+- 10.Nodejs 中的 cluster 和 fork 模式区别
+- 11.node 中的回调函数变成 then 链式调用，手写 promisify
 
 ## 1.Nodejs 事件循环
 
-timer -> I/O 回调 -> Poll -> check -> close Callback
+请移步[事件循环](../../node/eventLoop.md)
+
+大体是这 6 个步骤：
+
+timer -> I/O 回调 -> idle 闲置阶段 -> Poll -> check -> close Callback
 
 ## 2.说说中间件，如何封装一个中间件
 
@@ -42,7 +48,7 @@ Koa 中间件采用的是洋葱圈模型，每次执行下一个中间件传入�
 ### token 校验
 
 ```js
-module.exports = function(options) {
+module.exports = function resolveToken(options) {
   return (ctx, next) => {
     try {
       // get Token
@@ -59,6 +65,22 @@ module.exports = function(options) {
     }
   }
 }
+```
+
+在这个示例中，resolveToken 函数返回一个函数，该函数接收请求和响应对象，并且调用 next() 函数来将**控制权传递给下一个中间件函数**。
+
+### 日子模块中间件
+
+```js
+module.exports = (option) => async (ctx, next) => {
+  const startTime = Date.now();
+  const requestTime = Date.now();
+  await next();
+  const ms = Date.now() - startTime;
+  let logout = `${ctx.request.ip} -- ${requestTime} -- ${ctx.method} -- ${ctx.url} -- ${ms}ms`;
+  // 输出日志文件
+  fs.appendFileSync('./log.txt', logout + '\n');
+};
 ```
 
 ## 3.说说你对洋葱模型的理解
@@ -97,6 +119,8 @@ function compose(middlewares) {
 }
 ```
 
+## Nodejs 如何利用多核 CPU?
+
 ## Nodejs 中的 cluster 模式和 fork 模式区别
 
 ### [fork 分叉模式(child_process.fork(modulePath[, args][, options]))](https://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options)，**单实例多进程**
@@ -110,3 +134,49 @@ for Example: 默认情况下，pm2 将使用 node 这样 `pm2 start server.js`
 但是只支持 node，端口可以复用，不需要额外的端口配置，0 代码实现负载均衡。优点就是由于多实例机制，可以保证服务器的容错性，就算出现异常也不会使多个服务器实例同时崩溃。 for Example: `pm2 start -i 4 server.js` 将启动 4 个 server.js 实例并让集群模块处理负载平衡
 
 ### 共同点：都是多进程，都需要消息机制或数据持久化来实现数据共享
+
+## promisify
+
+实现一个 node 异步函数的 promisify?
+
+promisify 作用是把**回调函数转成 promise 形式**
+
+即调用该回调函数的时候有 2 个参数，第一个是错误信息，其次才是真正要返回的内容，Promisify 就是把第二个参数转化为 promise
+
+```js
+function Promisify(fn) {
+  return (...rest) => {
+    return new Promise((resolve, reject) => {
+      rest.push((error, ...con) => {
+        if (error) {
+          reject(error);
+        }
+        resolve(con);
+      });
+      // fn.apply(this, rest);
+      Reflect.apply(fn, this, rest);
+    });
+  };
+}
+
+// 输入：
+// 原有的callback调用
+fs.readFile('test.js', function (err, data) {
+  if (!err) {
+    console.log(data);
+  } else {
+    console.log(err);
+  }
+});
+// 输出：
+// promisify后
+var readFileAsync = promisify(fs.readFile);
+readFileAsync('test.js').then(
+  (data) => {
+    console.log(data);
+  },
+  (err) => {
+    console.log(err);
+  },
+);
+```

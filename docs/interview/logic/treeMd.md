@@ -83,31 +83,50 @@ var hasPathSum = function (root, targetSum) {
  *     this.right = (right===undefined ? null : right)
  * }
  */
-/**
- * @param {TreeNode} root
- * @return {number}
- */
+// DFS
 var sumNumbers = function (root) {
-  let res = [];
   if (!root) return 0;
-  var dfs = (root, total) => {
+  let num = 0;
+  var dfs = (root) => {
     // 叶子节点
     if (root.left == null && root.right == null) {
-      arr.push(`${root.val}`);
+      num = num + Number(root.val);
     }
-    if (root) {
-      if (root.left) {
-        total = root.left.val + dfs(root.left, total);
-      }
-      if (root.right) {
-        total = root.right.val + dfs(root.right, total);
-      }
+    if (root.left) {
+      root.left.val = `${root.val}${root.left.val}`;
+      dfs(root.left);
     }
-    console.log(total, 'total');
-    return total;
+    if (root.right) {
+      root.right.val = `${root.val}${root.right.val}`;
+      dfs(root.right);
+    }
   };
   dfs(root);
-  return res.reduce((a, b) => a + b, 0);
+  return num;
+};
+// BFS
+var sumNumbers = function (root) {
+  if (!root) return 0;
+  var nodeArr = [root];
+  var valArr = [root.val];
+  let num = 0;
+  while (nodeArr.length) {
+    var curNode = nodeArr.shift();
+    var curVal = valArr.shift();
+    if (curNode.left == null && curNode.right == null) {
+      num = num + Number(curVal);
+      continue;
+    }
+    if (curNode.left) {
+      nodeArr.push(curNode.left);
+      valArr.push(`${curVal}${curNode.left.val}`);
+    }
+    if (curNode.right) {
+      nodeArr.push(curNode.right);
+      valArr.push(`${curVal}${curNode.right.val}`);
+    }
+  }
+  return num;
 };
 ```
 

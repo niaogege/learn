@@ -209,7 +209,7 @@ var maxSubArray = function (nums) {
 };
 ```
 
-## [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
+## [8.合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
 
 ```js
 /**
@@ -250,6 +250,8 @@ var mergeTwoLists = function (l1, l2) {
   }
 };
 ```
+
+## 10.最长回文子串
 
 ## [12.搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/description/)
 
@@ -296,6 +298,8 @@ function merge(num1, m, num2, n) {
 }
 ```
 
+> feel difficult ???
+
 ## 21.二叉树的锯齿形层序遍历
 
 ```js
@@ -332,3 +336,5 @@ var zigzagLevelOrder = function (root) {
 ```js
 
 ```
+
+## [38.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)

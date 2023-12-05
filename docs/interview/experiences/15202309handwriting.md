@@ -49,6 +49,7 @@ nav:
  * 29.js实现一个可移除的监听器
  * 30.如何自定义一个事件，使某一个对象能够捕获到？
  * 31.如何实现一个 ORM 类似的 find 链式调用
+ * 32.实现一个区间内的随机数
  */
 ```
 
@@ -1101,6 +1102,15 @@ var result = find(data)
 
 //=> 返回 [{ userId: 19, title: 'title2'}, { userId: 8, title: 'title1' }];
 console.log(result);
+```
+
+## 实现一个区间内的随机数
+
+```js
+function getRandom(min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+getRandom(-3, -1);
 ```
 
 ## 参考
