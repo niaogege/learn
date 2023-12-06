@@ -20,8 +20,15 @@ nav:
 
 ```js
 /**
- 1. 二叉树路径和
- 2. 二叉树路径和II
+ 1.二叉树路径和
+ 2.二叉树路径和II
+ 3.重排链表
+ 4.最长公共前缀
+ 5.最长公共子序列
+ 6.阶乘(迭代/递归/缓存)
+ 7.打家劫舍
+ 8.零钱兑换
+ 9.删除链表的节点
  */
 ```
 
@@ -61,5 +68,36 @@ var pathSum = function (root, targetSum) {
     dfs(root.right, tempPath, sum);
   };
   dfs(root, [], 0);
+};
+```
+
+## 9.[剑指 Offer 18. 删除链表的节点](https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
+
+```js
+/**
+ * 给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。返回删除后的链表的头节点。
+ * 示例： 输入: head = [4,5,1,9], val = 5
+输出: [4,1,9]
+解释: 给定你链表中值为 5 的第二个节点，那么在调用了你的函数之后，该链表应变为 4 -> 1 -> 9.
+ * @param {ListNode} head
+ * @param {number} val
+ * @return {ListNode}
+ * 节点next指针直接指向下下一个节点
+ */
+var deleteNode = function (head, val) {
+  var dummy = {
+    next: head,
+    val: null,
+  };
+  let cur = dummy;
+  while (cur) {
+    if (cur.next && cur.next.val === val) {
+      let next = cur.next.next;
+      cur.next = next;
+      continue;
+    }
+    cur = cur.next;
+  }
+  return dummy.next;
 };
 ```

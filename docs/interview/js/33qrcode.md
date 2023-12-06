@@ -1,6 +1,6 @@
 ---
 title: 基于web原生API：BarcodeDetector 解析二维码
-order: 32
+order: 33
 group:
   order: 1
   title: js Basic

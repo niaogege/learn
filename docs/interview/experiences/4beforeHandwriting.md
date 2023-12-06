@@ -1396,7 +1396,7 @@ function factoialIterative(n) {
   }
   return total;
 }
-
+factoialIterative(0);
 // 第二版 递归阶乘
 function factorial(n) {
   if (n <= 1) {

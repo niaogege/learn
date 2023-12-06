@@ -253,6 +253,35 @@ var mergeTwoLists = function (l1, l2) {
 
 ## 10.最长回文子串
 
+```js
+// 输入：s = "babad"
+// 输出："bab"
+// 解释："aba" 同样是符合题意的答案。
+var longestPalindrome = function (s) {
+  let len = s.length;
+  let dp = new Array(len).fill(0).map((_) => new Array(len).fill(false));
+  let max = 0;
+  let begin = 0;
+  for (let i = len - 1; i >= 0; i--) {
+    for (let j = i; j < len; j++) {
+      if (s[i] == s[j]) {
+        if (j - i <= 1) {
+          dp[i][j] = true;
+        } else if (dp[i + 1][j - 1]) {
+          dp[i][j] = true;
+        }
+      }
+      let temp = j - i + 1;
+      if (dp[i][j] && temp > max) {
+        max = temp;
+        begin = i;
+      }
+    }
+  }
+  return s.slice(begin, begin + max);
+};
+```
+
 ## [12.搜索旋转排序数组](https://leetcode.cn/problems/search-in-rotated-sorted-array/description/)
 
 ```js

@@ -50,6 +50,14 @@ nav:
  * 30.如何自定义一个事件，使某一个对象能够捕获到？
  * 31.如何实现一个 ORM 类似的 find 链式调用
  * 32.实现一个区间内的随机数
+ * 33.实现阶乘(迭代/递归)
+ * 34.FileReader使用
+ * 35.
+ * 36.
+ * 37.
+ * 38.
+ * 39.
+ * 40.
  */
 ```
 
@@ -1104,13 +1112,46 @@ var result = find(data)
 console.log(result);
 ```
 
-## 实现一个区间内的随机数
+## 32.实现一个区间内的随机数
 
 ```js
 function getRandom(min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 getRandom(-3, -1);
+```
+
+## 33.实现阶乘(迭代/递归)
+
+```js
+
+```
+
+## 34.FileReader 使用
+
+```js
+function uploadFile(file) {
+  return new Promise((resolve, reject) => {
+    let len = 0;
+    let reader = new FileReader();
+    reader.readAsText(file[len]);
+    reader.onabort = function (e) {
+      console.log('文件读取异常:', e);
+    };
+    reader.onerror = function (e) {
+      console.log('文件读取错误:', e);
+    };
+    reader.onload = function (e) {
+      if (e.target) {
+        len++;
+        reader.readAsText(file[len]);
+        resolve({
+          size: e.target.size,
+        });
+      }
+    };
+  });
+}
 ```
 
 ## 参考

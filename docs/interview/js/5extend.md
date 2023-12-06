@@ -452,12 +452,14 @@ console.log(child1, 'CHILD1');
 ### 用 ES5 实现 es6 class 中的 extends(高频面试题)
 
 ```js
-function extend(Child, Parent, proto) {
+function extend(Child, Parent, staticProp) {
   var prototype = Object.create(Parent.prototype); // 1
   prototype.constructor = Child; // 2
   Child.prototype = prototype; // 3
-  for (var k in proto) {
-    Child.prototype[k] = proto[k];
+  // 继承静态方法
+  Parent && Object.setPrototypeOf(Child, Parent);
+  for (let key in staticProp) {
+    Child.prototype[key] = staticProp[key];
   }
 }
 function Par(name) {

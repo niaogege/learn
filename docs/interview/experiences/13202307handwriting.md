@@ -550,6 +550,14 @@ function chartUppercase(str) {
   });
 }
 chartUppercase('cpp-wmh'); // cppWmh
+function chartUppercase2(str) {
+  var arr = str.split('-');
+  for (let i = 1; i < arr.length; i++) {
+    arr[i] = arr[i].charAt(0).toUpperCase() + arr[i].substring(1);
+  }
+  return arr.join('');
+}
+chartUppercase2('hello-cpp');
 ```
 
 ## 18.手写防抖和节流
