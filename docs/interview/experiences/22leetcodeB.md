@@ -29,10 +29,11 @@ nav:
  7.打家劫舍
  8.零钱兑换
  9.删除链表的节点
+ 10.括号生成
  */
 ```
 
-## 路径和 II
+## 1/2 路径和 II
 
 ```js
 var pathSum = function (root, targetSum) {
@@ -69,6 +70,43 @@ var pathSum = function (root, targetSum) {
   };
   dfs(root, [], 0);
 };
+```
+
+## 6.阶乘(迭代/递归/缓存)
+
+```js
+// bfs
+function count(n) {
+  if (n < 0) return undefined;
+  let total = 1;
+  for (let i = n; i > 1; i--) {
+    total = total * i;
+  }
+  return total;
+}
+count(3);
+// dfs
+function coun2(n) {
+  if (n <= 1) {
+    return 1;
+  } else {
+    return n * coun2(n - 1);
+  }
+}
+coun2(3);
+// cache
+function count3(n) {
+  var m = new Map();
+  var fn = (n) => {
+    if (n <= 1) return 1;
+    if (m.has(n)) return m.get(n);
+    let res = n * fn(n - 1);
+    m.set(n, res);
+    return res;
+  };
+  return fn(n);
+}
+count3(3);
 ```
 
 ## 9.[剑指 Offer 18. 删除链表的节点](https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof/)

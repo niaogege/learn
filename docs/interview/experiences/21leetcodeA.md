@@ -360,6 +360,27 @@ var zigzagLevelOrder = function (root) {
 };
 ```
 
+## 24.相交链表
+
+```js
+function insectionLink(headA, headB) {
+  let cur = headA;
+  var set = new Set();
+  while (cur) {
+    set.add(cur);
+    cur = cur.mext;
+  }
+  cur = headB;
+  while (cur) {
+    if (set.has(cur)) {
+      return cur;
+    }
+    cur = cur.next;
+  }
+  return null;
+}
+```
+
 ## [32.二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
 
 ```js

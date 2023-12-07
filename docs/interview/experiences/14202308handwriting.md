@@ -81,7 +81,22 @@ nav:
  * @param {ListNode} headB
  * @return {ListNode}
  */
-var getIntersectionNode = function (headA, headB) {};
+var getIntersectionNode = function (headA, headB) {
+  let cur = headA;
+  let set = new Set();
+  while (cur) {
+    set.add(cur);
+    cur = cur.next;
+  }
+  cur = headB;
+  while (cur) {
+    if (set.has(cur)) {
+      return cur;
+    }
+    cur = cur.next;
+  }
+  return null;
+};
 ```
 
 ## 2.[盛最多水的容器](https://leetcode.cn/problems/container-with-most-water/)

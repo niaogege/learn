@@ -52,7 +52,7 @@ nav:
  * 32.实现一个区间内的随机数
  * 33.实现阶乘(迭代/递归)
  * 34.FileReader使用
- * 35.
+ * 35.取消请求
  * 36.
  * 37.
  * 38.
@@ -1151,6 +1151,24 @@ function uploadFile(file) {
       }
     };
   });
+}
+```
+
+## 35.取消请求
+
+```js
+function cancelRequest(url) {
+  const controller = new AbortContoller();
+  const { siganl } = controller;
+  fetch(url, { siganl }).then((res) => {
+    return res.json();
+  });
+  setTimeout(() => {
+    controller.abort({
+      type: 'USER_ABORT_ACTION',
+      msg: '用户终止了操作',
+    });
+  }, 2000);
 }
 ```
 

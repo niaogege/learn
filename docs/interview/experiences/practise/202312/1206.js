@@ -6,7 +6,39 @@
  * 5.相交链表
  * 6.环形链表
  * 7.删除链表节点
+ * 8.解构为搜索二叉树
+ * 9.括号生成
+ * 10.对称二叉树
+ * 11.排序链表
  */
+
+/**
+ * 重排链表
+ */
+
+function reorderList(head) {
+  if (head == null) return;
+  let cur = head;
+  let stack = [];
+  while (cur) {
+    stack.push(cur);
+    cur = cur.next;
+  }
+  let i = 0;
+  let j = stack.length - 1;
+  while (i < j) {
+    // 开头直接指向末尾
+    stack[i].next = stack[j];
+    i++;
+    if (i == j) {
+      break;
+    }
+    // 末尾直接指向开头
+    stack[j].next = stack[i];
+    j--;
+  }
+  stack[j].next = null;
+}
 
 /**
  * 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表不存在相交节点，返回 null 。

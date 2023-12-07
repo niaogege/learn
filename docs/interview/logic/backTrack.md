@@ -612,3 +612,25 @@ var permuteUnique = function (nums) {
   return res;
 };
 ```
+
+### [22. 括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+> 20231206
+
+```js
+var generateParenthesis = function (n) {
+  if (n <= 0) return [];
+  let res = [];
+  let dfs = (paths, left, right) => {
+    if (left > n || right > left) return;
+    if (paths.length === n * 2) {
+      res.push(paths);
+      return;
+    }
+    dfs(paths + '(', left + 1, right);
+    dfs(paths + ')', left, right + 1);
+  };
+  dfs('', 0, 0);
+  return res;
+};
+```
