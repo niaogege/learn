@@ -19,10 +19,13 @@ nav:
 - 5.说说 commonjs 跟 esmodule 区别
 - 6.说说 tree Shaking 原理
 - 7.说说 nodejs 中的 EventEmitter 事件订阅机制,如何实现一个 eventEmitter
-- 8.Nodejs 如何利用多核 CPU
+- 8.Nodejs 如何利用多核 CPU or 说说你对 Node.js 中多进程的理解
 - 9.pm2 守护进程原理是什么
 - 10.Nodejs 中的 cluster 和 fork 模式区别
 - 11.node 中的回调函数变成 then 链式调用，手写 promisify
+- Nodejs 异步 IO 模型
+- Node 的日志和负载均衡怎么做的
+- 在操作系统中，进程和线程如何进行通信？请列举几种常见的进程间通信方式。
 
 ## 1.Nodejs 事件循环
 

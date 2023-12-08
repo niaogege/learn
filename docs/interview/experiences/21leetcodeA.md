@@ -73,6 +73,55 @@ nav:
  */
 ```
 
+## 1.无重复字符的最长子串
+
+> 小红书第一道题的变种题 不会举一反三 直接跪了
+
+```js
+// 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+var lengthOfLongestSubstring = function (s) {
+  if (s && s.length <= 1) return 1;
+  s = s.split('');
+  let res = {
+    string: '',
+    count: 0,
+  };
+  let arr = []; // 滑动的窗口
+  for (let i = 0; i < s.length; i++) {
+    let cur = s[i];
+    if (!arr.includes(cur)) {
+      arr.push(cur);
+    } else {
+      let index = arr.indexOf(cur);
+      arr.splice(0, index + 1);
+      arr.push(cur);
+    }
+    res.count = Math.max(res.count, arr.length);
+    if (res.count === arr.length) {
+      res.string = arr.join('');
+    }
+  }
+  return res;
+};
+lengthOfLongestSubstring('abcabcbb');
+```
+
+### 扩展：连续重复的子字符串
+
+```js
+- 编写 maxContinuousString 函数，寻找字符串中连续重复次数最多的字符：
+- 输入 aaabbbbccbbcccccc，返回 { string: 'c', count: 6} \*/
+```
+
+### 扩展 2:
+
+```js
+利用字符重复出现的次数，编写一种方法，实现基本的字符串压缩功能。比如，字符串aabcccccaaa会变为a5b1c5
+
+如果需要是连续的呢？比如aabcccccaaa会变为a2b1c5a3
+再优化一下，如果只有一个元素那就将1给去掉
+```
+
 ## 2.反转链表
 
 ```js
@@ -314,6 +363,14 @@ var search = function (nums, target) {
     }
   }
 };
+```
+
+## [岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+
+> 我以为不会考 DP 真实面试中还会考的
+
+```js
+给定一个二维数组，其中只包含0和1。我们定义1相邻的区域是指1与1是上下左右相邻的区域。请编写一个JavaScript函数，找出给定二维数组中所有1相邻的区域。
 ```
 
 ## [17.合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)

@@ -15,6 +15,20 @@ nav:
 
 > 迈不过也得迈 读书破万卷 下笔如有神
 
+> 20231208 重新开始背算法题，写算法题
+
+## 参考资料
+
+- [向大佬致敬](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIxMjExNzQxMQ==&action=getalbum&album_id=2856240521298657286&scene=173&from_msgid=2247489721&from_itemidx=1&count=3&nolastread=1#wechat_redirect)
+
+- [代码随想录](https://programmercarl.com/%E8%83%8C%E5%8C%85%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%8001%E8%83%8C%E5%8C%85-1.html)
+
+- [前端算法面试（高频题库&题目解析）](https://github.com/hovinghuang/fe-agorithm-interview/tree/main)
+
+> 需要自己整理一份面试，花点时间
+
+## 分类
+
 - DP
 - 二叉树
 - 回溯

@@ -18,18 +18,28 @@ nav:
 
 > [面试经典 150 题](https://leetcode.cn/studyplan/top-interview-150/)
 
+> 算法虐你三千遍，依然要保持热爱
+
 ```js
 /**
- 1.二叉树路径和
- 2.二叉树路径和II
- 3.重排链表
- 4.最长公共前缀
- 5.最长公共子序列
- 6.阶乘(迭代/递归/缓存)
- 7.打家劫舍
- 8.零钱兑换
- 9.删除链表的节点
- 10.括号生成
+ * 1.二叉树路径和
+ * 2.二叉树路径和II
+ * 3.重排链表
+ * 4.最长公共前缀
+ * 5.最长公共子序列
+ * 6.阶乘(迭代/递归/缓存)
+ * 7.打家劫舍
+ * 8.零钱兑换
+ * 9.删除链表的节点
+ * 10.括号生成
+ * 11.数组旋转
+ * 12.多叉树, 获取每一层的节点之和
+ * 13.全排列II
+ * 14.寻找字符串中连续重复次数最多的字符
+ * 15.乘积最大子数组
+ * 16.螺旋打印二维数组
+ * 17.按照版本号对数组排序
+ * 18.翻转二叉树，二叉树的左右节点翻转
  */
 ```
 
@@ -71,6 +81,8 @@ var pathSum = function (root, targetSum) {
   dfs(root, [], 0);
 };
 ```
+
+## 3.重排链表
 
 ## 6.阶乘(迭代/递归/缓存)
 
@@ -139,3 +151,107 @@ var deleteNode = function (head, val) {
   return dummy.next;
 };
 ```
+
+## 11.数组旋转
+
+```js
+function rotateArray(arr, k) {
+  var len = arr.length;
+  var newArr = [];
+  for (let i = 0; i < len; i++) {
+    newArr[(i + k) % len] = arr[i];
+  }
+  for (let i = 0; i < len; i++) {
+    arr[i] = newArr[i];
+  }
+  return arr;
+}
+rotateArray([1, 2, 3, 4, 5], 2);
+```
+
+## 12.多叉树 获取每一层的节点之和
+
+```js
+function layerSum(root) {}
+
+const res = layerSum({
+  value: 2,
+  children: [
+    { value: 6, children: [{ value: 1 }] },
+    { value: 3, children: [{ value: 2 }, { value: 3 }, { value: 4 }] },
+    { value: 5, children: [{ value: 7 }, { value: 8 }] },
+  ],
+});
+
+console.log(res);
+```
+
+## [13.全排列 II](https://leetcode.cn/problems/permutations-ii/description/)
+
+```js
+// 给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
+var permuteUnique = function (nums) {
+  nums.sort((a, b) => a - b);
+  let used = new Array(nums.length).fill(false);
+  var res = [];
+  let backTrack = (res, path, i) => {
+    if (path.length === nums.length) {
+      res.push(path.slice());
+      return;
+    }
+    let s = new Set();
+    for (let i = 0; i < nums.length; i++) {
+      if (s.has(nums[i])) continue;
+      if (!used[i]) {
+        used[i] = true;
+        s.add(nums[i]);
+        path.push(nums[i]);
+        backTrack(res, path, i);
+        path.pop();
+        used[i] = false;
+      }
+    }
+  };
+  backTrack(res, [], 0);
+  return res;
+};
+```
+
+## 14.寻找字符串中连续重复次数最多的字符
+
+```js
+
+- 编写 maxContinuousString 函数，寻找字符串中连续重复次数最多的字符：
+-
+- 输入 aaabbbbccbbcccccc，返回 { string: 'c', count: 6} \*/
+
+
+// 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
+var lengthOfLongestSubstring = function(s) {
+    if (s && s.length <= 1) return 1
+    s = s.split('')
+    let res = {
+      string: '',
+      count: 0
+    }
+    let arr = [] // 滑动的窗口
+    for(let i = 0; i < s.length;i++) {
+        let cur = s[i]
+        if(!arr.includes(cur)) {
+            arr.push(cur)
+        } else {
+            let index = arr.indexOf(cur)
+            arr.splice(0, index + 1)
+            arr.push(cur)
+        }
+        res.count = Math.max(res.count, arr.length)
+        if (res.count === arr.length) {
+          res.string = arr.join('')
+        }
+    }
+    return res
+};
+lengthOfLongestSubstring('abcabcbb')
+```
+
+## [15.乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)

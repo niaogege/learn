@@ -1,5 +1,5 @@
 ---
-title: 代码片段
+title: 代码片段和打印题
 order: 10
 group:
   order: 1
@@ -47,7 +47,7 @@ for (let i = 0; i < 5; i++) {
 }
 ```
 
-- 打印题
+## 输出结果
 
 ```js
 let a = 0,
@@ -212,7 +212,7 @@ console.log(typeof a); // undefined
 console.log(typeof b); // number
 ```
 
-## 如何正常结构对象里的属性值
+## 如何正常解构对象里的属性值
 
 在不知道 obj 的属性名 data 的前提下，解构出 name 属性
 
@@ -273,7 +273,7 @@ const a = 200;
 fn();
 ```
 
-## 生成器函数打印
+## [生成器函数打印](https://juejin.cn/post/7299696650896080922#heading-14)
 
 ```js
 function* test(x) {
@@ -283,7 +283,83 @@ function* test(x) {
   return x + y + z;
 }
 const b = test(5);
-console.log(b.next());
-console.log(b.next(12));
-console.log(b.next(13));
+console.log(b.next()); // 6
+console.log(b.next(12)); // 2*12/3 = 8
+console.log(b.next(13)); // 5+24+13 = 42
+
+function asyncGenerator(fn) {
+  return function (...rest) {
+    let gFn = fn.apply(this, rest);
+    return new Promise((resolve, reject) => {
+      step('next');
+      function step(key, ...arg) {
+        let res;
+        try {
+          res = gFn[key](...arg);
+          let { done, value } = res;
+          if (done) {
+            resolve(value);
+          } else {
+            return Promise.resolve(value).then(
+              (val) => {
+                return step('next', val);
+              },
+              (err) => step('throw', err),
+            );
+          }
+        } catch (e) {
+          reject(e);
+        }
+      }
+    });
+  };
+}
 ```
+
+长时间不复习 generator 函数，容易忘记,这是一个使用 **Generator** 函数的示例，该函数包含了 yield 表达式，允许你在迭代的过程中暂停执行，同时传递和接收值。在执行 Generator 函数时，通过调用其 next 方法，可以逐步执行 Generator 函数体内的代码。
+
+让我们逐步解释这个过程：
+
+```js
+function* test(x) {
+  // 第一次调用 next()，执行到第一个 yield 表达式
+  const y = 2 * (yield x + 1);
+  // 第二次调用 next(12)，将 12 传递给上一个 yield 表达式，计算 y，并执行到第二个 yield 表达式
+  const z = yield y / 3;
+  // 第三次调用 next(13)，将 13 传递给上一个 yield 表达式，计算 z，并执行到函数结束
+  console.log('x', x, 'y', y, 'z', z);
+  // 返回 x + y + z
+  return x + y + z;
+}
+
+// 创建 Generator 对象，但不执行函数体
+const b = test(5);
+
+// 第一次调用 next()，开始执行 Generator 函数体，执行到第一个 yield 表达式
+console.log(b.next());
+// 输出: { value: 6, done: false }，其中 value 是第一个 yield 表达式的结果（5 + 1）
+
+// 第二次调用 next(12)，将 12 传递给上一个 yield 表达式，继续执行函数体，执行到第二个 yield 表达式
+console.log(b.next(12));
+// 输出: { value: 8, done: false }，其中 value 是第二个 yield 表达式的结果（2 * 6 / 3）
+
+// 第三次调用 next(13)，将 13 传递给上一个 yield 表达式，继续执行函数体，执行到函数结束
+console.log(b.next(13));
+// 输出: x 5 y 24 z 13，其中 x 是初始参数 5，y 是上一个 yield 表达式的结果（2 * 12），z 是上一个 yield 表达式的传入值（13）
+// 最终返回 x + y + z，即 5 + 24 + 13 = 42
+// 输出: { value: 42, done: true }，其中 value 是函数的返回值，done 表示 Generator 函数是否执行结束
+```
+
+分析函数执行过程：
+
+- 第一次调用 b.next()：
+
+Generator 函数开始执行，执行到 yield (x + 1) 时暂停，返回 { value: 6, done: false }。此时 yield 的表达式的值为 x + 1，即 5 + 1。
+
+- 第二次调用 b.next(12)：
+
+继续执行 Generator 函数，将传入的参数 12 赋给上一个 yield 表达式的结果。执行到 yield (y / 3) 时暂停，返回 { value: 8, done: false }。此时 y 的值为 2 \* 12，即 24。
+
+- 第三次调用 b.next(13)：
+
+继续执行 Generator 函数，将传入的参数 13 赋给上一个 yield 表达式的结果。执行到函数末尾，即 console.log 语句，打印 'x 5 y 24 z 13'。最终返回 { value: 18, done: true }，表示 Generator 函数执行完毕。

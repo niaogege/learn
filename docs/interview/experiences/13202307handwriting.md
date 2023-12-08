@@ -679,7 +679,7 @@ function render(str, data) {
 render('name:{{name}},age:{{age}}', { name: 'cpp', age: 30 });
 ```
 
-## 22.千分位分割
+## 22.千分位分割以及包含小数点的分割
 
 ```js
 function thousand(str) {
@@ -687,7 +687,7 @@ function thousand(str) {
 }
 thousand('123456789');
 //有小数点
-let num2 = '342243242322.3432423';
+var num2 = '123456789.1234';
 num2.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 ```
 

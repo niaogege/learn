@@ -53,11 +53,21 @@ nav:
  * 33.实现阶乘(迭代/递归)
  * 34.FileReader使用
  * 35.取消请求
- * 36.
- * 37.
- * 38.
- * 39.
- * 40.
+ * 36.将数字转换成汉语的输出，输入为不超过 10000 亿的数字
+ * 37.两个字符串对比, 得出结论都做了什么操作, 比如插入或者删除
+ * 38.给一个字符串, 找到第一个不重复的字符
+ * 39.一个赛场中有5条赛道，现在有25匹马，在没有定时器的前提下最少跑多少圈可以角逐出前三名？
+ * 40.vue模板解析
+ * 41.增加数组原型 group 方法
+ * 42.Vue 中的响应式机制是如何实现的？请手写代码来实现数据劫持（数据劫持即数据变化时触发回调函数）的简单示例
+ * 43.
+ * 44.
+ * 45.
+ * 45.
+ * 47.
+ * 48.
+ * 49.
+ * 50.
  */
 ```
 
@@ -950,7 +960,7 @@ var arr = [...cards];
 console.log(arr);
 ```
 
-## 26.解析二维码
+## 26.用原生 JS 实现解析二维码
 
 ```js
 function parseQrcode() {
@@ -1154,7 +1164,7 @@ function uploadFile(file) {
 }
 ```
 
-## 35.取消请求
+## 35.取消请求 AbortController
 
 ```js
 function cancelRequest(url) {
@@ -1172,4 +1182,105 @@ function cancelRequest(url) {
 }
 ```
 
+## 36.将数字转换成汉语的输出，输入为不超过 10000 亿的数字
+
+```js
+// trans(123456) —— 十二万三千四百五十六
+function trans(num) {}
+```
+
+## 37.两个字符串对比, 得出结论都做了什么操作, 比如插入或者删除
+
+```js
+pre = 'abcde123';
+now = '1abc123';
+
+// a前面插入了1, c后面删除了de
+```
+
+## 38.给一个字符串, 找到第一个不重复的字符
+
+```js
+ababcbdsa;
+abcdefg;
+function diff(a, b) {
+  let len = Math.min(a.length, b.length);
+  let index;
+  for (let i = 0; i < len; i++) {
+    if (a[i] !== b[i]) {
+      index = i;
+      break;
+    }
+  }
+  return a[index];
+}
+diff('ababcbdsa', 'abcdefg');
+```
+
+## 39.一个赛场中有 5 条赛道，现在有 25 匹马，在没有定时器的前提下最少跑多少圈可以角逐出前三名？
+
+## 40.vue 模板编译，正则解析
+
+```js
+// 输入: render(`{{msg}}-{{name}}`, {msg: 'chendap', name: 'wmh'}) 输出: 'chendap-wmh'
+
+function render(template, data) {
+  var reg = /\{\{(\w+)\}\}/;
+  if (reg.test(template)) {
+    const name = RegExp.$1.trim(); // name = reg.exec(template)[1]
+    template = template.replace(reg, data[name]);
+    return render(template, data);
+  }
+  return template;
+}
+// 测试
+render(`{{msg}}-{{name}}`, { msg: 'chendap', name: 'wmh' }); // chendap-wmh
+```
+
+## 41.增加数组原型 group 方法,实现自定义分类
+
+```js
+// expected
+var result = {
+  bigger: [4, 5],
+  smaller: [1, 2, 3],
+};
+var array = [1, 2, 3, 4, 5]; // sorted
+Array.prototype.group = function (fn) {
+  let arr = this || [];
+  let res = {};
+  for (let i = 0; i < arr.length; i++) {
+    let val = fn.apply(this, [arr[i], i, this]);
+    res[val] = res[val] ? [...res[val], arr[i]] : [arr[i]];
+  }
+  return res;
+};
+var res = array.group((num, index, array) => {
+  return num > 3 ? 'bigger' : 'smaller';
+});
+console.log(res);
+```
+
+## 42.Vue 中的响应式机制是如何实现的？请手写代码来实现数据劫持（数据劫持即数据变化时触发回调函数）的简单示例
+
+```js
+
+```
+
+## 43.算法：实现一个函数，将给定的十进制数转换为 36 进制表示
+
+```js
+
+```
+
+## 44.迭代/递归的方式实现二叉树的层次遍历
+
+## 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称。
+
+## 46.给定一组乱序的区间，合并重叠的区间并返回结果。
+
+## 47.
+
 ## 参考
+
+- [字节跳动前端面经（3 年工作经验附详细答案）](https://mp.weixin.qq.com/s/MYfuUSNS7xIAT4RgZIMv0g)
