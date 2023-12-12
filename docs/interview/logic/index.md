@@ -17,6 +17,8 @@ nav:
 
 > 20231208 重新开始背算法题，写算法题
 
+> 20231209 刷不到 200 算法题 不会轻易去看 BOSS，看了也白看，真丢人
+
 ## 参考资料
 
 - [向大佬致敬](https://mp.weixin.qq.com/mp/appmsgalbum?__biz=MzIxMjExNzQxMQ==&action=getalbum&album_id=2856240521298657286&scene=173&from_msgid=2247489721&from_itemidx=1&count=3&nolastread=1#wechat_redirect)

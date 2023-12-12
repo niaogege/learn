@@ -347,7 +347,7 @@ console.log(b.next(12));
 console.log(b.next(13));
 // 输出: x 5 y 24 z 13，其中 x 是初始参数 5，y 是上一个 yield 表达式的结果（2 * 12），z 是上一个 yield 表达式的传入值（13）
 // 最终返回 x + y + z，即 5 + 24 + 13 = 42
-// 输出: { value: 42, done: true }，其中 value 是函数的返回值，done 表示 Generator 函数是否执行结束
+// 输出: { value: 42, done: true }，其中 value 是函数的返回值，done 表示 Generator 函数是否执行结束·
 ```
 
 分析函数执行过程：

@@ -688,7 +688,8 @@ function thousand(str) {
 thousand('123456789');
 //有小数点
 var num2 = '123456789.1234';
-num2.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+num2.replace(/(?!^)(?=(\d{3})+\.)/g, ',');
+// '123,456,789.1234'
 ```
 
 ## 23.实现一个 node 异步函数的 promisify

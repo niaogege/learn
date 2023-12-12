@@ -1201,8 +1201,8 @@ now = '1abc123';
 ## 38.给一个字符串, 找到第一个不重复的字符
 
 ```js
-ababcbdsa;
-abcdefg;
+// ababcbdsa;
+// abcdefg;
 function diff(a, b) {
   let len = Math.min(a.length, b.length);
   let index;
@@ -1278,6 +1278,40 @@ console.log(res);
 ## 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称。
 
 ## 46.给定一组乱序的区间，合并重叠的区间并返回结果。
+
+```js
+outin: [
+  [2, 4],
+  [5, 6],
+  [3, 9],
+  [0, 6],
+  [11, 15],
+];
+//expected [0, 9] [11, 15]
+function merge(arr) {
+  arr.sort((a, b) => a[0] - b[0]);
+  let pre = arr[0];
+  let res = [];
+  for (let i = 1; i < arr.length; i++) {
+    let cur = arr[i];
+    if (cur[0] > pre[1]) {
+      res.push(pre);
+      pre = cur;
+    } else {
+      pre[1] = Math.max(pre[1], cur[1]);
+    }
+  }
+  res.push(pre);
+  return res;
+}
+merge([
+  [2, 4],
+  [5, 6],
+  [3, 9],
+  [0, 6],
+  [11, 15],
+]);
+```
 
 ## 47.
 

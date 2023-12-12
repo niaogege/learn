@@ -10,19 +10,18 @@
  * 9.全排列2
  */
 
-
 function thousand(str) {
-  return str.replace(//, ',')
+  return str.replace(/(?!^)(?=(\d{3})+\.)/g, ',');
 }
-
+thousand('123456789.12345');
 function render(str, data) {
-  let reg = /\{\{(\w+)\}\}/
+  let reg = /\{\{(\w+)\}\}/;
   if (reg.test(str)) {
-    var key = reg.exec(str)[1]
-    str = str.replace(reg, data[key])
-    return render(str, data)
+    var key = reg.exec(str)[1];
+    str = str.replace(reg, data[key]);
+    return render(str, data);
   }
-  return str
+  return str;
 }
 // 给定一个可包含重复数字的序列 nums ，按任意顺序 返回所有不重复的全排列。
 // 输入：nums = [1,2,3]

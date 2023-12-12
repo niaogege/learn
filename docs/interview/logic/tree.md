@@ -13,6 +13,8 @@ nav:
 
 > 还是不理解二叉树的递归遍历流程，在此记录刷过的二叉树题目
 
+> 20231209 还是不理解二叉树的递归
+
 - [110.平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/)
 - [100.相同的树](https://leetcode-cn.com/problems/same-tree/)
 - [98.验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)

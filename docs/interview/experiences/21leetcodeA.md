@@ -22,7 +22,7 @@ nav:
 /**
  * 1.无重复字符的最长子串
  * 2.反转链表
- * 3. LRU缓存机制
+ * 3.LRU缓存机制
  * 4.数组中的第K个最大元素
  * 5. K 个一组翻转链表
  * 6.三数之和
@@ -117,9 +117,18 @@ lengthOfLongestSubstring('abcabcbb');
 
 ```js
 利用字符重复出现的次数，编写一种方法，实现基本的字符串压缩功能。比如，字符串aabcccccaaa会变为a5b1c5
-
 如果需要是连续的呢？比如aabcccccaaa会变为a2b1c5a3
 再优化一下，如果只有一个元素那就将1给去掉
+function outPutStr(str) {
+  let res = {
+    string: '',
+    count: 0
+  }
+  let arr = []
+  for (let i=0;i<str.length;i++) {
+
+  }
+}
 ```
 
 ## 2.反转链表
@@ -369,8 +378,31 @@ var search = function (nums, target) {
 
 > 我以为不会考 DP 真实面试中还会考的
 
+> 不是 DP 是 DFS
+
 ```js
 给定一个二维数组，其中只包含0和1。我们定义1相邻的区域是指1与1是上下左右相邻的区域。请编写一个JavaScript函数，找出给定二维数组中所有1相邻的区域。
+function numIslands(grid) {
+  var isArea = (grid, r, c) => r < grid.length && c < grid[0].length && r >= 0 && c >= 0;
+  var dfs = (grid, r, c ) => {
+    if (!isArea(grid, r, c) || grid[r][c] != '1') return;
+    grid[r][c] = '2'
+    dfs(grid, r-1, c)
+    dfs(grid, r+1, c)
+    dfs(grid, r, c-1)
+    dfs(grid, r, c+1)
+  }
+  let count = 0
+  for (let r = 0; i < grid.length;r++) {
+    for(let c = 0; c < grid[0].length;c++) {
+      if (grid[r][c] == '1') {
+        count = count+1
+        dfs(grid, r, c)
+      }
+    }
+  }
+  return count
+}
 ```
 
 ## [17.合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
@@ -445,3 +477,23 @@ function insectionLink(headA, headB) {
 ```
 
 ## [38.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
+
+## [46.括号生成](https://leetcode.cn/problems/generate-parentheses/)
+
+```js
+function generate(n) {
+  if (n <= 0) return '';
+  let res = [];
+  var dfs = (paths, left, right) => {
+    if (left < right || left > n) return;
+    if (paths.length == 2 * n) {
+      res.push(paths.slice());
+      return;
+    }
+    dfs(paths + '(', left + 1, right);
+    dfs(paths + ')', left, right);
+  };
+  dfs('', 0, 0);
+  return res;
+}
+```
