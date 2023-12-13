@@ -1182,11 +1182,49 @@ function cancelRequest(url) {
 }
 ```
 
-## 36.将数字转换成汉语的输出，输入为不超过 10000 亿的数字
+## [36.将数字转换成汉语的输出，输入为不超过 10000 亿的数字](https://www.nowcoder.com/practice/6eec992558164276a51d86d71678b300)
 
 ```js
 // trans(123456) —— 十二万三千四百五十六
-function trans(num) {}
+function trans(n) {
+  let isLosf = n < 0;
+  n = Math.abs(n).toString();
+  let len = n.length;
+  let res = [];
+  let units = ['', '万', '亿'];
+  for (let i = len; i > 0; i -= 4) {
+    let item = numToCn(n.slice(Math.max(0, i - 4), i));
+    res.push(item);
+  }
+  console.log(res, 'res11');
+  for (let i = 0; i < res.length; i++) {
+    res[i] = res[i] + units[i];
+  }
+  console.log(res, 'res22');
+  if (isLosf) {
+    res.push('负');
+  }
+  return res.reverse().join('');
+}
+function numToCn(n) {
+  n = n.toString();
+  let units = ['', '十', '百', '千'];
+  let nums = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  let len = n.length;
+  let res = '';
+  for (let i = 0; i < len; i++) {
+    let num = n[i];
+    if (num != '0') {
+      if (i >= 1 && n[i - 1] == '0') res += nums[0];
+      res += nums[num] + units[len - i - 1];
+    }
+  }
+  if (len == 2 && n[0] == '1') {
+    res = res.slice(1);
+  }
+  return res;
+}
+trans(123456);
 ```
 
 ## 37.两个字符串对比, 得出结论都做了什么操作, 比如插入或者删除
@@ -1275,7 +1313,49 @@ console.log(res);
 
 ## 44.迭代/递归的方式实现二叉树的层次遍历
 
-## 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称。
+## 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称
+
+```js
+// dfs
+function isSym(root) {
+  if (root == null) return true;
+  var dfs = (left, right) => {
+    if (left == null && right != null) {
+      return false;
+    } else if (left != null && right == null) {
+      return false;
+    } else if (left == null && right == null) {
+      return true;
+    } else if (left.val != right.val) {
+      return false;
+    }
+    let outSide = dfs(left.left, right.right);
+    let innerSide = dfs(left.right, right.left);
+    return outSide && innerSide;
+  };
+  return dfs(root.left, root.right);
+}
+// bfs
+function isSameBfs(root) {
+  if (!root) return true;
+  let queue = [root.left, root.right];
+  while (queue.length) {
+    let lefNode = queue.shift();
+    let rightNode = queue.shift();
+    if (rightNode == null && lefNode == null) {
+      continue;
+    }
+    if (rightNode || lefNode || rightNode.val != lefNode.val) {
+      return false;
+    }
+    queue.push(lefNode.left);
+    queue.push(rightNode.right);
+    queue.push(lefNode.right);
+    queue.push(rightNode.left);
+  }
+  return true;
+}
+```
 
 ## 46.给定一组乱序的区间，合并重叠的区间并返回结果。
 
