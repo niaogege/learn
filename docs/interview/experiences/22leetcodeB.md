@@ -40,6 +40,11 @@ nav:
  * 16.螺旋打印二维数组
  * 17.按照版本号对数组排序
  * 18.翻转二叉树，二叉树的左右节点翻转
+ * 19.每日温度
+ * 20.二叉树直径
+ * 21.二叉树的最大路径和
+ * 22.二叉树的第K小的元素
+ * 23.将有序数组展开为二叉搜索树
  */
 ```
 
@@ -255,3 +260,69 @@ lengthOfLongestSubstring('abcabcbb')
 ```
 
 ## [15.乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
+
+## [16.螺旋打印二维数组]()
+
+```js
+function matrix(nums) {
+  if (!nums.length) return [];
+  let res = [];
+  let up = 0;
+  let down = nums.length - 1;
+  let left = 0;
+  let right = nums[0].length - 1;
+  while (true) {
+    // 从右往左
+    for (let i = left; i <= right; i++) {
+      res.push(nums[up][i]);
+    }
+    if (++up > down) break;
+
+    // 从上往下
+    for (let i = up; i <= down; i++) {
+      res.push(nums[i][right]);
+    }
+    if (--right < left) break;
+
+    //从右往左
+    for (let i = right; i >= left; i--) {
+      res.push(nums[down][i]);
+    }
+    if (up > --down) break;
+
+    // 从下往上
+    for (let i = down; i >= up; i--) {
+      res.push(nums[i][left]);
+    }
+    if (++left > right) break;
+  }
+  return res;
+}
+```
+
+## [19.每日温度](https://leetcode.cn/problems/daily-temperatures/)
+
+```js
+// 输入: temperatures = [73,74,75,71,69,72,76,73]
+// 输出: [1,1,4,2,1,1,0,0]
+function dailyTemp(nums) {
+  if (!nums.length) return [];
+  let len = nums.length;
+  let res = new Array(len).fill(0);
+  let stack = [0];
+  for (let i = 0; i < len; i++) {
+    let cur = nums[i];
+    if (cur <= nums[stack.slice(-1)]) {
+      stack.push(i);
+    } else {
+      while (cur && cur > nums[stack.slice(-1)]) {
+        let top = stack.pop();
+        res[top] = i - top;
+      }
+      stack.push(i);
+    }
+  }
+  return res;
+}
+dailyTemp([73, 74, 75, 71, 69, 72, 76, 73]);
+```

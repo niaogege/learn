@@ -4,7 +4,26 @@
  * 3.螺旋矩阵
  * 4.括号生成
  * 5.合并区间
+ * 6.每日温度
  */
+
+var dailyTemperatures = function (nums) {
+  if (!nums.length) return [];
+  let len = nums.length;
+  let res = new Array(len).fill(0);
+  let stack = [0];
+  for (let i = 1; i < len; i++) {
+    if (nums[stack.slice(0, 1)] >= nums[i]) {
+      stack.push(i);
+    } else {
+      while (nums[i] && nums[stack.slice(0, 1)] < nums[i]) {
+        res[stack.slice(0, 1)] = i - stack.slice(0, 1);
+        stack.pop();
+      }
+    }
+  }
+  return res;
+};
 
 function quto(n) {
   if (n <= 0) return '';
