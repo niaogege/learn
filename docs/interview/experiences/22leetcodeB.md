@@ -45,6 +45,7 @@ nav:
  * 21.二叉树的最大路径和
  * 22.二叉树的第K小的元素
  * 23.将有序数组展开为二叉搜索树
+ * 24.背包问题
  */
 ```
 
@@ -126,6 +127,10 @@ function count3(n) {
 count3(3);
 ```
 
+## 7.打家劫舍
+
+## 8.零钱兑换
+
 ## 9.[剑指 Offer 18. 删除链表的节点](https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
 
 ```js
@@ -160,6 +165,7 @@ var deleteNode = function (head, val) {
 ## 11.数组旋转
 
 ```js
+// 构建新数组
 function rotateArray(arr, k) {
   var len = arr.length;
   var newArr = [];
@@ -325,4 +331,26 @@ function dailyTemp(nums) {
   return res;
 }
 dailyTemp([73, 74, 75, 71, 69, 72, 76, 73]);
+```
+
+## [20. 二叉树的直径](https://leetcode.cn/problems/diameter-of-binary-tree/)
+
+```js
+// 给你一棵二叉树的根节点，返回该树的 直径 。
+// 二叉树的 直径 是指树中任意两个节点之间最长路径的 长度 。这条路径可能经过也可能不经过根节点 root 。
+// 两节点之间路径的 长度 由它们之间边数表示。
+
+var diameterOfBinaryTree = function (root) {
+  if (!root) return 0;
+  let total = 0;
+  var dfs = (root) => {
+    if (!root) return 0;
+    let left = dfs(oot.left);
+    let right = dfs(root.right);
+    total = Math.max(total, left + right);
+    return 1 + Math.max(left, right);
+  };
+  dfs(root);
+  return total;
+};
 ```

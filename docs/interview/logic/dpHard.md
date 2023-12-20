@@ -17,6 +17,44 @@ nav:
 
 > 还行不忍心放下 DP 太不甘里，20221112，再次重拾
 
+### 01 背包
+
+```js
+/**
+ * 「背包问题：给你一个可装载重量为10的背包和N个物品，每个物品有重量和价值两个属性。其中第i个物品的重量为wt[i]，价值为val[i]，现在让你用这个背包装物品，最多能装的价值是多少？」
+ */
+// 先遍历物品 还是先遍历背包的容量
+// dp[i][j] [0,i]的物品放进容量为j的背包
+// dp[i][j] 又哪几个状态决定 取决于你放不放物品 你放物品是一种状态 不放另一种状态
+// 不放物品i dp[i-1][j]
+// 放物品i dp[i-1][j-weight[i-1]]+val[i]
+// dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i - 1]] + val[i]);
+// weight 2，3，4
+// value 15 20 30
+function weightBag(weight, value, size) {
+  let len = weight.length;
+  let dp = new Array(len).fill().map(() => new Array(size + 1).fill(0));
+  // 第一行初始化 等于第一个物品的价值
+  for (let i = weight[0]; i <= size; i++) {
+    dp[0][i] = value[0];
+  }
+  // 先遍历物品 在遍历容量
+  for (let i = 1; i < len; i++) {
+    for (let j = 0; j <= size; j++) {
+      // 物品大雨总容量的时候 就不需要放物品
+      if (weight[i] > j) {
+        dp[i][j] = dp[i - 1][j];
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+      }
+    }
+  }
+  console.table(dp);
+  return dp[len - 1][size];
+}
+weightBag([1, 3, 4, 5], [15, 20, 30, 55], 6);
+```
+
 ### [494. 目标和](https://leetcode.cn/problems/target-sum/)
 
 感谢[大佬分析](https://leetcode.cn/problems/target-sum/solutions/1303046/hen-xiang-xi-de-zhuan-hua-wei-0-1bei-bao-irvy/)

@@ -90,7 +90,7 @@ function render22(vNode, parent) {
     var dom = mount(document.createElement(vNode.tag));
     // 对子元素进行遍历
     for (let child of vNode['children']) {
-      render(child, dom);
+      document.appendChild(render22(child, dom));
     }
     // 设置属性
     for (let prop in vNode.props) {

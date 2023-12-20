@@ -60,11 +60,11 @@ nav:
  * 40.vue模板解析
  * 41.增加数组原型 group 方法
  * 42.Vue 中的响应式机制是如何实现的？请手写代码来实现数据劫持（数据劫持即数据变化时触发回调函数）的简单示例
- * 43.
- * 44.
- * 45.
- * 45.
- * 47.
+ * 43.算法：实现一个函数，将给定的十进制数转换为 36 进制表示
+ * 44.迭代/递归的方式实现二叉树的层次遍历
+ * 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称
+ * 46.给定一组乱序的区间，合并重叠的区间并返回结果。
+ * 47.多叉树, 获取每一层的节点之和
  * 48.
  * 49.
  * 50.
@@ -1393,7 +1393,40 @@ merge([
 ]);
 ```
 
-## 47.
+## 47.多叉树, 获取每一层的节点之和
+
+```js
+var res = layerSum({
+  value: 2,
+  children: [
+    { value: 6, children: [{ value: 1 }] },
+    { value: 3, children: [{ value: 2 }, { value: 3 }, { value: 4 }] },
+    { value: 5, children: [{ value: 7 }, { value: 8 }] },
+  ],
+});
+
+function layerSum(root) {
+  var res = [];
+  var dfs = (node, depth) => {
+    if (node) {
+      if (!res[depth]) {
+        res[depth] = [];
+      }
+      res[depth].push(node.value);
+      if (node.children) {
+        node.children.forEach((child) => {
+          dfs(child, depth + 1);
+        });
+        delete node.children;
+      }
+    }
+  };
+  dfs(root, 0);
+  return res.map((item) => item.reduce((a, b) => a + b, 0));
+}
+console.log(res, 'res');
+// 如果是二叉树的节点之和呢
+```
 
 ## 参考
 

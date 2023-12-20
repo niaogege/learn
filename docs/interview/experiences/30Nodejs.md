@@ -13,7 +13,7 @@ nav:
 ## 列表
 
 - 1.Nodejs 事件循环
-- 2.说说中间件，如何封装一个中间件
+- 2.说说中间件，如何封装一个中间件，中间件的异常处理是怎么做的
 - 3.说说你对洋葱模型的理解
 - 4.手写 compose,或者说写一个 简易的 koa-compose
 - 5.说说 commonjs 跟 esmodule 区别
@@ -23,9 +23,10 @@ nav:
 - 9.pm2 守护进程原理是什么
 - 10.Nodejs 中的 cluster 和 fork 模式区别
 - 11.node 中的回调函数变成 then 链式调用，手写 promisify
-- Nodejs 异步 IO 模型
-- Node 的日志和负载均衡怎么做的
-- 在操作系统中，进程和线程如何进行通信？请列举几种常见的进程间通信方式。
+- 12.Nodejs 异步 IO 模型
+- 13.Node 的日志和负载均衡怎么做的?
+- 14.Node 开启子进程的方法有哪些?
+- 15.在操作系统中，进程和线程如何进行通信？请列举几种常见的进程间通信方式。
 
 ## 1.Nodejs 事件循环
 
@@ -102,7 +103,7 @@ Koa 框架是一个 Node.js 的 Web 应用程序框架，它通过中间件（Mi
 
 在这个过程中，每个中间件都可以根据需要对请求和响应对象进行修改、扩展、封装等操作，并将控制权传递给下一个中间件，形成了一条流水线式的处理模式。这种设计可以大大提高代码的复用和可读性，同时也方便了对程序行为进行监控、调试和优化。
 
-## 手写 compose
+## 4.手写 compose
 
 ```js
 function compose(middlewares) {
@@ -122,9 +123,23 @@ function compose(middlewares) {
 }
 ```
 
-## Nodejs 如何利用多核 CPU?
+## 5.说说 commonjs 跟 esmodule 区别
 
-## Nodejs 中的 cluster 模式和 fork 模式区别
+## 6.说说 tree Shaking 原理
+
+## 7.说说 nodejs 中的 EventEmitter 事件订阅机制,如何实现一个 eventEmitter
+
+## 8.Nodejs 如何利用多核 CPU?
+
+在 Node.js 中，JS 也是单线程的，只有一个主线程用于执行任务。但是，在 Node.js 中可以使用**多进程**来利用多核机器，以充分利用系统资源。
+
+- Node.js 提供了  **cluster**  模块，可以轻松创建子进程来处理任务。通过将任务分配给不同的子进程，每个子进程可以在自己的线程上执行任务，从而实现多核机器的利用。
+- Node.js 也提供了 **worker_threads** 模块，可以创建真正的多线程应用程序。这个模块允许开发者创建和管理多个工作线程，每个线程都可以独立地执行任务。
+- 利用的是 Node.js 的**事件循环机制和异步非阻塞的 I/O**操作。Node.js 使用事件驱动的模型来处理请求，当有请求到达时，Node.js 将其放入事件队列中，然后通过事件循环来处理这些请求。在等待 I/O 操作的过程中，Node.js 不会阻塞其他请求的处理，而是继续处理其他请求。这样，即使 JavaScript 是单线程的，但在实际运行中，多个请求可以同时处理，充分利用了多核系统的能力。
+
+## 9.pm2 守护进程原理是什么
+
+## 10.Nodejs 中的 cluster 模式和 fork 模式区别
 
 ### [fork 分叉模式(child_process.fork(modulePath[, args][, options]))](https://nodejs.org/api/child_process.html#child_process_child_process_fork_modulepath_args_options)，**单实例多进程**
 

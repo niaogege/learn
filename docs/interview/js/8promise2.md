@@ -171,6 +171,101 @@ promise.then((res) => {
 });
 ```
 
+解析：
+
+**promise** 的 .then 或者 .catch 可以被调用多次，但这里 Promise 构造函数只执行一次。或者说 promise 内部状态一经改变，并且有了一个值，那么后续每次调用 .then 或者 .catch 都会直接拿到该值。
+
+```js
+once
+success 1005
+success 1007
+```
+
+### 06.
+
+```js
+Promise.resolve()
+  .then(() => {
+    return new Error('error!!!');
+  })
+  .then((res) => {
+    console.log('then: ', res);
+  })
+  .catch((err) => {
+    console.log('catch: ', err);
+  });
+```
+
+解析：
+
+.then 或者 .catch 中 return 一个 error 对象并不会抛出错误，所以不会被后续的 .catch 捕获，需要改成其中一种：
+
+```js
+return Promise.reject(new Error('error!!!'));
+throw new Error('error!!!');
+```
+
+因为返回任意一个非 promise 的值都会被包裹成 promise 对象，即 return new Error('error!!!') 等价于 `return Promise.resolve(new Error('error!!!'))` 运行结果：
+
+```js
+then:  Error: error!!!
+    at <anonymous>
+```
+
+### 07
+
+```js
+const promise = Promise.resolve().then(() => {
+  return promise;
+});
+promise.catch(console.error);
+```
+
+解析：.then 或 .catch 返回的值不能是 promise 本身，否则会造成死循环。类似于：
+
+```js
+process.nextTick(function tick() {
+  console.log('tick');
+  process.nextTick(tick);
+});
+```
+
+运行结果：
+
+```js
+TypeError: Chaining cycle detected for promise #<Promise>
+```
+
+### 打印输出里面的值
+
+```js
+Promise.resolve()
+  .then(() => {
+    console.log(0);
+    return Promise.resolve(4);
+  })
+  .then((res) => {
+    console.log(res);
+  });
+
+Promise.resolve()
+  .then(() => {
+    console.log(1);
+  })
+  .then(() => {
+    console.log(2);
+  })
+  .then(() => {
+    console.log(3);
+  })
+  .then(() => {
+    console.log(5);
+  })
+  .then(() => {
+    console.log(6);
+  });
+```
+
 ### 批量发请求
 
 ```js

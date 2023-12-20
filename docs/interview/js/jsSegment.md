@@ -212,6 +212,21 @@ console.log(typeof a); // undefined
 console.log(typeof b); // number
 ```
 
+## 输出打印题
+
+```js
+var b = 10;
+(function b() {
+  b = 20;
+  console.log(b);
+})();
+// 会打印 b函数
+function b() {
+  b = 20;
+  console.log(b);
+}
+```
+
 ## 如何正常解构对象里的属性值
 
 在不知道 obj 的属性名 data 的前提下，解构出 name 属性

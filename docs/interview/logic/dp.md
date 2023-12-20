@@ -19,6 +19,8 @@ nav:
 
 > 在看 DP 已经是 202311，过去了 16 个月
 
+> dp 永远逃不过去的坎 20231217
+
 - [746. 使用最小花费爬楼梯](https://leetcode.cn/problems/min-cost-climbing-stairs/)
 - [53. 最大子数组和](https://leetcode.cn/problems/maximum-subarray/)
 - [647. 回文子串](https://leetcode.cn/problems/palindromic-substrings/)

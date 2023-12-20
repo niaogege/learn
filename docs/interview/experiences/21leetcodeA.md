@@ -309,7 +309,7 @@ var mergeTwoLists = function (l1, l2) {
 };
 ```
 
-## 10.最长回文子串
+## [10.最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
 
 ```js
 // 输入：s = "babad"
@@ -474,13 +474,49 @@ function insectionLink(headA, headB) {
 
 ## [30.接雨水](https://leetcode.cn/problems/trapping-rain-water/)
 
+```js
+function water(nums) {
+  if (!nums.length) return 0;
+  let len = nums.length;
+  let stack = [0];
+  let res = 0;
+  for (let i = 1; i < len; i++) {
+    let cur = nums[i];
+    // 当前元素跟栈顶元素进行比较
+    // 当前元素小于栈顶元素 下标入栈
+    if (cur < nums[stack.slice(-1)]) {
+      stack.push(i);
+    } else {
+      while (cur && cur >= nums[stack.slice(-1)]) {
+        // 需要计算h*w
+        let top = stack.pop(); // 已经出栈的栈顶元素
+        if (stack.length != 0) {
+          let curTop = stack.slice(-1); // 当前栈顶元素
+          let h = Math.min(cur, nums[curTop]) - nums[top];
+          let w = i - curTop - 1;
+          res = res + h * w;
+        }
+      }
+      stack.push(i);
+    }
+  }
+  return res;
+}
+```
+
 ## [32.二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
+
+> hard
 
 ```js
 
 ```
 
 ## [38.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
+
+```js
+
+```
 
 ## [46.括号生成](https://leetcode.cn/problems/generate-parentheses/)
 

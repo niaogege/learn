@@ -73,6 +73,15 @@ Array.prototype.myMap = function (fn, context) {
   return res;
 };
 
+Array.prototype.myReudce = function (fn, init) {
+  let arr = this || [];
+  let res = init ? init : arr[0];
+  for (let i = init ? 0 : 1; i < arr.length; i++) {
+    res = fn.call(this, res, arr[i], i, arr);
+  }
+  return res;
+};
+
 /**
  * 
 柯里化的定义：接收一部分参数，返回一个函数接收剩余参数，接收足够参数后，执行原函数。
