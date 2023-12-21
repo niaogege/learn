@@ -131,7 +131,7 @@ function compose(middlewares) {
 
 ## 8.Nodejs 如何利用多核 CPU?
 
-在 Node.js 中，JS 也是单线程的，只有一个主线程用于执行任务。但是，在 Node.js 中可以使用**多进程**来利用多核机器，以充分利用系统资源。
+在 Node.js 中，JS 也是单线程的，只有一个主线程用于执行任务。但是，在 Node.js 中可以使用**多进程**来利用多核机器，以充分利用 CPU 系统资源。
 
 - Node.js 提供了  **cluster**  模块，可以轻松创建子进程来处理任务。通过将任务分配给不同的子进程，每个子进程可以在自己的线程上执行任务，从而实现多核机器的利用。
 - Node.js 也提供了 **worker_threads** 模块，可以创建真正的多线程应用程序。这个模块允许开发者创建和管理多个工作线程，每个线程都可以独立地执行任务。
@@ -198,3 +198,17 @@ readFileAsync('test.js').then(
   },
 );
 ```
+
+## 说说 Nodejs 异步 IO 模型
+
+## 13.Node 的日志和负载均衡怎么做的?
+
+## 14.Node 开启子进程的方法有哪些?
+
+## 15.在操作系统中，进程和线程如何进行通信？请列举几种常见的进程间通信方式。
+
+## cluster 模块为什么可以让多个子进程监听同一个端口呢
+
+开启多进程时候端口疑问讲解：如果多个 Node 进程监听同一个端口时会出现 Error:listen EADDRIUNS 的错误，而 cluster 模块为什么可以让多个子进程监听同一个端口呢?原因是 master 进程内部启动了一个 TCP 服务器，而真正监听端口的只有这个服务器，当来自前端的请求触发服务器的 connection 事件后，master 会将对应的 socket 句柄发送给子进程。而 child_process 操作子进程时，创建多个 TCP 服务器， 无论是 child_process 模块还是 cluster 模块，为了解决 Node.js 实例单线程运行，无法利用多核 CPU 的问题而出现的。核心就是通过 fork()或者其他 API，创建了子进程之后，父进程（即 master 进程）负责监听端口，接收到新的请求后将其分发给下面的 worker 进程，父子进程之间才能通过 message 和 send()进行 IPC 通信（Inter-Process Communication）。
+
+Node 中实现 IPC 通道是依赖于 **libuv**，

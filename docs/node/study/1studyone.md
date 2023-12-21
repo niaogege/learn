@@ -1,6 +1,6 @@
 ---
 title: Node学习笔记
-order: 2
+order: 1
 group:
   title: study
   order: 1
@@ -228,3 +228,7 @@ readFile('./index', (err, data) => {
   console.log(data);
 });
 ```
+
+### 参考
+
+- [nodejs eventEmitter](https://nodejs.cn/api/events.html)

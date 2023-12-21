@@ -438,39 +438,14 @@ const listTree = [
     children: [],
   },
 ];
-function loop(tree) {
-  let node = tree;
-  if (!node.length) return [];
-  var res = [];
-  for (let i = 0; i < node.length; i++) {
-    var item = node[i];
-    res.push({
-      id: item.id,
-      name: item.name,
-      pid: item.pid,
-    });
-    if (item.children) {
-      const last = loop(item.children);
-      if (Array.isArray(last)) {
-        res.push(...last.flat());
-      } else {
-        last && res.push(last);
-      }
-    }
-  }
-  return res;
-}
-loop(listTree);
-
 // BFS
 function loop2(tree, childName = 'children') {
-  let queen = [];
+  let queen = [...tree];
   const res = [];
-  queen = queen.concat(tree);
   while (queen.length) {
     const first = queen.shift();
     if (first[childName]) {
-      queen = queen.concat(first[childName]);
+      queen.push(...first[childName]);
       delete first[childName];
     }
     res.push(first);
@@ -1425,7 +1400,69 @@ function layerSum(root) {
   return res.map((item) => item.reduce((a, b) => a + b, 0));
 }
 console.log(res, 'res');
+
+function layerSumBfs(root) {
+  if (!root) return 0;
+  let queue = [root];
+  let res = [];
+  while (queue.length) {
+    let sum = 0;
+    let len = queue.length;
+    for (let i = 0; i < len; i++) {
+      let first = queue.shift();
+      sum += first.value;
+      if (first.children) {
+        first.children.forEach((child) => {
+          queue.push(child);
+        });
+        delete first.children;
+      }
+    }
+    res.push(sum);
+  }
+  return res;
+}
+
+function levelTra(root) {
+  if (!root) return [];
+  let queue = [root];
+  let res = [];
+  while (queue.length) {
+    let len = queue.length;
+    let arr = [];
+    for (let i = 0; i < len; i++) {
+      let cur = queue.shift();
+      arr.push(cur.val);
+      if (cur.left) {
+        queue.push(cur.left);
+      }
+      if (cur.right) {
+        queue.push(cur.right);
+      }
+    }
+    res.push(arr);
+  }
+}
 // 如果是二叉树的节点之和呢
+var levelOrderDFS = function (root) {
+  if (!root) return [];
+  var res = [];
+  var dfs = (root, depth) => {
+    if (!root) return;
+    if (!res[depth]) {
+      res[depth] = [];
+    }
+    root.val != null && res[depth].push(root.val);
+    if (root.left) {
+      dfs(root.left, depth + 1);
+    }
+    if (root.right) {
+      dfs(root.right, depth + 1);
+    }
+  };
+  dfs(root, 0);
+  return res;
+};
 ```
 
 ## 参考
