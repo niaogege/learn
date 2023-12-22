@@ -61,12 +61,12 @@ nav:
  * 41.增加数组原型 group 方法
  * 42.Vue 中的响应式机制是如何实现的？请手写代码来实现数据劫持（数据劫持即数据变化时触发回调函数）的简单示例
  * 43.算法：实现一个函数，将给定的十进制数转换为 36 进制表示
- * 44.迭代/递归的方式实现二叉树的层次遍历
+ * 44.useState hook
  * 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称
  * 46.给定一组乱序的区间，合并重叠的区间并返回结果。
  * 47.多叉树, 获取每一层的节点之和
- * 48.
- * 49.
+ * 48.按照版本号由小到大排序
+ * 49.【代码题】实现一个拼手气抢红包算法
  * 50.
  */
 ```
@@ -1286,7 +1286,21 @@ console.log(res);
 
 ```
 
-## 44.迭代/递归的方式实现二叉树的层次遍历
+## 44.useState hook
+
+```js
+const useState = (defaultVal) => {
+  const val = useRef(defaultVal);
+  const setVal = (newVal) => {
+    if (typeof newVal === 'function') {
+      val.current = newVal(val.current);
+    } else {
+      val.current = newVal;
+    }
+  };
+  return [val, setVal];
+};
+```
 
 ## 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称
 
@@ -1464,6 +1478,31 @@ var levelOrderDFS = function (root) {
   return res;
 };
 ```
+
+## 48.按照版本号由小到大排序
+
+```js
+// 样例输入：versions = ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']
+// 输出：['0.1.1', '0.302.1', '2.3.3', '4.3.4.5', '4.3.5']
+function sortVersion(nums) {
+  return nums.sort((a, b) => {
+    a = a.split('.');
+    b = b.split('.');
+    let len = Math.max(a.length, b.length);
+    for (let i = 0; i < len; i++) {
+      let A = +a[i] || 0;
+      let B = +b[i] || 0;
+      if (A == B) continue;
+      console.log(A - B, 'ab', A, B);
+      return A - B;
+    }
+    return 0;
+  });
+}
+sortVersion(['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']);
+```
+
+## 49.【代码题】实现一个拼手气抢红包算法
 
 ## 参考
 

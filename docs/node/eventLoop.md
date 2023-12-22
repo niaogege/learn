@@ -139,7 +139,7 @@ Node 中的 Event Loop 和浏览器中的是完全不相同的东西。 Node 的
 - 开始执行宏任务，上面 6 个阶段。从第 1 个阶段开始，执行相应每一个阶段的宏任务队列中所有任务。（每个阶段的宏任务队列执行完毕后，开始执行微任务），然后在开始下一阶段的宏任务，依次构成事件循环。
 - timers Queue -> 执行微任务 -> I/O Queue -> 执行微任务 -> Check Queue 执行微任务 -> Close Callback Queue -> 执行微任务
 
-在 node 环境下，**process.nextTick**的优先级高于 Promise.then，可以简单理解为在宏任务结束后会先执行微任务队列中的 nextTickQueue 部分，然后才会执行微任务中的 Promise.then 部分
+在 node 环境下，**process.nextTick**的优先级高于 **Promise.then**，可以简单理解为在宏任务结束后会先执行微任务队列中的 nextTickQueue 部分，然后才会执行微任务中的 Promise.then 部分
 
 如此反复，无穷无尽……
 
@@ -214,3 +214,5 @@ setTimeout(function () {
 - [JS 运行机制](https://juejin.cn/post/6976927131095793678?searchId=20231201210755359B842682307A9F6668)
 
 - [「硬核 JS」一次搞懂 JS 运行机制](https://juejin.cn/post/6844904050543034376?searchId=20231201233712D5595BAB6E2502B738BB)
+
+- [node 端事件循环](https://mp.weixin.qq.com/s/huyn95OyOz45J93B3WGXdA)

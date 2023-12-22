@@ -690,6 +690,12 @@ thousand('123456789');
 var num2 = '123456789.1234';
 num2.replace(/(?!^)(?=(\d{3})+\.)/g, ',');
 // '123,456,789.1234'
+
+function thousand(str) {
+  let ans = [];
+  str = str.split('').reverse();
+  for (let i = 0; i < str.length; i++) {}
+}
 ```
 
 ## 23.实现一个 node 异步函数的 promisify

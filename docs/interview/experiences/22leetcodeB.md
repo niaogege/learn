@@ -46,6 +46,8 @@ nav:
  * 22.二叉树的第K小的元素
  * 23.将有序数组展开为二叉搜索树
  * 24.背包问题
+ * 25.多个数组交集
+ * 26.删除有序数组中的重复项
  */
 ```
 
@@ -89,6 +91,46 @@ var pathSum = function (root, targetSum) {
 ```
 
 ## 3.重排链表
+
+## 4.最长公共前缀
+
+```js
+// 输入：strs = ["flower","flow","flight"]
+// 输出："fl"
+// 横行扫描
+function longFind(strs) {
+  if (!strs.length) return '';
+  let prefix = strs[0];
+  for (let i = 0; i < strs.length; i++) {
+    prefix = findL(prefix, strs[i]);
+    if (prefix.length == 0) break;
+  }
+  return prefix;
+}
+function findL(a, b) {
+  let len = Math.min(a.length, b.length);
+  let index = 0;
+  while (a[index] == b[index] && index < len) {
+    index++;
+  }
+  return a.slice(0, index);
+}
+longFind(['flower', 'flow', 'flight']);
+// 纵向扫描
+function longFindHor(strs) {
+  if (!strs.length) return [];
+  let prefix = strs[0];
+  for (let i = 0; i < prefix.length; i++) {
+    for (let j = 1; j < strs.length; j++) {
+      if (strs[j][i] != prefix[i]) {
+        return prefix.slice(0, i);
+      }
+    }
+  }
+  return prefix;
+}
+longFindHor(['flower', 'flow', 'flight']);
+```
 
 ## 6.阶乘(迭代/递归/缓存)
 
@@ -353,4 +395,139 @@ var diameterOfBinaryTree = function (root) {
   dfs(root);
   return total;
 };
+```
+
+## 24.背包问题
+
+```js
+function weightBag(weight, value, size) {
+  let len = weight.length;
+  let dp = new Array(len).fill().map(() => new Array(size + 1).fill(0));
+  // 首行设置0
+  for (let i = weight[0]; i <= size; i++) {
+    dp[0][i] = value[0];
+  }
+  // 注意遍历顺序
+  for (let i = 1; i < len; i++) {
+    for (let j = 0; j <= size; j++) {
+      if (weight[i] > j) {
+        dp[i][j] = dp[i - 1][j];
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j - weight[i]] + value[i]);
+      }
+    }
+  }
+  console.table(dp);
+  return dp[len - 1][size];
+}
+weightBag([1, 3, 4], [15, 20, 30], 6);
+```
+
+## 25.多个数组交集
+
+```js
+/**
+ * 多个数组交集 [[3,1,2,4,5],[1,2,3,4],[3,4,5,6]]
+ */
+// 横向扫描
+function intersect2(nums) {
+  if (!nums.length) return [];
+  let prefix = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    prefix = findT(prefix, nums[i]);
+    if (prefix.length == 0) break;
+  }
+  return prefix;
+}
+function findT(a, b) {
+  let ans = [];
+  for (let item of a) {
+    let index = b.indexOf(item);
+    if (index > -1) {
+      ans.push(item);
+      b.splice(index, 1);
+    }
+  }
+  return ans;
+}
+intersect2([
+  [3, 1, 2, 4, 5],
+  [1, 2, 3, 4],
+  [3, 4, 5, 6],
+]);
+
+// hash
+function intersect3(nums) {
+  let m = new Map();
+  let ans = [];
+  for (let item of nums) {
+    for (let i of item) {
+      if (!m.has(i)) {
+        m.set(i, 0);
+      }
+      let count = m.get(i);
+      m.set(i, count + 1);
+    }
+  }
+  for (let [key, value] of m.entries()) {
+    if (value == nums.length) {
+      ans.push(key);
+    }
+  }
+  return ans;
+}
+intersect3([
+  [3, 1, 2, 4, 5],
+  [1, 2, 3, 4],
+  [3, 4, 5, 6],
+]);
+```
+
+## [26.删除有序数组中的重复项](https://leetcode.cn/problems/remove-duplicates-from-sorted-array/)
+
+```js
+// 输入：nums = [0,0,1,1,1,2,2,3,3,4]
+// 输出：5, nums = [0,1,2,3,4]
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var removeDuplicates = function (nums) {
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] == nums[i + 1]) {
+      const v = nums.splice(i, 1);
+      i--;
+    }
+  }
+  return nums.length;
+};
+removeDuplicates([1, 1, 2]);
+function removeDuplicates2(nums) {
+  if (nums.length == 0) return 0;
+  let slow = 0,
+    fast = 1;
+  while (fast < nums.length) {
+    if (nums[fast] != nums[slow]) {
+      slow = slow + 1;
+      nums[slow] = nums[fast];
+    }
+    fast = fast + 1;
+  }
+  return slow + 1;
+}
+//[1,4,1,6]
+function once(nums) {
+  nums.sort((a. b) => a-b)
+  let ans = []
+  for(let i=0;i<nums.length;i++) {
+    if (nums[i] != nums[i++]) {
+      ans.push(nums[i++])
+    } else {
+      if (ans.length) {
+        ans.pop()
+      }
+    }
+  }
+  return ans
+}
 ```

@@ -410,6 +410,10 @@ function numIslands(grid) {
 ## [17.合并两个有序数组](https://leetcode.cn/problems/merge-sorted-array/)
 
 ```js
+// 输入：nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+// 输出：[1,2,2,3,5,6]
+// 解释：需要合并 [1,2,3] 和 [2,5,6] 。
+// 合并结果是 [1,2,2,3,5,6] ，其中斜体加粗标注的为 nums1 中的元素。
 function merge(num1, m, num2, n) {
   for (let i = m; i < m + n; i++) {
     num1[i] = nums2[i - m];
@@ -512,6 +516,36 @@ function water(nums) {
 
 ```
 
+## [33.合并区间](https://leetcode.cn/problems/merge-intervals/)
+
+```js
+// 输入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+// 输出：[[1,6],[8,10],[15,18]]
+// 解释：区间 [1,3] 和 [2,6] 重叠, 将它们合并为 [1,6].
+function mergeArr(nums) {
+  nums.sort((a, b) => a[0] - b[0]);
+  let ans = [];
+  let pre = nums[0];
+  for (let i = 1; i < nums.length; i++) {
+    let cur = nums[i];
+    if (cur[0] > pre[1]) {
+      ans.push(pre);
+      pre = cur;
+    } else {
+      pre[1] = Math.max(cur[1], pre[1]);
+    }
+  }
+  ans.push(pre);
+  return ans;
+}
+mergeArr([
+  [1, 3],
+  [2, 6],
+  [8, 10],
+  [15, 18],
+]);
+```
+
 ## [38.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
 
 ```js
@@ -536,4 +570,10 @@ function generate(n) {
   dfs('', 0, 0);
   return res;
 }
+```
+
+## 50.比较版本号
+
+```js
+
 ```
