@@ -439,12 +439,15 @@ function mockInstanceof(l, r) {
 
 ## 15.手写选择排序和插入排序
 
+选择排序跟冒泡排序区别：
+
+冒泡排序是不停的交换元素，而选择排序只需要在每一轮交换一次。
+
 ```js
 // 选择排序是将最小的元素存放在数组起始位置，再从剩下的未排序的序列中寻找最小的元素，然后将其放到已排序的序列后面。以此类推，直到排序完成。
 function selectSort(arr) {
-  var min = 0;
   for (let i = 0; i < arr.length; i++) {
-    min = i;
+    let min = i;
     for (let j = i + 1; j < arr.length; j++) {
       if (arr[min] > arr[j]) {
         min = j;
@@ -458,6 +461,13 @@ function selectSort(arr) {
 }
 selectSort([11, 222, 11, 2, 3, 0, 8, 6]);
 
+// [5,4,1]
+// cur = 4
+// i=1 pre = 0
+// arr[0] > arr[1] => 5>4
+// arr[1] = arr[0]=5
+// pre = 0-1 = -1
+// arr[0] = 4
 // 插入排序
 // 对于未排序的数据，在已排序的序列中从后往前扫描，找到相应的位置进行插入，保持已排序序列中元素一直有序。
 function inserSort(arr) {
@@ -476,6 +486,49 @@ function inserSort(arr) {
 inserSort([11, 222, 11, 2, 3, 0, 8, 6]);
 // 时间复杂度: O(n^2)
 // 空间复杂度: O(1)
+
+// 此种方式比之前都好理解
+function insertSort2(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let j = i;
+    while (j > 0 && arr[j - 1] > arr[j]) {
+      swap(arr, j, j - 1);
+      j--;
+    }
+  }
+}
+function swap(arr, i, j) {
+  let temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+}
+insertSort2([22, 111, 2, 3, 4, 55, 1]);
+
+// 希尔排序
+function shellSort(arr) {
+  //没有math的库，但是可以用js原生的parseInt!
+  for (let gap = parseInt(nums.length / 2); gap > 0; gap = parseInt(gap / 2)) {
+    //循环2是有几组要排序【错！】
+    //循环2是从第gap个元素，逐个对其所在组进行直接插入排序操作
+    //分组的意义不是专门分组比较，直接顺延往后走就行，而是分组的是比较对象
+    //已排序的还是在前面，比较的还是和前面的比较
+    //除了多一层gap变化的循环，内层的变化只是比较的间隔变大，由-1变-gap
+    for (let i = gap; i < nums.length; i++) {
+      let j = i - gap;
+      let min = nums[i];
+      for (j >= 0; j = j - gap) {
+        if (min >= nums[j]) {
+          break;
+        }
+        nums[j + gap] = nums[j];
+        //min的值在最内层循环的不变，是插入排序！寻找的是j位置！
+      }
+      nums[j + gap] = min;
+    }
+  }
+  return nums;
+}
+shellSort([22, 111, 2, 3, 4, 55, 1]);
 ```
 
 ## [16.手写二分法查找](https://leetcode.cn/problems/binary-search/description/)
@@ -1254,7 +1307,9 @@ function postOrder(node) {
 }
 ```
 
-## 41.冒泡排序和归并排序
+## 41.冒泡排序和归并排序和计数排序
+
+[计数排序](https://leetcode.cn/problems/sort-an-array/solutions/174838/shi-er-chong-pai-xu-suan-fa-bao-ni-man-yi-dai-gift/)
 
 ```js
 function bubbleSort(arr) {
@@ -1308,12 +1363,33 @@ var mergeSort = (arr) => {
   return sort(arr);
 };
 mergeSort([33, 11, 3, 4, 66, 1]);
+
+// 计数排序
+function countingSort(arr, maxValue) {
+  let bucket = new Array(maxValue + 1),
+    sortedIndex = 0;
+  let arrLen = arr.length,
+    bucketLen = maxValue + 1;
+  for (var i = 0; i < arrLen; i++) {
+    if (!bucket[arr[i]]) {
+      bucket[arr[i]] = 0;
+    }
+    bucket[arr[i]]++;
+  }
+  for (var j = 0; j < bucketLen; j++) {
+    while (bucket[j] > 0) {
+      arr[sortedIndex++] = j;
+      bucket[j]--;
+    }
+  }
+  return arr;
+}
+countingSort([22, 111, 2, 3, 4, 55, 1], 122);
 ```
 
 ## 42.[滑动窗口，无重复字符的最长子串](https://leetcode.cn/problems/longest-substring-without-repeating-characters/)
 
 ```js
-// 题目记不清了
 var lengthOfLongestSubstring = function (s) {
   var max = 0;
   var res = [];

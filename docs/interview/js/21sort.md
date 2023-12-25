@@ -13,7 +13,7 @@ nav:
 
 > 到底什么时候才会手写各类排序 20220701
 
-## 冒泡排序
+## 1.冒泡排序
 
 ```js
 var bubble = (arr) => {
@@ -32,34 +32,16 @@ var tt = [11, 3, 2, 111, 5, 6];
 bubble(tt);
 ```
 
-## 插入排序
+## 2.插入排序
 
 [插入排序](https://segmentfault.com/img/bVDcJz)
 
 对于未排序的数据，在已排序的序列中从后往前扫描，找到相应的位置进行插入，始终保持排序序列中的元素有序
 
-```js
-var insertSort = (arr) => {
-  const len = arr.length;
-  for (let i = 1; i < len; i++) {
-    let j = i;
-    let temp = arr[i];
-    while (j >= 0 && arr[j - 1] > temp) {
-      arr[j] = arr[j - 1];
-      j--;
-    }
-    arr[j] = temp;
-  }
-  return arr;
-};
-var tt = [11, 3, 2, 111, 5, 6];
-insertSort(tt);
-```
-
 > 从 1 开始 始终保持排序序列中的元素有序
 
 ```js
-var insertSort2 = (arr) => {
+var insertSort = (arr) => {
   const len = arr.length;
   for (let i = 1; i < len; i++) {
     let prev = i - 1;
@@ -74,7 +56,28 @@ var insertSort2 = (arr) => {
 };
 ```
 
-## 选择排序
+> 另一个版本的插入排序，比之前的好理解!!哇塞，确实好记多了
+
+```js
+function insertSort(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let j = i;
+    while (j > 0 && arr[j - 1] > arr[j]) {
+      swap(arr, j - 1, j);
+      j--;
+    }
+  }
+  return arr;
+}
+function swap(arr, i, j) {
+  let temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+}
+insertSort([11, 222, 1, 2, 55, 22, 10]);
+```
+
+## 3.选择排序
 
 选择排序和插入排序有些类似，也分已排序序列和未排序序列。
 
@@ -102,7 +105,7 @@ var tt = [11, 3, 2, 111, 5, 6];
 selectSort(tt);
 ```
 
-## 快速排序
+## 4.快速排序
 
 ```js
 // first version
@@ -148,7 +151,7 @@ var findLargest = (nums, k) => {
 }
 ```
 
-## 归并排序
+## 5.归并排序
 
 顾名思义，分而治之。一般分为以下三个过程：
 
@@ -192,11 +195,21 @@ function mergerSort(arr) {
 mergerSort([111, 22, 3, 1, 22, 333]);
 ```
 
-## 桶排序
+## 6.桶排序
 
-## 基数排序
+```js
+var bucket = (arr) => {};
+```
 
-## 堆排序
+## 7.计数排序
+
+```js
+var countSort = (arr) => {};
+```
+
+## 8.基数排序
+
+## 9.堆排序
 
 [215. 数组中的第 K 个最大元素 ](https://leetcode.cn/problems/kth-largest-element-in-an-array/description/)
 

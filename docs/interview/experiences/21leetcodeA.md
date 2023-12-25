@@ -572,8 +572,25 @@ function generate(n) {
 }
 ```
 
-## 50.比较版本号
+## [50.比较版本号](https://leetcode.cn/problems/compare-version-numbers/description/)
 
 ```js
-
+var compareVersion = function (v1, v2) {
+  v1 = v1.split('.').map((e) => +e);
+  v2 = v2.split('.').map((e) => +e);
+  let len = Math.max(v1.length, v2.length);
+  let i = 0;
+  while (i < len) {
+    let cu1 = +v1[i] || 0;
+    let cu2 = +v2[i] || 0;
+    if (cu1 > cu2) {
+      return 1;
+    } else if (cu1 < cu2) {
+      return -1;
+    } else if (cu1 == cu2) {
+      i++;
+    }
+  }
+  return 0;
+};
 ```
