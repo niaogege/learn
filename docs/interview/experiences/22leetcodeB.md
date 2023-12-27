@@ -29,7 +29,7 @@ nav:
  * 5.最长公共子序列
  * 6.阶乘(迭代/递归/缓存)
  * 7.打家劫舍
- * 8.零钱兑换
+ * 8.零钱兑换I/零钱兑换II
  * 9.删除链表的节点
  * 10.括号生成
  * 11.数组旋转
@@ -48,6 +48,7 @@ nav:
  * 24.背包问题
  * 25.多个数组交集
  * 26.删除有序数组中的重复项
+ * 27.不定长二维数组全排列
  */
 ```
 
@@ -531,3 +532,32 @@ function once(nums) {
   return ans
 }
 ```
+
+## 27.不定长二维数组全排列
+
+```js
+//  [['A', 'B'],[1, 2],['a', 'b']]
+function allPer(nums) {
+  let ans = [];
+  let backTrack = (nums, path, row) => {
+    if (nums.length === path.length) {
+      ans.push(path.slice().join(''));
+      return;
+    }
+    for (let i = 0; i < nums[row].length; i++) {
+      path.push(nums[row][i]);
+      backTrack(nums, path, row + 1);
+      path.pop();
+    }
+  };
+  backTrack(nums, [], 0);
+  return ans;
+}
+allPer([
+  ['A', 'B'],
+  [1, 2],
+  ['a', 'b'],
+]);
+```
+
+## 28.

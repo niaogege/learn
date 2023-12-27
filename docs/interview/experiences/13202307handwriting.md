@@ -1080,7 +1080,7 @@ async function pool(array, limit, iteratorFn) {
       var p2 = p1.then(() => arr.splice(arr.indexOf(p2), 1));
       // 保存正在执行的异步任务
       arr.push(p2);
-      if (arr.length >= arr) {
+      if (arr.length >= limit) {
         // 等待较快的任务执行
         await Promise.race(arr);
       }

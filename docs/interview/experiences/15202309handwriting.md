@@ -1109,7 +1109,38 @@ getRandom(-3, -1);
 ## 33.实现阶乘(迭代/递归)
 
 ```js
+// dfs 1*2*3
+function count(n) {
+  if (n <= 0) return 0;
+  if (n == 1) return n;
+  return n * count(n - 1);
+}
+count(3);
 
+// bfs
+function count(n) {
+  if (n <= 0) return 0;
+  if (n == 1) return n;
+  let ans = 1;
+  for (let i = 2; i <= n; i++) {
+    ans = ans * i;
+  }
+  return ans;
+}
+count(3);
+// 带有缓存
+function factorial(n) {
+  let m = new Map();
+  let fn = (n) => {
+    if (n <= 1) return 1;
+    if (m.has(n)) return m.get(n);
+    let res = n * fn(n - 1);
+    m.set(n, res);
+    return res;
+  };
+  return fn(n);
+}
+factorial(4);
 ```
 
 ## 34.FileReader 使用
@@ -1209,6 +1240,48 @@ pre = 'abcde123';
 now = '1abc123';
 
 // a前面插入了1, c后面删除了de
+// 删除动作和添加动作
+// 添加 位置和内容
+// 删除 位置和内容
+function diff(pre, now) {
+  now = now.split('');
+  let action = {
+    delete: [],
+    add: [],
+  };
+  let base = pre.split('');
+  let i = 0;
+  let j = 0;
+  while (i < base.length && j < now.length) {
+    if (base[i] == now[j]) {
+      if (j > i) {
+        action.add.push({
+          cont: now.splice(i, j - i),
+          index: base[i],
+        });
+        j = i;
+      } else if (j < i && j >= 1) {
+        action.delete.push({
+          cont: base.splice(j, i - j),
+          index: now[j - 1],
+        });
+        i = j;
+      }
+      i = i + 1;
+      j = j + 1;
+    } else if (base[i] != now[j]) {
+      let index = now.indexOf(base[i]);
+      if (index < 0) {
+        i++;
+      } else {
+        j++;
+      }
+    }
+  }
+  console.log(action, 'action');
+  return action;
+}
+diff('abcde123', '1abc123');
 ```
 
 ## 38.给一个字符串, 找到第一个不重复的字符
@@ -1300,6 +1373,7 @@ const useState = (defaultVal) => {
   };
   return [val, setVal];
 };
+export default useState;
 ```
 
 ## 45.判断一个二叉树是否对称，即左子树和右子树是否镜像对称
@@ -1503,6 +1577,8 @@ sortVersion(['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']);
 ```
 
 ## 49.【代码题】实现一个拼手气抢红包算法
+
+## 50.
 
 ## 参考
 
