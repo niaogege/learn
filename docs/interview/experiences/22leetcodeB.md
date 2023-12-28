@@ -564,5 +564,4 @@ allPer([
 ## [28.字符串相乘](https://leetcode.cn/problems/multiply-strings/)
 
 ```js
-
 ```
