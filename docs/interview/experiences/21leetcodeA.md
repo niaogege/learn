@@ -479,6 +479,7 @@ function insectionLink(headA, headB) {
 ## [30.接雨水](https://leetcode.cn/problems/trapping-rain-water/)
 
 ```js
+// 单调栈
 function water(nums) {
   if (!nums.length) return 0;
   let len = nums.length;
@@ -576,8 +577,8 @@ function generate(n) {
 
 ```js
 var compareVersion = function (v1, v2) {
-  v1 = v1.split('.').map((e) => +e);
-  v2 = v2.split('.').map((e) => +e);
+  v1 = v1.split('.');
+  v2 = v2.split('.');
   let len = Math.max(v1.length, v2.length);
   let i = 0;
   while (i < len) {
@@ -593,4 +594,29 @@ var compareVersion = function (v1, v2) {
   }
   return 0;
 };
+```
+
+作为其扩展的题目，比较版本号之后，输出排序之后的版本号(正序或者倒序都行)
+
+```js
+// 输入：versions = ['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']
+// 输出：['0.1.1', '0.302.1', '2.3.3', '4.3.4.5', '4.3.5']
+
+function compare(nums) {
+  return nums.sort((a, b) => {
+    let a1 = a.split('.');
+    let b1 = b.split('.');
+    let len = Math.max(a1.length, b1.length);
+    for (let i = 0; i < len; i++) {
+      let cu1 = +a1[i] || 0;
+      let cu2 = +b1[i] || 0;
+      if (cu1 > cu2) {
+        return 1;
+      } else if (cu1 < cu2) {
+        return -1;
+      } else continue;
+    }
+    return 0;
+  });
+}
 ```

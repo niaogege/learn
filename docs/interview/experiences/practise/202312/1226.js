@@ -6,6 +6,43 @@
  * 5.目标和
  * 6.1和0
  */
+// ['1.2', '1.3']
+function compare(nums) {
+  return nums.sort((a, b) => {
+    let a1 = a.split('.');
+    let b1 = b.split('.');
+    let len = Math.max(a1.length, b1.length);
+    for (let i = 0; i < len; i++) {
+      let cu1 = +a1[i] || 0;
+      let cu2 = +b1[i] || 0;
+      if (cu1 > cu2) {
+        return 1;
+      } else if (cu1 < cu2) {
+        return -1;
+      } else {
+        continue;
+      }
+    }
+    return 0;
+  });
+}
+compare(['1.2', '1.3', '1.1', '2.1']);
+async function limitQuest(arr, limit, fn) {
+  let queue = [];
+  let ans = [];
+  for (let i = 0; i < arr.length; i++) {
+    let p1 = Promise.resolve(arr[i]).then(() => fn.call());
+    ans.push(p1);
+    if (arr.length >= limit) {
+      let p2 = p1.then(() => queue.splice(queue.indexOf(p2), 1));
+      queue.push(p2);
+      if (queue.length >= limit) {
+        await Promise.race(queue);
+      }
+    }
+  }
+  return Promise.all(ans);
+}
 
 var changeOne = function (amount, coins) {
   let len = coins.length;

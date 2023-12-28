@@ -66,6 +66,7 @@ nav:
  * 48.实现异步并行函数
  * 49.实现异步串行函数
  * 50.手机号脱敏
+ * 51.实现对象的Object.freeze
  */
 ```
 
@@ -286,6 +287,31 @@ onceF(3);
 onceF(4);
 ```
 
+另一种实现方式
+
+```js
+// 实现一个只执行一次的函数
+// 闭包
+function once(fn) {
+  let called = false;
+  return function _once() {
+    if (called) {
+      return _once.value;
+    }
+    called = true;
+    _once.value = fn.apply(this, arguments);
+  };
+}
+
+//ES6 的元编程 Reflect API 将其定义为函数的行为
+Reflect.defineProperty(Function.prototype, 'once', {
+  value() {
+    return once(this);
+  },
+  configurable: true,
+});
+```
+
 ## 10.TS 练习体操之 Equal
 
 ```ts
@@ -392,7 +418,7 @@ var node = {
     },
   ],
 };
-// dom转对象
+// 真实dom转对象
 const dom2tree = (node) => {
   const obj = {};
   obj.tag = node.tagName;
@@ -432,6 +458,7 @@ function myAssign(target, ...source) {
   });
   return res;
 }
+Object.myAssign = myAssign;
 ```
 
 ## 23 TS 手写 IndexToUnion 索引转联合类型
@@ -951,6 +978,21 @@ const fetchData = (url) => {
 };
 ```
 
+另一种实现方式: 用闭包和 Proxy 属性拦截
+
+```js
+function getSingleInstance(func) {
+  let instance;
+  let handler = {
+    construct(target, args) {
+      if (!instance) instance = Reflect.construct(func, args);
+      return instance;
+    },
+  };
+  return new Proxy(func, handler);
+}
+```
+
 ## 44.观察者模式
 
 通俗点讲就是：定义对象间的一种一对多的依赖关系，当一个对象的状态发生改变时，所有依赖于它的对象都将得到通知
@@ -1003,6 +1045,21 @@ const observer2 = new Observer('二号', sub);
 sub.setCount(1);
 // 一号 变了 1
 // 二号 变了 1
+```
+
+另一种实现方式
+
+```js
+const queuedObservers = new Set();
+
+const observe = (fn) => queuedObservers.add(fn);
+const observable = (obj) => new Proxy(obj, { set });
+
+function set(target, key, value, receiver) {
+  const result = Reflect.set(target, key, value, receiver);
+  queuedObservers.forEach((observer) => observer());
+  return result;
+}
 ```
 
 ## 45.工厂模式
@@ -1192,6 +1249,49 @@ function thounsand(str) {
 thounsand('1878888999');
 ```
 
+## 51.实现对象的 Object.freeze
+
+```js
+function mockFreze(obj) {
+  if (obj instanceof Object) {
+    Object.seal(obj);
+    for (let key in obj) {
+      if (obj.hasOwnproperty(key)) {
+        Object.defineProperty(obj, key, {
+          writable: false,
+        });
+        mockFreze(obj[key]); // 递归
+      }
+    }
+  }
+}
+```
+
+## 52.实现模版字符串解析
+
+```js
+var template = `
+<div>
+    <% if(name){ %>
+        <span>%= name =%</span>
+    <% } %>
+    %= age =%
+<div>`;
+let str = rander(template, { name: '小明', age: 18 });
+// 解析完成 str <div> <span>小明</span>18<div>
+
+function parseTemplateString(templateString, data) {
+  // 使用正则表达式在模板字符串中查找所有 ${...} 的实例
+  const regex = /${(.*?)}/g;
+  // 使用 replace() 方法将每个 ${...} 的实例替换为数据对象中相应的值
+  const parsedString = templateString.replace(regex, (match, key) => {
+    // 使用 eval() 函数来评估 ${...} 中的表达式，并从数据对象中返回相应的值
+    return eval(`data.${key}`);
+  });
+  return parsedString;
+}
+```
+
 ## 参考
 
 - [面试官不要再问我 axios 了？我能手写简易版的 axios](https://mp.weixin.qq.com/s/nmKU-Z1Ewc75HH0NxgvcCw)
@@ -1199,3 +1299,4 @@ thounsand('1878888999');
 - [前端手写并理解面试常考 code 的思路和运行过程](https://mp.weixin.qq.com/s/Z9tiY0bbpwmEqLEtKmDWOg)
 - [前端设计模式](https://mp.weixin.qq.com/s/9UNJG0MJrAsYKjQK4MAoyg)
 - [这些高阶的函数技术，你掌握了么](https://juejin.cn/post/6892886272377880583?searchId=20231128205315E68CD3641D010A87C8E3#heading-9)
+- [前端面试必须掌握的手写题：进阶篇](https://juejin.cn/post/7299357176928354313#heading-7)

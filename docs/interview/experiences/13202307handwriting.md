@@ -27,7 +27,7 @@ nav:
  * 9.16进制转 rgb or rgb 转 16 进制
  * 10.mockMap/mockFilter 数组方法重写
  * 11.myReduce 重写
- * 12.flatter 扁平化手写
+ * 12.flatter 数组和对象扁平化
  * 13.手写发布订阅模式
  * 14.instanceof 手写
  * 15.手写选择排序和插入排序
@@ -66,6 +66,8 @@ nav:
  * 48.如何实现无限累加的一个函数
  * 49.手写NOSSR
  * 50.数组随机展示以及随机取一个数字展示
+ * 51.字符串相乘
+ * 52.0.2+0.1相加
  **/
 ```
 
@@ -252,11 +254,21 @@ function deepClone(obj) {
 ## 9.16 进制转 rgb or rgb 转 16 进制
 
 ```js
+// test 20231227
+function rgbToHex(str) {
+  let arr = str.split(/\D+/); // [^\d]+
+  let [, r, g, b] = arr;
+  let toHex = (s) => {
+    let hex = (+s).toString(16);
+    return hex.length === 1 ? `0${hex}` : hex;
+  };
+  return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+}
+rgbToHex('rgb(255,255,255');
 // rgb(255,255,255) => #ffffff
 function rgbToHex(str) {
-  var rgbs = str.split(/[^\d]+/);
-  console.log(rgbs, 'rrr');
-  var [, r, g, b] = rgbs;
+  let rgbs = str.split(/[^\d]+/);
+  let [, r, g, b] = rgbs;
   const toHex = (hex) => {
     var t = (+hex).toString(16);
     return t.length === 1 ? `0${t}` : t;
@@ -267,10 +279,10 @@ rgbToHex('rgb(255,255,255)');
 
 // #fffff => rgb(255,255,255)
 function hexToRgb(str) {
-  var rgb = str.replace('#', '0x');
-  var r = rgb >> 16;
-  var g = (rgb >> 8) & 0xff;
-  var b = rgb & 0xff;
+  let rgb = str.replace('#', '0x');
+  let r = rgb >> 16;
+  let g = (rgb >> 8) & 0xff;
+  let b = rgb & 0xff;
   return `rgb(${r},${g},${b})`;
 }
 hexToRgb('#ffffff');
@@ -325,9 +337,10 @@ var sum2 = [1, 2, 3].mockReduce((pre, cur) => pre + cur, 10);
 console.log(sum2);
 ```
 
-## 12.flatten
+## 12.数组和对象 flatten
 
 ```js
+// [[1,2,3,[4,5]]]
 const flatten = (list, level = +Infinity) => {
   var stack = [...list];
   var res = [];
@@ -364,6 +377,8 @@ function myFlatten2(arr) {
   }, []);
 }
 flatten([1, 2, [3, 4, [5, 9]]]);
+
+// 对象扁平化
 ```
 
 ## 13.手写发布订阅模式
@@ -899,6 +914,8 @@ var deleteNode = function (head, val) {
 
 ## 26.手写 async/await
 
+async/await 语法糖就是使用**Generator 函数+自动执行器**来运作的，注意只要实现 async 函数就是实现一个 Generator 函数+执行器的语法糖
+
 ```js
 function mockAsync(fn) {
   return (...rest) => {
@@ -1421,23 +1438,23 @@ fibonce(3);
 ## 44.最大子序和
 
 ```js
-输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
-输出：6
-解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
+// 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+// 输出：6
+// 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
 function maxSumChild(arr) {
-  var max = 0
-  var sum = 0
+  var max = 0;
+  var sum = 0;
   for (let item of arr) {
     if (sum > 0) {
-      sum = sum + item
+      sum = sum + item;
     } else {
-      sum = item
+      sum = item;
     }
-    max = Math.max(max, sum)
+    max = Math.max(max, sum);
   }
-  return max
+  return max;
 }
-maxSumChild([-2,1,-3,4,-1,2,1,-5,4])
+maxSumChild([-2, 1, -3, 4, -1, 2, 1, -5, 4]);
 ```
 
 ## 45.实现简单的 hash 路由跟 history 路由!!!

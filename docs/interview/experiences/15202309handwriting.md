@@ -602,6 +602,10 @@ parseQueryString('uid');
 
 ## 14.实现一个类，其实例阔以链式调用，有一个 sleep 方法，一段时间之后在后续调用
 
+?? 没太搞懂
+
+> https://juejin.cn/post/7299357176928354313#heading-2
+
 ```js
 const boy = new PlayBoy('cpp');
 boy.sayHi().sleep(2000).playA('王者').sleep(1000).play('code');
