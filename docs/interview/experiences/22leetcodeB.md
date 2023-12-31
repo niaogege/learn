@@ -50,6 +50,8 @@ nav:
  * 26.删除有序数组中的重复项
  * 27.不定长二维数组全排列
  * 28.字符串相乘
+ * 29.完全平方数
+
  */
 ```
 
@@ -564,4 +566,11 @@ allPer([
 ## [28.字符串相乘](https://leetcode.cn/problems/multiply-strings/)
 
 ```js
+
+```
+
+## [29.完全平方数](https://leetcode.cn/problems/perfect-squares/)
+
+```js
+
 ```

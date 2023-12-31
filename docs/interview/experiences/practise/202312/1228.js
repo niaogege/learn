@@ -11,8 +11,34 @@
  * 10.字符串相乘
  */
 
+// 完全平方数
+var numSquares = function (n) {
+  let dp = new Array(n + 1).fill(Infinity);
+  dp[0] = 0;
+  for (let i = 1; i * i <= n; i++) {
+    for (let j = i * i; j <= n; j++) {
+      dp[j] = Math.min(dp[j], dp[j - i * i] + 1);
+    }
+  }
+  return dp[n];
+};
+
 // 零钱兑换I/II
 
+// 输入：coins = [1, 2, 5], amount = 11
+// 输出：3
+// 解释：11 = 5 + 5 + 1
+function coinChange(coins, amount) {
+  let dp = new Array(amount + 1).fill(Infinity);
+  dp[0] = 0;
+  for (let coin of coins) {
+    for (let j = coin; j <= amount; j++) {
+      dp[j] = Math.min(dp[j], dp[j - coin] + 1);
+    }
+  }
+  console.log(dp, 'dp');
+  return dp[amount] == Infinity ? -1 : dp[amount];
+}
 function flattenObj(obj, path = '', res = {}, isArray = false) {
   for (let [k, v] of Object.entries(obj)) {
     if (Array.isArray(v)) {

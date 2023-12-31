@@ -1309,6 +1309,10 @@ diff('ababcbdsa', 'abcdefg');
 
 ## 39.一个赛场中有 5 条赛道，现在有 25 匹马，在没有定时器的前提下最少跑多少圈可以角逐出前三名？
 
+```js
+
+```
+
 ## 40.vue 模板编译，正则解析
 
 ```js
@@ -1360,7 +1364,33 @@ console.log(res);
 ## 43.算法：实现一个函数，将给定的十进制数转换为 36 进制表示
 
 ```js
-
+function numToBase36(num, base = 36) {
+  if (num === 0) return '0';
+  let ans = '';
+  let digits = '0123456789abcdefghijklmnopqrstuvwxyz';
+  while (num > 0) {
+    let remainer = num % base; //获取余数
+    ans = digits[remainer] + ans;
+    num = Math.floor(num / base);
+  }
+  return ans;
+}
+numToBase36(360);
+// 字符串相加
+function addBig(a, b) {
+  let len = Math.max(a.length, b.length);
+  a = a.padStart(len, '0');
+  b = b.padStart(len, '0');
+  let ans = '';
+  let flag = 0;
+  for (let i = len - 1; i >= 0; i--) {
+    flag = Number(a[i]) + Number(b[i]) + flag;
+    ans = (flag % 10) + ans;
+    flag = Math.floor(flag / 10);
+  }
+  return flag === 1 ? '1' + ans : ans;
+}
+addBig('99', '1');
 ```
 
 ## 44.useState hook

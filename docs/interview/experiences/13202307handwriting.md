@@ -228,7 +228,7 @@ function bigIntSum(a, b) {
     res = (flag % 10) + res;
     flag = Math.floor(flag / 10);
   }
-  return flag === '1' ? '1' + res : res;
+  return flag === 1 ? '1' + res : res;
 }
 bigIntSum('123', '123');
 ```
