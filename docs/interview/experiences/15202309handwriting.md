@@ -67,7 +67,7 @@ nav:
  * 47.多叉树, 获取每一层的节点之和
  * 48.按照版本号由小到大排序
  * 49.【代码题】实现一个拼手气抢红包算法
- * 50.
+ * 50.数字转36进制
  */
 ```
 
@@ -655,6 +655,48 @@ class PlayBoy {
 }
 ```
 
+### 第二种方式
+
+```js
+class Person {
+  constructor() {
+    this.queue = [];
+    this.lock = false;
+  }
+  eat() {
+    this.queue.push(() => {
+      return new Promise((resolve) => {
+        console.log('eat');
+        resolve('eat');
+      });
+    });
+    return this;
+  }
+  sleep(timer, name) {
+    this.queue.push(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          console.log('sleep:' + name);
+          resolve('sleep');
+        }, timer);
+      });
+    });
+    return this;
+  }
+  async run() {
+    if (this.queue.length && !this.lock) {
+      this.lock = true;
+      const task = this.queue.shift();
+      await task();
+      this.lock = false;
+      this.run();
+    }
+  }
+}
+const person = new Person();
+person.eat().sleep(1000, 'cpp').eat().sleep(3000, '2wmh').eat().run();
+```
+
 ## 15.使用 css 生成三角形
 
 ```css
@@ -706,6 +748,10 @@ class PlayBoy {
 
 ## 17.虚拟滚动？固定高度跟不固定高度两者方式实现
 
+```js
+// 代完善
+```
+
 ## 18.[请求超时重试?](https://github.com/xiumubai/coding/blob/main/promise/timeoutFail.js)
 
 ```js
@@ -754,6 +800,10 @@ retryRequest(fn, 3, 1000);
 
 ## 19.校验 html 是否合法
 
+```js
+
+```
+
 ## [20.实现数组的轮转](https://leetcode.cn/problems/rotate-array/)
 
 ```js
@@ -792,14 +842,19 @@ var rotate2 = (nums, k) => {
   return nums;
 };
 rotate2([1, 2, 3, 4, 5, 6], 2);
-//
 ```
 
 ## 21.三数之和
 
 > 贼难的一道题
 
-## 22.连续正整数之和
+```js
+
+```
+
+## 22.连续正整数之和?
+
+> 题目忘记了
 
 ## 23.手写 ts 版方法调用的注解(装饰器)
 
@@ -1612,7 +1667,22 @@ sortVersion(['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']);
 
 ## 49.【代码题】实现一个拼手气抢红包算法
 
-## 50.
+## 50. 数字转 36 进制
+
+```js
+function numToString(str, radio = 36) {
+  if (str == 0) return '0';
+  let base = '0123456789abcdefghijklmnopqrstuvxyz';
+  let res = '';
+  while (str > 0) {
+    let flag = str % radio;
+    res = base[flag] + res;
+    str = Math.floor(str / radio);
+  }
+  return res;
+}
+numToString(360); // 'a0'
+```
 
 ## 参考
 

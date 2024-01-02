@@ -566,7 +566,25 @@ allPer([
 ## [28.字符串相乘](https://leetcode.cn/problems/multiply-strings/)
 
 ```js
-
+var multiply = function (num1, num2) {
+  let m = num1.length,
+    n = num2.length;
+  let res = new Array(m + n).fill(0);
+  for (let i = m - 1; i >= 0; i--) {
+    for (let j = n - 1; j >= 0; j--) {
+      let mul = +num1[i] * +num2[j];
+      let p1 = i + j; // 0
+      let p2 = i + j + 1; // 1
+      let sum = res[p2] + mul; // 6
+      res[p2] = sum % 10; // 6
+      res[p1] = res[p1] + Math.floor(sum / 10); // 0
+    }
+  }
+  while (res[0] == 0) {
+    res.shift();
+  }
+  return res.length ? res.join('') : '0';
+};
 ```
 
 ## [29.完全平方数](https://leetcode.cn/problems/perfect-squares/)

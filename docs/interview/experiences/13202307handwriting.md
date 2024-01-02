@@ -1701,6 +1701,27 @@ function sum(...rest) {
 sum(1, 2, 3).valueOf();
 ```
 
+还有一种类型差不多
+
+```js
+console.log(sum(1, 2)(3)()); // 6
+console.log(sum(1, 2, 4)(4)()); // 11
+function sum(...args) {
+  let arr = [...args];
+  return function temp(...arg) {
+    if (arg.length) {
+      arr.push(...arg);
+      return temp;
+    } else {
+      let val = arr.reduce((a, b) => a + b, 0);
+      arr = [];
+      return val;
+    }
+  };
+}
+console.log(sum(1, 2)(3)());
+```
+
 ## 49.NoSSR
 
 ```js

@@ -220,11 +220,14 @@ mockFlat(test);
 
 ## 7.[寄生组合式继承](https://mp.weixin.qq.com/s/8-vWM7WMqZYMnw_pe7CXhg)
 
+> 来自[寄生组合式继承](https://segmentfault.com/a/1190000009389979#item-7)
+
 ```js
-function inherit(child, parent, props) {
+function inherit(child, parent) {
   var prototype = Object.create(parent.prototype);
-  parent.constructor = child;
+  prototype.constructor = child;
   child.prototype = prototype;
+}
 ```
 
 ## [8.实现 repeat 方法](https://mp.weixin.qq.com/s/8-vWM7WMqZYMnw_pe7CXhg)
@@ -778,7 +781,21 @@ type Fork3 = UnionToFork<Fork>;
 const fork3: Fork3 = { name: 'ccc', age: 222 };
 ```
 
-## 36.TS 实现内置函数 Parameters 和 ReturnTypes
+## 36.TS 实现内置函数 Parameters 和 ReturnType
+
+```ts
+const fnTest = (name: string, age: number): string => name + 'cpp';
+type MockParameters<T extends (...args: any) => any> = T extends (...args: infer P) => any
+  ? P
+  : never;
+type P01 = MockParameters<typeof fnTest>; // [name: string, age: number]
+type P02 = Parameters<typeof fnTest>;
+type MockReturnTypes<T extends (...args: any) => any> = T extends (...args: any) => infer R
+  ? R
+  : any;
+type R01 = MockReturnTypes<typeof fnTest>; // string
+type R02 = ReturnType<typeof fnTest>; // string
+```
 
 ## 37.滚动到页面顶部
 
@@ -792,7 +809,7 @@ function scrollTop {
 }
 ```
 
-## 38.滚动到元素位置
+## 38.滚动到元素位置*scrollIntoView*
 
 ```js
 function smoothScroll(ele) {
@@ -899,11 +916,9 @@ _element.addEventListener(
   function (e) {
     // e.touches[0].pageY 当前位置
     _transitionHeight = e.touches[0].pageY - _startPos; // 记录差值
-
     if (_transitionHeight > 0 && _transitionHeight < 60) {
       _refreshText.innerText = '下拉刷新';
       _element.style.transform = 'translateY(' + _transitionHeight + 'px)';
-
       if (_transitionHeight > 55) {
         _refreshText.innerText = '释放更新';
       }
@@ -924,10 +939,28 @@ _element.addEventListener(
 );
 ```
 
-## 41. 私有变量的实现
+## [41. 私有变量的实现](https://segmentfault.com/a/1190000017171866)
 
 ```js
+// 例子 4-3
+const Example = (function () {
+  var _private = Symbol('private');
+  class Example {
+    constructor() {
+      this[_private] = 'private';
+    }
+    getName() {
+      return this[_private];
+    }
+  }
 
+  return Example;
+})();
+
+var ex = new Example();
+
+console.log(ex.getName()); // private
+console.log(ex.name); // undefined
 ```
 
 ## 42.洗牌算法 Shuffle Algorithm, 用于随机排列或打乱数组或列表中的元素顺序，以产生随机性
@@ -1249,7 +1282,7 @@ function thounsand(str) {
 thounsand('1878888999');
 ```
 
-## 51.实现对象的 Object.freeze
+## 51.实现对象的 **Object.freeze**
 
 ```js
 function mockFreze(obj) {
