@@ -270,7 +270,7 @@ server.listen(3000, () => {
 });
 ```
 
-![Nodejs 7个线程](image.png)
+![Nodejs 7个线程](https://s2.loli.net/2024/01/03/hOQ6xibIogZ59S8.png)
 
 创建了 http 服务，开启了一个进程，都说了 Node.js 是单线程，所以大家可能认为 Node 启动后线程数应该为 1，让我们使用 Mac 自带的活动监视器搜索进程 pid 来查看一下具体是几个线程：
 

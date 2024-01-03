@@ -28,7 +28,7 @@ nav:
  * 4.最长公共前缀
  * 5.最长公共子序列
  * 6.阶乘(迭代/递归/缓存)
- * 7.打家劫舍
+ * 7.打家劫舍I/打家劫舍II
  * 8.零钱兑换I/零钱兑换II
  * 9.删除链表的节点
  * 10.括号生成
@@ -51,6 +51,7 @@ nav:
  * 27.不定长二维数组全排列
  * 28.字符串相乘
  * 29.完全平方数
+ * 30.单词拆分
 
  */
 ```
@@ -174,6 +175,10 @@ count3(3);
 ```
 
 ## 7.打家劫舍
+
+```js
+
+```
 
 ## 8.零钱兑换
 
@@ -590,5 +595,18 @@ var multiply = function (num1, num2) {
 ## [29.完全平方数](https://leetcode.cn/problems/perfect-squares/)
 
 ```js
-
+function numSquares(n) {
+  // dp初始化和下标含义
+  // 递推公式
+  // 数组初始化
+  // 遍历顺序
+  let dp = new Array(n + 1).fill(Infinity);
+  dp[0] = 0;
+  for (let i = 1; i * i <= n; i++) {
+    for (let j = i * i; j <= n; j++) {
+      dp[j] = Math.min(dp[j], dp[j - i * i] + 1);
+    }
+  }
+  return dp[n];
+}
 ```
