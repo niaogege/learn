@@ -52,7 +52,9 @@ nav:
  * 28.字符串相乘
  * 29.完全平方数
  * 30.单词拆分
-
+ * 31.无重叠区间
+ * 32.寻找两个正序数组的中位数
+ * 33.分发糖果
  */
 ```
 
@@ -595,11 +597,27 @@ var multiply = function (num1, num2) {
 ## [29.完全平方数](https://leetcode.cn/problems/perfect-squares/)
 
 ```js
-function numSquares(n) {
-  // dp初始化和下标含义
-  // 递推公式
-  // 数组初始化
-  // 遍历顺序
+// 给你一个整数 n ，返回和为 n 的完全平方数的 最少数量 。
+// 13 => 4 + 9
+// 输入：n = 12
+// 输出：3
+// 解释：12 = 4 + 4 + 4
+// dp[2] => dp[1] dp[2]
+// 1 1
+// 先遍历背包 在遍历物品
+function square(n) {
+  let dp = new Array(n + 1).fill(Infinity);
+  dp[0] = 0; // 初始值给1还是0？
+  for (let i = 1; i <= n; i++) {
+    for (let j = 1; j * j <= i; j++) {
+      dp[i] = Math.min(dp[i], dp[i - j * j] + 1);
+    }
+  }
+  return dp[n];
+}
+
+// 先遍历物品 在遍历背包
+function square2(n) {
   let dp = new Array(n + 1).fill(Infinity);
   dp[0] = 0;
   for (let i = 1; i * i <= n; i++) {
@@ -610,3 +628,29 @@ function numSquares(n) {
   return dp[n];
 }
 ```
+
+## 30.单词拆分
+
+```js
+// leetcode => ['leet', 'code']
+function wordSplit(s, words) {
+  let dp = new Array(s.length+1).fill(false)
+  dp[0] = true
+  // 排列 先遍历背包 在遍历物品
+  for(let i=1；i<s.length;i++) {
+    for(let j=0;j<i;j++) {
+      let temp = s.slice(j, i)
+      if (words.includes(temp) && dp[j] == true) {
+        dp[i] = true
+      }
+    }
+  }
+  return dp[s.length]
+}
+```
+
+## [31.无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/)
+
+## [32.寻找两个正序数组的中位数](https://leetcode.cn/problems/median-of-two-sorted-arrays/description/)
+
+## [33.分发糖果](https://leetcode.cn/problems/candy/description/)

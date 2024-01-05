@@ -11,6 +11,8 @@ nav:
   path: /interview
 ---
 
+[参考 打印题](https://juejin.cn/post/7021704952586174478])
+
 ### check 数据类型
 
 ```js

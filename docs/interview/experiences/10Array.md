@@ -19,22 +19,33 @@ nav:
 - Array.prototype.some
 - Array.prototype.every
 
-### 手写 instanceof
+## 数组相关应用
 
-用于检测构造函数的原型是否在某一个实例的**原型链上**
+- 找到数组数字最小的 index
+- 找到数组项中最大的一项
+
+### [找到数组数字最小的 index](https://phuoc.ng/collection/1-loc/find-the-index-of-the-minimum-item-of-an-array/)
 
 ```js
-function mockInstanceof(left, right) {
-  let link = left.__proto__; // Object.getPrototypeOf(left)
-  while (link !== null) {
-    if (link === right.prototype) {
-      return true;
-    }
-    link = link.__proto__;
-  }
-  return false;
+function findMax(arr) {
+  return arr.reduce((pre, cur, i, a) => (a[pre] > cur ? pre : i), 0);
 }
-function mockInstanceof2(left, right) {
-  return right.prototype.isPrototypeof(left);
+findMax([101, 2, 3, 4, 5]);
+
+function findMin(arr) {
+  return arr.reduce((pre, cur, i, a) => (cur < a[pre] ? i : pre), 0);
 }
+findMin([101, 2, 3, 4, 5]);
+```
+
+### [找到数组项中最大的一项](https://phuoc.ng/collection/1-loc/find-the-maximum-item-of-an-array-by-given-key/)
+
+```js
+const people = [
+  { name: 'Bar', age: 24 },
+  { name: 'Baz', age: 32 },
+  { name: 'Foo', age: 42 },
+  { name: 'Fuzz', age: 36 },
+];
+maxBy(people, 'age'); // { name: 'Foo', age: 42 }
 ```

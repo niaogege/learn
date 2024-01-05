@@ -511,6 +511,7 @@ function insertSort2(arr) {
       j--;
     }
   }
+  return arr
 }
 function swap(arr, i, j) {
   let temp = arr[i];
@@ -1768,3 +1769,7 @@ function sanLunArr2(arr) {
 sanLunArr2(arr);
 sanLuanArr(arr);
 ```
+
+## 参考
+
+- [handwriting](https://github.com/xiumubai/coding/tree/main)

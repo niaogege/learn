@@ -35,7 +35,7 @@ nav:
  * 15.使用css 实现三角形
  * 16.使用css 实现无线循环的动画
  * 17.虚拟滚动？
- * 18.[请求超时重试?](https://github.com/xiumubai/coding/blob/main/promise/timeoutFail.js)
+ * 18.请求超时重试?
  * 19.校验html是否合法
  * 20.实现数组的旋转
  * 21.三数之和
@@ -309,7 +309,15 @@ p1.then((res) => {
 
 ## 6.用 js 实现二叉树的定义和基本操作
 
+```js
+
+```
+
 ## 7.密码校验，要求包含大小写字母，数字，长度为 6，至少满足三个条件
+
+```js
+
+```
 
 ## 8.用 es5 实现 let 和 const
 
@@ -606,9 +614,16 @@ parseQueryString('uid');
 
 > https://juejin.cn/post/7299357176928354313#heading-2
 
+要求实现：
+
 ```js
 const boy = new PlayBoy('cpp');
-boy.sayHi().sleep(2000).playA('王者').sleep(1000).play('code');
+boy.sayHi().sleep(2000).play('王者').sleep(1000).play('code');
+```
+
+### 第一种方式
+
+```js
 // 大家好我是Tom
 // 1s 之后
 // 我在玩王者
@@ -620,8 +635,8 @@ class PlayBoy {
     this.queue = []; // 队列存放事务
     setTimeout(() => {
       this.next();
+      console.log('开始执行任务');
     }, 0);
-    return this;
   }
   sayHi() {
     const fn = () => {
@@ -633,8 +648,10 @@ class PlayBoy {
   }
   sleep(num) {
     const fn = () => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
+        console.log('sleep');
         this.next();
+        clearTimeout(timer);
       }, num);
     };
     this.queue.push(fn);
@@ -653,6 +670,9 @@ class PlayBoy {
     fn && fn();
   }
 }
+var boy = new PlayBoy('cpp');
+console.log(boy, 'boy');
+boy.sayHi().sleep(2000).play('王者').sleep(1000).play('code');
 ```
 
 ### 第二种方式
@@ -798,7 +818,30 @@ function retryRequest(fn, limit, timer) {
 retryRequest(fn, 3, 1000);
 ```
 
-## 19.校验 html 是否合法
+## [19.校验 html 是否合法/验证密码的合法性](https://juejin.cn/post/7021672733213720613?searchId=202401041945548E669BD2908D492430A4#heading-18)
+
+### 校验 html 是否合法
+
+> 匹配成对的标签
+
+```js
+/*
+  匹配
+  <title>regular expression</title>
+  <p>laoyao bye bye</p>
+  不匹配
+  <title>wrong!</p>
+*/
+function isValid(html) {
+  let reg = /<([^>]+)>.*?<\/\1>/g;
+  return reg.test(html);
+}
+isValid('<p>laoyao bye bye</p>');
+```
+
+### 校验密码合法性
+
+> 密码长度是 6-12 位，由数字、小写字符和大写字母组成，但必须至少包括 2 种字符
 
 ```js
 

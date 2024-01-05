@@ -11,6 +11,9 @@
  * 10.数字转36进制
  */
 
+var getConsecutiveArrays = (arr, size) =>
+  size > arr.length ? [] : arr.slice(size - 1).map((_, i) => arr.slice(i, size + i));
+getConsecutiveArrays([1, 3, 4, 5, 8], 2);
 // 数字转36进制
 function numToString(str, radio = 36) {
   if (str == 0) return '0';

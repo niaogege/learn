@@ -67,6 +67,7 @@ nav:
  * 49.实现异步串行函数
  * 50.手机号脱敏
  * 51.实现对象的Object.freeze
+ * 52.数组连续子集进行切分
  */
 ```
 
@@ -1323,6 +1324,15 @@ function parseTemplateString(templateString, data) {
   });
   return parsedString;
 }
+```
+
+## 52.数组连续子集进行切分
+
+```js
+var getConsecutiveArrays = (arr, size) =>
+  size > arr.length ? [] : arr.slice(size - 1).map((_, i) => arr.slice(i, size + i));
+getConsecutiveArrays([1, 3, 4, 5, 8], 2);
+// [1, 3] [3, 4] [4, 5] [5, 8]
 ```
 
 ## 参考
