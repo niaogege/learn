@@ -22,6 +22,7 @@
 
 function buy(nums) {
   // 如何定义dp数组
+  // 地推公式
   let dp = new Array(nums.length).fill(-Infinity);
   dp[0] = 0;
   for (let i = 1; i < nums.length; i++) {
