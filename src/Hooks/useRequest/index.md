@@ -81,11 +81,6 @@ const useRequest = (url: string, options: any) => {
     error,
     abort,
   };
-  return {
-    res,
-    error,
-    abort,
-  };
 };
 export default useRequest;
 ```

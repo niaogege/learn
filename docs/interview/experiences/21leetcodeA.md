@@ -183,7 +183,9 @@ var reverseKGroup = function (head, k) {
 };
 ```
 
-## 6.三数之和(排序 双指针 去重)
+## [6.三数之和(排序 双指针 去重)](https://leetcode.cn/problems/3sum/description/)
+
+> [参考题解](https://leetcode.cn/problems/3sum/solutions/39722/pai-xu-shuang-zhi-zhen-zhu-xing-jie-shi-python3-by/)
 
 ```js
 // 给你一个整数数组 nums ，判断是否存在三元组 [nums[i], nums[j], nums[k]] 满足 i != j、i != k 且 j != k ，同时还满足 nums[i] + nums[j] + nums[k] == 0 。请
@@ -506,6 +508,8 @@ function water(nums) {
 }
 ```
 
+## 31.删除链表的倒数第 N 个结点
+
 ## [32.二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
 
 > hard
@@ -547,7 +551,25 @@ mergeArr([
 ## [38.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
 
 ```js
-
+function findLongest(nums1, nums2) {
+  let len1 = nums1.length;
+  let len2 = nums2.length;
+  let max = 0;
+  let dp = new Array(len1 + 1).fill().map(() => new Array(len2 + 1).fill(0));
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      let a = dp[i - 1];
+      let b = dp[j - 1];
+      if (a == b) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+      max = Math.max(max, dp[i][j]);
+    }
+  }
+  return max;
+}
 ```
 
 ## [46.括号生成](https://leetcode.cn/problems/generate-parentheses/)

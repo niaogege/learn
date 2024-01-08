@@ -1199,6 +1199,12 @@ function useEvent(fn) {
 }
 ```
 
+## 36.useFetch
+
+```js
+
+```
+
 ## 37.链表是否有环？
 
 ```js

@@ -26,7 +26,7 @@ nav:
  * 2.二叉树路径和II
  * 3.重排链表
  * 4.最长公共前缀
- * 5.最长公共子序列
+ * 5.最长公共子串
  * 6.阶乘(迭代/递归/缓存)
  * 7.打家劫舍I/打家劫舍II
  * 8.零钱兑换I/零钱兑换II
@@ -55,7 +55,13 @@ nav:
  * 31.无重叠区间
  * 32.寻找两个正序数组的中位数
  * 33.分发糖果
- * 34.
+ * 34.最长递增子序列
+ * 35.最长连续递增序列
+ * 36.最长公共子序列
+ * 37.最小路径和
+ * 38.移动0
+ * 39.
+ * 40.
  */
 ```
 
@@ -138,6 +144,29 @@ function longFindHor(strs) {
   return prefix;
 }
 longFindHor(['flower', 'flow', 'flight']);
+```
+
+## [5.最长公共子串/最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/description/)
+
+```js
+[1, 2, 3, 2, 1][(4, 5, 3, 2, 1)];
+function longChild(nums1, nums2) {
+  let len1 = nums1.length;
+  let len2 = nums2.length;
+  let dp = new Array(len1 + 1).fill().map(() => new Array(len2 + 1).fill(0));
+  let max = 0;
+  for (let i = 1; i <= len1; i++) {
+    for (let j = 1; j <= len2; j++) {
+      let a = dp[i - 1];
+      let b = dp[j - 1];
+      if (a == b) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      }
+      max = Math.max(dp[i][j], max);
+    }
+  }
+  return max;
+}
 ```
 
 ## 6.阶乘(迭代/递归/缓存)
@@ -655,3 +684,24 @@ function wordSplit(s, words) {
 ## [32.寻找两个正序数组的中位数](https://leetcode.cn/problems/median-of-two-sorted-arrays/description/)
 
 ## [33.分发糖果](https://leetcode.cn/problems/candy/description/)
+
+## [34.最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
+
+## [35.最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/description/)
+
+```js
+// 贪心算法
+var findLengthOfLCIS = function (nums) {
+  let ans = 1;
+  let count = 1;
+  for (let i = 1; i < nums.length; i++) {
+    if (nums[i] > nums[i - 1]) {
+      count = count + 1;
+    } else {
+      count = 1;
+    }
+    ans = Math.max(ans, count);
+  }
+  return ans;
+};
+```
