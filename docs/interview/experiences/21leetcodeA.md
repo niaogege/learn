@@ -81,7 +81,6 @@ nav:
 // 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
 var lengthOfLongestSubstring = function (s) {
   if (s && s.length <= 1) return 1;
-  s = s.split('');
   let res = {
     string: '',
     count: 0,
@@ -89,13 +88,11 @@ var lengthOfLongestSubstring = function (s) {
   let arr = []; // 滑动的窗口
   for (let i = 0; i < s.length; i++) {
     let cur = s[i];
-    if (!arr.includes(cur)) {
-      arr.push(cur);
-    } else {
-      let index = arr.indexOf(cur);
+    let index = arr.indexOf(cur);
+    if (index > -1) {
       arr.splice(0, index + 1);
-      arr.push(cur);
     }
+    arr.push(cur);
     res.count = Math.max(res.count, arr.length);
     if (res.count === arr.length) {
       res.string = arr.join('');
@@ -419,6 +416,13 @@ function merge(num1, m, num2, n) {
   }
   num1.sort((a, b) => a - b);
 }
+// splice(start, deletecount, pushItem)
+function mergeArr(nums1, nums2, m, n) {
+  nums1.splice(m, nums1.length - m, ...nums2);
+  nums1.sort((a, b) => a - b);
+}
+
+mergeArr([1, 2, 3, 0, 0, 0], [2, 5, 6], 3, 3);
 ```
 
 > feel difficult ???
@@ -473,6 +477,32 @@ function insectionLink(headA, headB) {
   }
   return null;
 }
+```
+
+## [27.最长上升子序列](https://leetcode.cn/problems/longest-increasing-subsequence/description/)
+
+```js
+子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
+输入：nums = [10,9,2,5,3,7,101,18]
+输出：4
+解释：最长递增子序列是 [2,3,7,101]，因此长度为 4
+
+function longestIncreSub(arr) {
+  let len = arr.length;
+  let dp = new Array(len).fill(0);
+  dp[0] = 1;
+  let max = 0;
+  for (let i = 1; i < len; i++) {
+    for (let j = 0; j < i; j++) {
+      if (arr[i] > arr[j]) {
+        dp[i] = Math.max(dp[i], dp[j] + 1);
+      }
+      max = Math.max(max, dp[i]);
+    }
+  }
+  return max;
+}
+longestIncreSub([2, 3, 7, 101]);
 ```
 
 ## [30.接雨水](https://leetcode.cn/problems/trapping-rain-water/)
