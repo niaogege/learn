@@ -372,34 +372,70 @@ var search = function (nums, target) {
 };
 ```
 
-## [岛屿数量](https://leetcode.cn/problems/number-of-islands/)
+## [13.买卖股票的最佳时机](https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/submissions/495102654/)
+
+```js
+/**
+输入：[7,1,5,3,6,4]
+输出：5
+解释：在第 2 天（股票价格 = 1）的时候买入，在第 5 天（股票价格 = 6）的时候卖出，最大利润 = 6-1 = 5 。注意利润不能是 7-1 = 6, 因为卖出价格需要大于买入价格；同时，你不能在买入前卖出股票。
+ */
+
+function maxProfit1(nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill([0, 0]); // [持有, 不持有股票 也就是最大现金]
+  dp[0] = [-nums[0], 0];
+  for (let i = 1; i < len; i++) {
+    // 持有股票 保持现状 第I天买入股票
+    dp[i][0] = Math.max(dp[i - 1][0], -nums[i]);
+    // 不持有股票 保持现状 第I天卖出股票
+    dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + nums[i]);
+  }
+  return dp[len - 1][1];
+}
+// 交易N次
+function maxProfit2(nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill([0, 0]); // [持有, 不持有股票 也就是最大现金]
+  dp[0] = [-nums[0], 0];
+  for (let i = 1; i < len; i++) {
+    // 持有股票 保持现状 昨天不持有股票的所得现金减去 今天的股票价格
+    dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][1] - nums[i]);
+    // 不持有股票 保持现状 第I天卖出股票
+    dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + nums[i]);
+  }
+  return dp[len - 1][1];
+}
+```
+
+## [14.岛屿数量](https://leetcode.cn/problems/number-of-islands/)
 
 > 我以为不会考 DP 真实面试中还会考的
 
 > 不是 DP 是 DFS
 
 ```js
-给定一个二维数组，其中只包含0和1。我们定义1相邻的区域是指1与1是上下左右相邻的区域。请编写一个JavaScript函数，找出给定二维数组中所有1相邻的区域。
+// 给定一个二维数组，其中只包含0和1。我们定义1相邻的区域是指1与1是上下左右相邻的区域。请编写一个JavaScript函数，找出给定二维数组中所有1相邻的区域。
 function numIslands(grid) {
   var isArea = (grid, r, c) => r < grid.length && c < grid[0].length && r >= 0 && c >= 0;
-  var dfs = (grid, r, c ) => {
+  var dfs = (grid, r, c) => {
     if (!isArea(grid, r, c) || grid[r][c] != '1') return;
-    grid[r][c] = '2'
-    dfs(grid, r-1, c)
-    dfs(grid, r+1, c)
-    dfs(grid, r, c-1)
-    dfs(grid, r, c+1)
-  }
-  let count = 0
-  for (let r = 0; i < grid.length;r++) {
-    for(let c = 0; c < grid[0].length;c++) {
+    grid[r][c] = '2';
+    dfs(grid, r - 1, c);
+    dfs(grid, r + 1, c);
+    dfs(grid, r, c - 1);
+    dfs(grid, r, c + 1);
+  };
+  let count = 0;
+  for (let r = 0; i < grid.length; r++) {
+    for (let c = 0; c < grid[0].length; c++) {
       if (grid[r][c] == '1') {
-        count = count+1
-        dfs(grid, r, c)
+        count = count + 1;
+        dfs(grid, r, c);
       }
     }
   }
-  return count
+  return count;
 }
 ```
 
@@ -426,6 +462,46 @@ mergeArr([1, 2, 3, 0, 0, 0], [2, 5, 6], 3, 3);
 ```
 
 > feel difficult ???
+
+## 19.二叉树的最近公共祖先
+
+## 20.手撕快速排序
+
+```js
+function swap(num, i, j) {
+  let temp = num[i];
+  num[i] = num[j];
+  num[j] = temp;
+}
+
+// 选择排序
+function selectSort(nums) {
+  let min = 0;
+  for (let i = 0; i < nums.length; i++) {
+    min = i;
+    for (let j = i + 1; j < nums.length; j++) {
+      if (nums[min] > nums[j]) {
+        min = j;
+      }
+    }
+    swap(nums, min, i);
+  }
+  return nums;
+}
+selectSort([11, 1, 2222, 2, 333, 4]);
+// 插入排序
+function insertSort(nums) {
+  for (let i = 1; i < nums.length; i++) {
+    let j = i;
+    while (j > 0 && nums[j - 1] > nums[j]) {
+      swap(nums, j, j - 1);
+      j--;
+    }
+  }
+  return nums;
+}
+insertSort([11, 1, 2222, 2, 333, 4]);
+```
 
 ## 21.二叉树的锯齿形层序遍历
 
@@ -539,6 +615,10 @@ function water(nums) {
 ```
 
 ## 31.删除链表的倒数第 N 个结点
+
+```js
+function deletNode(node, k) {}
+```
 
 ## [32.二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
 
@@ -663,9 +743,12 @@ function compare(nums) {
         return 1;
       } else if (cu1 < cu2) {
         return -1;
-      } else continue;
+      } else {
+        continue; // 这一步很关键
+      }
     }
     return 0;
   });
 }
+compare(['1.0', '1.0.1', '1.1', '1.2.0.1']);
 ```

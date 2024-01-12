@@ -2,7 +2,87 @@
  * 1.合并两个有序数组（https://leetcode.cn/problems/merge-sorted-array/description/
  * 2.不同路径和最小路径
  * 3.最长的有效括号
+ * 4.判断子序列
+ * 5.移动0
  */
+
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var moveZeroes = function (nums) {
+  for (let i = 0; i < nums.length; i++) {
+    let index = nums.indexOf(0);
+    if (index > -1) {
+      nums.splice(index, 1);
+      nums.push(0);
+    }
+  }
+};
+var moveZeroes = function (nums) {
+  let j = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] != 0) {
+      let tem = nums[i];
+      nums[i] = nums[j];
+      nums[j++] = tem;
+    }
+  }
+};
+
+/**
+示例 1：
+输入：s = "abc", t = "ahbgdc"
+输出：true
+示例 2：
+输入：s = "axc", t = "ahbgdc"
+输出：false
+
+s = ""
+t =
+"ahbgdc"
+*/
+
+var isSubsequence = function (s, t) {
+  if (s.length == 0) return true;
+  for (let i = 0, j = 0; j < t.length; j++) {
+    if (s[i] == t[j]) {
+      if (++i == s.length) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+var isSubsequence = function (s, t) {
+  for (let j = 1; j < s.length; j++) {
+    let a = s[j];
+    let a2 = s[j - 1];
+    let index1 = t.indexOf(a);
+    let index2 = t.indexOf(a2);
+    if (index2 > -1 && index1 > -1 && index2 < index1) {
+      return true;
+    }
+  }
+  return false;
+};
+
+var isSubsequence = function (s, t) {
+  let dp = new Array(t.length + 1).fill().map(() => new Array(s.length + 1).fill(false));
+  for (let i = 1; i <= t.length; i++) {
+    for (let j = 1; j <= s.length; j++) {
+      let a = s[j];
+      let b = t[i];
+      let a2 = s[j + 1];
+      let index1 = t.indexOf(a);
+      let index2 = t.indexOf(a2);
+      if (index2 > -1 && index1 > -1 && index2 > index1) {
+        dp[i] = dp[i - 1];
+      }
+    }
+  }
+  return false;
+};
 
 function longestValid(str) {
   if (str.length < 2) return 0;

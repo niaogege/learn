@@ -61,7 +61,7 @@ nav:
  * 37.最小路径和
  * 38.移动0
  * 39.最长有效括号(连续)
- * 40.
+ * 40.判断子序列
  */
 ```
 
@@ -663,19 +663,23 @@ function square2(n) {
 
 ```js
 // leetcode => ['leet', 'code']
+// 输入: s = "leetcode", wordDict = ["leet", "code"]
+// 输出: true
+// 解释: 返回 true 因为 "leetcode" 可以被拆分成 "leet code"。
 function wordSplit(s, words) {
-  let dp = new Array(s.length+1).fill(false)
-  dp[0] = true
+  let dp = new Array(s.length + 1).fill(false);
+  dp[0] = true;
   // 排列 先遍历背包 在遍历物品
-  for(let i=1；i<s.length;i++) {
-    for(let j=0;j<i;j++) {
-      let temp = s.slice(j, i)
+  for (let i = 1; i < s.length; i++) {
+    for (let j = 0; j < i; j++) {
+      let temp = s.slice(j, i);
       if (words.includes(temp) && dp[j] == true) {
-        dp[i] = true
+        dp[i] = true;
       }
     }
   }
-  return dp[s.length]
+  return dp[s.length];
+}
 }
 ```
 
@@ -704,4 +708,103 @@ var findLengthOfLCIS = function (nums) {
   }
   return ans;
 };
+```
+
+## 36.最长公共子序列
+
+```js
+// abc aebdc
+```
+
+## 37.最小路径和
+
+```js
+function minPathSum(arr) {}
+```
+
+## [38.移动 0](https://leetcode.cn/problems/move-zeroes/)
+
+### 第一种非 0 的移动到前面，用 j 记录下 然后在遍历 j,替换成 0
+
+```js
+// [1,0,22,3,1,0] => [1,22,3,1,0,0]
+function moveZero(nums) {
+  let j = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] != 0) {
+      nums[j] = nums[i];
+      j++;
+    }
+  }
+  for (let i = j; i < nums.length; i++) {
+    nums[i] = 0;
+  }
+  return nums;
+}
+moveZero([1, 0, 22, 3, 1, 0]);
+```
+
+### 第二种
+
+```js
+// [1,0,22,3,1,0] => [1,22,3,1,0,0]
+function moveZero(nums) {
+  for (let i = 0; i < nums.length; i++) {
+    let index = nums.indexOf(nums[i]);
+    if (index > -1) {
+      nums.splice(index, 1);
+      nums.push(0);
+    }
+  }
+  return nums;
+}
+```
+
+## 39.最长有效括号(连续)
+
+```js
+// ()) ((())
+function findLongestValid(str) {
+  let stack = [-1];
+  let max = 0;
+  for (let i = 0; i < str.length; i++) {
+    let s = str[i];
+    if (s == '(') {
+      stack.push(i);
+    } else {
+      stack.pop();
+      if (stack.length == 0) {
+        stack.push(i);
+      } else {
+        max = Math.max(max, i - stack.slice(-1));
+      }
+    }
+  }
+  return max;
+}
+```
+
+## 40.判断子序列
+
+```js
+输入：s = "abc", t = "ahbgdc"
+输出：true
+输入：s = "axc", t = "ahbgdc"
+输出：false
+
+function isChildSeq(s, t) {
+  if (s.length == 0) return true;
+  let j = 0;
+  for (let i = 0; i < t.length; i++) {
+    if (s[j] == t[i]) {
+      j = j + 1;
+      // 如何s的长度 == j 则完全包含
+      if (j == s.length) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+isChildSeq('abc', 'ahbgdc');
 ```
