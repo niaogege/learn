@@ -68,20 +68,18 @@ var isSubsequence = function (s, t) {
 };
 
 var isSubsequence = function (s, t) {
-  let dp = new Array(t.length + 1).fill().map(() => new Array(s.length + 1).fill(false));
-  for (let i = 1; i <= t.length; i++) {
-    for (let j = 1; j <= s.length; j++) {
-      let a = s[j];
-      let b = t[i];
-      let a2 = s[j + 1];
-      let index1 = t.indexOf(a);
-      let index2 = t.indexOf(a2);
-      if (index2 > -1 && index1 > -1 && index2 > index1) {
-        dp[i] = dp[i - 1];
+  let [m, n] = [s.length, t.length];
+  let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(false));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (s[i] == t[j]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = dp[i][j - 1];
       }
     }
   }
-  return false;
+  return dp[m][n] == m ? true : false;
 };
 
 function longestValid(str) {

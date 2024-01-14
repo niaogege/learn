@@ -62,6 +62,8 @@ nav:
  * 38.移动0
  * 39.最长有效括号(连续)
  * 40.判断子序列
+ * 41.不同的子序列
+ * 42.两个字符串的删除操作
  */
 ```
 
@@ -206,13 +208,17 @@ function count3(n) {
 count3(3);
 ```
 
-## 7.打家劫舍
+## 7.打家劫舍 I/II/III
 
 ```js
 
 ```
 
 ## 8.零钱兑换
+
+```js
+
+```
 
 ## 9.[剑指 Offer 18. 删除链表的节点](https://leetcode.cn/problems/shan-chu-lian-biao-de-jie-dian-lcof/)
 
@@ -719,6 +725,12 @@ var findLengthOfLCIS = function (nums) {
 ## 37.最小路径和
 
 ```js
+/**
+ * 给定一个包含非负整数的 m x n 网格 grid ，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。说明：每次只能向下或者向右移动一步。
+ * 输入：grid = [[1,3,1],[1,5,1],[4,2,1]
+ * 输出：7
+ * 解释：因为路径 1→3→1→1→1 的总和最小。
+ */
 function minPathSum(arr) {}
 ```
 
@@ -757,6 +769,22 @@ function moveZero(nums) {
     }
   }
   return nums;
+}
+```
+
+### 第三种,参考快排思想
+
+```js
+function moveZero(nums) {
+  let j = 0;
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] != 0) {
+      let temp = nums[i];
+      nums[i] = nums[j];
+      nums[j] = temp;
+      j = j + 1;
+    }
+  }
 }
 ```
 

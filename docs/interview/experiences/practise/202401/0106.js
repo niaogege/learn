@@ -16,6 +16,7 @@
  * @param {string} text2
  * @return {number}
  */
+// 最长公共子序列
 var longestCommonSubsequence = function (text1, text2) {
   let [m, n] = [text1.length, text2.length];
   let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
@@ -26,13 +27,15 @@ var longestCommonSubsequence = function (text1, text2) {
       let b = text2[j - 1];
       if (a == b) {
         dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j]);
       }
       max = Math.max(dp[i][j], max);
     }
   }
   return max;
 };
-
+// 最长重复子数组
 var findLength = function (nums1, nums2) {
   let max = 0;
   let [m, n] = [nums1.length, nums2.length];

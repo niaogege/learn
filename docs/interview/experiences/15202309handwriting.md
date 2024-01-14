@@ -1335,7 +1335,9 @@ function numToCn(n) {
 trans(123456);
 ```
 
-## 37.两个字符串对比, 得出结论都做了什么操作, 比如插入或者删除
+## 37.两个字符串对比, 得出结论都做了什么操作, 比如插入或者删除？
+
+> form leetcode [编辑距离](https://leetcode.cn/problems/edit-distance/description/)
 
 ```js
 pre = 'abcde123';
