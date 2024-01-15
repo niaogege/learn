@@ -208,10 +208,23 @@ function count3(n) {
 count3(3);
 ```
 
-## 7.打家劫舍 I/II/III
+## [7.打家劫舍 I/II/III](https://leetcode.cn/problems/house-robber/)
 
 ```js
-
+// 给定一个代表每个房屋存放金额的非负整数数组，计算你 不触动警报装置的情况下 ，一夜之内能够偷窃到的最高金额。
+// 输入：[2,7,9,3,1]
+// 输出：12 解释：偷窃 1 号房屋 (金额 = 2), 偷窃 3 号房屋 (金额 = 9)，接着偷窃 5 号房屋 (金额 = 1)。   偷窃到的最高金额 = 2 + 9 + 1 = 12 。
+function houseRobber(nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill(0);
+  dp[0] = nums[0];
+  dp[1] = Math.max(nums[0], nums[1]);
+  for (let i = 2; i < len; i++) {
+    dp[i] += Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+  }
+  return dp[len - 1];
+}
+houseRobber([1, 2, 3, 1]);
 ```
 
 ## 8.零钱兑换
@@ -697,6 +710,13 @@ function wordSplit(s, words) {
 
 ## [34.最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
 
+```js
+// 输入：nums = [10,9,2,5,3,7,101,18]
+// 输出：4
+// 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
+function longestUpChildSeq(nums) {}
+```
+
 ## [35.最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/description/)
 
 ```js
@@ -731,7 +751,26 @@ var findLengthOfLCIS = function (nums) {
  * 输出：7
  * 解释：因为路径 1→3→1→1→1 的总和最小。
  */
-function minPathSum(arr) {}
+// 最小路径和
+var minPathSum = function (grid) {
+  let [m, n] = [grid.length, grid[0].length];
+  let dp = new Array(m).fill().map(() => new Array(n).fill(0));
+  dp[0][0] = grid[0][0];
+  // 首行
+  for (let i = 1; i < n; i++) {
+    dp[0][i] = dp[0][i - 1] + grid[0][i];
+  }
+  // 首列
+  for (let j = 1; j < m; j++) {
+    dp[j][0] = dp[j - 1][0] + grid[i][0];
+  }
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1]) + grid[i][j];
+    }
+  }
+  return dp[m - 1][n - 1];
+};
 ```
 
 ## [38.移动 0](https://leetcode.cn/problems/move-zeroes/)
