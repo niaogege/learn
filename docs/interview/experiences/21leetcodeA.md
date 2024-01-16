@@ -705,6 +705,10 @@ function generate(n) {
 ## [50.比较版本号](https://leetcode.cn/problems/compare-version-numbers/description/)
 
 ```js
+// 返回规则如下：
+// 如果 version1 > version2 返回 1，
+// 如果 version1 < version2 返回 -1，
+// 除此之外返回 0。
 var compareVersion = function (v1, v2) {
   v1 = v1.split('.');
   v2 = v2.split('.');

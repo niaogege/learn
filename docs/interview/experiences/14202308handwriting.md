@@ -68,6 +68,7 @@ nav:
  * 50.手机号脱敏
  * 51.实现对象的Object.freeze
  * 52.数组连续子集进行切分
+ * 53.依次按照price、size降序排序
  */
 ```
 
@@ -1333,6 +1334,26 @@ var getConsecutiveArrays = (arr, size) =>
   size > arr.length ? [] : arr.slice(size - 1).map((_, i) => arr.slice(i, size + i));
 getConsecutiveArrays([1, 3, 4, 5, 8], 2);
 // [1, 3] [3, 4] [4, 5] [5, 8]
+```
+
+## 53.依次按照 price、size 降序排序
+
+```js
+// [{ price: 1, size: 2 }, { price: 2, size: 2 }, { price: 1, size: 1 }]
+function sortNums(nums) {
+  return nums.sort((a, b) => {
+    if (a.price != b.price) {
+      return b.price - a.price;
+    } else {
+      return b.size - a.size;
+    }
+  });
+}
+sortNums([
+  { price: 1, size: 2 },
+  { price: 2, size: 2 },
+  { price: 1, size: 1 },
+]);
 ```
 
 ## 参考

@@ -10,6 +10,8 @@ nav:
   path: /interview
 ---
 
+> 有些可能 code 会有问题，欢迎找我修正
+
 > 0801 40 道手写题 先拿 40 道题目练练手,八月目标是 100 道
 
 > 0805 50 道题
@@ -155,7 +157,7 @@ function compose(middlewares) {
 
 ## 5.myBind
 
-bind() 方法会创建一个新函数。当这个新函数被调用时，bind() 的第一个参数将作为它运行时的 this，之后的一序列参数将会在传递的实参前传入作为它的参数。(来自于 MDN )
+**bind()** 方法会创建一个新函数。当这个新函数被调用时，bind() 的第一个参数将作为它运行时的 this，之后的一序列参数将会在传递的实参前传入作为它的参数。(来自于 MDN )
 
 ```js
 Function.prototype.myBind = function (context, ...rest) {
@@ -614,7 +616,7 @@ var search = function (nums, target) {
 
 ```js
 function chartUppercase(str) {
-  return str.replace(/[-|@](^\w)/g, (m, p) => {
+  return str.replace(/[-|@|_]([\w])/g, (m, p) => {
     return p.toUpperCase();
   });
 }

@@ -1710,19 +1710,46 @@ function sortVersion(nums) {
 sortVersion(['0.1.1', '2.3.3', '0.302.1', '4.2', '4.3.5', '4.3.4.5']);
 ```
 
+### [比较版本大小](https://leetcode.cn/problems/compare-version-numbers/description/)
+
+```js
+// 返回规则如下：
+// 如果 version1 > version2 返回 1，
+// 如果 version1 < version2 返回 -1，
+// 除此之外返回 0。
+var compareVersion = function (v1, v2) {
+  v1 = v1.split('.');
+  v2 = v2.split('.');
+  let len = Math.max(v1.length, v2.length);
+  let i = 0;
+  while (i < len) {
+    let cu1 = +v1[i] || 0;
+    let cu2 = +v2[i] || 0;
+    if (cu1 > cu2) {
+      return 1;
+    } else if (cu1 < cu2) {
+      return -1;
+    } else if (cu1 == cu2) {
+      i++;
+    }
+  }
+  return 0;
+};
+```
+
 ## 49.【代码题】实现一个拼手气抢红包算法
 
 ## 50. 数字转 36 进制
 
 ```js
-function numToString(str, radio = 36) {
+function numToString(str, radix = 36) {
   if (str == 0) return '0';
   let base = '0123456789abcdefghijklmnopqrstuvxyz';
   let res = '';
   while (str > 0) {
-    let flag = str % radio;
+    let flag = str % radix;
     res = base[flag] + res;
-    str = Math.floor(str / radio);
+    str = Math.floor(str / radix);
   }
   return res;
 }
