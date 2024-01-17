@@ -64,6 +64,7 @@ nav:
  * 40.判断子序列
  * 41.不同的子序列
  * 42.两个字符串的删除操作
+ * 43.杨辉三角形
  */
 ```
 
@@ -227,7 +228,7 @@ function houseRobber(nums) {
 houseRobber([1, 2, 3, 1]);
 ```
 
-## 8.零钱兑换
+## [8.零钱兑换 I/II](https://leetcode.cn/problems/coin-change/)
 
 ```js
 
@@ -874,4 +875,25 @@ function isChildSeq(s, t) {
   return false;
 }
 isChildSeq('abc', 'ahbgdc');
+// dp
+function isChild(s, t) {
+  let [m, n] = [s.length, t.length];
+  let dp = new Array(m).fill().map(() => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (s[i - 1] == t[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = dp[i][j - 1] + 1;
+      }
+    }
+  }
+  return dp[m][n] == m ? true : false;
+}
 ```
+
+## 41.不同的子序列
+
+## 42.两个字符串的删除操作
+
+## 43.杨辉三角形

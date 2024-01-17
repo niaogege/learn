@@ -6,7 +6,110 @@
  * 5.对象和数组扁平化
  * 6.字符串相加
  * 7.字符串转换
+ * 8.合并区间
+ * 9.无重叠区间
+ * 10.杨辉三角形
+ * 11.判断子序列
  */
+
+// 11 判断子序列
+/**
+ * 示例 1：
+输入：s = "abc", t = "ahbgdc"
+输出：true
+示例 2：
+输入：s = "axc", t = "ahbgdc"
+输出：false
+ */
+
+// dp
+function isChild(s, t) {
+  let [m, n] = [s.length, t.length];
+  let dp = new Array(m).fill().map(() => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (s[i - 1] == t[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = dp[i][j - 1] + 1;
+      }
+    }
+  }
+  return dp[m][n] == m ? true : false;
+}
+
+function isChild(s, t) {
+  let j = 0;
+  for (let i = 0; i < t.length; i++) {
+    if (t[i] == s[j]) {
+      j = j + 1;
+      if (j == s.length) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// 输出打印数组
+/**
+输入: numRows = 5
+输出: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+示例 2:
+输入: numRows = 1
+输出: [[1]]
+numRows=4
+[[1],[1,1],[1,2,1],[1,3,3,1]]
+*/
+function generate(n) {
+  let dp = [];
+  for (let i = 0; i < n; i++) {
+    dp[i] = new Array(i + 1).fill(1);
+    for (let j = 1; j < i; j++) {
+      dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+    }
+  }
+  return dp;
+}
+generate(3);
+
+/**
+ * 
+给定一个区间的集合 intervals ，其中 intervals[i] = [starti, endi] 。返回 需要移除区间的最小数量，使剩余区间互不重叠 。
+示例 1
+输入: intervals = [[1,2],[2,3],[3,4],[1,3]]
+输出: 1
+解释: 移除 [1,3] 后，剩下的区间没有重叠。
+示例 2:
+输入: intervals = [ [1,2], [1,2], [1,2] ]
+输出: 2
+解释: 你需要移除两个 [1,2] 来使剩下的区间没有重叠。
+示例 3:
+输入: intervals = [ [1,2], [2,3] ]
+输出: 0
+解释: 你不需要移除任何区间，因为它们已经是无重叠的了。
+*/
+
+function merge(nums) {
+  nums.sort((a, b) => a[0] - b[0]);
+  let pre = nums[0];
+  let res = [];
+  for (let i = 1; i < nums.length; i++) {
+    let num = nums[i];
+    if (num[0] > pre[1]) {
+      res.push(pre);
+      pre = num;
+    } else {
+      pre[1] = Math.max(pre[1], num[1]);
+    }
+  }
+  res.push(pre);
+  return res;
+}
+merge([
+  [0, 10],
+  [10, 60],
+]);
 
 // get-element-by-id' -> 'getElementById
 
