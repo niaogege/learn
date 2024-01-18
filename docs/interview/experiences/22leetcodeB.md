@@ -65,6 +65,8 @@ nav:
  * 41.不同的子序列
  * 42.两个字符串的删除操作
  * 43.杨辉三角形
+ * 44.和为 K 的子数组
+ * 45.最小覆盖子串
  */
 ```
 
@@ -897,3 +899,7 @@ function isChild(s, t) {
 ## 42.两个字符串的删除操作
 
 ## 43.杨辉三角形
+
+## [44.和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/description/)
+
+## [45.最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)

@@ -114,7 +114,7 @@ merge([
 // get-element-by-id' -> 'getElementById
 
 function transformStr(str) {
-  return str.replace(/[_|-|@]([\w+])/g, (_, p) => p.toLocalUppercase());
+  return str.replace(/[_|-]([\w])/g, (_, p) => p.toUpperCase());
 }
 transformStr('get-element-by-id');
 

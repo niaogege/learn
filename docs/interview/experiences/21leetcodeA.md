@@ -310,6 +310,8 @@ var mergeTwoLists = function (l1, l2) {
 
 ## [10.最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
 
+> [参考解析](https://leetcode.cn/problems/longest-palindromic-substring/solutions/9001/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-bao-gu/)
+
 ```js
 // 输入：s = "babad"
 // 输出："bab"
@@ -656,6 +658,79 @@ mergeArr([
   [8, 10],
   [15, 18],
 ]);
+```
+
+## [34.编辑距离](https://leetcode.cn/problems/edit-distance/description/)
+
+```js
+/**
+ * 输入：word1 = "horse", word2 = "ros"
+    输出：3
+    解释：
+    horse -> rorse (将 'h' 替换为 'r')
+    rorse -> rose (删除 'r')
+    rose -> ros (删除 'e')
+ */
+function editPaths(word1, word2) {
+  let [m,n] = [word1.length, word2.length]
+  let dp = new Array(m+1).fill().map(() => new Array(n+1).fill(0))
+  for(let i=1;i<=m;i++) {
+    dp[i][0]=i
+  }
+  for(let j=1;j<=n;j++) {
+    dp[0][j]=j
+  }
+  for(let i=1;i<=m;i++) {
+    for(let j=1;j<=n;j++) {
+      if(word1[i-1]==word2[j-1]) {
+        dp[i][j] = dp[i-1][j-1]
+      } else {
+        dp[i][j] = Math.min(
+          dp[i-1][j]+1
+          dp[i][j-1]+1
+          dp[i-1][j-1]+1
+        )
+      }
+    }
+  }
+  return dp[m][n]
+}
+```
+
+## [37.用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/description/)
+
+```js
+var MyQueue = function () {};
+
+/**
+ * @param {number} x
+ * @return {void}
+ */
+MyQueue.prototype.push = function (x) {};
+
+/**
+ * @return {number}
+ */
+MyQueue.prototype.pop = function () {};
+
+/**
+ * @return {number}
+ */
+MyQueue.prototype.peek = function () {};
+
+/**
+ * @return {boolean}
+ */
+MyQueue.prototype.empty = function () {};
+
+/**
+ * Your MyQueue object will be instantiated and called as such:
+ * var obj = new MyQueue()
+ * obj.push(x)
+ * var param_2 = obj.pop()
+ * var param_3 = obj.peek()
+ * var param_4 = obj.empty()
+ */
 ```
 
 ## [38.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
