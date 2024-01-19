@@ -28,11 +28,16 @@ nav:
 
 ## 最长公共系列
 
+### 最长重复子数组
+
+1.dp 解法
+
 ```js
-// 最长重复子数组
+/**
 输入：nums1 = [1,2,3,2,1], nums2 = [3,2,1,4,7]
 输出：3
 解释：长度最长的公共子数组是 [3,2,1] 。
+ */
 
 function findPublicChild(a, b) {
   let [m, n] = [a.length, b.length];
@@ -51,6 +56,29 @@ function findPublicChild(a, b) {
 ```
 
 ### 拓展，求输出公共子数组？
+
+```js
+function findPublicChild(a, b) {
+  let [m, n] = [a.length, b.length];
+  let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
+  let max = 0;
+  let begin = 0;
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] == b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      }
+      if (dp[i][j] > max) {
+        max = dp[i][j];
+        begin = i;
+      }
+    }
+  }
+  console.log(max, begin);
+  return a.slice(begin, begin + max);
+}
+findPublicChild([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]);
+```
 
 ### 最长公共子序列
 
@@ -86,6 +114,10 @@ if (a[i - 1] == b[j - 1]) {
 ```
 
 ### 拓展，求输出公共子序列？
+
+```js
+
+```
 
 ## 最长递增子序列相关
 
@@ -186,10 +218,65 @@ function longestPalindrome(s) {
 }
 ```
 
-### 最长回文子序列
+还有一种按照代码随想录的解法
 
 ```js
+function longestPalindrome(s) {
+  if (s.length == '') return s;
+  let len = s.length;
+  let dp = new Array(len).fill().map(() => new Array(len).fill(false));
+  let begin = 0;
+  let maxLen = 1;
+  for (let i = len - 1; i >= 0; i--) {
+    for (let j = i; j < len; j++) {
+      if (s[i] == s[j]) {
+        if (j - i <= 1) {
+          dp[i][j] = true;
+        } else {
+          dp[i][j] = dp[i + 1][j - 1]; // 左下角推出dp[i][j]
+        }
+      }
+      if (dp[i][j] && j - i + 1 > maxLen) {
+        maxLen = j - i + 1;
+        begin = i;
+      }
+    }
+  }
+  return s.substring(begin, begin + maxLen);
+}
+longestPalindrome('babad');
+```
 
+> 死记硬背系列，
+
+### [最长回文子序列](https://leetcode.cn/problems/longest-palindromic-subsequence/)
+
+```js
+/**
+ * 示例 1: 输入: "bbbab" 输出: 4 一个可能的最长回文子序列为 "bbbb"
+ * 示例 2: 输入:"cbbd" 输出: 2 一个可能的最长回文子序列为 "bb"。
+ */
+function longestPalindSub(s) {
+  let len = s.length;
+  let dp = new Array(len).fill().map(() => new Array(len).fill(0));
+  // 对角线部分
+  for (let i = 0; i < len; i++) {
+    dp[i][i] = 1;
+  }
+  // 从上往下 从左往右 右上角最大
+  // 遍历i的时候一定要从下到上遍历，这样才能保证下一行的数据是经过计算的
+  for (let i = len - 1; i >= 0; i--) {
+    for (let j = i + 1; j < len; j++) {
+      if (s[i] == s[i]) {
+        dp[i][j] = dp[i + 1][j - 1] + 2; // +2
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+  return dp[0][len - 1];
+}
+longestPalindSub('cbbd');
 ```
 
 ## [最长有效括号](https://leetcode.cn/problems/longest-valid-parentheses/description/)
