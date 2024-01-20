@@ -28,9 +28,7 @@ nav:
 
 ## 最长公共系列
 
-### 最长重复子数组
-
-1.dp 解法
+### [最长重复子数组](https://leetcode.cn/problems/maximum-length-of-repeated-subarray/description/)
 
 ```js
 /**
@@ -62,7 +60,7 @@ function findPublicChild(a, b) {
   let [m, n] = [a.length, b.length];
   let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
   let max = 0;
-  let begin = 0;
+  let end = 0;
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
       if (a[i - 1] == b[j - 1]) {
@@ -70,22 +68,24 @@ function findPublicChild(a, b) {
       }
       if (dp[i][j] > max) {
         max = dp[i][j];
-        begin = i;
+        end = i;
       }
     }
   }
-  console.log(max, begin);
-  return a.slice(begin, begin + max);
+  console.log(max, end);
+  return a.slice(end - max, end);
 }
-findPublicChild([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]);
+findPublicChild([5, 7, 8, 10, 11, 12, 34], [3, 2, 7, 8, 10]);
 ```
 
-### 最长公共子序列
+### [最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
 
 ```js
+/**
 输入：text1 = "abcde", text2 = "ace"
 输出：3
 解释：最长公共子序列是 "ace" ，它的长度为 3 。
+ */
 function findLongestPublicChild(a, b) {
   let [m, n] = [a.length, b.length];
   let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
@@ -115,13 +115,9 @@ if (a[i - 1] == b[j - 1]) {
 
 ### 拓展，求输出公共子序列？
 
-```js
-
-```
-
 ## 最长递增子序列相关
 
-### 最长递增子序列
+### [最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/description/)
 
 ```js
 /**
@@ -145,7 +141,7 @@ function longestUpChild(nums) {
 }
 ```
 
-### 最长连续递增子序列
+### [最长连续递增子序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/)
 
 ```js
 /**

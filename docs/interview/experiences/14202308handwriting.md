@@ -69,6 +69,7 @@ nav:
  * 51.实现对象的Object.freeze
  * 52.数组连续子集进行切分
  * 53.依次按照price、size降序排序
+ * 54.字符串中的乱码处理
  */
 ```
 
@@ -1312,9 +1313,8 @@ var template = `
     <% } %>
     %= age =%
 <div>`;
-let str = rander(template, { name: '小明', age: 18 });
+let str = parseTemplateString(template, { name: '小明', age: 18 });
 // 解析完成 str <div> <span>小明</span>18<div>
-
 function parseTemplateString(templateString, data) {
   // 使用正则表达式在模板字符串中查找所有 ${...} 的实例
   const regex = /${(.*?)}/g;
@@ -1325,6 +1325,7 @@ function parseTemplateString(templateString, data) {
   });
   return parsedString;
 }
+console.log(str);
 ```
 
 ## 52.数组连续子集进行切分
@@ -1354,6 +1355,17 @@ sortNums([
   { price: 2, size: 2 },
   { price: 1, size: 1 },
 ]);
+```
+
+## 54.字符串中的乱码处理
+
+```js
+/**
+ * “I'm?���driving�??�to�?beijing�?��after�breakfast”
+1.只需要大小写英文字母和“ ’ ”单引号
+2.如果乱码的末尾是?则它的下一位字母肯定是大写;
+示例结果：I'm driving to Beijing after breakfast.
+ */
 ```
 
 ## 参考
