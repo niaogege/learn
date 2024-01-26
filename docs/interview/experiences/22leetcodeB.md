@@ -65,9 +65,13 @@ nav:
  * 41.不同的子序列
  * 42.两个字符串的删除操作
  * 43.杨辉三角形
- * 44.和为 K 的子数组
+ * 44.
  * 45.最小覆盖子串
  * 46.回文子串
+ * 47.和为 K 的子数组
+ * 48.滑动窗口最大值
+ * 49.除自身以外数组的乘积
+ * 50.旋转图像
  */
 ```
 
@@ -799,7 +803,7 @@ function moveZero(nums) {
 moveZero([1, 0, 22, 3, 1, 0]);
 ```
 
-### 第二种
+### 第二种，一边移动一边删除 同时增加 0
 
 ```js
 // [1,0,22,3,1,0] => [1,22,3,1,0,0]
@@ -901,6 +905,57 @@ function isChild(s, t) {
 
 ## 43.杨辉三角形
 
-## [44.和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/description/)
+## []()
 
 ## [45.最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)
+
+## [47.和为 K 的子数组(前缀和)](https://leetcode.cn/problems/subarray-sum-equals-k/)
+
+```js
+// 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。
+// 子数组是数组中元素的连续非空序列。
+// 输入：nums = [1,1,1], k = 2
+// 输出：2
+var subArraySum = function (nums, k) {
+  let sum = 0,
+    count = 0;
+  let m = new Map([0, 1]);
+  for (let num of nums) {
+    sum += num;
+    if (m.has(sum - k)) {
+      count += m.get(sum - k);
+    }
+    if (m.has(sum)) {
+      m.set(sum, m.get(sum) + 1);
+    } else {
+      m.set(sum, 1);
+    }
+  }
+};
+```
+
+## 48.滑动窗口最大值
+
+## 49.除自身以外数组的乘积
+
+```js
+function mul(arr) {
+  // I左边的相乘 在乘以I右边的
+  let right = 1;
+  let len = arr.length;
+  let res = [1];
+
+  for (let i = 1; i < len; i++) {
+    res[i] = res[i - 1] * arr[i - 1];
+  }
+  for (let j = len - 1; j >= 0; j--) {
+    res[j] *= right;
+    right *= arr[j];
+  }
+  return res;
+}
+// [24, 12, 8, 6]
+mul([1, 2, 3, 4]);
+```
+
+## 50.旋转图像

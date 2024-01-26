@@ -14,6 +14,8 @@ nav:
 
 > 如果能积累 hot100 道题，基本面试算法没啥大问题 1120
 
+> 20240121 突破 200 太墨迹了，慢死了
+
 > [Hot 100](https://leetcode.cn/studyplan/top-100-liked/)
 
 > [面试经典 150 题](https://leetcode.cn/studyplan/top-interview-150/)
