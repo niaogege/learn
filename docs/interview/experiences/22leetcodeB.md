@@ -72,6 +72,7 @@ nav:
  * 48.滑动窗口最大值
  * 49.除自身以外数组的乘积
  * 50.旋转图像
+ * 51.分发饼干
  */
 ```
 
@@ -959,3 +960,32 @@ mul([1, 2, 3, 4]);
 ```
 
 ## 50.旋转图像
+
+## [51.分发饼干](https://leetcode.cn/problems/assign-cookies/description/)
+
+> 尽量用大饼干喂胃口大的孩子
+
+```js
+/**
+输入: g = [1,2,3], s = [1,1]
+输出: 1
+解释:
+你有三个孩子和两块小饼干，3个孩子的胃口值分别是：1,2,3。
+你的目标是尽可能满足越多数量的孩子，并输出这个最大数值。
+*/
+var findContentChildren = function (g, s) {
+  s.sort((a, b) => a - b);
+  g.sort((a, b) => a - b);
+  let count = 0;
+  let sLen = s.length - 1;
+  let gLen = g.length - 1;
+  for (let i = gLen; i >= 0; i--) {
+    let item = g[i];
+    if (sLen >= 0 && s[sLen] >= item) {
+      count++;
+      sLen--;
+    }
+  }
+  return count;
+};
+```
