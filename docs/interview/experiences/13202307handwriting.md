@@ -112,8 +112,8 @@ class LRU {
     this.limit = limit;
   }
   get(key) {
-    var val = this.cache.get(key);
-    if (val || this.cache.has(key)) {
+    if (this.cache.has(key)) {
+      var val = this.cache.get(key);
       this.cache.delete(key);
       this.cache.set(key, val);
     } else {
@@ -124,7 +124,7 @@ class LRU {
     if (this.cache.has(key)) {
       this.cache.delete(key);
     } else if (this.limit <= this.cache.size) {
-      var oldKey = this.cache.keys.value().next;
+      const oldKey = this.cache.keys().next().value;
       this.cache.delete(oldKey);
     }
     this.cache.set(key, value);
