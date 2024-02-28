@@ -10,3 +10,95 @@
  * 9.前中后遍历
  * 10.层序遍历
  */
+// 层序遍历
+function levelTraverse(tree) {
+  let stack = [tree];
+  let res = [];
+  while (stack.length || tree) {
+    let arr = [];
+    for (let item of stack) {
+      let cur = stack.pop();
+      arr.push(cur.val);
+      if (cur.left) {
+        stack.push(cur.left);
+      }
+      if (cur.right) {
+        stack.push(cur.right);
+      }
+    }
+    res.push(arr);
+  }
+  return res;
+}
+
+// 前序 跟左右
+function preOrder(tree) {
+  let stack = [tree];
+  let res = [];
+  while (stack.length) {
+    let cur = stack.pop();
+    res.push(cur.val);
+    // 右
+    if (cur.right) {
+      stack.push(cur.right);
+    }
+    // 左
+    if (cur.left) {
+      stack.push(cur.left);
+    }
+  }
+  return res;
+}
+
+// 中 左根右
+function inOrder(tree) {
+  let stack = [];
+  let res = [];
+  let root = tree;
+  while (root || stack.length) {
+    if (root) {
+      root = root.left;
+      stack.push(root);
+    } else {
+      root = stack.pop();
+      res.push(root.val);
+      root = root.right;
+    }
+  }
+}
+
+// 后序post 左右跟
+function postOrder(tree) {
+  let stack = [tree];
+  let res = [];
+  while (stack.length) {
+    let cur = stack.pop();
+    res.push(cur.val);
+    // 左
+    if (cur.left) {
+      stack.push(cur.left);
+    }
+    // 右
+    if (cur.right) {
+      stack.push(cur.right);
+    }
+  }
+  return res.reverse();
+}
+// [[1],[1,1],[1,2,1],[1,3,3,1]]
+function generate(num) {
+  let dp = [];
+  for (let i = 0; i < num; i++) {
+    dp[i] = new Array(i + 1).fill(1);
+    for (let j = 1; j < i; j++) {
+      dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+    }
+  }
+  return dp;
+}
+generate(4);
+
+// 最长回文子串
+// 输入："ababc"
+// 返回值：3
+// 说明：最长的回文子串为"aba"与"bab"，长度都为3

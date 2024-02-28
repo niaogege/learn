@@ -381,6 +381,31 @@ function myFlatten2(arr) {
 flatten([1, 2, [3, 4, [5, 9]]]);
 
 // 对象扁平化
+function objFlatten(obj, res = {}, key = '', isArray = false) {
+  for (let [k, val] of Object.entries(obj)) {
+    if (Array.isArray(val)) {
+      let tmp = isArray ? `${key}[${k}]` : `${key}${k}`;
+      objFlatten(val, res, tmp, true);
+    } else if (typeof val === 'object') {
+      let tmp = isArray ? `${key}[${k}].` : `${key}${k}.`;
+      objFlatten(val, res, tmp, false);
+    } else {
+      let tmp = isArray ? `${key}[${k}]` : `${key}${k}`;
+      res[tmp] = val;
+    }
+  }
+  return res;
+}
+objFlatten({
+  a: { b: 1 },
+  c: [1, 2, 3],
+  d: 5,
+});
+// a.b: 1
+// c[0]: 1
+// c[1]: 2
+// c[2]: 3
+// d: 5
 ```
 
 ## 13.手写发布订阅模式
@@ -1423,14 +1448,35 @@ var lengthOfLongestSubstring = function (s) {
     var index = res.indexOf(item);
     if (index > -1) {
       res.splice(0, index + 1);
-    } else {
-      res.push(item);
     }
+    res.push(item);
     max = Math.max(max, res.length);
   }
   return max;
 };
-lengthOfLongestSubstring('pwwkew'); // kew
+lengthOfLongestSubstring('abcababed'); // kew
+// 寻找无重复的最长子串
+function findLongestStr(s) {
+  var max = 0;
+  var res = [];
+  let ans = [];
+  for (let item of s) {
+    var index = res.indexOf(item);
+    if (index > -1) {
+      res.splice(0, index + 1);
+    }
+    res.push(item);
+    max = Math.max(max, res.length);
+    if (max == res.length) {
+      ans = res.slice();
+    }
+  }
+  return {
+    max,
+    ans,
+  };
+}
+findLongestStr('abcababed'); // abed
 ```
 
 ## 43.实现一个带缓存斐波那契数列

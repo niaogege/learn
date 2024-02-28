@@ -90,7 +90,7 @@ var obj = {
 
 flattenObj(obj);
 
-function flattenObj(obj, path = '', res = {}, isArray) {
+function flattenObj(obj, path = '', res = {}, isArray = false) {
   for (let [k, v] of Object.entries(obj)) {
     if (Array.isArray(v)) {
       let temp = isArray ? `${path}[${k}]` : `${path}${k}`;
