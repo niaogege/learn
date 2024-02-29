@@ -52,22 +52,6 @@ var node = {
 左根右
 
 ```js
-const inorderTraversal = (root) => {
-  let res = [];
-  let stack = [];
-  while (root || stack.length) {
-    while (root) {
-      stack.push(root);
-      root = root.left;
-    }
-    root = stack.pop();
-    res.push(root.val);
-    root = root.right;
-  }
-  return res;
-};
-inorderTraversal(node);
-
 function inorder(root, res = []) {
   if (!root) return res;
   var cur = root;
@@ -94,20 +78,6 @@ function inorder(root, res = []) {
 根左右
 
 ```js
-function preTraversal(root) {
-  var stack = [];
-  var res = [];
-  while (root || stack.length) {
-    while (root) {
-      stack.push(root);
-      res.push(root.val);
-      root = root.left;
-    }
-    root = stack.pop();
-    root = root.right;
-  }
-  return res;
-}
 function tarversePre(node) {
   var res = [];
   var stack = [node];
@@ -126,21 +96,6 @@ function tarversePre(node) {
 左右根
 
 ```js
-function postOrderTraversal(root) {
-  let stack = [];
-  let res = [];
-  while (root || stack.length) {
-    while (root) {
-      stack.push(root);
-      res.unshift(root.val);
-      root = root.right;
-    }
-    root = root.pop();
-    root = root.left;
-  }
-  return res;
-}
-
 function tarversePost(node) {
   var res = [];
   var stack = [node];
@@ -179,26 +134,39 @@ function levelNode(root) {
   }
   return res;
 }
+```
 
-// dfs
-function dfsLevel(root) {
-  if (!tree) return [];
-  var res = [];
-  var dfs = (node, step, res) => {
-    if (node != null) {
-      if (!res[step]) {
-        res[step] = [];
-      }
-      res[step].push(node.val);
-      if (node.left) {
-        dfs(node.left, step + 1, res);
-      }
-      if (node.right) {
-        dfs(node.right, step + 1, res);
+### 多叉树 获取每一层的节点之和 BFS
+
+```js
+const res = layerSum({
+  value: 2,
+  children: [
+    { value: 6, children: [{ value: 1 }] },
+    { value: 3, children: [{ value: 2 }, { value: 3 }, { value: 4 }] },
+    { value: 5, children: [{ value: 7 }, { value: 8 }] },
+  ],
+});
+console.log(res); // [2,14,25]
+function layerSum(root) {
+  if (!root) return [];
+  let ans = [];
+  let stack = [root];
+  while (stack.length) {
+    let sum = 0;
+    let len = stack.length;
+    for (let i = 0; i < len; i++) {
+      let cur = stack.shift();
+      sum += cur.value;
+      if (cur.children) {
+        cur.children.forEach((child) => {
+          stack.push(child);
+        });
+        delete cur.children;
       }
     }
-  };
-  dfs(root, 0, res);
-  return res;
+    ans.push(sum);
+  }
+  return ans;
 }
 ```

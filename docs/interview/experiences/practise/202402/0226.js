@@ -9,14 +9,67 @@
  * 8.买股票的最佳时机
  * 9.前中后遍历
  * 10.层序遍历
+ * 11.多叉树每层之和
  */
+
+function layerSum(root) {
+  let ans = [];
+  let dfs = (data, path) => {
+    if (data) {
+      path.push(data.value);
+      if (data.children && data.children.length) {
+        for (let i = 0; i < data.children; i++) {
+          dfs(data.children[i], path);
+          ans[i].push(path.slice());
+        }
+      }
+    }
+  };
+  dfs(root, []);
+  return ans;
+}
+
+const res = layerSum({
+  value: 2,
+  children: [
+    { value: 6, children: [{ value: 1 }] },
+    { value: 3, children: [{ value: 2 }, { value: 3 }, { value: 4 }] },
+    { value: 5, children: [{ value: 7 }, { value: 8 }] },
+  ],
+});
+
+console.log(res);
+
+// 层序遍历dfs
+function levelDfs(node) {
+  if (!node) return [];
+  let ans = [];
+  let dfs = (node, step) => {
+    if (node) {
+      if (!ans[step]) {
+        ans[step] = [];
+      }
+      ans[step].push(node.val);
+      if (node.left) {
+        dfs(node.left, step + 1);
+      }
+      if (node.right) {
+        dfs(node.right, step + 1);
+      }
+    }
+  };
+  dfs(node, 0);
+  return ans;
+}
+
 // 层序遍历
 function levelTraverse(tree) {
   let stack = [tree];
   let res = [];
-  while (stack.length || tree) {
+  while (stack.length) {
     let arr = [];
-    for (let item of stack) {
+    let len = stack.length;
+    for (let i = 0; i < len; i++) {
       let cur = stack.pop();
       arr.push(cur.val);
       if (cur.left) {
@@ -102,3 +155,26 @@ generate(4);
 // 输入："ababc"
 // 返回值：3
 // 说明：最长的回文子串为"aba"与"bab"，长度都为3
+function findLongest(str) {
+  let len = str.length;
+  let dp = new Array(len).fill().map(() => new Array(len).fill(false));
+  let start = 0;
+  let L = 0;
+  for (let i = len; i >= 0; i--) {
+    for (let j = i; j < len; j++) {
+      if (str[i] == str[j]) {
+        if (j - i <= 1) {
+          dp[i][j] = true;
+        } else {
+          dp[i][j] = dp[i + 1][j - 1];
+        }
+      }
+      if (dp[i][j] && j - i + 1 > L) {
+        L = j - i + 1;
+        start = i;
+      }
+    }
+  }
+  return str.slice(start, start + L);
+}
+findLongest('ababc');

@@ -116,6 +116,66 @@ input: [1, 2, 3, 4, 5, 6, 7];
 output: [4, 5, 2, 6, 7, 3, 1];
 ```
 
+### 二叉树层序遍历
+
+```js
+// dfs
+function dfsLevel(root) {
+  if (!tree) return [];
+  var res = [];
+  var dfs = (node, step) => {
+    if (node != null) {
+      if (!res[step]) {
+        res[step] = [];
+      }
+      res[step].push(node.val);
+      if (node.left) {
+        dfs(node.left, step + 1);
+      }
+      if (node.right) {
+        dfs(node.right, step + 1);
+      }
+    }
+  };
+  dfs(root, 0);
+  return res;
+}
+```
+
+### 多叉树 获取每一层的节点之和 DFS
+
+```js
+function layerSum(root) {
+  if (!root) return [];
+  let ans = [];
+  let dfs = (node, step) => {
+    if (node) {
+      if (!ans[step]) {
+        ans[step] = [];
+      }
+      ans[step].push(node.value);
+      if (node.children && node.children.length) {
+        node.children.forEach((child) => {
+          dfs(child, step + 1);
+        });
+      }
+    }
+  };
+  dfs(root, 0, []);
+  console.log(ans);
+  return ans.map((item) => item.reduce((a, b) => a + b, 0));
+}
+
+const res = layerSum({
+  value: 2,
+  children: [
+    { value: 6, children: [{ value: 1 }] },
+    { value: 3, children: [{ value: 2 }, { value: 3 }, { value: 4 }] },
+    { value: 5, children: [{ value: 7 }, { value: 8 }] },
+  ],
+});
+```
+
 ### 困难题 [岛屿数量](https://leetcode.cn/problems/number-of-islands/)
 
 20220513 题意第一次看都没理解，nnp，数据结构意识太差
