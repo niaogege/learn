@@ -11,6 +11,54 @@
  * 11.打乱数组顺序
  */
 
+/**
+给定一个只包括 '('，')'，'{'，'}'，'['，']' 的字符串 s ，判断字符串是否有效。
+有效字符串需满足：
+- 左括号必须用相同类型的右括号闭合。
+- 左括号必须以正确的顺序闭合。
+- 每个右括号都有一个对应的相同类型的左括号。
+1.输入：s = "()[]{}" 输出：true 2.输入：s = "[()]" 输出：true
+*/
+function isValid(s) {
+  let m = new Map([
+    [')', '('],
+    ['}', '{'],
+    [']', '['],
+  ]);
+  let ans = [];
+  for (let item of s) {
+    const one = m.get(item);
+    const last = ans[ans.length - 1];
+    if (one == last) {
+      ans.pop();
+    } else {
+      ans.push(item);
+    }
+  }
+  return ans.length == 0;
+}
+
+/**
+ * @param {number[]} height
+ * @return {number}
+ */
+var maxArea = function (height) {
+  let end = height.length - 1;
+  let start = 0;
+  let max = 0;
+  while (start <= end) {
+    let h = Math.max(height[start], height[end]);
+    let w = end - start;
+    max = Math.max(max, h * w);
+    if (height[end] > height[start]) {
+      start++;
+    } else {
+      end--;
+    }
+  }
+  return max;
+};
+
 // 惰性函数
 function addEventListener() {}
 
@@ -26,9 +74,6 @@ function mockExtend(child, parent) {
 }
 
 function mockExtends(child, parent, props) {}
-
-// isValid括号
-function isValid() {}
 
 function render(vnode, parent) {
   const mount = parent ? (el) => parent.appendChild(el) : (el) => el;
@@ -106,24 +151,27 @@ function loadImg(src, cb) {
 }
 
 /**
- 给定一个长度为 n 的整数数组 height 。有 n 条垂线，第 i 条线的两个端点是 (i, 0) 和 (i, height[i]) 。
- 找出其中的两条线，使得它们与 x 轴共同构成的容器可以容纳最多的水。
- 返回容器可以储存的最大水量。
- 说明：你不能倾斜容器。
- 输入：[1,8,6,2,5,4,8,3,7]
-输出：49 
-解释：图中垂直线代表输入数组 [1,8,6,2,5,4,8,3,7]。在此情况下，容器能够容纳水（表示为蓝色部分）的最大值为 49。
- *  */
-
-function maxContainer(arr) {}
-
-/**
  * 
 给你两个单链表的头节点 headA 和 headB ，请你找出并返回两个单链表相交的起始节点。如果两个链表没有交点，返回 null 。
 图示两个链表在节点 c1 开始相交：
 */
 
-function insectionNode(headA, headB) {}
+function insectionNode(headA, headB) {
+  let s = new Set();
+  let cur = headA;
+  while (cur) {
+    s.add(cur);
+    cur = cur.next;
+  }
+  let tmp = headB;
+  while (tmp) {
+    if (s.has(tmp)) {
+      return tmp;
+    }
+    tmp = tmp.next;
+  }
+  return null;
+}
 
 /** 
 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]

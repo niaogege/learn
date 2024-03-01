@@ -12,6 +12,18 @@
  * 11.多叉树每层之和
  */
 
+// [] 持有股票 不持有股票 卖出
+var maxProfit = function (prices) {
+  let len = prices.length;
+  let dp = new Array(len).fill([0, 0]);
+  dp[0] = [-prices[0], 0];
+  for (let i = 1; i < len; i++) {
+    dp[i][0] = Math.max(dp[i - 1][0], -prices[i]);
+    dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] + prices[i]);
+  }
+  return dp[len - 1][1];
+};
+
 function layerSum(root) {
   let ans = [];
   let dfs = (data, path) => {
@@ -70,7 +82,7 @@ function levelTraverse(tree) {
     let arr = [];
     let len = stack.length;
     for (let i = 0; i < len; i++) {
-      let cur = stack.pop();
+      let cur = stack.shift();
       arr.push(cur.val);
       if (cur.left) {
         stack.push(cur.left);
