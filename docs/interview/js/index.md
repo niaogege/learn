@@ -244,7 +244,7 @@ JavaScript 是一种单线程语言，所以它同一时间只能执行单个任
 
 执行环境的第二个阶段就是代码执行阶段，进行其他赋值操作并且代码最终被执行。
 
-## 原型以及原型链
+## [原型以及原型链](https://segmentfault.com/a/1190000008959943)
 
 每一个 JavaScript 对象(null 除外)在创建的时候就会与之关联另一个对象，这个对象就是我们所说的原型，每一个对象都会从原型"继承"属性
 
@@ -259,32 +259,6 @@ console.log(person.__proto__ == Person.prototype); // true 实例的_proto__指�
 console.log(Person.prototype.constructor == Person); // true 原型的constrcuore属性指向构造函数
 // 顺便学习一个ES5的方法,可以获得对象的原型
 console.log(Object.getPrototypeOf(person) === Person.prototype); //
-```
-
-## 词法作用域
-
-词法作用域的意思是在函数嵌套中，内层函数可以访问父级作用域的变量等资源。这意味着子函数词法绑定到了父级执行环境。因为 JavaScript 采用的是词法作用域，函数的作用域在函数定义的时候就决定了。
-
-## 闭包
-
-当内部函数试着访问外部函数的作用域链（词法作用域之外的变量）时产生闭包。闭包包括它们自己的作用域链、父级作用域链和全局作用域。
-
-闭包不仅能访问外部函数的变量，也能访问外部函数的参数;
-
-即使函数已经 return，闭包仍然能访问外部函数的变量。这意味着 return 的函数允许持续访问外部函数的所有资源。当你的外部函数 return 一个内部函数，调用外部函数时 return 的函数并不会被调用。你必须先用一个单独的变量保存外部函数的引用，然后将这个变量当做函数来调用。看下面这个例子：
-
-```js
-function greet() {
-  name = 'Hammad';
-  return function () {
-    console.log('Hi ' + name);
-  };
-}
-greet(); // nothing happens, no errors
-// the returned function from greet() gets saved in greetLetter
-greetLetter = greet();
-// calling greetLetter calls the returned function from the greet() function
-greetLetter(); // logs 'Hi Hammad'
 ```
 
 ## 正则学习

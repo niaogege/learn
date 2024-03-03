@@ -148,36 +148,50 @@ function isValid(str) {
 isValid('()');
 ```
 
-## 4.实现 ES6 的 Class
+## 4.用 es5 实现 ES6 的 Class
 
 ```js
+function checkNew(instance, con) {
+  if (!(instance instanceof con)) {
+    throw new TypeError(`Class constructor ${con.name} cannot be invoked without 'new'`);
+  }
+}
+function mockClass(con, proto, staticProps) {
+  proto && defineProperties(con.prototype, proto);
+  staticProps && defineProperties(con, staticProps);
+  return con;
+}
 function defineProperties(target, obj) {
   for (let key in obj) {
     Object.defineProperty(target, key, {
-      value: obj[key],
-      writable: true,
       configurable: true,
+      value: obj[key],
       enumerable: false,
+      writable: true,
     });
   }
 }
+function MyName(name) {
+  checkNew(this, MyName);
+  this.name = name;
+}
+var t0 = new MyName('wmh');
+var personClass = mockClass(
+  MyName,
+  {
+    getName: function () {
+      return this.name;
+    },
+  },
+  {},
+);
 
-function mockClass(con, obj, staticProps) {
-  obj && defineProperties(con, obj);
-  staticProps && defineProperties(con, defineProperties);
-  return con;
-}
-function Person(name) {
-  this.name = name
-}
-var createClass = mockClass(Person, {
-  getName: () => {
-    return this.name
-  }
-}
+var t1 = new personClass('cpp');
+
+console.log(t0, t1);
 ```
 
-## 5.[实现 ES6 的 Extend](https://mp.weixin.qq.com/s/8FmjffUnWx49LsyJn28XdA)
+## 5.[用 es5 实现 ES6 的 Extend](https://mp.weixin.qq.com/s/8FmjffUnWx49LsyJn28XdA)
 
 ```js
 function mockExtend(child, parent, staticProps) {

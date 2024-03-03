@@ -10,6 +10,58 @@
  * 9.按照版本号进行排序
  */
 
+function asyncS() {
+  let arr = [1, 2, 3];
+  arr.reduce((pre, cur) => {
+    return pre.then(
+      () =>
+        new Promise((resolve, reject) => {
+          setTimeout(() => {
+            resolve(console.log(cur));
+          }, 1000);
+        }),
+    );
+  }, Promise.resolve());
+}
+asyncS();
+
+function wait(timer, fn) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(fn());
+    }, timer);
+  });
+}
+
+function red() {
+  console.log('red');
+}
+
+function yellow() {
+  console.log('yellow');
+}
+
+function green() {
+  console.log('green');
+}
+
+async function main() {
+  while (true) {
+    await wait(3000, red);
+    await wait(2000, yellow);
+    await wait(1000, green);
+  }
+}
+function loopMain() {
+  return Promise.resolve()
+    .then(() => wait(3000, red))
+    .then(() => wait(2000, yellow))
+    .then(() => wait(1000, green))
+    .then(() => loopMain());
+}
+loopMain();
+
+// 惰性函数
 function addHandler(ele, type, handler) {}
 
 function partialFn(fn) {

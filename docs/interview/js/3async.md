@@ -289,7 +289,7 @@ function* createIterator(items) {
 }
 ```
 
-- 箭头函数不能用做 generator
+- 箭头函数不能用做 **generator**
 
 ```js
 var test = *(item) => { // throw error Uncaught SyntaxError: Unexpected token '*'
