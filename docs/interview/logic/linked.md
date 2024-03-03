@@ -28,6 +28,7 @@ nav:
 - 14.两数相加
 - 15.二叉搜索树转链表
 - [16.K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/description/)
+- 17.合并 K 个排序链表
 
 ## 回一下链表的数据结构：
 
