@@ -150,7 +150,13 @@ var reverseList = function (head) {
 };
 ```
 
+## 3.LRU 缓存机制
+
 ## 4.数组中的第 K 个最大元素
+
+```js
+
+```
 
 ## 5.K 个一组链表反转
 
@@ -467,6 +473,30 @@ mergeArr([1, 2, 3, 0, 0, 0], [2, 5, 6], 3, 3);
 
 > feel difficult ???
 
+### 18.全排列
+
+```js
+function allPermute(arr) {
+  let ans = [];
+  const backTrack = (arr, path) => {
+    if (arr.length == path.length) {
+      ans.push(path.slice());
+      return;
+    }
+    for (let item of arr) {
+      if (!path.includes(item)) {
+        path.push(item);
+        backTrack(arr, path);
+        path.pop();
+      }
+    }
+  };
+  backTrack(arr, []);
+  return ans;
+}
+allPermute([1, 2, 3]);
+```
+
 ## 19.二叉树的最近公共祖先
 
 ## 20.手撕快速排序
@@ -559,6 +589,35 @@ function insectionLink(headA, headB) {
 }
 ```
 
+## [25.合并 k 个升序链表](https://leetcode.cn/problems/merge-k-sorted-lists/description/)
+
+```js
+function mergeKLinks(head) {
+  let ans = [];
+  let cur = head;
+  for (let item of cur) {
+    while (item) {
+      ans.push(item.val);
+      item = item.next;
+    }
+  }
+  ans = ans.flat().sort((a, b) => a - b);
+  let dummy = {
+    next: null,
+    val: null,
+  };
+  let pre = dummy;
+  for (let item of ans) {
+    pre.next = {
+      next: null,
+      val: ans.shift(),
+    };
+    pre = pre.next;
+  }
+  return dummy.next;
+}
+```
+
 ## [27.最长上升子序列](https://leetcode.cn/problems/longest-increasing-subsequence/description/)
 
 ```js
@@ -569,8 +628,7 @@ function insectionLink(headA, headB) {
 
 function longestIncreSub(arr) {
   let len = arr.length;
-  let dp = new Array(len).fill(0);
-  dp[0] = 1;
+  let dp = new Array(len).fill(1);
   let max = 0;
   for (let i = 1; i < len; i++) {
     for (let j = 0; j < i; j++) {
@@ -698,6 +756,31 @@ function editPaths(word1, word2) {
   return dp[m][n]
 }
 ```
+
+## 35.二叉树的中序遍历
+
+```js
+// 左根右
+function inorder(node) {
+  if (!node) return [];
+  let queue = [];
+  let cur = node;
+  let ans = [];
+  while (queue.length || cur) {
+    if (cur) {
+      queue.push(cur);
+      cur = cur.left;
+    } else {
+      cur = queue.pop();
+      ans.push(cur.val);
+      cur = cur.right;
+    }
+  }
+  return ans;
+}
+```
+
+## 36.二分查找
 
 ## [37.用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/description/)
 

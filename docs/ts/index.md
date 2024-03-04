@@ -32,7 +32,7 @@ export enum Sizes {
   Large,
 }
 // 然后可以像这样访问枚举：
-const coffee = {
+export const coffee = {
   name: 'pro',
   size: Sizes.Middle, // 1
 };

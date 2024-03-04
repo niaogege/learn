@@ -13,25 +13,54 @@ nav:
 
 ## 汇总
 
+- 0.盒模型
 - 1.flex
 - 2.BFC
 - 3.如何清除浮动
 - 4.怎么让一个 div 水平垂直居中
-- 5.5.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景
+- 5.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景
 - 6.使用 css 实现无线循环的动画
 - 7.如何解决移动端 Retina 屏 1px 像素问题
 - 8.介绍下重绘和回流（Repaint & Reflow），以及如何进行优化
 - 9.涉及 css 的性能优化
 - 10.已知如下代码，如何修改才能让图片宽度为 300px ？注意下面代码不可修改。
-- 11.link 和@import 区别
-- 12.如何将文字超出元素的部分变成省略号（...）
-- 13.伪元素和伪类的区别
+- 11.说说 CSS 选择器以及这些选择器的优先级
+- 12.link 和@import 区别
+- 13.如何将文字超出元素的部分变成省略号（...）
+- 14.伪元素和伪类的区别
+- 15.position
 
-> 20231129
+## 盒模型
 
-## 1.flex 相关
+它描述了网页中的元素是如何被呈现和布局的。每个元素被看作一个矩形盒子，这个盒子由内容区域、内边距、边框和外边距组成。
 
-### 常用用法
+- 标准盒模型：盒子总宽度计算公式为：width + padding + border + margin
+
+box-sizing: content-box
+
+- IE 怪异盒模型：盒子总宽度计算公式为： width + margin,这里的 width 包含内容区域、内边距和边框的宽度(width = content + padding + border) box-sizing: border-box
+
+## [1.flex 相关](https://juejin.cn/post/7245898637779157052?searchId=20240303201006D84B025A45E38C950F5F#heading-10)
+
+Flexbox 布局也叫弹性盒子布局。它决定了元素如何在页面上排列，使它们能在不同的屏幕尺寸和设备下可预测地展现出来，更简便、完整、响应式地实现各种页面布局。它的主要思想是使父元素能够调整子元素的宽度、高度、排列方式，从而更好的适应可用的布局空间。
+
+采用 Flex 布局的元素，称为 Flex 容器，简称 容器， 它的所有**子元素**自动成为容器成员，称为 Flex 项目（flex item），简称"项目"。
+
+容器默认存在两根轴: 水平的主轴（main axis）和垂直的交叉轴（cross axis）。主轴的开始位置（与边框的交叉点）叫做 main start，结束位置叫做 main end；交叉轴的开始位置叫做 cross start，结束位置叫做 cross end。项目默认沿主轴排列。单个项目占据的主轴空间叫做 main size，占据的交叉轴空间叫做 cross size。
+
+### 容器属性
+
+以下 6 个属性设置在容器上。
+
+flex-direction flex-wrap flex-flow justify-content align-items align-content
+
+### 项目属性
+
+以下 6 个属性设置在项目上。
+
+order flex-grow flex-shrink flex-basis flex align-self
+
+### flex 属性常用用法
 
 - flex: 1 代表什么
 
@@ -57,9 +86,9 @@ flex-shrink: 1;
 flex-basis: 0%;
 ```
 
-- flex-grow: 定义项目的放大比例，默认 0，即使存在剩余空间也不放大
-- flex-shrink: 定义项目的缩小比例，默认 1，即如果空间不足该项目将缩小
-- flex-basis: 在分配多余的空间之前，项目占据的主轴空间，浏览器根据这个属性计算主轴是否有剩余空间，默认值 auto,即项目的本来大小
+- flex-grow: 定义项目的**放大**比例，默认 0，即使存在剩余空间也不放大
+- flex-shrink: 定义项目的**缩小**比例，默认 1，即如果空间不足该项目将缩小
+- flex-basis: **在分配多余的空间之前，项目占据的主轴空间**，浏览器根据这个属性计算主轴是否有剩余空间，默认值 auto,即项目的本来大小
 
 ### flex 交叉轴上如何对齐
 
@@ -77,7 +106,7 @@ flex-basis: 0%;
 
 ### flex 布局优缺点
 
-## 2.BFC， 介绍下 BFC、IFC、GFC 和 FFC
+## 2.BFC，介绍下 BFC、IFC、GFC 和 FFC
 
 块级格式化上下文，是 web 页面盒模型布局里的 css 渲染模式，指一个独立的渲染区域或指一个**隔离的独立容器**。
 
@@ -114,22 +143,46 @@ Inline Formate Context 行内格式化上下文
 
 ## 3.如何清除浮动
 
-- 1：给浮动元素的父元素添加高度（扩展性不好）
-- clear:both; 父级元素的最后一个子元素增加一个冗余元素，而且必须是块级元素，否则会无效
+- 套路 1: 给浮动元素的父元素**添加高度**（扩展性不好）
+- 套路 2: **clear:both**; 父级元素的最后一个子元素增加一个冗余元素，而且必须是块级元素，否则会无效
 
 ```html
 <div class="parent">
   <div class="child"></div>
   <div class="child"></div>
   <div class="child"></div>
-  <div></div>
-  // style: clear: both
+  <div style={{
+    clear: 'both'
+  }}></div>
 </div>
 ```
 
-- 伪元素清除浮动
+- 伪元素清除浮动给浮动元素的父元素添加一个 clearFix class，然后给这个 class 添加一个：after 伪元素 ,实现元素末尾添加一个看不见的块元素来清理浮动。这是通用的清理浮动方案，推荐使用
 
-- 给父元素使用 overflow:hidden;
+```html
+<div class="parent clearFix">
+  <div class="child"></div>
+  <div class="child"></div>
+  <div class="child"></div>
+</div>
+```
+
+```css
+.clearFix {
+  zoom: 1;
+}
+.clearfix: afetr {
+  content: '';
+  display: block;
+  clear: both;
+}
+```
+
+- 给父元素使用 overflow:hidden; 利用 BFC,这种方案让父容器形成了 BFC（块级格式上下文），而 BFC 可以包含浮动，通常用来**解决浮动父元素高度坍塌**的问题。 BFC 的主要特征:
+
+- BFC 容器是一个隔离的容器，和其他元素互不干扰；所以我们可以用触发两个元素的 BFC 来解决垂直边距折叠问题。
+- BFC 不会重叠浮动元素
+- BFC 可以包含浮动,这可以清除浮动。
 
 ## 4.怎么让一个 div 水平垂直居中
 
@@ -141,6 +194,10 @@ div {
 ```
 
 ## 5.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景。
+
+- visibility 设置 hidden 会隐藏元素，但是其位置还存在与页面文档流中，不会被删除，所以会触发浏览器渲染引擎的重绘
+- display 设置了 none 属性会隐藏元素，且其位置也不会被保留下来，所以会触发浏览器渲染引擎的回流和重绘。
+- opacity 会将元素设置为透明，但是其位置也在页面文档流中，不会被删除，所以会触发浏览器渲染引擎的重绘
 
 ## 6.使用 css 实现无线循环的动画
 
@@ -197,16 +254,16 @@ div {
 
 重排(Reflow)：元素的 **位置发生变动** 时发生重排，也叫回流。此时在 Layout 布局 阶段，**计算每一个元素在设备视口内的确切位置和大小**。当一个元素位置发生变化时，其父元素及其后边的元素位置都可能发生变化，代价极高。
 
-重绘(Repaint): 元素的 **样式发生变动** ，但是位置没有改变。此时在关键渲染路径中的 **Paint** 阶段，**将渲染树中的每个节点转换成屏幕上的实际像素**，这一步通常称为绘制或栅格化。
+重绘(Repaint): 元素的 **样式发生变动** ，但是位置没有改变。发生在关键渲染路径中的 **Paint** 阶段，**将渲染树中的每个节点转换成屏幕上的实际像素**，这一步通常称为绘制或栅格化。
 
 ## 9.涉及 css 的性能优化
 
 - 减少 DOM 树渲染时间（譬如降低 HTML 层级、标签尽量语义化等等）
 - 减少 CSSOM 树渲染时间（降低选择器层级等等）
 - 减少 HTTP 请求次数及请求大小
-- 将 css 放在页面开始位置
+- **将 css 放在页面开始位置**
 - 将 js 放在页面底部位置，并尽可能用 **defer** 或者 **async** 避免阻塞的 js 加载，确保 DOM 树生成完才会去加载 JS [defer/async](../interview/jsBasic/jsDeferAsync.md)
-- 用 link 替代@import(why?@import 引入的 css 需要等到页面全部被加载完，延迟了 CSSOM 生成的时间，link 下载就加载即刻生成 CSSOM,)
+- **用 link 替代@import**(why?@import 引入的 css 需要等到页面全部被加载完，延迟了 CSSOM 生成的时间，link 下载就加载即刻生成 CSSOM,)
 - 如果页面 css 较少，尽量使用内嵌式
 - 为了减少白屏时间，页面加载时先快速生成一个 DOM 树
 
@@ -223,7 +280,7 @@ div {
 - 元素选择器(p/span)/伪元素选择器（0001）(:afrer/before)
 - 关系选择器(兄弟 后代 A + B 紧邻组合)/通配符选择器（0000）
 
-## 11.link 和@import 区别
+## 12.link 和@import 区别
 
 - 从属关系区别：link 是 HTML 方式， @import 是 CSS 方式即 @import 是 CSS 提供的语法规则，只有导入样式表的作用；link 是 HTML 提供的标签，不仅可以加载 CSS 文件，还可以定义 RSS、rel 连接属性等。
 
@@ -233,7 +290,7 @@ div {
 
 - DOM 可控性区别，可以通过 JS 操作 DOM ，插入 link 标签来改变样式；由于 DOM 方法是基于文档的，无法使用@import 的方式插入样式
 
-## 12.如何将文字超出元素的部分变成省略号（...）
+## 13.如何将文字超出元素的部分变成省略号（...）
 
 - 单行超出
 
@@ -255,11 +312,19 @@ white-space: nowrap;
 }
 ```
 
-## 13.伪元素和伪类的区别
+## 14.伪元素和伪类的区别
 
 伪元素: 用于创建一些不在文档树中的元素，并为其添加样式。比如说，我们可以通过:before 来在一个元素前增加一些文本，并为这些文本添加样式。虽然用户可以看到这些文本，但是这些文本实际上不在文档树中。
 
 伪类: 用于给已有元素处于的某个状态时，为其添加对应的样式，这个状态是根据用户行为而动态变化的,比如：hover
+
+## 15.Position
+
+- static：无特殊定位，对象遵循正常文档流。**top，right，bottom，left 等属性不会被应用**。
+- relative：对象遵循正常文档流，但将依据 top，right，bottom，left 等属性在**正常文档流中偏移位置**。而其层叠通过 z-index 属性定义。
+- absolute：对象脱离正常文档流，使用 top，right，bottom，left 等属性进行绝对定位。**相当于最近一层定位不是 static 的父级**，如果父级没有定位，则相当于 html,而其层叠通过 z-index 属性定义。
+- fixed：对象脱离正常文档流，使用 top，right，bottom，left 等属性以**窗口为参考点**进行定位，当出现滚动条时，对象不会随着滚动。而其层叠通过 z-index 属性定义。
+- sticky：具体是类似 relative 和 fixed，在 viewport 视口滚动到阈值之前应用 relative，滚动到阈值之后应用 fixed 布局，由 top 决定。
 
 ## 参考
 

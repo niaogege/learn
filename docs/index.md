@@ -18,7 +18,7 @@ features:
 footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2021048304号-1](https://beian.miit.gov.cn/#/Integrated/index)
 ---
 
-> 目前坐标上海/南京，即将步入程序员的 last 红利时期，是时候厚积薄发了
+> 目前坐标上海/南京，你对自己的热爱有多少坚持，你对你的职业又有多少热爱，你又有多少勇气和毅力去改变这一切?
 
 > 始终保持一个对技术热爱的 ❤️
 
@@ -48,10 +48,10 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 
 ## 面试相关
 
+- 八股文
 - webpack & vite & rollup
 - 算法(爱不知所起一往情深)
 - 网络
-- 源码调试
 - 源码阅读
 - 思考与成长
 
@@ -61,8 +61,6 @@ footer: Open-source MIT Licensed | Copyright © 2020<br />Powered by [苏ICP备2
 - 工具函数
 - 脚手架
 - 调试工具
-- webpack plugin
-- rollup plugin
-- babel plugin
+- webpack plugin/rollup plugin/babel plugin
 
 不求广，只求精和深！

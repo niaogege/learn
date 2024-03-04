@@ -78,7 +78,18 @@ SSL 协议的主要功能：
 
 ## https 请求流程(Tls1.2)
 
-![http2_process.png](https://s2.loli.net/2022/05/05/aUNcYeXOKq4BPp1.png) 本人总结 1.client 向 server 端发送 https 请求，同时把自己支持的 tls 版本 加密套件 和 client-random 给服务端 2.server 端向 client 端打招呼，确认支持的 tls 版本 加密套件，同时也生成自己的 server-random 给 client 3.server 向 client 发送证书 4.客户端验证证书 5.三个信息都发送完之后告诉客户端 done 6.client 端在此生成第三个随机数，也称为预主密钥，用证书里的公钥进行加密成随机数，然后在发给 server 7.server 用自己的私钥进行解密，得到预主密钥，然后用 client-random/server-random/预主密钥生成一个会话密钥，同时客户端也用同样的方式生成一模一样的会话密钥。会话密钥生成之前都是采用非对称加密，后续都是采用对称加密 8.Server 使用会话密钥加密“明文内容 A”，发送给 Client。Client 使用会话密钥解密响应的密文，得到“明文内容 A”
+![http2_process.png](https://s2.loli.net/2022/05/05/aUNcYeXOKq4BPp1.png)
+
+### 本人总结
+
+- 1.client 向 server 端发送 https 请求，同时把自己支持的 tls 版本 加密套件 和 client-random 给服务端
+- 2.server 端向 client 端打招呼，确认支持的 tls 版本 加密套件，同时也生成自己的 server-random 给 client
+- 3.server 向 client 发送证书
+- 4.客户端验证证书
+- 5.三个信息都发送完之后告诉客户端 done
+- 6.client 端在此生成第三个随机数，也称为预主密钥，用证书里的公钥进行加密成随机数，然后在发给 server
+- 7.server 用自己的私钥进行解密，得到预主密钥，然后用 client-random/server-random/预主密钥生成一个会话密钥，同时客户端也用同样的方式生成一模一样的会话密钥。会话密钥生成之前都是采用非对称加密，后续都是采用对称加密
+- 8.Server 使用会话密钥加密“明文内容 A”，发送给 Client。Client 使用会话密钥解密响应的密文，得到“明文内容 A”
 
 他人总结
 
