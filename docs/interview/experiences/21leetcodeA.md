@@ -152,6 +152,36 @@ var reverseList = function (head) {
 
 ## 3.LRU 缓存机制
 
+```js
+class LRU {
+  constructor(limit) {
+    this.limit = limit;
+    this.cache = new Map();
+  }
+  get(key) {
+    if (this.cache.has(key)) {
+      const val = this.cache.get(key);
+      this.cache.delete(key);
+      this.cache.set(key, val);
+    } else {
+      return -1;
+    }
+  }
+  set(key, val) {
+    const size = this.cache.size;
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    } else {
+      if (size >= this.limit) {
+        const oldKey = this.cache.keys().next().value;
+        this.cache.delete(oldKey);
+      }
+    }
+    this.cache.set(key, val);
+  }
+}
+```
+
 ## 4.数组中的第 K 个最大元素
 
 ```js
@@ -159,6 +189,8 @@ var reverseList = function (head) {
 ```
 
 ## 5.K 个一组链表反转
+
+> 不会！
 
 ```js
 var reverseKGroup = function (head, k) {
@@ -315,6 +347,8 @@ var mergeTwoLists = function (l1, l2) {
   }
 };
 ```
+
+## 9.两数之和
 
 ## [10.最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
 
@@ -497,7 +531,20 @@ function allPermute(arr) {
 allPermute([1, 2, 3]);
 ```
 
-## 19.二叉树的最近公共祖先
+## [19.二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/)
+
+```js
+// 最近公共祖先
+var lowestCommonAncestor = function (root, p, q) {
+  if (root == null || p == root || q == root) return root;
+  let left = lowestCommonAncestor(root.left, p, q);
+  let right = lowestCommonAncestor(root.right, p, q);
+  if (right != null && left != null) return root;
+  if (left != null) return left;
+  if (right != null) return right;
+  return null;
+};
+```
 
 ## 20.手撕快速排序
 
@@ -568,6 +615,42 @@ var zigzagLevelOrder = function (root) {
 };
 ```
 
+## 23.螺旋矩阵
+
+```js
+function matrix(arr) {
+  if (!arr.length) return [];
+  let up = 0;
+  let down = arr.length - 1;
+  let left = 0;
+  let right = arr[0].length - 1;
+  let ans = [];
+  while (true) {
+    // 从左到右
+    for (let i = left; i <= right; i++) {
+      ans.push(arr[up][i]);
+    }
+    if (++up > down) break;
+    // 从上到下
+    for (let i = up; i <= down; i++) {
+      ans.push(arr[i][right]);
+    }
+    if (left > --right) break;
+    // 从右往左
+    for (let i = right; i >= left; i--) {
+      ans.push(arr[down][i]);
+    }
+    if (up > --down) break;
+    // 从下往上
+    for (let i = down; i >= up; i--) {
+      ans.push(arr[i][left]);
+    }
+    if (++left > right) break;
+  }
+  return ans;
+}
+```
+
 ## 24.相交链表
 
 ```js
@@ -576,7 +659,7 @@ function insectionLink(headA, headB) {
   var set = new Set();
   while (cur) {
     set.add(cur);
-    cur = cur.mext;
+    cur = cur.next;
   }
   cur = headB;
   while (cur) {
@@ -666,7 +749,7 @@ function water(nums) {
           let curTop = stack.slice(-1); // 当前栈顶元素
           let h = Math.min(cur, nums[curTop]) - nums[top];
           let w = i - curTop - 1;
-          res = res + h * w;
+          res += +h * w;
         }
       }
       stack.push(i);

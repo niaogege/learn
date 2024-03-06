@@ -129,6 +129,129 @@ const arr = [
     parentId: 4,
   },
 ];
+[
+  {
+    id: 0,
+    name: '',
+    children: [
+      {
+        id: 2,
+        name: '部门B',
+        children: [
+          {
+            id: 1,
+            name: '部门A',
+            children: [
+              {
+                id: 3,
+                name: '部门C',
+                children: [],
+              },
+            ],
+          },
+          {
+            id: 5,
+            name: '部门D',
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+function arrToTree(arr) {
+  let ans = [];
+  var dfs = (arr, res, parentId) => {
+    for (let item of arr) {
+      if (parentId == item.parentId) {
+        const one = {
+          ...item,
+          children: [],
+        };
+        res.push(one);
+        dfs(arr, one.children, item.id);
+        delete item.children;
+      }
+    }
+  };
+  dfs(arr, ans, 0);
+  return ans;
+}
+```
+
+树转数组
+
+```js
+var listTree = [
+  {
+    id: 1,
+    name: '部门1',
+    pid: 0,
+    children: [
+      {
+        id: 2,
+        name: '部门1-1',
+        pid: 1,
+        children: [
+          {
+            id: 4,
+            name: '部门1-1-1',
+            pid: 2,
+            children: [],
+          },
+        ],
+      },
+      {
+        id: 3,
+        name: '部门1-2',
+        pid: 1,
+        children: [
+          {
+            id: 5,
+            name: '部门1-2-1',
+            pid: 3,
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: '部门2',
+    pid: 0,
+    children: [
+      {
+        id: 7,
+        name: '部门2-1',
+        pid: 6,
+        children: [],
+      },
+    ],
+  },
+  {
+    id: 8,
+    name: '部门3',
+    pid: 0,
+    children: [],
+  },
+];
+function treeToArr(tree) {
+  let ans = [];
+  var dfs = (arr, res) => {
+    for (let child of arr) {
+      res.push(child);
+      if (child.children.length) {
+        dfs(child.children, res);
+      }
+      delete child.children;
+    }
+  };
+  dfs(tree, ans);
+  return ans;
+}
+treeToArr(listTree);
 ```
 
 - Node 是怎么部署的? pm2 守护进程的原理?

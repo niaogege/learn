@@ -21,6 +21,42 @@ nav:
 - webpack
 - microFrontend
 
+## webpack/vite/rollup
+
+### vite 原理
+
+基于 esbuild 与 Rollup，依靠浏览器自身 ESM 编译功能， 实现极致开发体验的新一代构建工具！
+
+相关概念：
+
+- 依赖： 指开发不会变动的部分(npm 包、UI 组件库)，esbuild 进行预构建。
+- 源码： 浏览器不能直接执行的非 js 代码(.jsx、.css、.vue 等)，vite 只在浏览器请求相关源码的时候进行转换，以提供 ESM 源码。
+
+#### 开发环境
+
+- Vite 以 原生 ESM 方式提供源码。这实际上是让**浏览器接管了打包程序的部分工作**：Vite 只需要在浏览器请求源码时进行转换并按需提供源码。
+
+- 浏览器执行 ESM 的 import 时，会向 dev server 发起该模块的 ajax 请求，服务器对源码做简单处理后返回给浏览器。根据情景动态导入代码，即只在当前屏幕上实际使用时才会被处理
+
+- Vite 中 HMR 是在原生 ESM 上执行的。当编辑一个文件时，Vite 只需要精确地使已编辑的模块失活，使得无论应用大小如何，HMR 始终能保持快速更新。
+
+- Vite 同时利用 HTTP 头来加速整个页面的重新加载（再次让浏览器为我们做更多事情）：源码模块的请求会根据 **304 Not Modified** 进行协商缓存，而依赖模块请求则会通过 **Cache-Control: max-age=31536000**,immutable 进行强缓存，因此一旦被缓存它们将不需要再次请求。
+
+- 使用 esbuild 处理项目依赖，esbuild 使用 go 编写，比一般 node.js 编写的编译器快几个数量级。
+
+#### 生产环境
+
+集成 Rollup 打包生产环境代码，依赖其成熟稳定的生态与更简洁的**插件机制**。
+
+#### 处理流程对比
+
+- Webpack 通过先将整个应用打包，再将打包后代码提供给 dev server，开发者才能开始开发
+- Vite 直接将源码交给浏览器，实现 dev server 秒开，浏览器显示页面需要相关模块时，再向 dev server 发起请求，服务器简单处理后，将该模块返回给浏览器，实现真正意义的按需加载。
+
+### webpack 中的说说 Loader 和 Plugin 的区别？编写 Loader，Plugin 的思路？
+
+### 说说 webpack 构建流程
+
 ## Cjs/Amd/umd/Esmodule
 
 ### Cjs
@@ -212,8 +248,6 @@ vscode debugger 的使用主要是在 .vscode/launch.json 里面添加调试配�
 ## koa/express 学习和使用
 
 ## ssr
-
-## webpack/vite/rollup
 
 ## BFF(Backends For Frontends))
 

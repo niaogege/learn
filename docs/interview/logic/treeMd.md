@@ -90,7 +90,7 @@ var sumNumbers = function (root) {
   var dfs = (root) => {
     // 叶子节点
     if (root.left == null && root.right == null) {
-      num = num + Number(root.val);
+      num += Number(root.val);
     }
     if (root.left) {
       root.left.val = `${root.val}${root.left.val}`;

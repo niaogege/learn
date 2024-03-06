@@ -81,14 +81,14 @@ nav:
 - 浏览器渲染原理 🌟🌟🌟🌟🌟
 - jwt/cookie/session 🌟🌟🌟
 - csrf/xss 🌟🌟🌟
-- 跨域 🌟🌟🌟
+- 跨域 🌟🌟🌟🌟
 - web 缓存 🌟🌟🌟🌟
 - 性能优化 🌟🌟🌟🌟
 
 ### nodejs
 
 - ESModule 和 Commonjs 区别 🌟🌟🌟🌟🌟
-- treeShaking 原理 🌟🌟🌟
+- treeShaking 原理 🌟🌟🌟🌟🌟
 - v8 相关
 - 垃圾回收 🌟🌟🌟
 - 如何利用多核 CPU🌟🌟🌟🌟
@@ -96,17 +96,18 @@ nav:
 
 ### 网络
 
-- http1.0/http1.1
-- http2/http3
-- https
-- tcp/udp/http
-- 缓存
+- http1.0/http1.1/http2🌟🌟🌟🌟
+- http3🌟🌟
+- https🌟🌟🌟
+- tcp/udp/http🌟🌟🌟
+- http 缓存 🌟🌟🌟🌟
+- WebSocket🌟🌟
 
 ### ts
 
-- 各种类型体操
-- 逆变和协变
-- interface 和 type 区别
+- 各种类型体操 🌟🌟🌟🌟🌟
+- 逆变和协变 🌟🌟
+- interface 和 type 区别 🌟🌟🌟🌟🌟
 
 > 在哪里跌倒 就在哪里爬起来
 
