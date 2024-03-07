@@ -865,6 +865,24 @@ function inorder(node) {
 
 ## 36.二分查找
 
+```js
+function binarySearch(arr, target) {
+  let left = 0;
+  let right = arr.length - 1;
+  while (left <= right) {
+    let base = left + Math.floor(right - left / 2);
+    if (arr[base] == target) {
+      return base;
+    } else if (target > arr[base]) {
+      left = mid + 1;
+    } else {
+      right = mid - 1;
+    }
+  }
+  return -1;
+}
+```
+
 ## [37.用栈实现队列](https://leetcode.cn/problems/implement-queue-using-stacks/description/)
 
 ```js

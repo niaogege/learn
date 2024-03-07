@@ -5,7 +5,7 @@
  * 4.Promise.finally
  * 5.reduce
  * 6.二叉树中的最大路径和
- * 7.对称二叉树
+ * 7.对称二叉树/翻转二叉树
  * 8.最大深度和最小深度
  * 9.重排链表
  * 10.最小路径和
@@ -13,7 +13,44 @@
  * 12.数组转树
  */
 
-function tryAgain(fn, time) {}
+/**
+ * @param {TreeNode} root
+ * @return {TreeNode}
+ */
+var invertTree = function (root) {
+  if (!root) return null;
+  let temp = invertTree(root.left);
+  root.left = invertTree(root.right);
+  root.right = temp;
+  return root;
+};
+
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ * 外侧
+ * 里侧
+ */
+var isSymmetric = function (root) {
+  if (root == null) return true;
+  const compare = (left, right) => {
+    // 确定终止条件
+    if ((left == null && right != null) || (right == null && left != null)) {
+      return false;
+    }
+    if (left == null && right == null) {
+      return true;
+    }
+    if (left.val !== right.val) {
+      return false;
+    }
+    // 确定单层逻辑
+    const outSide = compare(left.left, right.right);
+    const inner = compare(left.right, right.left);
+    return outSide && inner;
+  };
+  return compare(root.left, root.right);
+};
 
 class Promise {
   static finally(cb) {

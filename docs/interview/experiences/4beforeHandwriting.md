@@ -1596,17 +1596,18 @@ camel('cppNName');
 
 输入: nums = [-1,0,3,5,9,12], target = 9 输出: 4 解释: 9 出现在 nums 中并且下标为 4
 
-```ts
-function search(nums: number[], target: number): number {
-  let max = nums.length - 1;
-  let min = 0;
-  while (max >= min) {
-    if (nums[max] === target) {
-      return max;
-    } else if (target < nums[max]) {
-      max--;
-    } else if (target > nums[min]) {
-      min++;
+```js
+function search(nums, target) {
+  let end = nums.length - 1;
+  let start = 0;
+  while (start <= end) {
+    let base = start + end >= 1;
+    if (arr[base] == target) {
+      return base;
+    } else if (arr[base] > target) {
+      end = mid - 1;
+    } else {
+      start = mid + 1;
     }
   }
   return -1;

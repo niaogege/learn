@@ -12,12 +12,33 @@
  * 11.二叉树中的最大路径和
  */
 
+/**
+ * 
+输入：amount = 5, coins = [1, 2, 5]
+输出：4
+解释：有四种方式可以凑成总金额：
+5=5
+5=2+2+1
+5=2+1+1+1
+5=1+1+1+1+1
+ */
+var change = function (amount, coins) {
+  let dp = new Array(amount + 1).fill(0);
+  dp[0] = 1;
+  for (let coin of coins) {
+    for (let j = coin; j <= amount; j++) {
+      dp[j] += dp[j - coin];
+    }
+  }
+  return dp[amount];
+};
+
 // 1/2 5总共有几种可能
 function clim(n) {
   let dp = new Array(n + 1).fill(0);
   dp[1] = 1;
   dp[2] = 2;
-  for (let i = 2; i <= n; i++) {
+  for (let i = 3; i <= n; i++) {
     dp[i] = dp[i - 1] + dp[i - 2];
   }
   return dp[n];
@@ -33,9 +54,10 @@ function clim(n) {
  */
 var coinChange = function (coins, amount) {
   let dp = new Array(amount + 1).fill(Infinity);
-  for (let i = 1; i <= amount; i++) {
-    for (let item of coins) {
-      dp[i] += dp[i - (amount - item)];
+  dp[0] = 0;
+  for (let coin of coins) {
+    for (let j = coin; j <= amount; j++) {
+      dp[j] = Math.min(dp[j], dp[j - coin] + 1);
     }
   }
   return dp[amount] == Infinity ? '-1' : dp[amount];
