@@ -14,6 +14,7 @@ react 在面试中举足轻重，列举几个有代表性的问题，背一背. 
 
 - [前端面试通关宝典：解析 44 道 React 测试题（上）](https://mp.weixin.qq.com/s/0EtJvTTZJFYZJOPDxLiAbw)
 - [前端面试通关宝典：解析 44 道 React 测试题（下）](https://mp.weixin.qq.com/s/H8TrhzBQpjJbz6A2oJ14UA)
+- [2023 面试真题之框架篇](https://juejin.cn/post/7204307381689532474?searchId=202403081641040D4CF9DBB2742B236EEA)
 
 列表如下
 
@@ -24,9 +25,10 @@ react 在面试中举足轻重，列举几个有代表性的问题，背一背. 
 - 4.基于类的 React 组件，与函数式 React 组件之间有何区别?
 - 5.类组件生命周期的各个阶段
 - 6.Redux 中的 reducer 是什么，它会用到哪些参数？
-- 7. Redux 实现的是哪种模式?以及 Mobx 实现的是哪种模式。两者之间有什么区别？
+- 7.Redux 实现的是哪种模式?以及 Mobx 实现的是哪种模式。两者之间有什么区别？
 - 8.什么是 JSX?
 - 9.userMemo 的用途是什么？它是如何起效的?
+- diff 算法相关
 
 ## 0.fiber
 
@@ -395,7 +397,7 @@ export const getStaticProps = async ({ params: { slug } }) => {
 ```
 
 2. getServerSideProps: 此方法用于根据每个请求获取数据，并在服务器端预渲染页面。如果需要获取经常更改、或者仅供特定用户使用的数据，则可以使用此方法。(SSR)
-3. getStaticPaths: 此方法用于在动态路由当中，指定需要在构建时预渲染的路径列表，常用于获取带有参数的动态路由数据。
+3. getStaticPaths: 此方法用于在**动态路由**当中，指定需要在构建时**预渲染的路径列表**，常用于获取带有参数的**动态路由数据**。
 
 ```js
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -449,3 +451,136 @@ function useRerender() {
   return ref.current;
 }
 ```
+
+## 17.react 中的 diff
+
+在 React 中，diff 算法需要与虚拟 DOM 配合才能发挥出真正的威力。React 会使用 diff 算法计算出虚拟 DOM 中真正发生变化的部分，并且只会针对该部分进行 dom 操作，从而避免了对页面进行大面积的更新渲染，减小性能的开销。在传统的 diff 算法中复杂度会达到 O(n^3)。React 中定义了三种策略，在对比时，根据策略只需遍历一次树就可以完成对比，将复杂度降到了 O(n)：
+
+- tree diff：在两个树对比时，只会比较同一层级的节点，会忽略掉跨层级的操作
+
+## 18.setState 同步异步问题
+
+### v18 之前版本
+
+> setState 并不是单纯的异步或同步，这其实与调用时的环境相关
+
+1.在**合成事件** 和 **生命周期钩子**(除 componentDidUpdate) 中，setState 是"异步"的；
+
+2.在 原生事件 和 setTimeout 中，setState 是同步的，可以马上获取更新后的值；
+
+### 批量更新
+
+多个顺序的 setState 不是同步地一个一个执行滴，会一个一个加入队列，然后最后一起执行。在 合成事件 和 生命周期钩子 中，setState 更新队列时，存储的是 合并状态(Object.assign)。因此前面设置的 key 值会被后面所覆盖，最终只会执行一次更新。
+
+### 异步现象原因
+
+setState 的“异步”并不是说内部由异步代码实现，其实本身执行的过程和代码都是同步的，只是**合成事件和生命钩子函数的调用顺序在更新之前**，导致在合成事件和钩子函数中没法立马拿到更新后的值，形成了所谓的“异步”，当然可以通过第二个参数 setState(partialState, callback)中的 callback 拿到更新后的结果。
+
+### setState 调用流程
+
+- 调用 this.setState(newState)
+- 将新状态 newState 存入 pending 队列
+- 判断是否处于 batch Update（isBatchingUpdates 是否为 true）
+
+### 为什么直接修改 this.state 无效
+
+setState 本质是通过一个**队列机制**实现 state 更新的。 执行 setState 时，会将需要更新的 state 合并后放入状态队列，而不会立刻更新 state，队列机制可以批量更新 state。
+
+### 自动批处理
+
+在 v18 之前只在事件处理函数中实现了批处理，在 v18 中所有更新都将自动批处理，包括 promise 链、setTimeout 等异步代码以及原生事件处理函数
+
+### V18 新特性
+
+React 中 Fiber 树的更新流程分为两个阶段 **render 阶段**和 **commit 阶段**。
+
+- 组件的 render 函数执行时称为 render（本次更新需要做哪些变更），纯 js 计算；
+- 而将 render 的结果渲染到页面的过程称为 commit （变更到真实的宿主环境中，在浏览器中就是操作 DOM）。
+
+在 V16 Async 异步 模式下，render 阶段是一次性执行完成；而在 Concurrent 模式下 render 阶段可以被拆解，每个时间片内执行一部分，直到执行完毕。由于 commit 阶段有 DOM 的更新，不可能让 DOM 更新到一半中断，必须一次性执行完毕。
+
+### React 并发新特性
+
+> 并发渲染机制 concurrent rendering 的目的：根据用户的设备性能和网速对渲染过程进行适当的调整， 保证 React 应用在长时间的渲染过程中依旧保持可交互性，避免页面出现卡顿或无响应的情况，从而提升用户体验。
+
+## 19.ref 能否拿到函数组件的实例？
+
+### 使用 forwardRef
+
+将组件单独封装成组件 TextInput
+
+```js
+const TextInput = React.forwardRef((props, ref) => {
+  return <input ref={ref} />;
+});
+const TextPar = () => {
+  const inputEl = useRef(null);
+  const onClick = () => {
+    inputEl.current.focus();
+  };
+  return (
+    <div>
+      <TextInput ref={inputEl}></TextInput>
+      <button onClick={onClick}>Focus the input</button>
+    </div>
+  );
+};
+```
+
+### useImperativeHandle
+
+有时候，我们可能不想将整个子组件暴露给父组件，而只是暴露出父组件需要的值或者方法，这样可以让代码更加明确。而**useImperativeHandle** Api 就是帮助我们做这件事的。
+
+```js
+const TextInput = React.forwardRef((props, ref) => {
+  const inputRef = useRef();
+  useImperativeHandle(ref, () => {
+    getName: () => {
+      inputRef.current.focus();
+    };
+  });
+  return <input ref={ref} />;
+});
+const TextPar = () => {
+  const inputEl = useRef(null);
+  const onClick = () => {
+    inputEl.current.getName();
+  };
+  return (
+    <div>
+      <TextInput ref={inputEl}></TextInput>
+      <button onClick={onClick}>Focus the input</button>
+    </div>
+  );
+};
+```
+
+## 20.React.memo
+
+memo：结合了 pureComponent 纯组件和 componentShouldUpdate()功能，会对传入的 props 进行一次对比，然后根据第二个函数返回值来进一步判断哪些 props 需要更新
+
+> 要注意 memo 是一个高阶组件，函数式组件和类组件都可以使用。
+
+```js
+function MyComponent(props) {}
+// 返回布尔值 true:不更新 false： 需要更新
+function areEqual(prevProps, nextProps) {}
+export default React.memo(MyComponent, areEqual);
+```
+
+### memo 的注意事项
+
+React.memo 与 PureComponent 的区别：
+
+#### 服务对象不同：
+
+- PureComponent 服务于类组件，
+- React.memo 既可以服务于类组件，也可以服务与函数式组件，
+- useMemo 服务于函数式组件
+
+#### 针对的对象不同：
+
+- PureComponent 针对的是 props 和 state
+- React.memo 只能针对 props 来决定是否渲染
+
+> React.memo 的第二个参数的返回值与 shouldComponentUpdate 的返回值是相反的 React.memo:返回  true  组件不渲染 ， 返回 false 组件重新渲染。 shouldComponentUpdate: 返回  true  组件渲染 ， 返回  false  组件不渲染

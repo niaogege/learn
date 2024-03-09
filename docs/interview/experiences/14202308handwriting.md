@@ -481,6 +481,52 @@ function myAssign(target, ...source) {
 Object.myAssign = myAssign;
 ```
 
+## 22.二叉树的最大深度和最小深度
+
+```js
+// 最大深度
+function maxDepth(root) {
+  if (root == null) return 0;
+  let queue = [root];
+  let depth = 0;
+  while (queue.length) {
+    let len = queue.length;
+    depth++;
+    for (let i = 0; i < len; i++) {
+      let cur = queue.shift();
+      if (cur.left) {
+        queue.push(cur.left);
+      }
+      if (cur.right) {
+        queue.push(cur.right);
+      }
+    }
+  }
+  return depth;
+}
+// 最小深度
+function minDepth(root) {
+  if (root == null) return 0;
+  let queue = [root];
+  let ans = 1;
+  while (queue.length) {
+    let len = queue.length;
+    for (let i = 0; i < len; i++) {
+      let cur = queue.shift();
+      if (cur.left == null && cur.right == null) return ans;
+      if (cur.left) {
+        queue.push(cur.left);
+      }
+      if (cur.right) {
+        queue.push(cur.right);
+      }
+    }
+    ans++;
+  }
+  return ans;
+}
+```
+
 ## 23 TS 手写 IndexToUnion 索引转联合类型
 
 ```ts
@@ -505,6 +551,30 @@ type IndexToUnion<T> = {
 
 type NN3 = IndexToUnion<NN1>;
 const tt3: NN3 = { age: '22' };
+```
+
+## 24.TS 手写 Unique 去重
+
+```ts
+type ZONE = [0, 1, 1, 2, 2];
+type Equal<A, B = A> = (<T>(arg: A) => T extends A ? 1 : 2) extends <T>(
+  arg: B,
+) => T extends B ? 1 : 2
+  ? true
+  : false;
+type EE1 = Equal<false, string>;
+type HasInclude<T, C> = T extends [infer F, ...infer R]
+  ? Equal<F, C> extends true
+    ? true
+    : HasInclude<R, C>
+  : false;
+type TP = HasInclude<[1, 2, 3], 11>;
+type Unique<T, N extends unknown[] = []> = T extends [infer F, ...infer R]
+  ? HasInclude<N, F> extends true
+    ? Unique<R, N>
+    : Unique<R, [F, ...N]>
+  : N;
+type ZONE1 = Unique<ZONE>;
 ```
 
 ## 25 axios 以及拦截器

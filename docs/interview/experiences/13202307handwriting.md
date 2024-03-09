@@ -27,7 +27,7 @@ nav:
  * 7.bigIntSum 大数相加
  * 8.deepClone 深浅拷贝
  * 9.16进制转 rgb or rgb 转 16 进制
- * 10.mockMap/mockFilter 数组方法重写
+ * 10.mockMap/mockFilter/push 数组方法重写
  * 11.myReduce 重写
  * 12.flatter 数组和对象扁平化
  * 13.手写发布订阅模式
@@ -319,6 +319,18 @@ Array.prototype.mockFilter = function (fn, context = window) {
 var filter = [1, 2, 3].filter((e) => e > 1);
 var filter2 = [1, 2, 3].mockFilter((e) => e > 1);
 console.log(filter, filter2);
+
+Array.prototype.mockPush = function () {
+  const len = arguments.length;
+  const arr = this;
+  for (let i = 0; i < len; i++) {
+    // 调用这个方法的数组 获取数组的长度 将当前元素放入最后一个
+    arr[arr.length] = arguments[i];
+  }
+  return arr.length;
+};
+let test = [1, 2, 3];
+test.mockPush(4, 5, 6);
 ```
 
 ## 11.myReduce 重写!!
@@ -328,9 +340,10 @@ var sum = [1, 2, 3].reduce((pre, cur) => cur + pre, 10);
 console.log(sum);
 
 Array.prototype.mockReduce = function (fn, init) {
-  var arr = this;
-  var res = init ? init : arr[0];
-  for (let i = init ? 0 : 1; i < arr.length; i++) {
+  const arr = this;
+  let res = init ? init : arr[0];
+  const startIndex = init ? 0 : 1; // 老是混淆
+  for (let i = startIndex; i < arr.length; i++) {
     res = fn.call(null, res, arr[i], i, arr);
   }
   return res;
@@ -364,11 +377,11 @@ const list2 = flatten(array, 2);
 console.log(list1); // [1, 2, 3, 4, 5, 3, -4]
 console.log(list2); // [1, 2, 3, 4, [5], 3, -4]
 function myFlatten1(arr) {
-  return arr.reduce((pre, cur) => {
-    return pre.concat(Array.isArray(cur) ? myFlatten(cur) : cur);
-  }, []);
+  while (arr.some((item) => Array.isArray(item))) {
+    arr = [].concat(...arr);
+  }
+  return arr;
 }
-
 function myFlatten2(arr) {
   return arr.reduce((pre, cur) => {
     if (Array.isArray(cur)) {
@@ -1206,7 +1219,8 @@ parseUrlParams('?name=cpp&age=31&hobby=writing');
 function removeDup(arr) {
   return arr.filter((item, index) => arr.indexOf(item) === index);
 }
-removeDup([1, 33, 44, 99, 11]);
+const uniueArr = [...new Set(arr)];
+removeDup([1, 1, 33, 44, 99, 11]);
 ```
 
 ## 35.useEvent

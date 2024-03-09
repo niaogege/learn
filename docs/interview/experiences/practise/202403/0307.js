@@ -13,6 +13,37 @@
  * 12.重排链表
  */
 
+var isBalanced = function (root) {
+  if (root == null) return true;
+  let left = maxDepth(root.left);
+  let right = maxDepth(root.right);
+  return Math.abs(left - right) <= 1 && isBalanced(root.left) && isBalanced(root.right);
+};
+var maxDepth = (root) => {
+  if (root == null) return 0;
+  let left = maxDepth(root.left);
+  let right = maxDepth(root.right);
+  return Math.max(left, right) + 1;
+};
+
+var removeDuplicates = function (nums) {
+  for (let i = 0; i < nums.length; i++) {
+    if (nums[i] == nums[i + 1]) {
+      nums.splice(i, 1);
+      i--;
+    }
+  }
+  return nums.length;
+};
+
+// 最大深度
+var maxDepth = function (root) {
+  if (root == null) return 0;
+  let left = maxDepth(root.left);
+  let right = maxDepth(root.right);
+  return 1 + Math.max(left, right);
+};
+
 /**
  * @param {number} n
  * @return {string[]}
@@ -21,11 +52,16 @@
  */
 var generateParenthesis = function (n) {
   let ans = [];
-  let dfs = (n, left, right) => {
-    if (left.length > right.length || right.length > n) return;
-    dfs(n);
+  let dfs = (paths, left, right) => {
+    if (left > right || right > n) return;
+    if (2 * n == paths.length) {
+      ans.push(paths);
+      return;
+    }
+    dfs(paths + '(', left + 1, right);
+    dfs(paths + ')', left, right + 1);
   };
-  dfs(n, '(', ')');
+  dfs('', 0, 0);
   return ans;
 };
 

@@ -70,7 +70,7 @@ type MockAwaited<T extends Promise<unknown>> = T extends Promise<infer P>
   : T;
 ```
 
-## Parital
+## 5.Parital
 
 ```ts
 /**

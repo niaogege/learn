@@ -38,7 +38,7 @@ nav:
  * 18.请求超时重试?
  * 19.校验html是否合法
  * 20.实现数组的旋转
- * 21.三数之和
+ * 21.用setTimeout实现setInterval
  * 22.连续正整数之和
  * 23.手写ts版方法调用的注解
  * 24.自定义迭代器遍历斐波那契数列
@@ -887,12 +887,22 @@ var rotate2 = (nums, k) => {
 rotate2([1, 2, 3, 4, 5, 6], 2);
 ```
 
-## 21.三数之和
-
-> 贼难的一道题
+## 21.用 setTimeout 实现 setInterval
 
 ```js
-
+function mockSetInterval(fn, delay) {
+  let timerId;
+  function interval() {
+    fn();
+    timerId = setTimeout(interval, delay);
+  }
+  setTimeout(interval, delay);
+  return {
+    clear() {
+      clearTimeout(timerId);
+    },
+  };
+}
 ```
 
 ## 22.连续正整数之和?

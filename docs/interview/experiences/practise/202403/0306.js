@@ -15,6 +15,28 @@
 
 /**
  * @param {TreeNode} root
+ * @return {number}
+ */
+var maxPathSum = function (root) {
+  if (root == null) return 0;
+  let max = Number.MAX_SAFE_INTEGER;
+  let dfs = (node) => {
+    if (node == null) return 0;
+    let left = dfs(node.left);
+    let right = dfs(node.right);
+    // 当前子树内部的最大路径和
+    let innerMax = left + right + val;
+    max = Math.max(innerMax, max);
+    // 当前子树外部的最大路径和
+    let outSideMax = root.val + Math.max(0, left, right);
+    return outSideMax > 0 ? outSideMax : 0;
+  };
+  dfs(root);
+  return max;
+};
+
+/**
+ * @param {TreeNode} root
  * @return {TreeNode}
  */
 var invertTree = function (root) {
@@ -26,6 +48,7 @@ var invertTree = function (root) {
 };
 
 /**
+ * 是否是对称二叉树
  * @param {TreeNode} root
  * @return {boolean}
  * 外侧

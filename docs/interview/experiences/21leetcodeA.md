@@ -767,10 +767,30 @@ function deletNode(node, k) {}
 
 ## [32.二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
 
-> hard
+> middle
 
 ```js
-
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxPathSum = function (root) {
+  if (root == null) return 0;
+  let max = Number.MAX_SAFE_INTEGER;
+  let dfs = (node) => {
+    if (node == null) return 0;
+    let left = dfs(node.left);
+    let right = dfs(node.right);
+    // 当前子树内部的最大路径和
+    let innerMax = left + right + val;
+    max = Math.max(innerMax, max);
+    // 当前子树外部的最大路径和
+    let outSideMax = root.val + Math.max(0, left, right);
+    return outSideMax > 0 ? outSideMax : 0;
+  };
+  dfs(root);
+  return max;
+};
 ```
 
 ## [33.合并区间](https://leetcode.cn/problems/merge-intervals/)
@@ -815,28 +835,26 @@ mergeArr([
     rose -> ros (删除 'e')
  */
 function editPaths(word1, word2) {
-  let [m,n] = [word1.length, word2.length]
-  let dp = new Array(m+1).fill().map(() => new Array(n+1).fill(0))
-  for(let i=1;i<=m;i++) {
-    dp[i][0]=i
+  let [m, n] = [word1.length, word2.length];
+  let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
+  // 首列
+  for (let i = 1; i <= m; i++) {
+    dp[i][0] = i;
   }
-  for(let j=1;j<=n;j++) {
-    dp[0][j]=j
+  // 首行
+  for (let j = 1; j <= n; j++) {
+    dp[0][j] = j;
   }
-  for(let i=1;i<=m;i++) {
-    for(let j=1;j<=n;j++) {
-      if(word1[i-1]==word2[j-1]) {
-        dp[i][j] = dp[i-1][j-1]
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (word1[i - 1] == word2[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
       } else {
-        dp[i][j] = Math.min(
-          dp[i-1][j]+1
-          dp[i][j-1]+1
-          dp[i-1][j-1]+1
-        )
+        dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
       }
     }
   }
-  return dp[m][n]
+  return dp[m][n];
 }
 ```
 
@@ -943,19 +961,22 @@ function findLongest(nums1, nums2) {
 }
 ```
 
-## [46.括号生成](https://leetcode.cn/problems/generate-parentheses/)
+## [41.复原 IP 地址](https://programmercarl.com/0093.%E5%A4%8D%E5%8E%9FIP%E5%9C%B0%E5%9D%80.html#%E7%AE%97%E6%B3%95%E5%85%AC%E5%BC%80%E8%AF%BE)
+
+## [46.括号生成](https://leetcode.cn/problems/generate-parentheses/solutions/597236/sui-ran-bu-shi-zui-xiu-de-dan-zhi-shao-n-0yt3/)
 
 ```js
 function generate(n) {
   if (n <= 0) return '';
   let res = [];
+  // 保存的结果 左括号 右括号
   var dfs = (paths, left, right) => {
     if (left < right || left > n) return;
     if (paths.length == 2 * n) {
       res.push(paths.slice());
       return;
     }
-    dfs(paths + '(', left + 1, right);
+    dfs(paths + '(', left + 1, right); // 生产一个 加一个
     dfs(paths + ')', left, right);
   };
   dfs('', 0, 0);
