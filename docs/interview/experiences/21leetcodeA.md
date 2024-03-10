@@ -726,6 +726,36 @@ function longestIncreSub(arr) {
 longestIncreSub([2, 3, 7, 101]);
 ```
 
+## 重排链表
+
+```js
+/**
+ * @param {ListNode} head
+ * @return {void} Do not return anything, modify head in-place instead.
+ */
+var reorderList = function (head) {
+  if (head == null) return;
+  let stack = [];
+  let cur = head;
+  while (cur) {
+    stack.push(cur);
+    cur = cur.next;
+  }
+  let start = 0;
+  let end = stack.length - 1;
+  while (start < end) {
+    // 开头直接执行末尾
+    stack[start].next = stack[end];
+    start++;
+    if (start == end) break;
+    // 末尾指向开头
+    stack[end].next = stack[start];
+    end--;
+  }
+  stack[end].next = null;
+};
+```
+
 ## [30.接雨水](https://leetcode.cn/problems/trapping-rain-water/)
 
 ```js

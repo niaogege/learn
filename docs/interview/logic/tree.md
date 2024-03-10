@@ -116,6 +116,7 @@ function maxDepth(root) {
   let queue = [root];
   while (queue.length) {
     let len = queue.length;
+    depth++;
     for (let i = 0; i < len; i++) {
       let node = queue.shift();
       if (node.left) {
@@ -125,7 +126,37 @@ function maxDepth(root) {
         queue.push(node.right);
       }
     }
+  }
+  return depth;
+}
+```
+
+### N 叉树最大深度
+
+```js
+// dfs
+function maxDepth(root) {
+  if (!root) return 0;
+  let depth = 0;
+  for (let node of root) {
+    depth = Math.max(depth, maxDepth(node));
+  }
+  return depth + 1;
+}
+// bfs
+function maxDepth(root) {
+  if (!root) return 0;
+  let depth = 0;
+  let queue = [root];
+  while (queue.length) {
+    let len = queue.length;
     depth++;
+    while (len--) {
+      let cur = queue.shift();
+      for (let node of cur) {
+        node && queue.push(node);
+      }
+    }
   }
   return depth;
 }

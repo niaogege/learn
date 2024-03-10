@@ -24,7 +24,7 @@ nav:
 /**
  * 1.二叉树路径和
  * 2.二叉树路径和II
- * 3.重排链表
+ * 3.最长的有效括号
  * 4.最长公共前缀
  * 5.最长公共子串
  * 6.阶乘(迭代/递归/缓存)
@@ -73,6 +73,7 @@ nav:
  * 49.除自身以外数组的乘积
  * 50.旋转图像
  * 51.分发饼干
+ * 52.跳跃游戏
  */
 ```
 
@@ -115,7 +116,36 @@ var pathSum = function (root, targetSum) {
 };
 ```
 
-## 3.重排链表
+## [3.最长的有效括号](https://leetcode.cn/problems/longest-valid-parentheses/description/)
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ * 输入：s = ")()())"
+ * 输出：4
+ * 解释：最长有效括号子串是 "()()"
+ */
+var longestValidParentheses = function (s) {
+  if (s.length < 2) return 0;
+  let stack = [-1];
+  let len = s.length;
+  let max = 0;
+  for (let i = 0; i < len; i++) {
+    if (s[i] == '(') {
+      stack.push(i);
+    } else {
+      stack.pop();
+      if (stack.length == 0) {
+        stack.push(i);
+      } else {
+        max = Math.max(max, i - stack.slice(-1));
+      }
+    }
+  }
+  return max;
+};
+```
 
 ## 4.最长公共前缀
 
@@ -294,7 +324,24 @@ rotateArray([1, 2, 3, 4, 5], 2);
 ## 12.多叉树 获取每一层的节点之和
 
 ```js
-function layerSum(root) {}
+function layerSum(root) {
+  let queue = [root];
+  let ans = [];
+  while (queue.length) {
+    let sum = 0;
+    let len = queue.length;
+    while (len--) {
+      let cur = queue.shift();
+      sum += cur.value;
+      if (cur && cur.children) {
+        queue.push(...cur.children);
+        delete cur.children;
+      }
+    }
+    ans.push(sum);
+  }
+  return ans;
+}
 
 const res = layerSum({
   value: 2,
@@ -719,6 +766,30 @@ function wordSplit(s, words) {
 
 ## [33.分发糖果](https://leetcode.cn/problems/candy/description/)
 
+```js
+/**
+ * @param {number[]} ratings
+ * @return {number}
+ */
+var candy = function (ratings) {
+  let len = ratings.length;
+  const candy = new Array(len).fill(1);
+  // 右边比左边大 正序遍历
+  for (let i = 1; i < len; i++) {
+    if (ratings[i] > ratings[i - 1]) {
+      candy[i] = candy[i - 1] + 1;
+    }
+  }
+  // 左边比右边大 倒序遍历
+  for (let i = len - 2; i >= 0; i--) {
+    if (ratings[i] > ratings[i + 1]) {
+      candy[i] = Math.max(candy[i], candy[i + 1] + 1);
+    }
+  }
+  return candy.reduce((a, b) => a + b);
+};
+```
+
 ## [34.最长递增子序列](https://leetcode.cn/problems/longest-increasing-subsequence/)
 
 ```js
@@ -923,7 +994,37 @@ function isChild(s, t) {
 
 ## 41.不同的子序列
 
-## 42.两个字符串的删除操作
+## [42.两个字符串的删除操作](https://leetcode.cn/problems/delete-operation-for-two-strings/)
+
+```js
+/**
+ * 输入: "sea", "eat"
+ * 输出: 2
+ * 解释: 第一步将"sea"变为"ea"，第二步将"eat"变为"ea"
+ */
+function twoCharDelete(a, b) {
+  let [m, n] = [a.length, b.length];
+  let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
+  // 首列初始化
+  for (let i = 0; i <= m; i++) {
+    dp[i][0] = i;
+  }
+  // 首行初始化
+  for (let j = 0; j <= n; j++) {
+    dp[0][j] = j;
+  }
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] == b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1];
+      } else {
+        dp[i][j] = Math.min(dp[i - 1][j] + 1, dp[i][j - 1] + 1, dp[i - 1][j - 1] + 2);
+      }
+    }
+  }
+  return dp[m][n];
+}
+```
 
 ## 43.杨辉三角形
 
@@ -969,7 +1070,9 @@ findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]);
 
 ## [45.最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)
 
-## [47.和为 K 的子数组(前缀和)](https://leetcode.cn/problems/subarray-sum-equals-k/)
+## [47.和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)
+
+> (前缀和)
 
 ```js
 // 给你一个整数数组 nums 和一个整数 k ，请你统计并返回 该数组中和为 k 的子数组的个数 。
@@ -979,7 +1082,7 @@ findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]);
 var subArraySum = function (nums, k) {
   let sum = 0,
     count = 0;
-  let m = new Map([0, 1]);
+  let m = new Map([[0, 1]]);
   for (let num of nums) {
     sum += num;
     if (m.has(sum - k)) {
@@ -1049,6 +1152,32 @@ var findContentChildren = function (g, s) {
 };
 ```
 
-```
+## 52.跳跃游戏
 
+```js
+// first
+function canJump(nums) {
+  let len = nums.length;
+  let distance = len - 1;
+  let max = nums[0];
+  for (let i = 0; i < len; i++) {
+    let cur = nums[i];
+    if (max >= distance) return true;
+    max = Math.max(max, cur + i);
+  }
+  return false;
+}
+// second
+function canJump(nums) {
+  let len = nums.length;
+  let distance = len - 1;
+  let cover = 0;
+  for (let i = 0; i <= cover; i++) {
+    cover = Math.max(cover, i + nums[i]);
+    if (cover >= distance) {
+      return true;
+    }
+  }
+  return false;
+}
 ```

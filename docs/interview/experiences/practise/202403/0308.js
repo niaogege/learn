@@ -16,6 +16,29 @@
  * 13.编辑距离
  */
 
+/**
+ * @param {number} m
+ * @param {number} n
+ * @return {number}
+ */
+var uniquePaths = function (m, n) {
+  let dp = new Array(m).fill().map(() => new Array(n));
+  // 列初始化
+  for (let i = 0; i < m; i++) {
+    dp[i][0] = 1;
+  }
+  // 行初始化
+  for (let j = 0; j < n; j++) {
+    dp[0][j] = 1;
+  }
+  for (let i = 1; i < m; i++) {
+    for (let j = 1; j < n; j++) {
+      dp[i][j] = dp[i - 1][j] + dp[i][j - 1];
+    }
+  }
+  return dp[m - 1][n - 1];
+};
+
 var minDistance = function (word1, word2) {
   let [a, b] = [word1.length, word2.length];
   let dp = new Array(a + 1).fill().map(() => new Array(b + 1).fill(0));
@@ -30,8 +53,8 @@ var minDistance = function (word1, word2) {
       if (word1[i - 1] == word2[j - 1]) {
         dp[i][j] = dp[i - 1][j - 1];
       } else {
-        dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1] + 2);
-        dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1;
+        // dp[i][j] = Math.min(dp[i - 1][j]+1, dp[i][j - 1]+1, dp[i - 1][j - 1] + 2); // 两个字符串删除
+        // dp[i][j] = Math.min(dp[i - 1][j], dp[i][j - 1], dp[i - 1][j - 1]) + 1; // 编辑距离
       }
     }
   }

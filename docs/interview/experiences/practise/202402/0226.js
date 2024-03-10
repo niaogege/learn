@@ -12,6 +12,24 @@
  * 11.多叉树每层之和
  */
 
+var subarraySum = function (nums, k) {
+  let m = new Map([[0, 1]]);
+  let count = 0;
+  let sum = 0;
+  for (let num of nums) {
+    sum += num;
+    if (m.has(sum - k)) {
+      count += m.get(sum - k);
+    }
+    if (m.has(sum)) {
+      m.set(sum, m.get(sum) + 1);
+    } else {
+      m.set(sum, 1);
+    }
+  }
+  return count;
+};
+
 // [] 持有股票 不持有股票 卖出
 var maxProfit = function (prices) {
   let len = prices.length;
