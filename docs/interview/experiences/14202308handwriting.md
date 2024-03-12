@@ -390,6 +390,11 @@ function lazyLoadImg(imgs) {
       const { target, intersectionRatio } = entry;
       if (intersectionRatio > 0) {
         target.src = target.dataset.src;
+        target.onerror = function (e) {
+          if (e.type === 'error') {
+            target.src = placeHoloder;
+          }
+        };
         observer.unobserve(target);
       }
     });

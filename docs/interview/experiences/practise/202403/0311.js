@@ -8,7 +8,38 @@
  * 7.重复的子字符串
  * 8.跳跃游戏
  * 9.k个链表反转
+ * 10.阿拉伯数字转成中文
+ * 11.36进制
  */
+
+function toNum(str) {
+  let base = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  let Gbase = ['', '十', '百', '千'];
+  let ans = [];
+  let len = str.length;
+  for (let i = 0; i < len; i++) {
+    let num = str[i];
+    if (i > 0 && str[i - 1] == '0') ans += base[0];
+    ans += base[num] + Gbase[len - i - 1];
+  }
+  if (str.length == 2 && str[0] == '') {
+    ans = ans.slice(1);
+  }
+  return ans;
+}
+toNum('1234'); // 一千二百三十四
+
+function to36(str, base = 24) {
+  str = +str;
+  let radix = '0123456789abcdefghijklmnopqrstuvwxwz';
+  let ans = '';
+  while (str > 0) {
+    let flag = str % base;
+    ans = radix[flag] + ans;
+    str = Math.floor(flag / base);
+  }
+  return ans;
+}
 
 var deleteNode = function (head, val) {
   let dummy = {

@@ -11,6 +11,43 @@ nav:
   path: /interview
 ---
 
+## 1.注意前面的+
+
+```js
+function f1() {
+  var sum = 0;
+  function f2() {
+    sum++;
+    return f2;
+  }
+  f2.valueOf = function () {
+    return sum;
+  };
+  f2.toString = function () {
+    return sum + '';
+  };
+  return f2;
+}
+console.log(+f1()); // 0
+console.log(+f1()()); // 1
+console.log(+f1()()()); // 2
+```
+
+## 函数作用域相关
+
+```js
+var foo = 1;
+function fn() {
+  foo = 3;
+  return;
+  function foo() {
+    // todo
+  }
+}
+fn();
+console.log(foo); // ? 1 or 3?
+```
+
 ## await/Promise
 
 睁大眼睛看看有啥区别

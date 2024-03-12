@@ -12,7 +12,7 @@ nav:
 
 ## Demo
 
-[useRerender](http://zoeice.com/react-hook-useRef/)
+是否首次渲染 [useRerender](http://zoeice.com/react-hook-useRef/)
 
 <code src="./index.tsx"></code>
 

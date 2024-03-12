@@ -20,7 +20,7 @@ nav:
 ### 如何防御 XSS 攻击
 
 - 输入的内容进行过滤或者转译
-- csp,配置安全内容策略白名单，告诉浏览器哪个域名下自由受信任
+- csp,配置安全内容策略白名单，告诉浏览器**哪个域名**下自由受信任
 
 ### 简单说明 JS 运行机制
 
@@ -41,7 +41,7 @@ sessionStorage 属性允许你访问一个，对应当前源的 session `Storage
 
 对面试官：多窗口之间 sessionStorage 不可以共享状态！！！但是在某些特定场景下新开的页面会复制之前页面的 sessionStorage！！也就是在**新标签或窗口**打开一个页面时会复制**顶级浏览会话的上下文作为新会话的上下文**
 
-### preload 跟 prefetch 区别，都应用在什么场景下
+### **preload** 跟 **prefetch** 区别，都应用在什么场景下
 
 ```js
 <link rel="preload" href="style.css" as="style">

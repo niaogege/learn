@@ -853,7 +853,7 @@ isValid('<p>laoyao bye bye</p>');
 // 示例用法
 const array = [1, 2, 3, 4, 5]; // 4 5 1 2 3
 const k = 2;
-const rotatedArray = rotateArray(inputArray, k);
+const rotatedArray = rotate(array, k);
 console.log(rotatedArray); // 输出: [4, 5, 1, 2, 3]
 
 // first 使用额外的数组
@@ -1083,6 +1083,8 @@ function shallow(obj1, obj2) {
   }
   return true;
 }
+// shallow({}, {});
+shallow(NaN, NaN);
 ```
 
 ## 28.获取设备电池信息(**navigator.getBattery**)
@@ -1255,7 +1257,7 @@ function factorial(n) {
 factorial(4);
 ```
 
-## 34.FileReader 使用
+## 34.FileReader 读写文件
 
 ```js
 function uploadFile(file) {
@@ -1347,7 +1349,7 @@ trans(123456);
 
 ## 37.两个字符串对比, 得出结论都做了什么操作, 比如插入或者删除？
 
-> form leetcode [编辑距离](https://leetcode.cn/problems/edit-distance/description/)
+> from leetcode [编辑距离](https://leetcode.cn/problems/edit-distance/description/)
 
 ```js
 pre = 'abcde123';
@@ -1748,6 +1750,37 @@ var compareVersion = function (v1, v2) {
 ```
 
 ## 49.【代码题】实现一个拼手气抢红包算法
+
+```js
+/**
+ * @param {number } money 总共发多少红包
+ * @param {number } count 红包个数
+ * @param {number } minBase 红包最少发多少
+ * @param {number } maxBase 红包最多不能超过平均的几倍
+ */
+function redPacket({ money, count, minBase = 0.1, maxBase = 2 }) {
+  let remainMoney = money;
+  let ans = [];
+  for (let i = 0; i < count - 1; i++) {
+    let max = (remainMoney / count) * maxBase; // 最多不能超过平均的2倍
+    let curMon = Math.random() * max;
+    curMon = curMon < minBase ? minBase : curMon;
+    curMon = Math.floor(curMon * 100) / 100;
+    remainMoney = Math.round((remainMoney - curMon) * 100) / 100;
+    ans.push(curMon);
+  }
+  // 最后一个剩余红包
+  ans.push(remainMoney);
+  console.log(
+    ans,
+    ans.reduce((a, b) => Number(a) + Number(b)),
+  );
+}
+redPacket({
+  money: 20,
+  count: 4,
+}); //  [8.67, 3.73, 1.42, 6.18] 20
+```
 
 ## 50. 数字转 36 进制
 

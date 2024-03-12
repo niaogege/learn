@@ -25,7 +25,7 @@ nav:
  * 11.TS手写Unique 去重
  * 12.OptionalKeys提取 T 中所有可选类型的 key 组成的联合类型。
  * 13.NonOptionalKeys提取 T 中非所有可选类型的 key 组成的联合类型。
- * 14.
+ * 14.如何限制数组索引为非负数
  * 15.
  */
 ```
@@ -191,6 +191,16 @@ type Q031 = {
   age: number;
 };
 type Q041 = OptionalKeys<Q03>;
+
+type GetFunction<T> = {
+  [P in keyof T as T[P] extends Function ? P : never]: T[P];
+};
+type Q0311 = {
+  name?: string;
+  age: number;
+  getName: () => void;
+};
+type Q0312 = GetFunction<Q0311>;
 ```
 
 ## 13.NonOptionalKeys 提取 T 中非所有可选类型的 key 组成的联合类型。
@@ -204,4 +214,15 @@ type Q03 = {
   age: number;
 };
 type Q04 = NonOptionalKeys<Q03>;
+```
+
+## 14.如何限制数组索引为非负数
+
+```ts
+type NotNegative<N extends number> = `${N}` extends `-${number}` ? never : N;
+function safeGet<T extends number>(arr: any[], index: NotNegative<T>) {
+  console.log(arr[index]);
+}
+// Argument of type 'number' is not assignable to parameter of type 'never'.ts(2345)
+safeGet([1, 2, 3, 4], -1);
 ```

@@ -10,7 +10,40 @@
  * 9.10进制转换36进制
  * 10.删除链表的倒数第 N 个结点
  * 11.重排链表
+ * 12.怎么实现图片懒加载的
  */
+
+function longestValid(str) {
+  let stack = [-1];
+  let max = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] == '(') {
+      stack.push(i);
+    } else {
+      stack.pop();
+      if (stack.length == 0) {
+        stack.push(i);
+      } else {
+        max = Math.max(max, i - stack.slice(-1));
+      }
+    }
+  }
+  return stack.length;
+}
+
+function loadImg(url, option) {
+  return new Promise((resolve, reject) => {
+    const img = new Image(option);
+    img.src = url;
+    img.onload = function () {
+      resolve(img);
+    };
+    img.onerror = function () {
+      reject(e);
+    };
+  });
+}
+loadImg('', {}).then((res) => console.log());
 
 function flattenObj(obj, res = {}, path = '', isArray = false) {
   for (let [k, val] of Object.entries(obj)) {

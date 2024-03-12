@@ -11,3 +11,5 @@ export { default as useInterval } from './useInterval/useInterval';
 export { default as useRequest } from './useRequest/useRequest';
 
 export { default as useEvent } from './useEvent/useEvent';
+
+export { default as useToggle } from './useToggle/useToggle';

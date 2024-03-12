@@ -1,6 +1,6 @@
 ---
-title: useEvent
-order: 6
+title: useToggle
+order: 7
 group:
   title: Hooks
   order: 1,
