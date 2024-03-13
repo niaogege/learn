@@ -246,7 +246,18 @@ var minDepth = function (root) {
  * @param {TreeNode} root
  * @return {number}
  */
-var diameterOfBinaryTree = function (root) {};
+var diameterOfBinaryTree = function (root) {
+  if (root == null) return 0;
+  let max = 0;
+  let dfs = (root) => {
+    if (root == null) return 0;
+    let left = dfs(root.left);
+    let right = dfs(root.right);
+    max = Math.max(max, right + left);
+    return Math.max(left, right) + 1;
+  };
+  return max;
+};
 
 function acceptWater(nums) {
   if (!nums.length) return 0;

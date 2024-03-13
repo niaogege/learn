@@ -227,6 +227,7 @@ function to36(str, base = 36) {
 }
 to36(360);
 
+// 最大直径
 var diameterOfBinaryTree = function (root) {
   if (root == null) return 0;
   let len = 0;

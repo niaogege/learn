@@ -81,20 +81,22 @@ MyQueue.prototype.push = function (x) {
 
 /**
  * @return {number}
+ * 从输入栈导入 直到输入栈为空
+ * 输出栈如果为空，就把进栈数据全部导入进来（注意是全部导入），再从出栈弹出数据，
+ * 如果输出栈不为空，则直接从出栈弹出数据就可以了。
  */
 MyQueue.prototype.pop = function () {
-  const size = this.stackOut.length;
-  if (size) {
-    return this.stackOut.pop();
-  }
-  while (this.stackIn.length) {
-    this.stackOut.push(this.stackIn.pop());
+  if (this.stackOut.length == 0) {
+    while (this.stackIn.length) {
+      this.stackOut.push(this.stackIn.pop());
+    }
   }
   return this.stackOut.pop();
 };
 
 /**
  * @return {number}
+ * 返回栈顶元素
  */
 MyQueue.prototype.peek = function () {
   const x = this.pop();

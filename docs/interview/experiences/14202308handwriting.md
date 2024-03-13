@@ -405,6 +405,64 @@ function lazyLoadImg(imgs) {
 }
 ```
 
+## 14.是否存在循环引用
+
+```js
+// hasCycle
+```
+
+## 15.找出数组中出现次数最多的数字，如[1,2,1,2,3],打印出 1 和 2，出现的次数是 2；[1,2,5,5,5],打印 5，出现的次数是 3
+
+```js
+function countNum(arr) {
+  let m = new Map();
+  let max = 0;
+  for (let num of arr) {
+    if (m.has(num)) {
+      max = Math.max(m.get(num) + 1, max);
+      console.log(max, 'max');
+      m.set(num, m.get(num) + 1);
+    } else {
+      m.set(num, 1);
+    }
+  }
+  let ans = [];
+  for (let [key, val] of m.entries()) {
+    if (val == max) {
+      ans.push(key);
+    }
+  }
+  return ans;
+}
+countNum([1, 2, 5, 5, 5]);
+```
+
+## 16.手写 ts 版 Awaited<T>
+
+```ts
+type MockAwaited2<T extends Promise<unknown>> = T extends Promise<infer R>
+  ? R extends Promise<unknown>
+    ? MockAwaited2<R>
+    : R
+  : T;
+```
+
+## 17.setInterval 实现 setTimeout / setTimeout 实现 setInterval
+
+```js
+function mockSetInterval(fn, delay) {
+  let timer = null;
+  let emitFn = () => {
+    fn();
+    timer = setTimeout(emitFn, delay);
+  };
+  setTimeout(emitFn, delay);
+  return {
+    clean: clearTimeout(timer),
+  };
+}
+```
+
 ## 18.[手写虚拟 DOM](https://mp.weixin.qq.com/s/S-7w8KgG0R5mdFIcCT0Keg)
 
 > 阔以理解成对象转 DOM
@@ -454,6 +512,24 @@ const dom2tree = (node) => {
   return obj;
 };
 dom2tree(node);
+```
+
+## 19.如何实现(a == 1 && a == 2 && a == 3)？
+
+```js
+const a = {
+  value: 1,
+  toString: function () {
+    return a.value++;
+  },
+};
+console.log(a == 1 && a == 2 && a == 3); // true
+```
+
+## 20.实现数组中的 findIndex/find/include
+
+```js
+
 ```
 
 ## 21 手写 Object.assign
@@ -1103,7 +1179,7 @@ const fetchData = (url) => {
 };
 ```
 
-另一种实现方式: 用闭包和 Proxy 属性拦截
+另一种实现方式: **用闭包和 Proxy 属性**拦截
 
 ```js
 function getSingleInstance(func) {

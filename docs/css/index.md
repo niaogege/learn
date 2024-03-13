@@ -29,6 +29,7 @@ nav:
 - 13.如何将文字超出元素的部分变成省略号（...）
 - 14.伪元素和伪类的区别
 - 15.position
+- 16.css 怎么开启硬件加速(GPU 加速)
 
 ## 盒模型
 
@@ -195,9 +196,9 @@ div {
 
 ## 5.分析比较 opacity: 0、visibility: hidden、display: none 优劣和适用场景。
 
-- visibility 设置 hidden 会隐藏元素，但是其位置还存在与页面文档流中，不会被删除，所以会触发浏览器渲染引擎的重绘
-- display 设置了 none 属性会隐藏元素，且其位置也不会被保留下来，所以会触发浏览器渲染引擎的回流和重绘。
-- opacity 会将元素设置为透明，但是其位置也在页面文档流中，不会被删除，所以会触发浏览器渲染引擎的重绘
+- visibility 设置 hidden 会隐藏元素，但是其位置还存在与页面文档流中，不会被删除，所以会触发浏览器渲染引擎的**重绘**
+- display 设置了 none 属性会隐藏元素，且其位置也**不会被保留下来**，所以会触发浏览器渲染引擎的**回流和重绘**
+- opacity 会将元素设置为透明，但是其位置也在页面文档流中，不会被删除，所以会触发浏览器渲染引擎的**重绘**
 
 ## 6.使用 css 实现无线循环的动画
 
@@ -324,9 +325,35 @@ white-space: nowrap;
 - relative：对象遵循正常文档流，但将依据 top，right，bottom，left 等属性在**正常文档流中偏移位置**。而其层叠通过 z-index 属性定义。
 - absolute：对象脱离正常文档流，使用 top，right，bottom，left 等属性进行绝对定位。**相当于最近一层定位不是 static 的父级**，如果父级没有定位，则相当于 html,而其层叠通过 z-index 属性定义。
 - fixed：对象脱离正常文档流，使用 top，right，bottom，left 等属性以**窗口为参考点**进行定位，当出现滚动条时，对象不会随着滚动。而其层叠通过 z-index 属性定义。
-- sticky：具体是类似 relative 和 fixed，在 viewport 视口滚动到阈值之前应用 relative，滚动到阈值之后应用 fixed 布局，由 top 决定。
+- sticky：具体是类似 relative 和 fixed，在 viewport 视口滚动到阈值之前应用 relative，滚动到阈值之后应用 fixed 布局，由 top 决定
+
+## 16.css 怎么开启硬件加速(GPU 加速)
+
+浏览器在处理下面的 css 的时候，会使用 GPU 渲染
+
+- transform（当 3D 变换的样式出现时会使用 GPU 加速）
+- opacity
+- filter
+- will-change
+
+## 17.css 的渲染层合成是什么 浏览器如何创建新的渲染层
+
+在 DOM 树中每个节点都会对应一个渲染对象（RenderObject），当它们的渲染对象处于**相同的坐标空间**（z 轴空间）时，就会形成一个 RenderLayers，也就是渲染层。渲染层将保证页面元素以正确的顺序堆叠，这时候就会出现层合成（composite），从而**正确处理透明元素和重叠元素的显示**。对于有位置重叠的元素的页面，这个过程尤其重要，因为一旦图层的合并顺序出错，将会导致元素显示异常。
+
+### 浏览器如何创建新的渲染层
+
+- 根元素 document
+- 有明确的定位属性（relative、fixed、sticky、absolute）
+- opacity < 1
+- 有 CSS fliter 属性
+- 有 CSS mask 属性
+- 有 CSS transform 属性且值不为 none
+- 有 CSS column-count 属性且值不为 auto 或者有 CSS column-width 属性且值不为 auto
+- 当前有对于 opacity、transform、fliter、backdrop-filter 应用动画
+- overflow 不为 visible
 
 ## 参考
 
 - [面试题汇总](https://juejin.cn/post/6844903885488783374#heading-58)
 - [清除浮动](https://juejin.cn/post/6844903710980571149#heading-3)
+- [](https://juejin.cn/post/7004638318843412493)

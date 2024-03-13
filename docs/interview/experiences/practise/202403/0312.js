@@ -12,6 +12,61 @@
  * 11.jsonp
  * 12.ajax
  */
+
+function parseUrl() {
+  let url = window.location.search;
+  let str = url.split('?')[1];
+  let obj = {};
+  let arr = str.split('&');
+  for (let item of arr) {
+    const cur = item.split('=');
+    obj[cur[0]] = cur[1];
+  }
+  return obj;
+}
+parseUrl();
+function joinUrl(obj) {
+  let str = '';
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      const val = obj[key];
+      str += key + '=' + val + '&';
+    }
+  }
+  str = str.slice(0, -1);
+  return str;
+}
+joinUrl({ name: 'cpp', age: 30 });
+
+function ajax(url, option) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest(option);
+    xhr.open('GET', url);
+    xhr.onreadystatechange = function () {
+      if (xhr.DONE == xhr.readyState && xhr.status == 200) {
+        const res = xhr.response;
+        resolve(JSON.parse(res));
+      } else {
+        reject('err');
+      }
+    };
+    xhr.send();
+  });
+}
+
+function mockJsonp(url, cb) {
+  let jsonp = new Date().getTime();
+  let script = document.createElement('script');
+  script.src = url + '?jsonp=' + jsonp;
+  script.async = true;
+  document.appendChild(script);
+  window[jsonp] = function (val) {
+    cb(val);
+    document.removeChild(script);
+    delete window[jsonp];
+  };
+}
+
 // pipe 从左向右
 function pipe(...rest) {
   if (rest.length == 0) return (arg) => arg;

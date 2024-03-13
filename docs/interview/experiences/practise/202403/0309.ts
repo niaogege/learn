@@ -61,3 +61,20 @@ type Q01 = Include<[1, 2, 3], 11>;
 //     : Unique<R, [F, ...C]>
 //   : C;
 // type Q02 = Unique<[1, 2, 3, 4, 4]>;
+
+type TT112 = {
+  name: string;
+  age: number;
+};
+type PickString<T> = {
+  [P in keyof T as T[P] extends string ? P : never]: T[P];
+};
+
+type TT113 = PickString<TT112>;
+
+type IsNotNeg<T extends number> = `${T}` extends `-${number}` ? never : T;
+function safeGet<T extends number>(arr: any[], index: IsNotNeg<T>) {
+  console.log(arr[index]);
+}
+// Argument of type 'number' is not assignable to parameter of type 'never'.ts(2345)
+safeGet([1, 2, 3, 4], -1);

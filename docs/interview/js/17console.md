@@ -45,7 +45,139 @@ function fn() {
   }
 }
 fn();
-console.log(foo); // ? 1 or 3?
+console.log(foo); // 1
+```
+
+另一个
+
+```js
+var foo;
+function fn() {
+  foo = 3;
+  return;
+  function foo() {
+    // todo
+  }
+}
+fn();
+console.log(foo); // 3
+```
+
+## 事件循环相关 输出打印顺序
+
+### requestAnimationFrame 和 requestIdleCallback
+
+```js
+console.log('1');
+setTimeout(() => {
+  console.log('2');
+}, 0);
+requestAnimationFrame(() => {
+  console.log('3');
+});
+requestIdleCallback(() => {
+  console.log('4');
+});
+new Promise((resolve) => {
+  console.log('5');
+}).then((value) => {
+  console.log(value);
+});
+async function a() {
+  console.log(await '7');
+}
+a();
+console.log('8');
+// 1 5 8 7 undefined 2 3 4 最后 2 3 4 也可能是324
+```
+
+> requestIdleCallback 空闲时调用 时机最后 requestAnimationFrame 1 秒刷新 16 次，跟当前刷新频率相关，有可能后执行
+
+async 跟 Promise 哪个顺序先？还要看 Promise 中的 resolve 了吗
+
+```js
+new Promise((resolve) => {
+  console.log('p1');
+  resolve('cpp');
+}).then((val) => {
+  console.log(val, 'undefined');
+});
+console.log('not');
+async function b() {
+  console.log(await 'await');
+}
+b();
+console.log('end');
+//p1 not end  cpp await
+```
+
+### 如果去掉 resolve 呢
+
+```js
+new Promise((resolve) => {
+  console.log('p1');
+  // resolve('cpp');
+}).then((val) => {
+  console.log(val, 'undefined');
+});
+console.log('not');
+async function b() {
+  console.log(await 'await');
+}
+b();
+console.log('end');
+// p1 not end await
+```
+
+### 如果去掉 **await** 呢
+
+```js
+new Promise((resolve) => {
+  console.log('p1');
+  resolve('cpp');
+}).then((val) => {
+  console.log(val, 'undefined');
+});
+console.log('not');
+async function b() {
+  console.log('await');
+}
+b();
+console.log('end'); // p1 not await end cpp undefined
+```
+
+## 事件循环相关打印 2
+
+```js
+setTimeout(function () {
+  console.log('1');
+}, 0);
+async function async1() {
+  console.log('2');
+  const data = await async2();
+  console.log('3');
+  return data;
+}
+async function async2() {
+  return new Promise((resolve) => {
+    console.log('4');
+    resolve('async2的结果');
+  }).then((data) => {
+    console.log('5');
+    return data;
+  });
+}
+async1().then((data) => {
+  console.log('6');
+  console.log(data);
+});
+new Promise(function (resolve) {
+  console.log('7');
+  //   resolve()
+}).then(function () {
+  console.log('8');
+});
+// 2 4 7    8 1
 ```
 
 ## await/Promise
@@ -189,6 +321,8 @@ var box = {
   },
 };
 console.log(Number(box));
+// 调用了valueOf
+// NaN
 ```
 
 以及
@@ -205,8 +339,12 @@ var box = {
   },
 };
 console.log(Number(box));
+// 调用了valueOf
+// 调用了toString
+// 123
 ```
 
 转换规则如下：
 
-如果 valueOf 存在，且返回“基本类型”数据，返回 valueOf 的结果。如果 toString 存在，且返回“基本类型”数据，返回 toString 的结果。报错。
+- 如果 valueOf 存在，且返回“基本类型”数据，返回 valueOf 的结果。
+- 如果 toString 存在，且返回“基本类型”数据，返回 toString 的结果。报错。
