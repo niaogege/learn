@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>draggable</title>
+    <style>
+      #dragElement {
+        width: 100px;
+        height: 100px;
+        border: 1px solid red;
+        background-color: aqua;
+        margin-bottom: 100px;
+      }
+      #dropZone {
+        width: 100px;
+        height: 100px;
+        border: 1px solid yellow;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <div id="dragElement" draggable="true">Drag me</div>
+      <div id="dropZone">Drop zone</div>
+    </div>
+  </body>
+
+  <script>
+    const dragElement = document.getElementById('dragElement');
+
+    dragElement.addEventListener('dragstart', (e) => {
+      // 设置拖拽数据
+      e.dataTransfer.setData('text/plain', e.target.id);
+    });
+
+    const dropZone = document.getElementById('dropZone');
+
+    dropZone.addEventListener('dragover', (e) => {
+      // 阻止默认行为,允许drop
+      e.preventDefault();
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      // 获取拖拽数据
+      const data = e.dataTransfer.getData('text/plain');
+      // 将拖拽元素添加到放置区域
+      e.target.appendChild(document.getElementById(data));
+    });
+  </script>
+</html>

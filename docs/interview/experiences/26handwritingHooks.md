@@ -15,6 +15,10 @@ nav:
  * 1.useUpdate 强制更新
  * 2.useLatest
  * 3.useCreation 结合useMemo和useRef封装
+ * 4.useToggle
+ * 5.useRequest
+ * 6.useEventListener
+ * 7.useTimeout
  */
 ```
 
@@ -164,7 +168,10 @@ useTimeout：一段时间内，执行一次
 ```ts
 import { useEffect } from 'react';
 export const useTimeout = (fn: () => void, delay: number) => {
-  const fnRef = useLatest(fn);
+  const fnRef = useRef();
+  useEffect(() => {
+    fnRef.current = fn;
+  }, [fn]);
   useEffect(() => {
     if (!delay || delay < 0) return;
     const timer = setTimeout(() => {
@@ -173,7 +180,7 @@ export const useTimeout = (fn: () => void, delay: number) => {
     return () => {
       clearTimeout(timer);
     };
-  }, []);
+  }, [delay]);
 };
 ```
 

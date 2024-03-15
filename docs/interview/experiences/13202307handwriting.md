@@ -290,7 +290,7 @@ function hexToRgb(str) {
 hexToRgb('#ffffff');
 ```
 
-## 10.mockMap/mockFilter 数组方法重写
+## 10.mockMap/mockFilter/mockPush/mockSome 数组方法重写
 
 ```js
 Array.prototype.mockMap = function (fn, context = window) {

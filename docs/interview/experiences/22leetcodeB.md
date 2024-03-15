@@ -74,6 +74,7 @@ nav:
  * 50.旋转图像
  * 51.分发饼干
  * 52.跳跃游戏
+ * 53.岛屿的最大面积
  */
 ```
 
@@ -918,6 +919,8 @@ var minPathSum = function (grid) {
 
 ## [38.移动 0](https://leetcode.cn/problems/move-zeroes/)
 
+> 请注意 ，必须在不复制数组的情况下原地对数组进行操作。
+
 ### 第一种非 0 的移动到前面，用 j 记录下 然后在遍历 j,替换成 0
 
 ```js
@@ -945,7 +948,7 @@ moveZero([1, 0, 22, 3, 1, 0]);
 function moveZero(nums) {
   for (let i = 0; i < nums.length; i++) {
     let index = nums.indexOf(nums[i]);
-    if (index > -1) {
+    if (index > -1 && nums[i] == 0) {
       nums.splice(index, 1);
       nums.push(0);
     }

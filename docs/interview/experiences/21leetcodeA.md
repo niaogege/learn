@@ -195,12 +195,11 @@ class LRU {
 ```js
 var reverseKGroup = function (head, k) {
   var dummy = {
-    next: null,
+    next: head,
     val: 0,
   };
   var prev = dummy;
   var cur = head;
-  dummy.next = head;
   let length = 0;
   while (head !== null) {
     length++;

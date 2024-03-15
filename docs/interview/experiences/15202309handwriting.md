@@ -71,7 +71,10 @@ nav:
  * 51.手写-如何找到数组中第一个没出现的最小正整数
  * 52.最长公共前缀
  * 53.手写-怎么在制定数据源里面生成一个长度为 n 的不重复随机数组
- *
+ * 54.手写实现lodash.get/lodash.set
+ * 55.场景应用题div拖拽
+ * 56.场景应用题：买饮料
+ * 57.编写函数，每次返回下一个质数（Prime number）
  */
 ```
 
@@ -241,7 +244,6 @@ class MyPromise {
     };
     exe(resolve);
   }
-
   then(onResolve) {
     return new MyPromise((resolve) => {
       this.cbs.push(() => {
@@ -488,7 +490,7 @@ function getTreeToArr(tree, res) {
 
 ```js
 // 示例数组
-const inputArray = [
+var inputArray = [
   { id: 1, parentId: null, name: 'Node 1' },
   { id: 2, parentId: 1, name: 'Node 1.1' },
   { id: 3, parentId: 1, name: 'Node 1.2' },
@@ -516,7 +518,7 @@ function arrToTree(arr, pid = null) {
   return res;
 }
 arrToTree(inputArray);
-// BFS
+// BFS 1
 function mapArrToTree(arr) {
   var res = [];
   var map = {};
@@ -542,6 +544,42 @@ function mapArrToTree(arr) {
   return res;
 }
 mapArrToTree(inputArray);
+// bfs
+function listToTree(arr) {
+  const res = [];
+  arr.forEach((item) => {
+    const parent = arr.find((node) => node.id == item.parentId);
+    if (parent) {
+      parent.children = parent.children || [];
+      parent.children.push(item);
+    } else {
+      res.push(item);
+    }
+  });
+  return res;
+}
+```
+
+两重循环开销比较大， 我们使用哈希表来优化一下：
+
+```js
+function listToTree(arr) {
+  const obj = {};
+  arr.forEach((child) => {
+    obj[child.id] = child;
+  });
+  var parentList = [];
+  arr.forEach((item) => {
+    const parent = obj[item.parentId];
+    if (parent) {
+      parent.children = parent.children || [];
+      parent.children.push(item);
+    } else {
+      parentList.push(item);
+    }
+  });
+  return parentList;
+}
 ```
 
 ## 12.使用 Promise 封装异步加载图片的方法
@@ -1803,7 +1841,7 @@ function numToString(str, radix = 36) {
 numToString(360); // 'a0'
 ```
 
-## 52.
+## 52. 最长公共前缀
 
 ```js
 编写一个函数来查找字符串数组中的最长公共前缀。
@@ -1813,6 +1851,157 @@ numToString(360); // 'a0'
 
 输入：strs = ["flower","flow","flight"]
 输出："fl"
+```
+
+## 54.手写实现 lodash.get/lodash.set
+
+```js
+// lodash.set(obj,path,value)
+// lodash.get(obj, path)
+function flattenObj(obj, res = {}, path = '', isArray = false, ans = '', p = '') {
+  for (let [k, val] of Object.entries(obj)) {
+    if (Array.isArray(val)) {
+      let tmp = isArray ? `${path}[${k}]` : `${path}${k}`;
+      flattenObj(val, res, tmp, true);
+    } else if (typeof val === 'object') {
+      let tmp = isArray ? `${path}[${k}].` : `${path}${k}.`;
+      flattenObj(val, res, tmp, false);
+    } else {
+      let tmp = isArray ? `${path}[${k}]` : `${path}${k}`;
+      if (p && ans) {
+        res[p] = ans;
+      } else {
+        res[tmp] = val;
+      }
+    }
+  }
+  return res;
+}
+function mockLodashGet(obj, path) {
+  const newObj = flattenObj(obj);
+  return newObj[path];
+}
+let obj = {
+  foo: {
+    bar: {
+      baz: 'Hello, World!',
+    },
+  },
+};
+mockLodashGet(obj, 'foo.bar.baz');
+
+// function mockLodashSet(obj, path, val) {
+//   flattenObj(obj, {}, '', false, val, path);
+// }
+// mockLodashSet(obj, 'foo.bar.baz', 'cpp');
+```
+
+## [55.场景应用题 div 拖拽](https://juejin.cn/post/7282951856514793513?searchId=20240315111348596E579AE59B54ED0ACB)
+
+```html
+<body>
+  <div class="box" id="drag">
+    <div class="resize-handle top-left"></div>
+    <div class="resize-handle top"></div>
+    <div class="resize-handle top-right"></div>
+    <div class="resize-handle right"></div>
+    <div class="resize-handle bottom-right"></div>
+    <div class="resize-handle bottom"></div>
+    <div class="resize-handle bottom-left"></div>
+    <div class="resize-handle left"></div>
+  </div>
+</body>
+<script>
+  const dragElement = document.getElementById('drag');
+  // 拖拽功能
+  dragElement.addEventListener('mousedown', startDrag);
+  function startDrag(event) {
+    event.preventDefault();
+    const startX = event.clientX;
+    const startY = event.clientY;
+    const startLeft = dragElement.offsetLeft;
+    const startTop = dragElement.offsetTop;
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('mouseup', stopDrag);
+    function drag(event) {
+      const dx = event.clientX - startX;
+      const dy = event.clientY - startY;
+      const newLeft = startLeft + dx;
+      const newTop = startTop + dy;
+      dragElement.style.left = newLeft + 'px';
+      dragElement.style.top = newTop + 'px';
+    }
+    function stopDrag() {
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('mouseup', stopDrag);
+    }
+  }
+</script>
+```
+
+## [56.场景应用题：买饮料](https://segmentfault.com/a/1190000040429638)
+
+> 来自我涛哥面过的题目
+
+```js
+/**
+ * 你有 20 块钱，一瓶饮料卖 5 块钱，2个瓶身可以换一瓶饮料，4个瓶盖可以换一瓶饮料。问最多可以喝多少瓶饮料
+ */
+function buyDrinks(total, price) {
+  //第一次用钱购买
+  const firstNum = Math.floor(total / price);
+  let res = firstNum;
+  // 剩余瓶盖
+  let remainCap = firstNum;
+  // 剩余瓶身
+  let remainBody = firstNum;
+  // 兑换
+  while (remainCap >= 4 || remainBody >= 2) {
+    // 瓶盖可兑换数量
+    const numCap = Math.floor(remainCap / 4);
+    // 瓶身可兑换数量
+    const numBody = Math.floor(remainBody / 2);
+    // 总共兑换的数量
+    const changeTotal = numCap + numBody;
+    res += changeTotal;
+    remainCap = (remainCap % 4) + changeTotal;
+    remainBody = (remainBody % 2) + changeTotal;
+  }
+
+  return res;
+}
+
+console.log(buyDrinks(20, 5));
+```
+
+## 57.编写函数，每次返回下一个质数（Prime number）
+
+> 质数（也称为素数）是一个大于 1 的自然数，2 是最小的质数，因为它只能被 1 和 2 整除。3、5、7、11、13、17、19 等都是质数，因为它们各自只能被 1 和自身整除
+
+```js
+function isPrime(num) {
+  // 除了1和本身， 都不能整除
+  for (let i = 2; i <= num; i++) {
+    if (num % i === 0) return false;
+  }
+  return num > 1;
+}
+function getPrime() {
+  let cur = 2;
+  return function () {
+    while (true) {
+      if (isPrime(cur)) {
+        const prime = cur;
+        cur++;
+        return prime;
+      }
+      cur++;
+    }
+  };
+}
+var getP = getPrime();
+getP(); // 2
+getP(); // 3
 ```
 
 ## 参考
