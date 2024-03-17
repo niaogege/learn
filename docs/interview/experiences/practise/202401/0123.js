@@ -9,6 +9,34 @@
  * 8.背包问题
  */
 
+// 复原IP地址
+/**
+ * @param {string} s
+ * @return {string[]}
+ */
+var restoreIpAddresses = function (s) {
+  let ans = [];
+  var backTrack = (path, start) => {
+    // 终止递归
+    if (path.length > 4) return;
+    if (path.length == 4 && start == s.length) {
+      ans.push(path.slice().join('.'));
+      return;
+    }
+    // 如何切割 以及判断是否是合法的ip
+    for (let i = start; i < s.length; i++) {
+      let cur = s.slice(start, i + 1);
+      if (cur.length > 3 || +cur > 255) continue;
+      if (cur.length > 1 && cur[0] == '0') continue;
+      path.push(cur);
+      backTrack(path, i + 1);
+      path.pop();
+    }
+  };
+  backTrack([], 0);
+  return ans;
+};
+
 function oneBag(weights, values, target) {
   let [m] = [weights.length];
   let dp = new Array(m).fill().map(() => new Array(target + 1).fill(0));

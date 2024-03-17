@@ -8,6 +8,65 @@
  * 6.排序 选择归并快速排序
  */
 
+var countPrimes = function (n) {
+  let count = 0;
+  let dp = new Array(n).fill(true);
+  for (let i = 2; i < n; i++) {
+    if (dp[i]) {
+      count++;
+      for (let j = i * i; j < n; j += i) {
+        dp[j] = false;
+      }
+    }
+  }
+  return count;
+};
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var maxAreaOfIsland = function (grid) {
+  let r = grid.length;
+  let c = grid[0].length;
+  let max = 0;
+  for (let i = 0; i < r; i++) {
+    for (let j = 0; j < c; j++) {
+      if (grid[i][j] == 1) {
+        let cur = dfs(grid, i, j);
+        max = Math.max(max, cur);
+      }
+    }
+  }
+  return max;
+};
+function dfs(grid, r, c) {
+  if (!isArea(grid, r, c) || grid[r][c] != '1') return;
+  grid[r][c] = '2';
+  return 1 + dfs(grid, r - 1, c) + dfs(grid, r + 1, c) + dfs(grid, r, c - 1) + dfs(grid, r, c + 1);
+}
+function isArea(grid, r, c) {
+  return r >= 0 && r < grid.length && c >= 0 && c < grid[0].length;
+}
+
+/**
+ * @param {number[]} nums
+ * @return {boolean}
+ */
+var canJump = function (nums) {
+  if (nums.length == 1) return true;
+  let cover = 0;
+  let max = nums.length - 1;
+  for (let i = 0; i < nums.length; i++) {
+    let cur = nums[i];
+    cover = Math.max(cover, cur + i);
+    if (cover >= max) {
+      return true;
+    }
+  }
+  return false;
+};
+canJump([2, 3, 1, 1, 4]);
+
 function quickSort(arr) {
   if (arr.length < 2) return arr;
   let base = arr[0];

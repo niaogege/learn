@@ -584,6 +584,24 @@ weightBag([1, 3, 4], [15, 20, 30], 6);
 
 ## 25.多个数组交集
 
+### [25.1 两个数组交集](https://leetcode.cn/problems/intersection-of-two-arrays/description/)
+
+```js
+function intersection(nums1, nums2) {
+  nums1 = [...new Set(nums1)];
+  nums2 = [...new Set(nums2)];
+  let ans = [];
+  for (let num of nums1) {
+    if (nums2.includes(num)) {
+      ans.push(nums2);
+    }
+  }
+  return ans;
+}
+```
+
+### 多个数组交集
+
 ```js
 /**
  * 多个数组交集 [[3,1,2,4,5],[1,2,3,4],[3,4,5,6]]
@@ -804,6 +822,25 @@ function wordSplit(s, words) {
 ```
 
 ## [31.无重叠区间](https://leetcode.cn/problems/non-overlapping-intervals/)
+
+```js
+// 左区间
+function noMerge(nums) {
+  nums.sort((a, b) => a[0] - b[0]);
+  let end = nums[0][1];
+  let count = 0;
+  for (let i = 1; i < nums.length; i++) {
+    let cur = nums[i];
+    if (cur[0] >= end) {
+      end = cur[1];
+    } else {
+      count++;
+      end = Math.min(end, cur[1]);
+    }
+  }
+  return count;
+}
+```
 
 ## [32.寻找两个正序数组的中位数](https://leetcode.cn/problems/median-of-two-sorted-arrays/description/)
 

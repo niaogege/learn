@@ -1,5 +1,5 @@
 ---
-title: 四种异步
+title: 四种异步编程
 order: 3
 group:
   order: 1
@@ -10,6 +10,8 @@ nav:
   title: 'interview'
   path: /interview
 ---
+
+Javascript 异步编程先后经历了四个阶段，分别是 Callback 阶段，Promise 阶段，Generator 阶段和 Async/Await 阶段。Callback 很快就被发现存在回调地狱和控制权问题，Promise 就是在这个时间出现，用以解决这些问题，Promise 并非一个新事务，而是按照一个规范实现的类，最终 ES6 中采用了 **Promise/A+** 规范。后来出现的 Generator 函数以及 Async 函数也是以 Promise 为基础的进一步封装，可见 Promise 在异步编程中的重要性。
 
 ## info asynchronization 和 synchronization
 
@@ -33,7 +35,7 @@ nav:
 
 > 对于 setTimeout、setInterval、addEventListener 这种异步场景，不需要我们手动实现异步，直接调用即可。但是对于 ajax 请求、node.js 中操作数据库这种异步，就需要我们自己来实现了~
 
-## callback 回调函数
+## 第一阶段：callback 回调函数
 
 ```js
 function ajax({ url, success }) {
@@ -64,51 +66,38 @@ ajax({
 });
 ```
 
-为了解决回调地狱的问题，提出了 Promise、async/await、generator 的概念。
+为了解决回调地狱的问题，提出了 Promise、async/await、generator 的概念。产生回调地狱的原因归结起来有两点：
 
-## promise
+- 嵌套调用，第一个函数的输出往往是第二个函数的输入；
+- 处理多个异步请求并发，开发时往往需要同步请求最终的结果。
 
-```js
-// 手写promise
-class Promise {
-  constructor(executor) {
-    this.data = undefined;
-    this.cbs = [];
-    const resolve = (val) => {
-      setTimeout(() => {
-        this.data = val;
-        this.cbs.forEach((fn) => fn(val));
-      });
-    };
-    executor(resolve);
-  }
-  then(onfulfilled) {
-    return new Promise((resolve, reject) => {
-      this.cbs.push(() => {
-        const res = onfulfilled(this.data);
-        if (res instanceof Promise) {
-          res.then(resolve);
-        } else {
-          resolve(res);
-        }
-      });
-    });
-  }
-}
-```
+原因分析出来后，那么问题的解决思路就很清晰了：
+
+- 消灭嵌套调用：通过 Promise 的**链式调用**可以解决；
+- **合并多个任务**的请求结果：使用 Promise.all 获取合并多个任务的错误处理
+
+## 第二阶段：promise
 
 Promise 包含 pending、fulfilled、rejected 三种状态
 
 - pending 指初始等待状态，初始化 promise 时的状态
-- resolve 指已经解决，将 promise 状态设置为 fulfilled
-- reject 指拒绝处理，将 promise 状态设置为 rejected
+- resolve 指已经解决，将 promise 状态设置为 fulfilled, 由 pengding 到 fulfilled
+- reject 指拒绝处理，将 promise 状态设置为 rejected，由 pending 到 rejected
 - promise 是生产者，通过 resolve 与 reject 函数告之结果
-- promise 非常适合需要一定执行时间的异步任务
-- 状态一旦改变将不可更改
+- **状态一旦改变将不可更改**
+- promise **非常适合需要一定执行时间的异步任务**
 
 > 如何理解 Promise 的异步链式调用 或者说怎么实现这种异步链式调用如何理解 Promise.then()里的异步嵌套
 
-1.Promise 中的 then 是链式调用执行的，所以 then 也要返回 Promise 才能实现 2.状态只能改变一次，且一旦改变就不可更改，调用`resolve`方法是 status 会更改成`fulfilled`,调用内部的`reject`方法会更改成`rejected` 3.then 处理状态的改变，then(onfulfilled, onrejected)中的 onfulfilled 用来处理成功的状态，onrejected 用来处理错误的状态，而两个方法都是用户自定义传入的，then 里的阔以采用 setTimeout 来模拟异步宏任务 4.构造函数中的 cbs 保存 pending 状态时处理函数，当状态改变时循环调用,且将 then 方法的回调函数加入 cbs 数组中，用于异步执行 5. 想不通，then 里如果返回的是 Promise 类型，需要如何处理这种
+- 1.Promise 中的 then 是链式调用执行的，所以 then 也要返回 Promise 才能实现
+
+- 2.状态只能改变一次，且一旦改变就不可更改，调用`resolve`方法时， status 会更改成`fulfilled`,调用内部的`reject`方法会更改成`rejected`
+
+- 3.then 处理状态的改变，then(onfulfilled, onrejected)中的 onfulfilled 用来处理成功的状态，onrejected 用来处理错误的状态，而两个方法都是用户自定义传入的，then 里的阔以采用 setTimeout 来模拟异步宏任务，如果不是函数将会被忽略，并且这两个参数都是可选的。
+
+- 4.构造函数中的 cbs 保存 pending 状态时处理函数，当状态改变时循环调用,且将 then 方法的回调函数加入 cbs 数组中，用于异步执行
+
+- 5. then 方法必须返回一个新的 promise，记作 promise2，这也就保证了 then 方法可以在同一个 promise 上多次调用
 
 ```js
 then((res) => {
@@ -133,6 +122,163 @@ then(onFulfilled) {
       }
     })
   })
+}
+```
+
+### 如何实现 Promise.then 链式调用和值穿透特性
+
+> Promise.then().then()
+
+promise 的优势在于可以链式调用。在我们使用 Promise 的时候，当 then 函数中 return 了一个值，不管是什么值，我们都能在下一个 then 中获取到，这就是所谓的 then 的链式调用。而且，当我们不在 then 中放入参数，例：promise.then().then()，那么其后面的 then 依旧可以得到之前 then 返回的值，这就是所谓的值的穿透。那具体如何实现呢？简单思考一下，如果每次调用 then 的时候，我们**都重新创建一个 promise 对象，并把上一个 then 的返回结果传给这个新的 promise 的 then 方法**，不就可以一直 then 下去了么
+
+```js
+var promise = new Promise((resolve, reject) => {
+  reject('失败');
+})
+  .then()
+  .then()
+  .then(
+    (data) => {
+      console.log(data);
+    },
+    (err) => {
+      console.log('err', err);
+    },
+  );
+```
+
+### Promise 存在哪些缺点
+
+- 无法中断 Promise，一旦新建它就会立即执行，无法中断。阔以用 Promise.race 封装中断方法
+
+```js
+function abortPromise(promise) {
+  let abort;
+  let p1 = new Promise((resolve, reject) => {
+    abort = reject;
+  });
+  let p2 = Promise.race([p1, promise]); // 任何一个先成功或者失败 就可以获取到结果
+  p2.abort = abort;
+  return p2;
+}
+// test
+var testP = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('1秒成功了');
+  }, 1000);
+});
+let newP = abortPromise(testP);
+setTimeout(() => {
+  newP.abort('超时了 3秒');
+}, 3000);
+newP
+  .then((res) => {
+    console.log('成功的结果' + res);
+  })
+  .catch((e) => console.log('失败的结果' + e));
+```
+
+- 如果不设置回调函数，Promise 内部抛出的错误，不会反应到外部。
+
+### 手写面试版的 Promise
+
+```js
+class Promise {
+  status = 'pending';
+  data = '';
+  onFulfilledCbs = [];
+  onRejectedCbs = [];
+  constructor(exe) {
+    const resolve = (val) => {
+      setTimeout(() => {
+        this.status = 'resolved';
+        this.data = val;
+        onFulfilledCbs.forEach((fn) => fn(val));
+      });
+    };
+    const reject = (reason) => {
+      setTimeout(() => {
+        this.status = 'rejected';
+        this.data = reason;
+        this.onRejectedCbs.forEach((fn) => fn(reason));
+      });
+    };
+    exe(resolve, reject);
+  }
+  then(onResolved, onRejected) {
+    // 设置默认参数
+    onResolved = typeof onResolved == 'function' ? onResolved : (v) => v;
+    onRejected = typeof onRejected == 'function' ? onRejected : (r) => r;
+    let p2;
+    p2 = new Promise((resolve, reject) => {
+      if (this.status == 'resolved') {
+        try {
+          const x = onResolved(this.data);
+          this.resolvePromise(p2, x, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      }
+      if (this.status == 'rejected') {
+        try {
+          const x = onRejected(this.data);
+          this.resolvePromise(p2, x, resolve, reject);
+        } catch (e) {
+          reject(e);
+        }
+      }
+      if (this.status === 'pending') {
+        this.onFulfilledCbs.push(() => {
+          try {
+            const x = onResolved(this.data);
+            this.resolvePromise(p2, x, resolve, reject);
+          } catch (e) {
+            reject(e);
+          }
+        });
+        this.onRejectedCbs.push(() => {
+          try {
+            const x = onRejected(this.data);
+            this.resolvePromise(p2, x, resolve, reject);
+          } catch (e) {
+            reject(e);
+          }
+        });
+      }
+    });
+    return p2;
+  }
+  resolvePromise(p2, x, resolve, reject) {
+    if (x == p2) {
+      return reject(new TypeError('chaining cycle'));
+    }
+    try {
+      if (x instanceof Promise) {
+        x.then(resolve);
+      } else {
+        resolve(x);
+      }
+    } catch (e) {
+      reject(e);
+    }
+  }
+  catch(onRejected) {
+    return this.then(null, onRejected);
+  }
+  static resolve(val) {
+    return new Promise((resolve, reject) => {
+      if (val instanceof Promise) {
+        val.then(resolve);
+      } else {
+        resolve(val);
+      }
+    });
+  }
+  static reject(reason) {
+    return new Promise((resolve, reject) => {
+      reject(reason);
+    });
+  }
 }
 ```
 

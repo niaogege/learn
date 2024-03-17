@@ -52,7 +52,7 @@ nav:
  * 32.实现一个区间内的随机数
  * 33.实现阶乘(迭代/递归)
  * 34.FileReader使用
- * 35.取消请求
+ * 35.取消请求/封装一个方法使得Promise阔以取消
  * 36.将数字转换成汉语的输出，输入为不超过 10000 亿的数字
  * 37.两个字符串对比, 得出结论都做了什么操作, 比如插入或者删除
  * 38.给一个字符串, 找到第一个不重复的字符
@@ -75,6 +75,7 @@ nav:
  * 55.场景应用题div拖拽
  * 56.场景应用题：买饮料
  * 57.编写函数，每次返回下一个质数（Prime number）
+ *
  */
 ```
 
@@ -229,33 +230,10 @@ const onScreen = useIntersectionObserver(ref, { threshold: 0.5 });
 })()
 ```
 
-## 5.Promise.finally 手写
+## 5.Promise.finally/resolve/reject 手写
 
 ```js
 class MyPromise {
-  constructor(exe) {
-    this.data = null;
-    this.cbs = [];
-    const resolve = (res) => {
-      setTimeout(() => {
-        this.data = res;
-        this.cbs.forEach((cb) => cb(res));
-      });
-    };
-    exe(resolve);
-  }
-  then(onResolve) {
-    return new MyPromise((resolve) => {
-      this.cbs.push(() => {
-        const res = onResolve(this.data);
-        if (res instanceof MyPromise) {
-          res.then(resolve);
-        } else {
-          resolve(res);
-        }
-      });
-    });
-  }
   // MyPromise.resolve
   static resolve(res) {
     return new MyPromise((resolve, reject) => {
@@ -292,7 +270,7 @@ class MyPromise {
       }
     });
   }
-  finally(cb) {
+  static finally(cb) {
     return this.then(
       (res) => {
         return MyPromise.resolve(cb()).then(() => res);
@@ -1091,6 +1069,8 @@ console.log(arr);
 
 ## 26.用原生 JS 实现解析二维码
 
+> BarcodeDetector
+
 ```js
 function parseQrcode() {
   if ('BarcodeDetector' in window) {
@@ -1328,6 +1308,8 @@ function uploadFile(file) {
 
 ## 35.取消请求 AbortController
 
+### 35.1 使用 AbortController 取消请求
+
 ```js
 function cancelRequest(url) {
   const controller = new AbortContoller();
@@ -1342,6 +1324,38 @@ function cancelRequest(url) {
     });
   }, 2000);
 }
+```
+
+### 35.2 使用 Promise.race 封装取消请求
+
+```js
+function cancelPromise(p) {
+  let abort;
+  let p1 = new Promise((resolve, reject) => (abort = reject));
+  let p2 = Promise.race([p1, p]);
+  p2.abort = abort;
+  return p2;
+}
+// test 测试
+var pTest = new Promise((resolve, reject) => {
+  setTimeout(() => {
+    resolve('success done');
+  }, 4000);
+});
+var newPromise = cancelPromise(pTest);
+setTimeout(() => {
+  // 超过3秒 就算超时 应该让 proimise 走到失败态
+  newPromise.abort('超时了');
+}, 3000);
+
+newPromise
+  .then((data) => {
+    console.log('成功的结果' + data);
+  })
+  .catch((e) => {
+    console.log('失败的结果' + e);
+  });
+// 三秒之后 超时 走到失败结果
 ```
 
 ## [36.将数字转换成汉语的输出，输入为不超过 10000 亿的数字](https://www.nowcoder.com/practice/6eec992558164276a51d86d71678b300)
@@ -1487,6 +1501,8 @@ render(`{{msg}}-{{name}}`, { msg: 'chendap', name: 'wmh' }); // chendap-wmh
 
 ## 41.增加数组原型 group 方法,实现自定义分类
 
+> 天天手写 Array.prototype.reduce 有啥用，随便一个题目搞晕你？？
+
 ```js
 // expected
 var result = {
@@ -1530,21 +1546,6 @@ function numToBase36(num, base = 36) {
   return ans;
 }
 numToBase36(360);
-// 字符串相加
-function addBig(a, b) {
-  let len = Math.max(a.length, b.length);
-  a = a.padStart(len, '0');
-  b = b.padStart(len, '0');
-  let ans = '';
-  let flag = 0;
-  for (let i = len - 1; i >= 0; i--) {
-    flag = Number(a[i]) + Number(b[i]) + flag;
-    ans = (flag % 10) + ans;
-    flag = Math.floor(flag / 10);
-  }
-  return flag === 1 ? '1' + ans : ans;
-}
-addBig('99', '1');
 ```
 
 ## 44.useState hook
@@ -1645,6 +1646,8 @@ merge([
 ```
 
 ## 47.多叉树, 获取每一层的节点之和
+
+> 二叉树 遍历方法 DFS/BFS 两种思想
 
 ```js
 var res = layerSum({

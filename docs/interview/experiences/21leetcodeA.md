@@ -790,8 +790,25 @@ function water(nums) {
 
 ## 31.删除链表的倒数第 N 个结点
 
+> 需要多联系几次 多写 谢谢
+
 ```js
-function deletNode(node, k) {}
+function deletNode(node, k) {
+  let dummy = { next: node, val: 0 };
+  let cur = dummy;
+  let fast = cur;
+  let slow = cur;
+  k = k + 1;
+  while (k-- && fast) {
+    fast = fast.next;
+  }
+  while (fast != null) {
+    fast = fast.next;
+    slow = slow.next;
+  }
+  slow.next = slow.next.next;
+  return dummy.next;
+}
 ```
 
 ## [32.二叉树中的最大路径和](https://leetcode.cn/problems/binary-tree-maximum-path-sum/)
@@ -972,8 +989,7 @@ class MyQueue {
 
 ```js
 function findLongest(nums1, nums2) {
-  let len1 = nums1.length;
-  let len2 = nums2.length;
+  let [len1, len2] = [nums1.length, nums2.length;]
   let max = 0;
   let dp = new Array(len1 + 1).fill().map(() => new Array(len2 + 1).fill(0));
   for (let i = 1; i <= len1; i++) {
@@ -993,6 +1009,70 @@ function findLongest(nums1, nums2) {
 ```
 
 ## [41.复原 IP 地址](https://programmercarl.com/0093.%E5%A4%8D%E5%8E%9FIP%E5%9C%B0%E5%9D%80.html#%E7%AE%97%E6%B3%95%E5%85%AC%E5%BC%80%E8%AF%BE)
+
+```js
+function revertIp(s) {
+  let ans = [];
+  let backTrack = (path, start) => {
+    if (path.length == 4 && start == s.length) {
+      ans.push(path.slice().join('.'));
+      return;
+    }
+    for (let i = start; i < s.length; i++) {
+      // 剪枝
+      let cur = s.slice(start, i + 1);
+      if (+cur > 255 || cur.length > 3) continue;
+      if (cur.length > 1 && cur[0] == '0') continue;
+      path.push(cur);
+      backTrack(path, i + 1);
+      path.pop();
+    }
+  };
+  backTrack([], 0);
+  return ans;
+}
+revertIp('0000'); // ['0.0.0.0']
+```
+
+## [43.下一个排列](https://leetcode.cn/problems/next-permutation/)
+
+> 好难理解
+
+“下一个排列” 的定义是：给定数字序列的字典序中下一个更大的排列。如果不存在下一个更大的排列，则将数字重新排列成最小的排列（即升序排列）
+
+```js
+function nextPermutation(nums) {
+  let firstIndex = -1;
+  for (let i = nums.length - 2; i >= 0; i--) {
+    if (nums[i] < nums[i + 1]) {
+      firstIndex = i;
+      break;
+    }
+  }
+  if (firstIndex == -1) {
+    reverse(nums, 0, nums.length);
+  }
+  let secondIndex = -1;
+  for (let i = nums.length - 1; i > firstIndex; i--) {
+    if (nums[i] > nums[firstIndex]) {
+      secondIndex = i;
+      break;
+    }
+  }
+  swap(nums, firstIndex, secondIndex);
+  reverse(nums, firstIndex + 1, nums.length - 1);
+}
+function reverse(nums, i, j) {
+  while (i < j) {
+    swap(nums, i++, j--);
+  }
+}
+function swap(nums, i, j) {
+  let tmp = nums[i];
+  nums[i] = nums[j];
+  nums[j] = tmp;
+}
+```
 
 ## [46.括号生成](https://leetcode.cn/problems/generate-parentheses/solutions/597236/sui-ran-bu-shi-zui-xiu-de-dan-zhi-shao-n-0yt3/)
 
