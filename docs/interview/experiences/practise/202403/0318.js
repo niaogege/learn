@@ -11,6 +11,28 @@
  * 10.删除链表的倒数第 N 个结点
  */
 
+function revertIp(s) {
+  let ans = [];
+  let backTrack = (path, start) => {
+    if (path.length == 4 && start == s.length) {
+      ans.push(path.slice().join('.'));
+      return;
+    }
+    // 如何分割呢
+    for (let i = start; i < s.length; i++) {
+      let cur = s.slice(start, i + 1);
+      if (+cur > 255 || cur.length > 3) continue;
+      if (cur[0] == '0' && cur.length > 1) continue;
+      path.push(cur);
+      backTrack(path, i + 1);
+      path.pop();
+    }
+  };
+  backTrack([], 0);
+  return ans;
+}
+revertIp('25525511135');
+
 // promisify 是把一个 node 中的 api 转换成 promise 的写法。 在 node 版本 12.18 以上，已经支持了原生的 promisify 方法：const fs = require('fs').promises。
 function Promisify(fn) {
   return (...arg) => {

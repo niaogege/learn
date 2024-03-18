@@ -78,7 +78,7 @@ ajax({
 
 ## 第二阶段：promise
 
-Promise 包含 pending、fulfilled、rejected 三种状态
+Promise 承诺过一段时间后会给你一个结果，包含 pending、fulfilled、rejected 三种状态
 
 - pending 指初始等待状态，初始化 promise 时的状态
 - resolve 指已经解决，将 promise 状态设置为 fulfilled, 由 pengding 到 fulfilled
@@ -97,7 +97,11 @@ Promise 包含 pending、fulfilled、rejected 三种状态
 
 - 4.构造函数中的 cbs 保存 pending 状态时处理函数，当状态改变时循环调用,且将 then 方法的回调函数加入 cbs 数组中，用于异步执行
 
-- 5. then 方法必须返回一个新的 promise，记作 promise2，这也就保证了 then 方法可以在同一个 promise 上多次调用
+- 5. then 方法必须返回一个新的 **promise**，记作 promise2，这也就保证了 then 方法可以在同一个 promise 上多次调用
+
+- 在 then 中 return 一个值，这个值会被 Promise.resolve 包装
+
+- 如果 then 出现异常，会走到下一个 then 里的失败回调
 
 ```js
 then((res) => {
@@ -108,7 +112,7 @@ then((res) => {
 });
 ```
 
-手写 Promise 里 **the**n 基本都是这种写法
+手写 Promise 里 **then** 基本都是这种写法
 
 ```js
 then(onFulfilled) {
@@ -129,7 +133,7 @@ then(onFulfilled) {
 
 > Promise.then().then()
 
-promise 的优势在于可以链式调用。在我们使用 Promise 的时候，当 then 函数中 return 了一个值，不管是什么值，我们都能在下一个 then 中获取到，这就是所谓的 then 的链式调用。而且，当我们不在 then 中放入参数，例：promise.then().then()，那么其后面的 then 依旧可以得到之前 then 返回的值，这就是所谓的值的穿透。那具体如何实现呢？简单思考一下，如果每次调用 then 的时候，我们**都重新创建一个 promise 对象，并把上一个 then 的返回结果传给这个新的 promise 的 then 方法**，不就可以一直 then 下去了么
+promise 的优势在于可以链式调用。在我们使用 Promise 的时候，当 then 函数中 return 了一个值，不管是什么值，我们都能在下一个 then 中获取到，这就是所谓的 then 的链式调用。而且，当我们不在 then 中放入参数，例：**promise.then().then()**，那么其后面的 then 依旧可以得到之前 then 返回的值，这就是所谓的值的穿透。那具体如何实现呢？简单思考一下，如果每次调用 then 的时候，我们**都重新创建一个 promise 对象，并把上一个 then 的返回结果传给这个新的 promise 的 then 方法**，不就可以一直 then 下去了么
 
 ```js
 var promise = new Promise((resolve, reject) => {
@@ -191,7 +195,7 @@ class Promise {
   constructor(exe) {
     const resolve = (val) => {
       setTimeout(() => {
-        this.status = 'resolved';
+        this.status = 'fulfilled';
         this.data = val;
         onFulfilledCbs.forEach((fn) => fn(val));
       });
@@ -211,7 +215,7 @@ class Promise {
     onRejected = typeof onRejected == 'function' ? onRejected : (r) => r;
     let p2;
     p2 = new Promise((resolve, reject) => {
-      if (this.status == 'resolved') {
+      if (this.status == 'fulfilled') {
         try {
           const x = onResolved(this.data);
           this.resolvePromise(p2, x, resolve, reject);
@@ -288,7 +292,7 @@ Generator 是 ES6 提出的一种异步编程的方案。因为手动创建一�
 
 ### iterator 是什么？
 
-iterator 中文名叫迭代器。它为 js 中各种不同的数据结构(Object、Array、Set、Map)提供统一的访问机制。任何数据结构只要部署了 Iterator 接口，就可以完成遍历操作。 因此 iterator 也是一种对象，不过相比于普通对象来说，它有着专为迭代而设计的接口。
+iterator 中文名叫迭代器。它为 js 中各种不同的数据结构(Object、Array、Set、Map)提供统一的访问机制。**任何数据结构只要部署了 Iterator 接口**，就可以完成遍历操作。 因此 iterator 也是一种对象，不过相比于普通对象来说，它有着专为迭代而设计的接口。
 
 iterator 的作用：
 

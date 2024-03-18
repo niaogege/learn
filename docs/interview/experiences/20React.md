@@ -28,7 +28,11 @@ react 在面试中举足轻重，列举几个有代表性的问题，背一背. 
 - 7.Redux 实现的是哪种模式?以及 Mobx 实现的是哪种模式。两者之间有什么区别？
 - 8.什么是 JSX?
 - 9.userMemo 的用途是什么？它是如何起效的?
-- diff 算法相关
+- 10.diff 算法相关
+
+- 21.react 强制刷新
+- 22.React 组件中怎么做事件代理？它的原理是什么？
+- 23.
 
 ## 0.fiber
 
@@ -42,7 +46,7 @@ fiber 是 react16 中引入的一种新的协调算法。v16 之前，react 使�
 
 1.从架构角度看，是 react 对调和算法的重写。v16 之前，react 使用的是名为 Stack Reconciler 的旧调和算法，V16 之后改成 fiber Reconciler，实现虚拟 DOM 增量渲染,让 react 在更新过程变得可控(适时让出 CPU 执行权，将控制器交给浏览器，让位给高优先级任务，等浏览器空闲也就是 idleCallback 时在恢复渲染)
 
-2.从编码角度看，fiber 是一种数据结构，是 Fiber 树结构的节点单位，也就是 React 16 新架构下的"虚拟 DOM"。一个 fiber 就是一个 JavaScript 对象，包含 child/return/sibling 等属性
+2.从编码角度看，fiber 是一种数据结构，是 Fiber 树结构的节点单位，也就是 React 16 新架构下的"虚拟 DOM"。一个 fiber 就是一个 JavaScript 对象，包含 **child/return/sibling** 等属性
 
 ### React Fiber 是如何实现更新过程可控？
 
@@ -81,6 +85,12 @@ useReducer: 负责使用 reducer 函数管理状态，原理类似于 Redux。
 useLayoutEffect: 与 useEffect 类似，但效果会在所有 DOM 更改之后再*同步运行*。
 
 这些 hooks 提供强大的工具，可用于管理状态、处理 side effects 和重用 React 函数组件当中的逻辑。
+
+### React Hooks 在平时开发中需要注意的问题和原因？
+
+- 1）不要在循环，条件或嵌套函数中调用 Hook，必须始终在 React 函数的顶层使用 Hook
+
+- 善用 useCallback/合理使用 useContext
 
 ## 2. 虚拟 DOM 是什么?
 
@@ -262,7 +272,7 @@ var someElement = () => {
 
 这就是所谓 JSX，是一种用于简化代码理解和开发表达的语言扩展。
 
-## 9.userMemo 的用途是什么？它是如何起效的?
+## 9.useMemo 的用途是什么？它是如何起效的?
 
 useMemo 用于缓存和记忆计算结果。
 
@@ -290,15 +300,17 @@ const callbackValue = useCallback(() => computeFunc(paramA, paramB), [paramA, pa
 
 ## 11.React Context 是什么?
 
-React Context 是一项功能，提供一种通过组件树传递数据的方法，避免在每个层次上手动传递 props。它允许我们创建一个全局状态，树中的任何组件无论位置如何、均可以访问该状态。当我们需要在未通过 props 直接连接的多个组件之间共享数据时，就可以使用 Context。
+React Context 提供一种通过组件树传递数据的方法，避免在每个层次上手动传递 props。它允许我们创建一个全局状态，树中的任何组件无论位置如何、均可以访问该状态。当我们需要在未通过 props 直接连接的多个组件之间共享数据时，就可以使用 Context。
+
+> Context 通过组件树提供了一个传递数据的方法，从而避免了在每一个层级手动的传递 props 属性。
 
 React Context API 包含以下三个主要部分：
 
-- createContext: 此函数用于创建一个新的 context 上下文对象。
+- createContext: 此函数用于创建一个新的 **context 上下文对象**。
 
-- Context.Provider: 此组件用于向 context 提供值，其中打包有需要访问该值的组件。
+- Context.Provider: 此组件用于向 context 提供值
 
-- Context.Consumer 或 useContext hook: 此组件或 hook 负责使用 context 中的值。它可以在上下文提供方内的任意组件中使用。
+- Context.Consumer 或 useContext hook: 此组件或 hook 负责消费 context 中的值。它可以在上下文提供方内的任意组件中使用。
 
 通过使用 React Context，我们可以避免 prop 钻取（即在多个层次的组件间传递项目）并轻松管理更高级别的状态，保证代码更具组织性的执行效率。
 
@@ -401,6 +413,7 @@ export const getStaticProps = async ({ params: { slug } }) => {
 ```
 
 2. getServerSideProps: 此方法用于根据每个请求获取数据，并在服务器端预渲染页面。如果需要获取经常更改、或者仅供特定用户使用的数据，则可以使用此方法。(SSR)
+
 3. getStaticPaths: 此方法用于在**动态路由**当中，指定需要在构建时**预渲染的路径列表**，常用于获取带有参数的**动态路由数据**。
 
 ```js
@@ -458,7 +471,7 @@ function useRerender() {
 
 ## 17.react 中的 diff
 
-在 React 中，diff 算法需要与虚拟 DOM 配合才能发挥出真正的威力。React 会使用 diff 算法计算出虚拟 DOM 中真正发生变化的部分，并且只会针对该部分进行 dom 操作，从而避免了对页面进行大面积的更新渲染，减小性能的开销。在传统的 diff 算法中复杂度会达到 O(n^3)。React 中定义了三种策略，在对比时，根据策略只需遍历一次树就可以完成对比，将复杂度降到了 O(n)：
+在 React 中，diff 算法需要与虚拟 DOM 配合才能发挥出真正的威力。React 会使用 diff 算法计算出虚拟 DOM 中真正发生变化的部分，并且只会针对该部分进行 dom 操作，从而避免了对页面进行大面积的更新渲染，减小性能的开销。在传统的 diff 算法中复杂度会达到 O(n^3)。React 中定义了三种策略，在对比时，根据策略只需遍历一次树就可以完成对比，将复杂度降到了 O(n)
 
 ## 18.setState 同步异步问题
 
@@ -468,7 +481,7 @@ function useRerender() {
 
 1.在**合成事件** 和 **生命周期钩子**(除 componentDidUpdate) 中，setState 是"异步"的；
 
-2.在 原生事件 和 setTimeout 中，setState 是同步的，可以马上获取更新后的值；
+2.在 **原生事件** 和 **setTimeout** 中，setState 是同步的，可以马上获取更新后的值；
 
 ### 批量更新
 
@@ -509,12 +522,14 @@ React 中 Fiber 树的更新流程分为两个阶段 **render 阶段**和 **comm
 
 ### 使用 forwardRef
 
-将组件单独封装成组件 TextInput
+通过 forwardRef 将组件单独封装成组件 TextInput
 
 ```js
+// 子组件
 const TextInput = React.forwardRef((props, ref) => {
   return <input ref={ref} />;
 });
+// parent
 const TextPar = () => {
   const inputEl = useRef(null);
   const onClick = () => {
@@ -586,3 +601,42 @@ React.memo 与 PureComponent 的区别：
 - React.memo 只能针对 props 来决定是否渲染
 
 > React.memo 的第二个参数的返回值与 shouldComponentUpdate 的返回值是相反的 React.memo:返回  true  组件不渲染 ， 返回 false 组件重新渲染。 shouldComponentUpdate: 返回  true  组件渲染 ， 返回  false  组件不渲染
+
+## 21.react 强制刷新
+
+component.**forceUpdate**() 一个不常用的生命周期方法, 它的作用就是强制刷新。
+
+官网解释如下：
+
+- 默认情况下，当组件的 state 或 props 发生变化时，组件将重新渲染。如果 render() 方法依赖于其他数据，则可以调用 forceUpdate() 强制让组件重新渲染。
+
+- 调用 forceUpdate() 将致使组件调用 render() 方法，此操作会跳过该组件的 shouldComponentUpdate()。但其子组件会触发正常的生命周期方法，包括 shouldComponentUpdate() 方法。如果标记发生变化，React 仍将只更新 DOM。
+
+通常你应该避免使用 forceUpdate()，尽量在 render() 中使用 this.props 和 this.state。
+
+shouldComponentUpdate 在初始化 和 forceUpdate 不会执行。
+
+## 22.React 组件中怎么做事件代理？它的原理是什么？
+
+React 基于 Virtual DOM 实现了一个 SyntheticEvent 层（合成事件层），定义的事件处理器会接收到一个**合成事件对象**的实例，它符合 W3C 标准，且与原生的浏览器事件拥有同样的接口，支持冒泡机制，所有的事件都自动绑定在最外层上。
+
+在 React 底层，主要对合成事件做了两件事：
+
+- 事件委托： React 会把所有的事件绑定到结构的最外层(根元素)，使用统一的事件监听器，这个事件监听器上维持了一个映射来保存所有组件内部事件监听和处理函数。
+- 自动绑定： React 组件中，每个方法的上下文都会指向该组件的实例，即自动绑定 this 为当前组件。
+
+## 23.哪些方法会触发 React 重新渲染？重新渲染 render 会做些什么？
+
+### 哪些方法会触发 react 重新渲染?
+
+- setState（）方法被调用 setState 是 React 中最常用的命令，通常情况下，执行 setState 会触发 render。但是这里有个点值得关注，执行 setState 的时候不一定会重新渲染。当 setState 传入 null 时，并不会触发 render。
+
+- 父组件重新渲染只要父组件重新渲染了，即使传入子组件的 props 未发生变化，那么子组件也会重新渲染，进而触发 render
+
+### 重新渲染 render 会做些什么
+
+- 会对新旧 VNode 进行对比，也就是我们所说的 Diff 算法。
+- 对新旧两棵树进行一个深度优先遍历，这样每一个节点都会一个标记，在到深度遍历的时候，每遍历到一和个节点，就把该节点和新的节点树进行对比，如果有差异就生成一个 patch 补丁
+- 遍历差异对象，根据 patch 补丁，应用到真实 dom
+
+React 的处理 render 的基本思维模式是**每次一有变动就会去重新渲染整个应用**。 React 将 render 函数返回的虚拟 DOM 树与老的进行比较，从而确定 DOM 要不要更新、怎么更新。当 DOM 树很大时，遍历两棵树进行各种比对还是相当耗性能的，特别是在顶层 setState 一个微小的修改，默认会去遍历整棵树。尽管 React 已经深度优化 Diff 算法，但是这个过程仍然会损耗性能.

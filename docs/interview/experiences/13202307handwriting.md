@@ -747,28 +747,81 @@ revserLink(node);
 
 ```js
 class MockPromise {
+  this.data = undefined;
+  this.onResolvedCbs = [];
+  this.onRejectedCbs = []
+  this.status = 'pending'
   constructor(exeFn) {
-    this.data = undefined;
-    this.cbs = [];
     const resolve = function (val) {
       setTimeout(() => {
-        this.data = val;
-        this.cbs.forEach((cb) => cb());
-      });
-    };
-    exeFn(resolve);
-  }
-  then(onFulfilled, onReject) {
-    return new MockPromise((resolve) => {
-      this.cbs.push(() => {
-        var val = onFullfilled(this.data);
-        if (val instanceof MockPromise) {
-          val.then(resolve);
-        } else {
-          resolve(val);
+        if(this.status == 'pending') {
+          this.data = val;
+          this.status = 'resolved'
+          this.onResolvedCbs.forEach((cb) => cb(val));
         }
       });
+    };
+    const reject = function (reason) {
+      setTimeout(() => {
+        if(this.status == 'pending') {
+          this.data = reason
+          this.status = 'rejected'
+          this.onRejected.forEach((fn) => fn(reason))
+        }
+      })
+    }
+    exeFn(resolve, reject);
+  }
+  then(onFulfilled, onReject) {
+    let p2 =  new MockPromise((resolve) => {
+      if(this.status == 'pending') {
+        this.cbs.push(() => {
+          var x = onFullfilled(this.data);
+          this.parsePromise(p2,x, resolve, reject)
+        });
+        this.onRejected.push(() => {
+          let x = onReject(this.data)
+          this.parsePromise(p2,x, resolve, reject)
+        })
+      }
+      if(this.status == 'resolved') {
+        try {
+          let x = onFulfilled(this.data)
+          this.parsePromise(p2,x, resolve, reject)
+        } catch(e) {
+          reject(e)
+        }
+      }
+      if(this.status === 'rejected') {
+        try {
+          let x = onRejected(this.data)
+          this.parsePromise(p2,x, resolve, reject)
+        } catch(e) {
+          reject(e)
+        }
+      }
     });
+    return p2
+  }
+  parsePromise(p,x,resolve,reject) {
+    if(x == p) {
+      reject(new TypeError('chaining circle'))
+    }
+    try {
+      if(x instanceof Promise) {
+        x.then(resolve, reject)
+      } else {
+        resolve(x)
+      }
+    } catch(e) {
+      reject(e)
+    }
+  }
+  done() {
+    this.catch((e) => {
+      console.log('done')
+      throw e
+    })
   }
 }
 ```

@@ -1858,45 +1858,48 @@ numToString(360); // 'a0'
 
 ## 54.手写实现 lodash.get/lodash.set
 
+### lodash.set
+
 ```js
-// lodash.set(obj,path,value)
-// lodash.get(obj, path)
-function flattenObj(obj, res = {}, path = '', isArray = false, ans = '', p = '') {
-  for (let [k, val] of Object.entries(obj)) {
-    if (Array.isArray(val)) {
-      let tmp = isArray ? `${path}[${k}]` : `${path}${k}`;
-      flattenObj(val, res, tmp, true);
-    } else if (typeof val === 'object') {
-      let tmp = isArray ? `${path}[${k}].` : `${path}${k}.`;
-      flattenObj(val, res, tmp, false);
+function lodashSet(obj, path, val) {
+  let paths = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  paths.reduce((cur, pre, index, arr) => {
+    // 最后一个 直接赋值
+    if (index == arr.length - 1) {
+      cur[pre] = val;
+      return null;
+    } else if (pre in cur) {
+      return cur[pre]; // key的值
     } else {
-      let tmp = isArray ? `${path}[${k}]` : `${path}${k}`;
-      if (p && ans) {
-        res[p] = ans;
-      } else {
-        res[tmp] = val;
-      }
+      return (cur[pre] = {});
     }
-  }
-  return res;
+  }, obj);
 }
-function mockLodashGet(obj, path) {
-  const newObj = flattenObj(obj);
-  return newObj[path];
-}
-let obj = {
+// test
+var obj = {
   foo: {
     bar: {
       baz: 'Hello, World!',
     },
   },
 };
-mockLodashGet(obj, 'foo.bar.baz');
+lodashSet(obj, 'foo.bar.baz', 'cpp');
+```
 
-// function mockLodashSet(obj, path, val) {
-//   flattenObj(obj, {}, '', false, val, path);
-// }
-// mockLodashSet(obj, 'foo.bar.baz', 'cpp');
+### lodahs.get(get(object: object, path: [never]): never)
+
+```js
+function lodashGet(object, path, defaultVal = undefined) {
+  let paths = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let res = object;
+  for (let p of paths) {
+    res = Object(res)[p];
+    if (res == undefined) {
+      return defaultVal;
+    }
+  }
+  return res;
+}
 ```
 
 ## [55.场景应用题 div 拖拽](https://juejin.cn/post/7282951856514793513?searchId=20240315111348596E579AE59B54ED0ACB)
@@ -2010,4 +2013,5 @@ getP(); // 3
 ## 参考
 
 - [字节跳动前端面经（3 年工作经验附详细答案）](https://mp.weixin.qq.com/s/MYfuUSNS7xIAT4RgZIMv0g)
-- [](https://juejin.cn/post/7004638318843412493?searchId=20240313143205EB66701739E2F9D6599F)
+- [最新的前端大厂面经（详解答案）](https://juejin.cn/post/7004638318843412493?searchId=20240313143205EB66701739E2F9D6599F)
+- [「2021」高频前端面试题汇总之手写代码篇](https://juejin.cn/post/6946136940164939813?searchId=2024031814180491A668E2D8A6BD15EEE9#heading-2)

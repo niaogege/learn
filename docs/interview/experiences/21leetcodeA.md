@@ -703,10 +703,12 @@ function mergeKLinks(head) {
 ## [27.最长上升子序列](https://leetcode.cn/problems/longest-increasing-subsequence/description/)
 
 ```js
+/**
 子序列 是由数组派生而来的序列，删除（或不删除）数组中的元素而不改变其余元素的顺序。例如，[3,6,2,7] 是数组 [0,3,1,6,2,2,7] 的子序列。
 输入：nums = [10,9,2,5,3,7,101,18]
 输出：4
 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4
+ */
 
 function longestIncreSub(arr) {
   let len = arr.length;
@@ -795,9 +797,8 @@ function water(nums) {
 ```js
 function deletNode(node, k) {
   let dummy = { next: node, val: 0 };
-  let cur = dummy;
-  let fast = cur;
-  let slow = cur;
+  let fast = dummy;
+  let slow = dummy;
   k = k + 1;
   while (k-- && fast) {
     fast = fast.next;
@@ -1005,6 +1006,30 @@ function findLongest(nums1, nums2) {
     }
   }
   return max;
+}
+```
+
+## [39.二叉树右视图](https://leetcode.cn/problems/binary-tree-right-side-view/submissions/220539265/)
+
+```js
+function dfsLight(tree) {
+  let level = 0;
+  let ans = [];
+  let dfs = (node, step) => {
+    if (!node) return;
+    if (step > level) {
+      ans.push(node.val);
+      level++;
+    }
+    if (node.right) {
+      dfs(node.right, step + 1);
+    }
+    if (node.left) {
+      dfs(node.left, step + 1);
+    }
+  };
+  dfs(node, 1);
+  return ans;
 }
 ```
 
