@@ -8,7 +8,170 @@
  * 7.lodash.set/get
  * 8.多叉树, 获取每一层的节点之和
  * 9.二叉树右视图
+ * 10.回文链表
+ * 11.两两相交
  */
+
+class LRU {
+  constructor(limit) {
+    this.cache = new Map();
+    this.limit = limit;
+  }
+  get(key) {
+    if (this.cache.has(key)) {
+      let val = this.cache.get(key);
+      this.cache.delete(key);
+      this.cache.set(key, val);
+    }
+    return -1;
+  }
+  set(key, val) {
+    let size = this.cache.size;
+    if (this.cache.has(key)) {
+      this.cache.delete(key);
+    } else if (size >= this.limit) {
+      let oldKey = this.cache.keys().next().value;
+      this.cache.delete(oldKey);
+    }
+    this.cache.set(key, val);
+  }
+}
+
+Array.prototype.mockReduce = function (fn, init) {
+  let arr = [];
+  let res = init ? init : arr[0];
+  let startIndex = init ? 0 : 1;
+  for (let i = startIndex; i < arr.length; i++) {
+    res = fn.call(this, res, arr[i], i, arr);
+  }
+  return res;
+};
+
+function mockLodashSet(obj, path, val) {
+  let paths = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  paths.reduce((cur, pre, i, arr) => {
+    if (i === arr.length - 1) {
+      cur[pre] = val;
+      return;
+    } else if (pre in cur) {
+      return cur[pre];
+    } else {
+      return (cur[pre] = {});
+    }
+  }, obj);
+}
+let test1 = {
+  name: {
+    cpp: 'dapeng',
+  },
+};
+// mockLodashSet(test1, 'name.cpp', 'chendapeng');
+
+function mockLodashGet(obj, path, defaultVal) {
+  let paths = path.replace(/\[(\d+)\]/g, '.$1').split('.');
+  let res = obj;
+  for (let p of paths) {
+    res = Object(res)[p];
+    if (!res) {
+      return defaultVal;
+    }
+  }
+  return res;
+}
+mockLodashGet(test1, 'name.cpp', '123');
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var swapPairs = function (head) {
+  let dummy = {
+    next: head,
+    val: null,
+  };
+  let cur = dummy;
+  while (cur.next != null && cur.next.next !== null) {
+    let tmp = cur.next;
+    let tmp1 = cur.next.next.next;
+    cur.next = cur.next.next;
+    cur.next.next = tmp;
+    tmp.next = tmp1; //1 指向3
+    cur = cur.next.next; // 移动cur
+  }
+  return dummy.next;
+};
+
+function reverse(head) {
+  let pre = null;
+  let cur = head;
+  while (cur) {
+    let next = cur.next;
+    cur.next = pre;
+    pre = cur;
+    cur = next;
+  }
+  return pre;
+}
+
+/**
+ * @param {ListNode} head
+ * @return {boolean}
+ */
+var isPalindrome = function (head) {
+  let cur = head;
+  let ans = [];
+  while (cur) {
+    ans.push(cur.val);
+    cur = cur.next;
+  }
+  // let reverse = ans.slice().reverse();
+  // return ans.join('') === reverse.join('');
+  let start = 0,
+    end = ans.length - 1;
+  while (start < end) {
+    if (ans[start] != ans[end]) {
+      return false;
+    }
+    start++;
+    end--;
+  }
+  return true;
+};
+
+function nextPre(arr) {
+  let len = arr.length;
+  let firstIndex = -1;
+  for (let i = len - 2; i >= 0; i--) {
+    if (arr[i + 1] > arr[i]) {
+      firstIndex = i;
+    }
+  }
+  if (firstIndex == -1) {
+    reverse(arr, 0, len - 1);
+    return;
+  }
+
+  let secondIndex = -1;
+  for (let j = len - 1; j >= firstIndex; j--) {
+    if (arr[j] > arr[firstIndex]) {
+      secondIndex = j;
+      break;
+    }
+  }
+  // 交换
+  swap(arr, firstIndex, secondIndex);
+  // 反转
+  reverse(arr, firstIndex + 1, len - 1);
+}
+function reverse(arr, i, j) {
+  while (i < j) {
+    swap(arr, i++, j--);
+  }
+}
+function swap(arr, i, j) {
+  let tmp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = tmp;
+}
 
 function mockLodashGet(obj, path, defaultVal = 'undefined') {
   let paths = path.replace(/\[(\d+)\]/g, '.$1').split('.');
@@ -27,7 +190,6 @@ var test = {
   },
 };
 mockLodashGet(test, 'name.cpp');
-mockLodashGet();
 function mockLodashSet(obj, path, val) {
   let paths = path.replace(/\[(\d+)\]/g, '.$1').split('.');
   console.log(paths, 'paths');

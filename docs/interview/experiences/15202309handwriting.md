@@ -39,7 +39,7 @@ nav:
  * 19.校验html是否合法
  * 20.实现数组的旋转
  * 21.用setTimeout实现setInterval
- * 22.连续正整数之和
+ * 22.判断对象是否存在循环引用
  * 23.手写ts版方法调用的注解
  * 24.自定义迭代器遍历斐波那契数列
  * 25.生成扑克牌的所有序列
@@ -925,9 +925,46 @@ function mockSetInterval(fn, delay) {
 }
 ```
 
-## 22.连续正整数之和?
+## 22.判断对象是否存在循环引用(Set)
 
-> 题目忘记了
+```js
+const person = { name: 'kalory', age: 18 };
+person.onwer = person;
+JSON.stringify(person); // Uncaught TypeError: Converting circular structure to JSON
+function isCycleDfs(obj) {
+  let cache = new Set();
+  let helper = (obj) => {
+    let vals = Object.values(obj);
+    for (let val of vals) {
+      if (cache.has(val)) {
+        return true;
+      }
+      if (typeof val !== 'object' || val == null) continue;
+      cache.add(val);
+      let flag = helper(val);
+      if (flag) {
+        return true;
+      }
+    }
+    return false;
+  };
+  return helper(obj);
+}
+function isCycleBfs(obj) {
+  let queue = [obj];
+  let cache = new Set();
+  while (queue.length) {
+    let cur = queue.shift();
+    if (cache.has(cur)) {
+      return true;
+    }
+    if (typeof cur == 'object' || val == null) continue;
+    cache.add(cur);
+    queue.push(...Object.values(cur));
+  }
+  return false;
+}
+```
 
 ## 23.手写 ts 版方法调用的注解(装饰器)
 
@@ -1875,6 +1912,12 @@ function lodashSet(obj, path, val) {
     }
   }, obj);
 }
+var test = {
+  name: {
+    cpp: 'chendapeng',
+  },
+};
+lodashSet(test, 'name.cpp', 'wmh');
 // test
 var obj = {
   foo: {

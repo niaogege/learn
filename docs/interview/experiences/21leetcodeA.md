@@ -1075,10 +1075,11 @@ function nextPermutation(nums) {
     }
   }
   if (firstIndex == -1) {
-    reverse(nums, 0, nums.length);
+    reverse(nums, 0, nums.length - 1);
+    return;
   }
   let secondIndex = -1;
-  for (let i = nums.length - 1; i > firstIndex; i--) {
+  for (let i = nums.length - 1; i > =firstIndex; i--) {
     if (nums[i] > nums[firstIndex]) {
       secondIndex = i;
       break;

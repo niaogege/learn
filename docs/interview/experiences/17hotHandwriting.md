@@ -32,22 +32,108 @@ nav:
 
 ### 10.URL 参数解析
 
-### 11.
+### 11.setTimeout 实现 setInterval
 
-### 12.
+```js
+function mockSetInterval(fn, delay) {
+  let timer;
+  let timerFn = () => {
+    fn();
+    timer = setTimeout(timerFn, delay);
+  };
+  setTimeout(timerFn, delay);
+  return {
+    clean: clearTimeout(timer),
+  };
+}
+```
 
-### 13.
+### 12.实现 Object.create
 
-### 14.
+### 13.实现 Object.assign
 
-### 15.
+```js
 
-### 16.
+```
 
-### 17.
+### 14.实现 es6 Class
 
-### 18.
+```js
+function mockClass(con, proto) {}
+```
 
-### 19.
+### 15.实现 es6 extends
 
-### 20.
+```js
+function mockExtends(child, parent, staticProps) {}
+```
+
+### 16.实现数组转对象
+
+```js
+function objToArray(obj: Record<string, Obj>): FormatItem[] {
+  // 补全此处代码
+  throw new Error('功能待实现');
+}
+
+console.log(
+  objToArray({
+    key1: {
+      op1: 'value1',
+    },
+    key2: {
+      op2: 'value2',
+    },
+  }),
+);
+// result示例
+// [
+//     {key: 'key1', op: 'op1', value: 'value1'},
+//     {key: 'key2', op: 'op2', value: 'value2'}
+// ]
+```
+
+### 17.缓存函数
+
+```js
+function memoryFn(fn) {
+  let cache = {};
+  return (...rest) => {
+    let key = JSON.stringify(rest);
+    return cache[key] || (cache[key] = fn(...rest));
+  };
+}
+```
+
+### 18.函数重载
+
+```js
+function addMethod(obj, name, fn) {
+  let oldFn = obj[name];
+  obj[name] = function () {
+    let res = Array.from(arguments);
+    if (rest.length == fn.length) {
+      fn.apply(this, rest);
+    } else if (typeof fn == 'function') {
+      oldFn.apply(this, rest);
+    }
+  };
+}
+var person = { userName: 'bear鲍的小小熊' };
+addMethod(person, 'show', function () {
+  console.log(this.userName + '---->' + 'show1');
+});
+addMethod(person, 'show', function (str) {
+  console.log(this.userName + '---->' + str);
+});
+addMethod(person, 'show', function (a, b) {
+  console.log(this.userName + '---->' + (a + b));
+});
+person.show();
+person.show('bkl');
+person.show(10, 20);
+```
+
+### 19.请求超时重试机制
+
+### 20.封装方法取消请求

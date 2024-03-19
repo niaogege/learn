@@ -14,6 +14,8 @@ nav:
 
 > 20240315 never give up
 
+> 20240319 生活太无聊 那就多刷点，防止老年失忆
+
 ```js
 /**
  * 1.二叉树的最小深度和最大深度
@@ -28,6 +30,17 @@ nav:
  * 10.复原IP地址
  * 11.回文链表
  * 12.两两交换链表中的节点
+ * 13.k个一组链表反转
+ * 14.字母异位词分组
+ * 15.滑动窗口最大值
+ * 16.最小覆盖子串
+ * 17.旋转图像
+ * 18.将有序数组转换为二叉搜索树
+ * 19.小孩报数问题
+ * 20.单词搜索
+ * 21.分割回文串
+ * 22.划分字母区间
+ * 23.多数元素
  */
 ```
 
@@ -107,3 +120,36 @@ function countPrime(n) {
   return count;
 }
 ```
+
+## 12.两两交换链表节点
+
+```js
+/**
+ * @param {ListNode} head
+ * @return {ListNode}
+ */
+var swapPairs = function (head) {
+  let dummy = {
+    next: head,
+    val: null,
+  };
+  let cur = dummy;
+  while (cur.next != null && cur.next.next != null) {
+    let tmp1 = cur.next; // 1
+    let tmp2 = cur.next.next.next; // 3
+    // cur -> 2
+    cur.next = cur.next.next;
+    // 2 -> 1
+    cur.next.next = tmp1;
+    // 1 - > 3
+    tmp1.next = tmp2;
+    // 移动2
+    cur = cue.next.next;
+  }
+  return dummy.next;
+};
+```
+
+## 19.小孩报数问题
+
+有 30 个小孩儿，编号从 1-30，围成一圈依此报数，1、2、3 数到 3 的小孩儿退出这个圈， 然后下一个小孩 重新报数 1、2、3，问最后剩下的那个小孩儿的编号是多少?
