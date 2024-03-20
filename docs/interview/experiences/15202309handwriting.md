@@ -75,7 +75,7 @@ nav:
  * 55.场景应用题div拖拽
  * 56.场景应用题：买饮料
  * 57.编写函数，每次返回下一个质数（Prime number）
- *
+ * 58.设计一个计算器，先乘除后加减
  */
 ```
 
@@ -2051,6 +2051,37 @@ function getPrime() {
 var getP = getPrime();
 getP(); // 2
 getP(); // 3
+```
+
+## 58.设计一个计算器，先乘除后加减
+
+```js
+class Calculator {
+  _result = 0;
+  _cbQueue = [];
+  add(a) {
+    this._cbQueue.push(() => (this._result += a));
+    return this;
+  }
+  sub(b) {
+    this._cbQueue.push(() => (this._result -= b));
+    return this;
+  }
+  div(c) {
+    this._cbQueue.unshift(() => (this._result /= c));
+    return this;
+  }
+  mul(d) {
+    this._cbQueue.unshift(() => (this._result *= d));
+    return this;
+  }
+  get() {
+    this._cbQueue.forEach((fn) => fn());
+    return this._result;
+  }
+}
+let tt = new Calculator();
+console.log(tt.add(10).mul(2).sub(3).div(2).get());
 ```
 
 ## 参考

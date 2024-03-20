@@ -792,7 +792,7 @@ function water(nums) {
 
 ## 31.删除链表的倒数第 N 个结点
 
-> 需要多联系几次 多写 谢谢
+> 需要多练习几次 多写 谢谢
 
 ```js
 function deletNode(node, k) {

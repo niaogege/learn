@@ -11,15 +11,15 @@ nav:
   path: /interview
 ---
 
-需要干掉的归纳：
+需要干掉的：
 
 - 1.反转链表
 - 2.回文链表
 - 3.环形链表
 - 4.两两交换链表中的节点
 - 5.链表中倒数第 k 个节点
-- 7.从尾到头打印链表
-- 8.合并两个有序链表
+- 7.合并两个有序链表
+- 8.合并 K 个排序链表
 - 9.相交链表
 - 10.链表中环的入口节点
 - 11.删除链表的节点
@@ -28,9 +28,8 @@ nav:
 - 14.两数相加
 - 15.二叉搜索树转链表
 - [16.K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/description/)
-- 17.合并 K 个排序链表
 
-## 回一下链表的数据结构：
+## 回忆一下链表的数据结构：
 
 数组跟链表的区别
 
@@ -47,21 +46,13 @@ nav:
 
 ```js
 /**
- * Definition for singly-linked list.
- * function ListNode(val) {
- *     this.val = val;
- *     this.next = null;
- * }
- */
-
-/**
  * @param {ListNode} head
  * @return {boolean}
  */
 var hasCycle = function (head) {};
 ```
 
-## 反转链表
+## 1.反转链表
 
 ```js
 var test = {
@@ -129,22 +120,6 @@ var deleteDuplicates = function (head) {
 };
 ```
 
-稍微精简一点的答案
-
-```js
-var deleteDuplicates = function (head) {
-  var cur = head;
-  while (cur && cur.next) {
-    if (cur.val === cur.next.val) {
-      cur.next = cur.next.next;
-    } else {
-      cur = cur.next;
-    }
-  }
-  return head;
-};
-```
-
 ## [合并两个有序链表](https://leetcode.cn/problems/merge-two-sorted-lists/)
 
 将两个升序链表合并为一个新的 升序 链表并返回。新链表是通过拼接给定的两个链表的所有节点组成的。
@@ -195,39 +170,6 @@ var mergeTwoLists = function (l1, l2) {
 };
 ```
 
-```js
-/**
- * @param {ListNode} list1
- * @param {ListNode} list2
- * @return {ListNode}
- */
-var mergeTwoLists = function (list1, list2) {
-  let arr = [];
-  while (list1) {
-    arr.push(list1.val);
-    list1 = list1.next;
-  }
-  while (list2) {
-    arr.push(list2.val);
-    list2 = list2.next;
-  }
-  var sum = arr.sort((a, b) => a - b);
-  var dummy = {
-    val: 1,
-    next: null,
-  };
-  var cur = dummy;
-  for (let i = 0; i < sum.length; i++) {
-    cur.next = {
-      val: sum[i],
-      next: null,
-    };
-    cur = cur.next;
-  }
-  return dummy.next;
-};
-```
-
 ## 删除节点
 
 ```js
@@ -266,3 +208,71 @@ deleteNode(test, 3);
 ```
 
 ## [16.K 个一组翻转链表](https://leetcode.cn/problems/reverse-nodes-in-k-group/description/)
+
+## 链表中倒数第 k 个节点
+
+```js
+function removeLink(head, k) {
+  let dummy = { next: head, val: null };
+  k = k + 1;
+  let fast = dummy;
+  let slow = dummy;
+  while (k-- && fast) {
+    fast = fast.next;
+  }
+  while (fast) {
+    fast = fast.next;
+    slow = slow.next;
+  }
+  slow.next = slow.next.next;
+  return dummy;
+}
+```
+
+## 两两交换链表中的节点
+
+```js
+// 两两交换
+function twoswap(head) {
+  let dummy = { next: head, val: null };
+  let cur = dummy;
+  while (cur.next && cur.next.next) {
+    let tmp1 = cur.next; // 1
+    let tmp2 = cur.next.next.next; // 3
+    //  cur -> 2
+    cur.next = cur.next.next;
+    // 2 ->1
+    cur.next.next = tmp1;
+    // 1 -> 3
+    tmp1.next = tmp2;
+    // cur 移动到1
+    cur = cur.next.next;
+  }
+  return dummy.next;
+}
+```
+
+## 重排链表
+
+```js
+var reorderList = function (head) {
+  let stack = [];
+  let cur = head;
+  let curr = head;
+  while (curr) {
+    stack.push(cur);
+    curr = curr.next;
+  }
+  let end = stack.length - 1;
+  let start = 0;
+  while (start < end) {
+    stack[start].next = stack[end];
+    if (start == end) {
+      break;
+    }
+    start++;
+    stack[end].next = stack[start];
+    end--;
+  }
+};
+```
