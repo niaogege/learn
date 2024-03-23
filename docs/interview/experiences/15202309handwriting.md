@@ -939,6 +939,7 @@ function isCycleDfs(obj) {
       if (cache.has(val)) {
         return true;
       }
+      // 如果不是引用类型直接跳过
       if (typeof val !== 'object' || val == null) continue;
       cache.add(val);
       let flag = helper(val);

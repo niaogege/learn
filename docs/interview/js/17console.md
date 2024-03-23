@@ -11,6 +11,40 @@ nav:
   path: /interview
 ---
 
+## 0.赋值表达式,输出下面的打印
+
+```js
+let obj = { num1: 111 };
+
+obj.child = obj = { num2: 222 };
+
+console.log(obj.child); // 输出？
+console.log(obj); // ?
+```
+
+判断对象是否存在循环引用？
+
+```js
+function isCycle(obj) {
+  let cache = new Set();
+  let dfs = (obj) => {
+    let values = Object.values(obj);
+    for (let val of values) {
+      if (cache.has(val)) {
+        return true;
+      }
+      if (val == null || typeof val != 'object') continue;
+      m.add(val);
+      if (dfs(val)) {
+        return true;
+      }
+      return false;
+    }
+  };
+  return dfs(obj);
+}
+```
+
 ## 1.注意前面的+
 
 ```js

@@ -840,6 +840,19 @@ function noMerge(nums) {
   }
   return count;
 }
+// 右区间
+function noMerge2(arr) {
+  arr.sort((a, b) => a[1] - b[1]);
+  let end = arr[0][1];
+  let count = 1;
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i][0] >= end) {
+      count++;
+      end = arr[i][1];
+    }
+  }
+  return arr.length - count;
+}
 ```
 
 ## [32.寻找两个正序数组的中位数](https://leetcode.cn/problems/median-of-two-sorted-arrays/description/)

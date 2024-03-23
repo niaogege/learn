@@ -27,7 +27,7 @@ function mergeArr(arrs) {
   for (let i = 1; i < arrs.length; i++) {
     let cur = arrs[i];
     if (cur[0] > pre[1]) {
-      ans.push(cur);
+      ans.push(pre);
       pre = cur;
     } else {
       pre[1] = Math.max(pre[1], cur[1]);

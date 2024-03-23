@@ -133,10 +133,7 @@ function outPutStr(str) {
 ## 2.反转链表
 
 ```js
-/**
- * @param {ListNode} head
- * @return {ListNode}
- */
+// bfs
 var reverseList = function (head) {
   var pre = null;
   var cur = head;
@@ -148,6 +145,14 @@ var reverseList = function (head) {
   }
   return pre;
 };
+// dfs
+function reverseList(head) {
+  if (head == null || head.next == null) return head;
+  let last = reverseList(head.next);
+  head.next.next = head;
+  head.next = null;
+  return last;
+}
 ```
 
 ## 3.LRU 缓存机制

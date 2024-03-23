@@ -41,6 +41,8 @@ nav:
  * 21.分割回文串
  * 22.划分字母区间
  * 23.多数元素
+ * 24.反转链表II
+ * 25.判断两个数组内容相等
  */
 ```
 
@@ -97,7 +99,38 @@ function removeNode(node) {
 
 ## 6.k 个一组反转链表
 
-> 一级难！！！
+> 一级难！！！还是不能理解
+
+```js
+function reverseLink(head, k) {
+  let dummy = { next: head, val: null };
+  let pre = dummy;
+  let cur = head;
+  let len = 0;
+  while (head) {
+    len++;
+    head = head.next;
+  }
+  let count = Math.floor(len / k);
+  for (let i = 0; i < count; i++) {
+    for (let j = 0; j < k - 1; j++) {
+      // pre-1-2-3-4
+      // pre-2-1-3-4
+      // 记录2
+      let next = cur.next;
+      // 1指向 3
+      cur.next = cur.next.next;
+      // 2指向 1
+      next.next = pre.next;
+      // 头节点指向2
+      pre.next = next;
+    }
+    pre = cur;
+    cur = pre.next;
+  }
+  return dummy.next;
+}
+```
 
 ## [7.计算质数的个数](https://leetcode.cn/problems/count-primes/)
 
@@ -119,6 +152,45 @@ function countPrime(n) {
   }
   return count;
 }
+```
+
+## 9.打乱数组
+
+```js
+function shufttle(arr) {
+  for (let i = arr.length - 1; i >= 0; i--) {
+    let tmp = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[tmp]] = [arr[tmp], arr[i]];
+  }
+  return arr;
+}
+shufttle([1, 2, 3, 4, 5, 6]);
+```
+
+## 10.复原 IP 地址
+
+```js
+// 0000 => [0.0.0.0]
+function reverseIp(s) {
+  let ans = [];
+  let backTrack = (path, start) => {
+    if (path.length == 4 && start == s.length) {
+      ans.push(path.slice().join('.'));
+      return;
+    }
+    for (let i = start; i < s.length; i++) {
+      let cur = s.slice(start, i + 1);
+      if (+cur > 255 || cur.length > 3) continue;
+      if (cur.length > 1 && cur[0] == '0') continue;
+      path.push(cur);
+      backTrack(path, i + 1);
+      path.pop();
+    }
+  };
+  backTrack([], 0);
+  return ans;
+}
+reverseIp('0000');
 ```
 
 ## 12.两两交换链表节点
@@ -153,3 +225,32 @@ var swapPairs = function (head) {
 ## 19.小孩报数问题
 
 有 30 个小孩儿，编号从 1-30，围成一圈依此报数，1、2、3 数到 3 的小孩儿退出这个圈， 然后下一个小孩 重新报数 1、2、3，问最后剩下的那个小孩儿的编号是多少?
+
+## 24.反转链表 II
+
+> 跟 k 个一组链表反转 好容易混淆
+
+```js
+// 1->2->3->4->5 2,4
+// 1->4->3->3->5
+function reverseLink(head, left, right) {
+  let dummy = {
+    next: head,
+    val: null,
+  };
+  let pre = dummy;
+  let i = 1;
+  while (i < left) {
+    pre = pre.next;
+    i++;
+  }
+  let cur = pre.next;
+  for (let i = 0; i < right - left; i++) {
+    let next = cur.next;
+    cur.next = next.next;
+    next.next = pre.next;
+    pre.next = next;
+  }
+  return dummy.next;
+}
+```

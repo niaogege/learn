@@ -12,7 +12,85 @@
  * 11.反转链表II
  * 12.K个一组链表反转
  */
-function reverseLink(head) {}
+
+/**
+ * @param {ListNode} head
+ * @param {number} left
+ * @param {number} right
+ * @return {ListNode}
+ */
+var reverseBetween = function (head, left, right) {
+  let dummy = { next: head, val: undefined };
+  let pre = dummy;
+  let i = 1;
+  while (i < left) {
+    pre = pre.next;
+    i++;
+  }
+  let cur = pre.next;
+  // 1 2 3 4 5
+  // 1 4 3 2 5
+  //  cur // 2
+  //  pre // 1
+  for (let i = 0; i < right - left; i++) {
+    // 保存 3
+    let next = cur.next;
+    // 2 指向 4
+    cur.next = next.next;
+    // 3 指向 2
+    next.next = pre.next;
+    // 2 指向 3
+    pre.next = next;
+  }
+  return dummy.next;
+};
+// bfs
+function reverseL(head) {
+  let pre = null;
+  let cur = head;
+  while (cur) {
+    let next = cur.next;
+    cur.next = pre;
+    pre = cur;
+    cur = next;
+  }
+  return pre;
+}
+// dfs
+function dfsReverse(head) {
+  if (head == null || head.next == null) return head;
+  let last = dfsReverse(head.next);
+  head.next.next = head;
+  head.next = null;
+  return last;
+}
+function reverseLink(head, k) {
+  let dummy = { next: head, val: null };
+  let pre = dummy;
+  let cur = head;
+  let len = 0;
+  while (head) {
+    head = head.next;
+    len++;
+  }
+  const Len = Math.floor(len / k);
+  for (let i = 0; i < Len; i++) {
+    for (let j = 0; j < k - 1; j++) {
+      // 记录2
+      let tmp = cur.next;
+      // 1指向3
+      cur.next = cur.next.next;
+      // 2指向1
+      next.next = pre.next;
+      // 头节点指向2
+      pre.next = tmp;
+    }
+    // 移动头节点
+    pre = cur;
+    // 移动目前指向
+    cur = pre.next;
+  }
+}
 
 /**
 输入：l1 = [1,2,4], l2 = [1,3,4]
