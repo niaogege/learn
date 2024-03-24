@@ -1222,21 +1222,35 @@ function mockAjax(url, cb) {
 
 ```js
 // 如何调用？
-function mockJsonp(url, cb) {
-  var funName = '?cb=' + Math.random().toString().slice(2);
-  var script = document.createElement('script');
-  script.src = url + funName;
-  script.async = true;
-  document.body.appendChild(script);
-  window[funName] = function (data) {
-    cb(data);
-    delete window[funName];
-    document.body.removeChild(script);
-  };
+function mockJsonp(url) {
+  return new Promise((resolve, reject) => {
+    var funName = Math.random().toString().slice(2); // 怕全局污染
+    var script = document.createElement('script');
+    script.src = url + '?cb=' + funName;
+    script.async = true;
+    document.body.appendChild(script);
+    window[funName] = function (data) {
+      resoolve(data);
+      delete window[funName];
+      document.body.removeChild(script);
+    };
+  });
 }
-mockJsonp('http://xx', (res) => {
+mockJsonp('http://xx').then((res) => {
   console.log(res);
 });
+
+// 后端大概代码
+const Koa = require('koa');
+const app = new Koa();
+const main = (ctx) => {
+  const cb = ctx.query.cb;
+  const data = JSON.stringify({ val: 'cpp', age: 'xx' });
+  const str = `${cb}(${data})`;
+  ctx.body = str;
+};
+app.use(main);
+app.listen(3000, () => {});
 
 // 动态加入脚本 并执行回调函数
 function loadScript(url, callback) {

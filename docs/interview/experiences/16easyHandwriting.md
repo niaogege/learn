@@ -487,17 +487,19 @@ function mockAjax(url, option) {
 ### 17.jsonp
 
 ```js
-function mockJsonp(url, cb) {
-  let fnName = 'jsonp' + new Date().getTime();
-  let script = document.createElement('script');
-  script.src = url + '?callback=' + fnName;
-  script.defer = true;
-  document.body.appendChild(script);
-  window[fnName] = function (val) {
-    cb(val);
-    document.body.removeChild(script);
-    delete window[fnName];
-  };
+function mockJsonp(url) {
+  return new Promise((resolve, reject) => {
+    let fnName = 'jsonp' + new Date().getTime();
+    let script = document.createElement('script');
+    script.src = url + '?cb=' + fnName;
+    script.defer = true;
+    document.body.appendChild(script);
+    window[fnName] = function (val) {
+      resolve(val);
+      document.body.removeChild(script);
+      delete window[fnName];
+    };
+  });
 }
 ```
 
@@ -558,13 +560,74 @@ bigNumAdd('22', '100');
 ### 21.数组/对象扁平化
 
 ```js
-
+// 为啥面试一变化就做不出来呢
+function flatten(arr, depth) {
+  let stack = [...arr];
+  let start = 1;
+  let ans = [];
+  while (stack.length) {
+    let cur = stack.pop();
+    if (Array.isArray(cur) && start < depth) {
+      stack.push(...cur);
+      start++;
+    } else {
+      ans.push(cur);
+    }
+  }
+  return ans.reverse();
+}
+function flattenObj(obj, res = {}, path = '', isArray = false) {
+  for (let [key, val] of Object.entries(obj)) {
+    if (Array.isArray(val)) {
+      let tmp = isArray ? `${path}[${key}]` : `${path}${key}`;
+      flattenObj(val, res, tmp, true);
+    } else if (typeof val == 'object') {
+      let tmp = isArray ? `${path}[${key}].` : `${path}${key}.`;
+      flattenObj(val, res, tmp, false);
+    } else {
+      let tmp = isArray ? `${path}[${key}]` : `${path}${key}`;
+      res[tmp] = val;
+    }
+  }
+  return res;
+}
+flattenObj({
+  test: {
+    name: [1, 2, 3],
+    age: 'cpp',
+  },
+});
 ```
 
 ### 22.lodash.get/set
 
 ```js
-
+function lodashGet(obj, path, defaultVal = 'undefiend') {
+  let paths = path.replace((/\[(\d+)\]/g, '.$1')).split('.');
+  let res = obj;
+  for (let p of paths) {
+    res = res[p];
+    if (!res) {
+      return defaultVal;
+    }
+  }
+  return res;
+}
+var test = {
+  obj: {
+    cpp: {
+      name: 'cdp',
+    },
+  },
+  other: [
+    {
+      name: 'wmh',
+    },
+  ],
+};
+lodashGet(test, 'obj.cpp.name');
+lodashGet(test, 'other[0].name');
+function lodashSet(obj, path, val) {}
 ```
 
 ### 23.红绿灯问题

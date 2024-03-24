@@ -29,10 +29,10 @@ class Observer {
 }
 
 var subject = new (function mockJsonp(url, cb) {
-  var cb = '?cb=' + new Date().getTime();
+  var cb = new Date().getTime();
   var script = document.createElement('script');
   script.async = true;
-  script.src = url + cb;
+  script.src = url + '?cb=' + cb;
   document.body.appendChild(script);
   window[cb] = function (res) {
     cb(res);

@@ -57,15 +57,24 @@ function ajax(url, option) {
 function mockJsonp(url, cb) {
   let jsonp = new Date().getTime();
   let script = document.createElement('script');
-  script.src = url + '?jsonp=' + jsonp;
+  script.src = url + '?cb=' + jsonp;
   script.async = true;
-  document.appendChild(script);
+  document.body.appendChild(script);
   window[jsonp] = function (val) {
     cb(val);
-    document.removeChild(script);
+    document.body.removeChild(script);
     delete window[jsonp];
   };
 }
+
+const main = (ctx) => {
+  const cb = ctx.query.cb;
+  const data = JSON.stringify({ val: 'cpp', age: '33' });
+  const str = `${cb}(${data})`;
+  ctx.body = str;
+};
+app.use(main);
+app.listen(3000, () => {});
 
 // pipe 从左向右
 function pipe(...rest) {

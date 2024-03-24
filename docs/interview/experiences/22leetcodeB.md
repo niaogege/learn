@@ -32,7 +32,7 @@ nav:
  * 8.零钱兑换I/零钱兑换II
  * 9.删除链表的节点
  * 10.括号生成
- * 11.数组旋转
+ * 11.轮转数组
  * 12.多叉树, 获取每一层的节点之和
  * 13.全排列II
  * 14.寻找字符串中连续重复次数最多的字符
@@ -59,7 +59,7 @@ nav:
  * 35.最长连续递增序列
  * 36.最长公共子序列
  * 37.最小路径和
- * 38.移动0
+ * 38.移动零
  * 39.最长有效括号(连续)
  * 40.判断子序列
  * 41.不同的子序列
@@ -346,11 +346,18 @@ var deleteNode = function (head, val) {
 };
 ```
 
-## 11.数组旋转
+## [11.轮转数组](https://leetcode.cn/problems/rotate-array/?envType=study-plan-v2&envId=top-100-liked)
+
+### 第一种方式
 
 ```js
-// 构建新数组
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
 function rotateArray(arr, k) {
+  // // 构建新数组
   var len = arr.length;
   var newArr = [];
   for (let i = 0; i < len; i++) {
@@ -359,9 +366,33 @@ function rotateArray(arr, k) {
   for (let i = 0; i < len; i++) {
     arr[i] = newArr[i];
   }
-  return arr;
 }
 rotateArray([1, 2, 3, 4, 5], 2);
+```
+
+### 第二种方式,反转数组
+
+```js
+var rotate = function (arr, k) {
+  let len = arr.length;
+  k %= len;
+  // 旋转所有
+  reverseK(arr, 0, len - 1);
+  // 旋转0，k-1
+  reverseK(arr, 0, k - 1);
+  // 旋转k到后面
+  reverseK(arr, k, len - 1);
+};
+
+function reverseK(arr, l, r) {
+  while (l < r) {
+    let tmp = arr[l];
+    arr[l] = arr[r];
+    arr[r] = tmp;
+    l++;
+    r--;
+  }
+}
 ```
 
 ## 12.多叉树 获取每一层的节点之和
@@ -432,43 +463,41 @@ var permuteUnique = function (nums) {
 ## 14.寻找字符串中连续重复次数最多的字符
 
 ```js
-
+/**
 - 编写 maxContinuousString 函数，寻找字符串中连续重复次数最多的字符：
--
-- 输入 aaabbbbccbbcccccc，返回 { string: 'c', count: 6} \*/
-
-
+- 输入 aaabbbbccbbcccccc，返回 { string: 'c', count: 6}
+ */
 // 给定一个字符串 s ，请你找出其中不含有重复字符的 最长子串 的长度。
-var lengthOfLongestSubstring = function(s) {
-    if (s && s.length <= 1) return 1
-    s = s.split('')
-    let res = {
-      string: '',
-      count: 0
+var lengthOfLongestSubstring = function (s) {
+  if (s && s.length <= 1) return 1;
+  s = s.split('');
+  let res = {
+    string: '',
+    count: 0,
+  };
+  let arr = []; // 滑动的窗口
+  for (let i = 0; i < s.length; i++) {
+    let cur = s[i];
+    if (!arr.includes(cur)) {
+      arr.push(cur);
+    } else {
+      let index = arr.indexOf(cur);
+      arr.splice(0, index + 1);
+      arr.push(cur);
     }
-    let arr = [] // 滑动的窗口
-    for(let i = 0; i < s.length;i++) {
-        let cur = s[i]
-        if(!arr.includes(cur)) {
-            arr.push(cur)
-        } else {
-            let index = arr.indexOf(cur)
-            arr.splice(0, index + 1)
-            arr.push(cur)
-        }
-        res.count = Math.max(res.count, arr.length)
-        if (res.count === arr.length) {
-          res.string = arr.join('')
-        }
+    res.count = Math.max(res.count, arr.length);
+    if (res.count === arr.length) {
+      res.string = arr.join('');
     }
-    return res
+  }
+  return res;
 };
-lengthOfLongestSubstring('abcabcbb')
+lengthOfLongestSubstring('abcabcbb');
 ```
 
 ## [15.乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
 
-## [16.螺旋打印二维数组]()
+## [16.螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/description/)
 
 ```js
 function matrix(nums) {
@@ -506,6 +535,8 @@ function matrix(nums) {
   return res;
 }
 ```
+
+## 18.翻转二叉树，二叉树的左右节点翻转
 
 ## [19.每日温度](https://leetcode.cn/problems/daily-temperatures/)
 
@@ -967,13 +998,17 @@ var minPathSum = function (grid) {
 };
 ```
 
-## [38.移动 0](https://leetcode.cn/problems/move-zeroes/)
+## [38.移动零](https://leetcode.cn/problems/move-zeroes/)
 
 > 请注意 ，必须在不复制数组的情况下原地对数组进行操作。
 
 ### 第一种非 0 的移动到前面，用 j 记录下 然后在遍历 j,替换成 0
 
 ```js
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
 // [1,0,22,3,1,0] => [1,22,3,1,0,0]
 function moveZero(nums) {
   let j = 0;
@@ -986,7 +1021,6 @@ function moveZero(nums) {
   for (let i = j; i < nums.length; i++) {
     nums[i] = 0;
   }
-  return nums;
 }
 moveZero([1, 0, 22, 3, 1, 0]);
 ```
@@ -1003,7 +1037,6 @@ function moveZero(nums) {
       nums.push(0);
     }
   }
-  return nums;
 }
 ```
 
@@ -1202,7 +1235,6 @@ function mul(arr) {
   let right = 1;
   let len = arr.length;
   let res = [1];
-
   for (let i = 1; i < len; i++) {
     res[i] = res[i - 1] * arr[i - 1];
   }
@@ -1214,9 +1246,27 @@ function mul(arr) {
 }
 // [24, 12, 8, 6]
 mul([1, 2, 3, 4]);
+
+function mul(arr) {
+  // I左边的相乘 在乘以I右边的
+  let right = 1;
+  let len = arr.length;
+  let res = [1];
+
+  for (let i = 1; i < len; i++) {
+    res[i] = res[i - 1] * arr[i - 1];
+  }
+  for (let j = len - 2; j >= 0; j--) {
+    right *= arr[j + 1];
+    res[j] *= right;
+  }
+  return res;
+}
+// [24, 12, 8, 6]
+mul([1, 2, 3, 4]);
 ```
 
-## 50.旋转图像
+## [50.旋转图像](https://leetcode.cn/problems/rotate-image/solutions/526980/xuan-zhuan-tu-xiang-by-leetcode-solution-vu3m/)
 
 ## [51.分发饼干](https://leetcode.cn/problems/assign-cookies/description/)
 

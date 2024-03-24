@@ -50,6 +50,14 @@ function mockSetInterval(fn, delay) {
 
 ### 12.实现 Object.create
 
+```js
+function mockCreate(target) {
+  function F() {}
+  F.prototype = target;
+  return new F();
+}
+```
+
 ### 13.实现 Object.assign
 
 ```js
@@ -136,4 +144,53 @@ person.show(10, 20);
 
 ### 19.请求超时重试机制
 
+```js
+function failed(timer) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(console.log('failed::' + timer));
+    }, timer);
+  });
+}
+function commonAjax(timer) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(console.log('success::' + timer));
+    }, timer);
+  });
+}
+function retryQuest(fn, num = 1) {
+  let count = 1;
+  async function request() {
+    let p;
+    try {
+      p = await Promise.race([fn(2000), failed(1000)]);
+      return p;
+    } catch (e) {
+      if (count <= num) {
+        count++;
+        request();
+      } else {
+        console.log('retry finish');
+      }
+    }
+  }
+  return request();
+}
+retryQuest(commonAjax, 3);
+```
+
 ### 20.封装方法取消请求
+
+```js
+/**
+ * p: promise
+ */
+function cancelPromise(p) {
+  let abort;
+  let p1 = new Promise((resolve, reject) => (abort = reject));
+  let p2 = Promise.race([p1, p]);
+  p2.abort = abort;
+  return p2;
+}
+```

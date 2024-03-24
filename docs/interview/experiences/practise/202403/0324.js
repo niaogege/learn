@@ -6,7 +6,163 @@
  * 5.计算乘积除以当前项
  * 6.把数组平分，实现 fn,跟上面相反
  * 7.k个一组链表反转
+ * 8.分割回文串
+ * 9.电话号码组合
+ * 10.移动0
+ * 11.轮转数组
  */
+
+function rotate2(arr, k) {
+  let len = arr.length;
+  k %= len;
+  // 旋转所有
+  reverseK(arr, 0, len - 1);
+  // 旋转0，k-1
+  reverseK(arr, 0, k - 1);
+  // 旋转k到后面
+  reverseK(arr, k, len - 1);
+}
+function reverseK(arr, l, r) {
+  while (l < r) {
+    let tmp = arr[l];
+    arr[l] = arr[r];
+    arr[r] = tmp;
+    l++;
+    r--;
+  }
+}
+
+function rotate(arr, k) {
+  let ans = [];
+  let len = arr.length;
+  for (let i = 0; i < len; i++) {
+    ans[(k + i) % len] = arr[i];
+  }
+  for (let i = 0; i < arr.length; i++) {
+    arr[i] = ans[i];
+  }
+  return arr;
+}
+rotate([1, 2, 3, 4, 5], 2);
+/**
+ * @param {number[]} nums
+ * @return {void} Do not return anything, modify nums in-place instead.
+ */
+var moveZeroes = function (nums) {
+  let arr = [];
+  let j = 0;
+  for (let num of nums) {
+    if (num != 0) {
+      arr.push(num);
+      j++;
+    }
+  }
+  for (let i = j; i < nums.length; i++) {
+    arr.push(0);
+  }
+  console.log(arr, 'arr', j);
+};
+var moveZeroes = function (nums) {
+  let len = nums.length;
+  for (let i = 0; i < len; i++) {
+    let cur = nums[i];
+    let index = nums.indexOf(cur);
+    if (index > -1 && cur == 0) {
+      nums.splice(index, 1);
+      nums.push(0);
+    }
+  }
+  return nums;
+};
+moveZeroes([0, 1, 0, 3, 12]);
+
+/**
+输入：s = "aab"
+输出：[["a","a","b"],["aa","b"]]
+ * @param {string} s
+ * @return {string[][]}
+ */
+var partition = function (s) {
+  let ans = [];
+  let len = s.length;
+  var backTrack = (path, start) => {
+    if (path <= len && start == len) {
+      ans.push(path.slice());
+      return;
+    }
+    for (let i = start; i < len; i++) {
+      let cur = s.slice(start, i + 1);
+      if (isValid(cur)) {
+        path.push(cur);
+        backTrack(path, i + 1);
+        path.pop();
+      }
+    }
+  };
+  backTrack([], 0);
+  return ans;
+};
+function isValid(str) {
+  let a = str.split('').reverse().join('');
+  return a == str;
+}
+
+function revertIp(s) {
+  let ans = [];
+  let len = s.length;
+  var backTrack = (path, start) => {
+    if (start == len && path.length == 4) {
+      ans.push(path.slice().join('.'));
+      return;
+    }
+    for (let i = start; i < len; i++) {
+      let cur = s.slice(start, i + 1);
+      if (+cur > 255 || cur.length > 3) continue;
+      if (cur.length == 2 && cur[0] == '0') continue;
+      path.push(cur);
+      backTrack(path, i + 1);
+      path.pop();
+    }
+  };
+  backTrack([], 0);
+  return ans;
+}
+revertIp('0000');
+
+function noLenArr(arr) {
+  let ans = [];
+  let backTrack = (path, start) => {
+    if (path.length == arr.length) {
+      ans.push(path.slice().join(''));
+      return;
+    }
+    for (let i = 0; i < arr[start].length; i++) {
+      let cur = arr[start][i];
+      path.push(cur);
+      backTrack(path, start + 1);
+      path.pop();
+    }
+  };
+  backTrack([], 0);
+  return ans;
+}
+noLenArr([
+  [1, 2],
+  ['a', 'b', 'c'],
+]);
+
+/**
+ * @param {string} digits
+ * @return {string[]}
+ */
+var letterCombinations = function (digits) {};
+
+function mockNew(fn, ...rest) {
+  let target = Object.create(fn.prototype);
+  let res = fn.apply(target, rest);
+  return res instanceof Object ? res : target;
+}
+
 // 1,2,3,4,5 2
 // 2,1,4,3,5
 function reverseK(head, k) {

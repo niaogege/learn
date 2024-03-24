@@ -243,11 +243,13 @@ var threeSum = function (nums) {
     len = nums.length;
   for (let i = 0; i < len; i++) {
     var cur = nums[i];
-    var r = len - 1;
-    var l = i + 1;
-    if (cur > 0) return res;
+    //  从小到大按序排队
+    if (cur > 0) return break;
     // cur i-1正确去重
     if (i > 0 && cur === nums[i - 1]) continue;
+
+    var r = len - 1;
+    var l = i + 1;
     while (l < r) {
       var sum = cur + nums[l] + nums[r];
       if (sum === 0) {
@@ -1125,6 +1127,8 @@ function generate(n) {
   return res;
 }
 ```
+
+## 48.两数相加
 
 ## [50.比较版本号](https://leetcode.cn/problems/compare-version-numbers/description/)
 

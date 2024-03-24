@@ -77,19 +77,20 @@ function reverseLink(head, k) {
   for (let i = 0; i < Len; i++) {
     for (let j = 0; j < k - 1; j++) {
       // 记录2
-      let tmp = cur.next;
+      let next = cur.next;
       // 1指向3
       cur.next = cur.next.next;
       // 2指向1
       next.next = pre.next;
       // 头节点指向2
-      pre.next = tmp;
+      pre.next = next;
     }
     // 移动头节点
     pre = cur;
     // 移动目前指向
     cur = pre.next;
   }
+  return dummy.next;
 }
 
 /**

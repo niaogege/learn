@@ -38,6 +38,42 @@ multiple('22', '22');
 
 ## 2.数字转汉字
 
+```js
+// 后续补上
+function trans(str) {
+  let isLof = +str < 0;
+  let res = [];
+  if (isLof) {
+    res.push('负');
+  }
+  return res.reverse().join('');
+}
+
+function parseHan(str) {
+  str = '' + str;
+  let units = ['', '十', '百', '千'];
+  let nums = ['零', '一', '二', '三', '四', '五', '六', '七', '八', '九'];
+  let res = '';
+  let len = str.length;
+  for (let i = 0; i < len; i++) {
+    let cur = str[i];
+    if (cur != '0') {
+      // 102
+      if (i >= 1 && str[i - 1] == '0') {
+        res += nums[0];
+      }
+      // key
+      res += nums[cur] + units[len - i - 1];
+    }
+  }
+  if (str.length == 2 && str[0] == 1) {
+    res = res.slice(1);
+  }
+  return res;
+}
+parseHan('103');
+```
+
 ## 3.归并排序/堆排序
 
 ## 4.数组转树
