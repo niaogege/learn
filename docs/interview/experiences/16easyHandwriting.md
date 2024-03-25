@@ -14,9 +14,11 @@ nav:
 
 > 写了不下 10 遍，so what?
 
-## 最热的手写
+> 练习的不是手写，而是对于这份工作的热爱
 
-### 1.apply/call
+# 最热的手写,没有之一,没有准备好，就不要出去面试
+
+## 1.apply/call
 
 ```js
 Function.prototype.myApply = function (context, rest) {
@@ -29,7 +31,7 @@ Function.prototype.myApply = function (context, rest) {
 };
 ```
 
-### 2.bind
+## 2.bind
 
 ```js
 Function.prototype.myBind = function (context) {
@@ -48,7 +50,7 @@ Function.prototype.myBind = function (context) {
 };
 ```
 
-### 3.new
+## 3.new
 
 ```js
 function mockNew(fn, ...rest) {
@@ -58,7 +60,7 @@ function mockNew(fn, ...rest) {
 }
 ```
 
-### 4.compose 洋葱模型实现
+## 4.compose 洋葱模型实现
 
 ```js
 function compose(mw) {
@@ -81,7 +83,7 @@ function compose(mw) {
 }
 ```
 
-### 5.instanceof 实现
+## 5.instanceof 实现
 
 ```js
 function mockInstanceOf2(l, r) {
@@ -99,7 +101,7 @@ function mockInstanceOf(l, r) {
 }
 ```
 
-### 6.reduce/map 实现
+## 6.reduce/map 实现
 
 ```js
 Array.prototype.mockReduce = function (fn, init) {
@@ -111,9 +113,18 @@ Array.prototype.mockReduce = function (fn, init) {
   }
   return res;
 };
+
+Array.prototype.mockMap = function (fn, context) {
+  let arr = this || [];
+  let res = [];
+  for (let i = 0; i < arr.length; i++) {
+    res.push(fn.call(context, arr[i], i, arr));
+  }
+  return res;
+};
 ```
 
-### 7.redux 中的 pipe 和 compose 组合
+## 7.redux 中的 pipe 和 compose 组合
 
 ```js
 // 从右到左
@@ -140,7 +151,7 @@ const pipe = (...funs) => {
 };
 ```
 
-### 8.深浅拷贝
+## 8.深浅拷贝
 
 ```js
 function deepClone(obj) {
@@ -155,7 +166,7 @@ function deepClone(obj) {
 }
 ```
 
-### 9.节流和防抖
+## 9.节流和防抖
 
 ```js
 function debounce(fn, delay) {
@@ -182,7 +193,7 @@ function throttle(fn, delay) {
 }
 ```
 
-### 10.选择排序/插入排序
+## 10.选择排序/插入排序
 
 ```js
 function swap(arr, i, j) {
@@ -217,7 +228,7 @@ function insertSort(arr) {
 insertSort([11, 2, 11, 444, 2, 333, 4, 555]);
 ```
 
-### 11.LRU
+## 11.LRU
 
 ```js
 class LRU {
@@ -246,7 +257,7 @@ class LRU {
 }
 ```
 
-### 12.发布订阅模式
+## 12.发布订阅模式
 
 ```js
 class EventEmitter {
@@ -280,7 +291,7 @@ class EventEmitter {
 }
 ```
 
-### 13.手写 Promise/Promise.all/race/allSetted
+## 13.手写 Promise/Promise.all/race/allSetted
 
 ```js
 class Promise {
@@ -404,7 +415,7 @@ p1.then((val) => console.log(val)).finally(() => {
 });
 ```
 
-### 14.async/awit
+## 14.async/awit
 
 ```js
 function mockGeneratorAsync(fn) {
@@ -438,7 +449,7 @@ function mockGeneratorAsync(fn) {
 }
 ```
 
-### 15.请求并发限制
+## 15.请求并发限制
 
 ```js
 async function LimitRequest(arr, limit, fn) {
@@ -463,7 +474,7 @@ async function LimitRequest(arr, limit, fn) {
 }
 ```
 
-### 16.ajax
+## 16.ajax
 
 ```js
 function mockAjax(url, option) {
@@ -484,7 +495,7 @@ function mockAjax(url, option) {
 }
 ```
 
-### 17.jsonp
+## 17.jsonp
 
 ```js
 function mockJsonp(url) {
@@ -530,13 +541,13 @@ function mockRender(vnode, parent) {
 }
 ```
 
-### 19.对象/数组去重
+## 19.对象/数组去重
 
 ```js
 
 ```
 
-### 20.大数相加
+## 20.大数相加
 
 ```js
 function bigNumAdd(a, b) {
@@ -557,7 +568,7 @@ function bigNumAdd(a, b) {
 bigNumAdd('22', '100');
 ```
 
-### 21.数组/对象扁平化
+## 21.数组/对象扁平化
 
 ```js
 // 为啥面试一变化就做不出来呢
@@ -599,7 +610,7 @@ flattenObj({
 });
 ```
 
-### 22.lodash.get/set
+## 22.lodash.get/set
 
 ```js
 function lodashGet(obj, path, defaultVal = 'undefiend') {
@@ -630,9 +641,13 @@ lodashGet(test, 'other[0].name');
 function lodashSet(obj, path, val) {}
 ```
 
-### 23.红绿灯问题
+## 23.红绿灯问题
 
-### 24.实现每隔 1 秒打印 1/2/3/4
+```js
+
+```
+
+## 24.实现每隔 1 秒打印 1/2/3/4
 
 ```js
 function print(n) {
@@ -651,3 +666,197 @@ function print(n) {
 }
 print(4);
 ```
+
+## 25.数组转树
+
+```js
+// arr => tree
+// 示例数组
+var inputArray = [
+  { id: 1, parentId: null, name: 'Node 1' },
+  { id: 2, parentId: 1, name: 'Node 1.1' },
+  { id: 3, parentId: 1, name: 'Node 1.2' },
+  { id: 4, parentId: 2, name: 'Node 1.1.1' },
+  { id: 5, parentId: null, name: 'Node 2' },
+  { id: 6, parentId: 5, name: 'Node 2.1' },
+];
+function arrToTree(arr) {
+  let res = [];
+  let dfs = (arr, res, parentId) => {
+    for (let item of arr) {
+      if (parentId == item.parentId) {
+        let obj = {
+          children: [],
+          ...item,
+        };
+        res.push(obj);
+        dfs(arr, obj.children, item.id);
+      }
+    }
+  };
+  dfs(arr, res, null);
+  return res;
+}
+arrToTree(inputArray);
+```
+
+## 26.树转数组
+
+```js
+// tree => arr
+var listTree = [
+  {
+    id: 1,
+    name: '部门1',
+    pid: 0,
+    children: [
+      {
+        id: 2,
+        name: '部门1-1',
+        pid: 1,
+        children: [
+          {
+            id: 4,
+            name: '部门1-1-1',
+            pid: 2,
+            children: [],
+          },
+        ],
+      },
+      {
+        id: 3,
+        name: '部门1-2',
+        pid: 1,
+        children: [
+          {
+            id: 5,
+            name: '部门1-2-1',
+            pid: 3,
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: 6,
+    name: '部门2',
+    pid: 0,
+    children: [
+      {
+        id: 7,
+        name: '部门2-1',
+        pid: 6,
+        children: [],
+      },
+    ],
+  },
+];
+function treeToArrDFS(arr) {
+  let res = [];
+  let dfs = (arr, res) => {
+    for (let item of arr) {
+      if (item.children && item.children.length) {
+        dfs(item.children, res);
+      }
+      delete item.children;
+      res.push(item);
+    }
+  };
+  dfs(arr, res);
+  return res;
+}
+treeToArrDFS(listTree);
+function treeToArrBFS(arr) {
+  let queue = [...arr];
+  let res = [];
+  while (queue.length) {
+    let len = queue.length;
+    for (let i = 0; i < len; i++) {
+      let cur = queue.shift();
+      if (cur.children && cur.children.length) {
+        queue.push(...cur.children);
+      }
+      delete cur.children;
+      res.push(cur);
+    }
+  }
+  return res;
+}
+```
+
+## 27.日期格式化
+
+```js
+// 实现日期格式话
+// dateFormat(new Date("2024-02-01"), "yyyy/MM/dd"); // 2024/02/01
+function dateFormat(date, format) {
+  let day = date.getDate();
+  let mon = date.getMonth() + 1;
+  let year = date.getFullYear();
+  format = format.replace(/yyyy/, year);
+  format = format.replace(/MM/, mon);
+  format = format.replace(/dd/, day);
+  return format;
+}
+dateFormat(new Date('2024-02-20'), 'yyyy/MM/dd');
+```
+
+## 28.数组[1,2,3],每隔一秒打印一个数字
+
+```js
+function print(arr) {
+  return arr.reduce((pre, cur) => {
+    return pre.then(() => {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(console.log(cur));
+        }, 1000);
+      });
+    });
+  }, Promise.resolve());
+}
+print([1, 2, 3, 4]);
+```
+
+## 29.手写类型判断函数
+
+> 如果是 null，直接返回 String(null)；基本类型和函数，直接使用 typeof；其它引用类型，使用 Object.prototype.toString.call。
+
+```js
+function getType(val) {
+  let type = '';
+  if (val == null) return null;
+  if (typeof val !== 'object') {
+    return typeof val;
+  } else {
+    let vals = Object.prototype.toString.call(val);
+    return vals.slice(8, -1).toLowerCase();
+  }
+}
+getType([]); // array
+getType({}); // object
+getType(Promise.resolve()); // promise
+```
+
+## 30.模拟实现虚拟 dom 实现
+
+```js
+function mockRender(node, parent) {}
+let vNode = {
+  type: 'div',
+  props: {},
+  children: [
+    {
+      type: 'span',
+      props: {},
+      children: [],
+    },
+  ],
+};
+mockRender(vNode, docuement.getElementById('#app'));
+```
+
+## 31.实现观察模式
+
+## 32.图片懒加载

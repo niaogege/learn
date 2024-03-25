@@ -142,6 +142,10 @@ class Subject {
   addObserver(observer) {
     this.observers.push(observer);
   }
+  // remove
+  removeObserver(observer) {
+    this.observers = this.observers.filter((ob) => ob != observer);
+  }
   // 主题通知观察者改变状态
   notify(newstate) {
     this.state = newstate;
@@ -909,6 +913,8 @@ rotate2([1, 2, 3, 4, 5, 6], 2);
 
 ## 21.用 setTimeout 实现 setInterval
 
+### first
+
 ```js
 function mockSetInterval(fn, delay) {
   let timerId;
@@ -923,6 +929,28 @@ function mockSetInterval(fn, delay) {
     },
   };
 }
+let test = () => console.log('111');
+mockSetInterval(test, 1000);
+```
+
+### second
+
+```js
+function mockSetInterval(fn, delay) {
+  let start = Date.now();
+  let timer, now;
+  let loop = () => {
+    timer = requestAnimationFrame(loop);
+    now = Date.now();
+    if (now - start >= delay) {
+      fn.apply(this);
+      cancelAnimationFrame(timer);
+    }
+  };
+  requestAnimationFrame(loop);
+}
+let test = () => console.log('111');
+mockSetInterval(test, 1000);
 ```
 
 ## 22.判断对象是否存在循环引用(Set)

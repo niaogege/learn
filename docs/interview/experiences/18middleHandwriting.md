@@ -12,6 +12,8 @@ nav:
 
 > 面试前的 middleWriting 中等难度
 
+> 没有强求要掌握，当然掌握最好，多多益善
+
 ## 1.大数相乘
 
 ```js
@@ -43,6 +45,16 @@ multiple('22', '22');
 function trans(str) {
   let isLof = +str < 0;
   let res = [];
+  let units = ['', '万', '亿'];
+  let len = str.length;
+  for (let i = len; i > 0; i -= 4) {
+    let cur = parseHan(str.slice(Math.max(0, i - 4), i));
+    res.push(cur);
+  }
+  for (let i = 0; i < res.length; i++) {
+    res[i] += units[i];
+  }
+
   if (isLof) {
     res.push('负');
   }
@@ -71,18 +83,23 @@ function parseHan(str) {
   }
   return res;
 }
-parseHan('103');
+// parseHan('103');
+trans('123456');
 ```
 
 ## 3.归并排序/堆排序
 
-## 4.数组转树
-
 ```js
-
+function mergeSort(arr) {
+  let merge = (l, r) => {};
+  let sort = (arr) => {};
+}
+mergeSort(arr);
 ```
 
-## 5.树转数组
+## 4.
+
+## 5.
 
 ## 6.判断对象是否存在循环引用
 
@@ -130,9 +147,54 @@ function redPacket(total, num, max = 2, min = '0.1') {
 
 ## 8.封装异步的 fetch，使用 async await 方式来使用
 
-## 9.查找文章中出现频率最高的单词
+## 9.查找文章中出现频率最高的单词(几率太低了)
+
+```js
+function findMoreWords(str) {
+  if (str.length == 0) return 0;
+  str = str.trim().toLowerCase();
+  let wordList = str.match(/[a-z]+/g),
+    visited = [],
+    maxNum = 0,
+    maxWord = '';
+  str = ' ' + wordList.join(' ') + ' ';
+  wordList.forEach((item) => {
+    if (visited.indexOf(item) < 0) {
+      visited.push(item);
+      let word = new RegExp(' ' + item + ' ', 'g');
+      let count = str.match(word).length;
+      if (count > maxNum) {
+        maxNum = count;
+        maxWord = item;
+      }
+    }
+  });
+  return maxWord + '' + maxNum;
+}
+```
 
 ## 10.实现双向数据绑定
+
+```js
+function mockData() {
+  let obj = {}
+  let input = document.getElementById('input')
+  let span = document.getElementById('span')
+  // 数据劫持
+  Object.defineProperty(obj, 'text', {
+    configurable: true,
+    enumerable: true,
+    get() {},
+    set(val) [
+      input.value = val
+      span?.innerHTML = val
+    ]
+  })
+  input?.addEventListener('click', function(e) {
+    obj.text = e.target.value
+  })
+}
+```
 
 ## 11.判断两个数组内容是否相同
 

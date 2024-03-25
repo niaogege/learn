@@ -409,6 +409,34 @@ function lazyLoadImg(imgs) {
 
 ```js
 // hasCycle
+function hasCycle(obj) {
+  let m = new Set();
+  let dfs = (obj) => {
+    let vals = Object.values(obj);
+    for (let val of vals) {
+      if (m.has(val)) return true;
+      if (typeof val !== 'object' || val == null) continue;
+      m.add(val);
+      if (dfs(val)) {
+        return true;
+      }
+    }
+    return false;
+  };
+  return dfs(obj);
+}
+let test = { name: 'cpp' };
+test.link = test;
+hasCycle(test);
+console.log(JSON.stringify(test));
+// error info
+/**
+VM4106:3 Uncaught TypeError: Converting circular structure to JSON
+    --> starting at object with constructor 'Object'
+    --- property 'link' closes the circle
+    at JSON.stringify (<anonymous>)
+    at <anonymous>:3:18
+ */
 ```
 
 ## 15.找出数组中出现次数最多的数字，如[1,2,1,2,3],打印出 1 和 2，出现的次数是 2；[1,2,5,5,5],打印 5，出现的次数是 3

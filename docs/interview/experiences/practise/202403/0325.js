@@ -18,6 +18,66 @@
  */
 
 /**
+ * @param {number} n
+ * @return {string[][]}
+ */
+var solveNQueens = function (n) {
+  let board = new Array(n).fill().map(() => new Array(n).fill('.'));
+  let ans = [];
+  let backTrack = (board, row) => {
+    if (row == n) {
+      ans.push(transform(board));
+      return;
+    }
+    for (let col = 0; col < n; col++) {
+      if (isValid(board, row, col)) {
+        board[row][col] = 'Q';
+        backTrack(board, row + 1);
+        board[row][col] = '.';
+      }
+    }
+  };
+  backTrack(board, 0);
+  return ans;
+};
+function isValid(board, row, col) {
+  // check col
+  for (let i = 0; i < row; i++) {
+    if (board[i][col] == 'Q') return false;
+  }
+  // check 45
+  for (let i = row - 1, j = col - 1; i >= 0 && j >= 0; i--, j--) {
+    if (board[i][j] == 'Q') return false;
+  }
+  // check 135
+  for (let i = row - 1, j = col + 1; i >= 0 && j >= 0; i--, j++) {
+    if (board[i][j] == 'Q') return false;
+  }
+  return true;
+}
+function transform(board) {
+  let ans = [];
+  board.forEach((item) => {
+    let str = '';
+    item.forEach((child) => {
+      str += child;
+    });
+    ans.push(str);
+  });
+  return ans;
+}
+function transform(board) {
+  let ans = [];
+  board.forEach((item) => {
+    let str = '';
+    item.forEach((child) => {
+      str += child;
+    });
+    ans.push(str);
+  });
+  return ans;
+}
+/**
 输入：nums = [1,2,3]
 输出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
  */
@@ -172,9 +232,9 @@ var rotate = function (matrix) {
   for (let i = 0; i < len; i++) {
     let item = [];
     for (let j = 0; j < len; j++) {
-      item.push(matrix[j][i]);
+      item.push(matrix[j][len - i - 1]);
     }
-    ans.push(item.reverse());
+    ans.push(item);
   }
   console.log(ans, 'ans');
   return ans;
