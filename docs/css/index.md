@@ -364,6 +364,12 @@ white-space: nowrap;
 
 总结来说，px 是绝对单位，不会随其他因素改变；rem 是相对于根元素字体大小的倍数，可以方便地调整整个页面的大小；em 是相对于父元素字体大小的倍数，可以影响子元素的大小。在实际使用中，可以根据需求选择合适的单位。对于响应式设计，使用 rem 可以方便地调整整个页面的大小；对于局部样式，可以使用 px 或 em 来控制具体的大小。
 
+## 19.在 CSS3 中举几个可以继承的属性，和不可以继承属性？
+
+可以继承的属性： font-family：字体系列 font-size：字体大小 font-weight：字体粗细 color：文本颜色 text-align：文本对齐方式 line-height：行高度 color：文本颜色
+
+不会继承的属性：display,盒子模型的属性：width,height,marigin, border,padding; 背景属性：float, clear, position , top ,tight.botton 定位属性：float、clear、position、top、right、bottom、left、overflow、clip
+
 ## 参考
 
 - [面试题汇总](https://juejin.cn/post/6844903885488783374#heading-58)

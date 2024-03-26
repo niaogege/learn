@@ -74,6 +74,30 @@ add(1)(2)(3)(4)();
 
 ## 2.偏函数/惰性函数
 
+### 2.1 偏函数
+
+偏函数用于固定一个函数的一个或多个参数，并返回一个可以接收剩余参数的函数,接下来实现 partial？
+
+```js
+function url(scheme, domain, path) {
+  return `${scheme}://${domain}/${path}`;
+}
+const myGithubPath = partial(url, 'https', 'github.com');
+const profilePath = myGithubPath('semlinker/semlinker');
+const awesomeTsPath = myGithubPath('semlinker/awesome-typescript');
+// https://github.com/semlinker/semlinker
+// https://github.com/semlinker/awesome-typescript
+function partial() {}
+```
+
+### 2.2 惰性函数
+
+所谓的惰性载入就是当第 1 次根据条件执行函数后，在第 2 次调用函数时，就不再检测条件，直接执行函数。要实现这个功能，我们可以在第 1 次条件判断的时候，在满足判断条件的分支中覆盖掉所调用的函数，实现一个封装事件监听器函数
+
+```js
+function addHandler(ele, type, handler) {}
+```
+
 ## 3.16 进制和颜色字符串进行转换
 
 ## 4.二分查找
@@ -254,10 +278,15 @@ function defineProperties(obj, target) {
 ## 15.实现 es6 extends
 
 ```js
-function mockExtends(child, parent, staticProps) {
-  let proto = Object.create(parent.prototype);
-  proto.constructor = child;
-  child.prototype = proto;
+function mockExtends(Child, Parent, staticProps) {
+  let proto = Object.create(Parent.prototype);
+  proto.constructor = Child;
+  Child.prototype = proto;
+  // 继承静态方法
+  Parent && Object.setPrototypeOf(Child, Parent);
+  for (let key in staticProp) {
+    Child.prototype[key] = staticProp[key];
+  }
 }
 ```
 
@@ -438,3 +467,5 @@ function backTop() {
   }
 }
 ```
+
+## 24.实现验证码倒计时

@@ -167,3 +167,20 @@ var maxSlidingWindow = function (nums, k) {
   }
   return res;
 };
+
+/**
+ * @param {TreeNode} root
+ * @return {boolean}
+ */
+var isBalanced = function (root) {
+  if (root == null) return true;
+  let left = maxDepth(root.left);
+  let right = maxDepth(root.right);
+  return Math.abs(left - right) <= 1 && isBalanced(root.left) && isBalanced(root.right);
+};
+function maxDepth(root) {
+  if (root == null) return 0;
+  let left = maxDepth(root.left);
+  let right = maxDepth(root.right);
+  return Math.max(left, right) + 1;
+}

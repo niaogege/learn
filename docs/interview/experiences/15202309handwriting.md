@@ -134,15 +134,13 @@ React 的**时间分片**便是基于类似 rIC 而实现，然而因为 rIC 的
 // 哈哈 不知道咋写
 // 被观察者
 class Subject {
-  constructor(name) {
-    this.name = name;
+  constructor() {
     this.observers = [];
     this.state = 'init';
   }
   addObserver(observer) {
     this.observers.push(observer);
   }
-  // remove
   removeObserver(observer) {
     this.observers = this.observers.filter((ob) => ob != observer);
   }
@@ -162,7 +160,7 @@ class Observer {
   }
 }
 
-var sub = new Subject('iphone');
+var sub = new Subject();
 var watcher1 = new Observer('wmh');
 var watcher2 = new Observer('cpp');
 // 观察者订阅主题(被观察者)
@@ -933,24 +931,32 @@ let test = () => console.log('111');
 mockSetInterval(test, 1000);
 ```
 
-### second
+### second,借助 requestAnimationFrame + 递归来完成
 
 ```js
-function mockSetInterval(fn, delay) {
-  let start = Date.now();
-  let timer, now;
-  let loop = () => {
-    timer = requestAnimationFrame(loop);
-    now = Date.now();
-    if (now - start >= delay) {
-      fn.apply(this);
-      cancelAnimationFrame(timer);
-    }
-  };
-  requestAnimationFrame(loop);
-}
-let test = () => console.log('111');
-mockSetInterval(test, 1000);
+let mockInterval = {
+  timer: null,
+  setInterval: function (cb, delay, ...arg) {
+    let start = Date.now();
+    let now;
+    let loop = () => {
+      this.timer = requestAnimationFrame(loop);
+      now = Date.now();
+      if (now - start >= delay) {
+        cb.apply(this, arg);
+        start = now;
+      }
+    };
+    requestAnimationFrame(loop);
+  },
+  clearInterval: function () {
+    cancelAnimationFrame(this.timer);
+  },
+};
+
+let count = 1;
+let test = () => console.log(count++);
+mockInterval.setInterval(test, 2000);
 ```
 
 ## 22.判断对象是否存在循环引用(Set)

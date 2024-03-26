@@ -14,6 +14,8 @@ nav:
 
 > 没有强求要掌握，当然掌握最好，多多益善
 
+> 顶多 20 个
+
 ## 1.大数相乘
 
 ```js
@@ -91,10 +93,35 @@ trans('123456');
 
 ```js
 function mergeSort(arr) {
-  let merge = (l, r) => {};
-  let sort = (arr) => {};
+  let merge = (l, r) => {
+    let i = 0,
+      j = 0;
+    let res = [];
+    while (i < l.length && j < r.length) {
+      if (r[j] > l[i]) {
+        res.push(l[i++]);
+      } else {
+        res.push(r[j++]);
+      }
+    }
+    while (i < l.length) {
+      res.push(l[i++]);
+    }
+    while (j < r.length) {
+      res.push(r[j++]);
+    }
+    return res;
+  };
+  let sort = (arr) => {
+    if (arr.length == 1) return arr;
+    let mid = Math.floor(arr.length / 2);
+    let l = arr.slice(0, mid);
+    let r = arr.slice(mid);
+    return merge(mergeSort(l), mergeSort(r));
+  };
+  return sort(arr);
 }
-mergeSort(arr);
+mergeSort([1, 222, 1, 24, 23, 44, 9]);
 ```
 
 ## 4.
@@ -146,6 +173,32 @@ function redPacket(total, num, max = 2, min = '0.1') {
 ```
 
 ## 8.封装异步的 fetch，使用 async await 方式来使用
+
+> [出自](https://juejin.cn/post/6946136940164939813?searchId=2024031814180491A668E2D8A6BD15EEE9#heading-60)
+
+```js
+class HttpRequestUtils {
+  async get(url) {
+    const res = await fetch(url);
+    const data = await res.json();
+    return data;
+  }
+  async post(url, data) {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    const data = await res.json();
+    return data;
+  }
+}
+const httpUtil = new HttpRequestUtils();
+const res = await httpUtil.get('http://golderbrother.cn/');
+console.log(res);
+```
 
 ## 9.查找文章中出现频率最高的单词(几率太低了)
 

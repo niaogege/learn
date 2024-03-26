@@ -18,7 +18,6 @@ nav:
 - [110.平衡二叉树](https://leetcode-cn.com/problems/balanced-binary-tree/)
 - [100.相同的树](https://leetcode-cn.com/problems/same-tree/)
 - [98.验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)
-- [二叉树的最大深度](https://leetcode-cn.com/problems/maximum-depth-of-binary-tree/])
 - [对称二叉树](https://leetcode-cn.com/problems/symmetric-tree/)
 - [二叉树的直径](https://leetcode-cn.com/problems/diameter-of-binary-tree/)
 - [226.翻转二叉树](https://leetcode-cn.com/problems/invert-binary-tree/)
@@ -51,7 +50,7 @@ var maxDepth = (root) => {
 };
 ```
 
-### 相同的树
+### 100.相同的树
 
 ```js
 /**

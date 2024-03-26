@@ -13,9 +13,74 @@
  * 12.两两交换链表
  */
 
+// 打家劫舍
+
+// 二叉树中第k小的元素
+//  左根右
+function binaryK(root, k) {
+  let queue = [];
+  let cur = root;
+  while (cur || queue.length) {
+    if (cur) {
+      queue.push(cur);
+      cur = cur.left;
+    } else {
+      cur = queue.pop();
+      k--;
+      if (k == 0) {
+        break;
+      }
+      cur = cur.right;
+    }
+  }
+  return cur.val;
+}
+
+var kthSmallest = function (tree, k) {
+  let stack = [];
+  let root = tree;
+  while (stack.length || root) {
+    if (root) {
+      stack.push(root);
+      root = root.left;
+    } else {
+      root = stack.pop();
+      --k;
+      if (k == 0) {
+        break;
+      }
+      root = root.right;
+    }
+  }
+  return root.val;
+};
+
 // 01 背包问题
 
 // 搜索旋转排序数组
+function rotateNums(arr, target) {
+  let len = arr.length;
+  let r = len;
+  let l = 0;
+  while (l <= r) {
+    let mid = l + Math.floor((r - l) / 2);
+    if (arr[mid] == target) return mid;
+    if (arr[mid] >= arr[l]) {
+      if (arr[mid] > target && target >= arr[l]) {
+        r = mid - 1;
+      } else {
+        l = mid + 1;
+      }
+    } else {
+      if (target > arr[mid] && target <= arr[r]) {
+        l = mid + 1;
+      } else {
+        r = mid - 1;
+      }
+    }
+  }
+  return -1;
+}
 
 // 两两交换
 function twoSwap(head) {}

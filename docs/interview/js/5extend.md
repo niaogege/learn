@@ -15,6 +15,7 @@ nav:
 
 - ES5/ES6 继承区别
 - 实现继承的主要方法是什么(原型链)
+- 构造函数和 class 区别
 - super 关键词的使用
 
 > 老是会忘记？咋整主要还得死记硬背，不然过一段时间就会忘记，最好能结合实际场景
@@ -155,7 +156,9 @@ console.log(Object.prototype.__proto__ === null);
 
 ![构造函数实例原型关系.png](https://s2.loli.net/2022/06/18/cCIwaz69sPKdGth.png)
 
-继承本质上复制，重写原型对象
+继承本质上是复制，重写原型对象
+
+> 子构造函数原型指向父类实例
 
 ```js
 function Parent() {
@@ -200,7 +203,11 @@ console.log(child2.name, 'child2'); // ['cpp', 'wmh']
 
 概念：**Parent.call(this)** 创建子类的时候调用 Parent 构造函数,于是每个 Child 实例都会将 Parent 中的实例属性复制一份优缺点：
 
-- 优点：(很好解决原型链继承的 2 个问题) 1.避免了引用类型的属性被所有实例共享， 2.可以在 Child 中向 Parent 传参
+- 优点：(很好解决原型链继承的 2 个问题)
+
+  1.避免了引用类型的属性被所有实例共享，
+
+  2.可以在 Child 中向 Parent 传参
 
 ```js
 function Parent(name) {
@@ -223,7 +230,11 @@ var child2 = new Child('wmh');
 console.log(child2, 'child2');
 ```
 
-缺点： 1.无法实现复用，每次创建子类实例都有父类实例函数的副本,影响性能 2.只能继承实例属性和方法，不会继承原型属性/方法,比如**Parent.prototype.getName**子类调用会报错
+缺点：
+
+1.无法实现复用，每次创建子类实例都有父类实例函数的副本,影响性能
+
+2.只能继承实例属性和方法，不会继承原型属性/方法,比如**Parent.prototype.getName**子类调用会报错
 
 ```js
 function Parent(name) {
@@ -279,7 +290,9 @@ console.log(child2, child2.name, 'child2'); //  ['cpp', 'wmh', 'child2'] 'child
 
 ### 原型式继承(Object.create)
 
-ES5 Object.create 的模拟实现，将传入的**对象作为创建的对象的原型**,阔以理解成对传入对象的浅复制缺点：引用类型的原型属性会被实例共享
+ES5 Object.create 的模拟实现，将传入的**对象作为创建的对象的原型**,阔以理解成对传入对象的浅复制
+
+缺点：引用类型的原型属性会被实例共享
 
 ```js
 function CreateObj(obj) {
@@ -349,13 +362,13 @@ Child.prototype = new Parent();
 var child1 = new Child();
 ```
 
-组合继承最大的缺点是会调用两次父构造函数。一次是: 设置子类型实例的原型
+组合继承最大的缺点是会调用两次父构造函数。一次是: 子构造函数原型指向父类实例时
 
 ```js
 Child.prototype = new Parent();
 ```
 
-一次是： 创建子类型的时候会调用父类型构造函数
+另一次是： 创建子类型的时候会调用父类型构造函数
 
 ```js
 Parent.call(this);
