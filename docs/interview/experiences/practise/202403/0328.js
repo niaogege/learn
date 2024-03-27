@@ -5,8 +5,43 @@
  * 3.二叉树中第k小的元素
  * 4.二叉树最大路径和
  * 5.x的平方根
- * 6.
+ * 6.最长公共子序列
+ * 7.最长重复子数组
  */
+
+function robs(nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill(0);
+
+  return dp[len - 1];
+}
+
+function generate(n) {
+  let dp = [[1]];
+  for (let i = 1; i < n; i++) {
+    dp[i] = new Array(i + 1).fill(1);
+    for (let j = 1; j < i; j++) {
+      dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+    }
+  }
+  return dp;
+}
+generate(5);
+
+function xSqurt(x) {
+  if (x <= 1) return x;
+  let l = 0;
+  let r = x;
+  while (l <= r) {
+    let mid = l + Math.floor((r - l) / 2);
+    if (mid * mid > x) {
+      r = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+  return r;
+}
 
 let mockInterval = {
   timer: null,

@@ -189,8 +189,39 @@ class LRU {
 
 ## 4.数组中的第 K 个最大元素
 
-```js
+> 各种排序 归并排序
 
+```js
+function mergeSort(arr) {
+  let merge = (l, r) => {
+    let i = 0,
+      j = 0;
+    let res = [];
+    while (i < l.length && j < r.length) {
+      if (r[j] > l[i]) {
+        res.push(l[i++]);
+      } else {
+        res.push(r[j++]);
+      }
+    }
+    while (i < l.length) {
+      res.push(l[i++]);
+    }
+    while (j < r.length) {
+      res.push(r[j++]);
+    }
+    return res;
+  };
+  let sort = (arr) => {
+    if (arr.length == 1) return arr;
+    let mid = Math.floor(arr.length / 2);
+    let l = arr.slice(0, mid);
+    let r = arr.slice(mid);
+    return merge(mergeSort(l), mergeSort(r));
+  };
+  return sort(arr);
+}
+mergeSort([111, 222, 1111, 2, 333, 2, 3, 4, 3, 2]);
 ```
 
 ## 5.K 个一组链表反转
@@ -354,7 +385,7 @@ var mergeTwoLists = function (l1, l2) {
 };
 ```
 
-## 9.两数之和
+## [9.两数之和]()
 
 ## [10.最长回文子串](https://leetcode.cn/problems/longest-palindromic-substring/)
 
@@ -513,7 +544,7 @@ mergeArr([1, 2, 3, 0, 0, 0], [2, 5, 6], 3, 3);
 
 > feel difficult ???
 
-### 18.全排列
+## 18.全排列 I/II
 
 ```js
 function allPermute(arr) {
@@ -619,6 +650,42 @@ var zigzagLevelOrder = function (root) {
   }
   return res;
 };
+```
+
+## 22.反转链表 II
+
+> 跟一组 K 个链表反转有的比
+
+```js
+function reverseLink(head, l, r) {
+  let dummy = { next: head, val: null };
+  let pre = dummy;
+  let i = 1;
+  while (i < l) {
+    pre = pre.next;
+    i++;
+  }
+  let cur = pre.next;
+  for (let i = 0; i < r - l; i++) {
+    let tmp = cur.next;
+    cur.next = tmp.next;
+    tmp.next = pre.next;
+    pre.next = tmp;
+  }
+  return dummy.next;
+}
+// 完全反转
+function reverseLink(head) {
+  let pre = null;
+  let cur = head;
+  while (cur) {
+    let next = cur.next;
+    cur.next = pre;
+    pre = cur;
+    cur = next;
+  }
+  return pre;
+}
 ```
 
 ## 23.螺旋矩阵
@@ -734,7 +801,24 @@ function longestIncreSub(arr) {
 longestIncreSub([2, 3, 7, 101]);
 ```
 
-## 重排链表
+## [28.环形链表 II](https://leetcode.cn/problems/linked-list-cycle-ii/submissions/517435042/)
+
+```js
+var detectCycle = function (head) {
+  let s = new Set();
+  let cur = head;
+  while (cur) {
+    if (s.has(cur)) {
+      return cur;
+    }
+    s.add(cur);
+    cur = cur.next;
+  }
+  return null;
+};
+```
+
+## [29.重排链表](https://leetcode.cn/problems/reorder-list/description/)
 
 ```js
 /**
@@ -1040,6 +1124,8 @@ function dfsLight(tree) {
 }
 ```
 
+## 40.删除排序链表中的重复元素 II
+
 ## [41.复原 IP 地址](https://programmercarl.com/0093.%E5%A4%8D%E5%8E%9FIP%E5%9C%B0%E5%9D%80.html#%E7%AE%97%E6%B3%95%E5%85%AC%E5%BC%80%E8%AF%BE)
 
 ```js
@@ -1065,6 +1151,8 @@ function revertIp(s) {
 }
 revertIp('0000'); // ['0.0.0.0']
 ```
+
+## [42.排序链表]()
 
 ## [43.下一个排列](https://leetcode.cn/problems/next-permutation/)
 
@@ -1107,6 +1195,33 @@ function swap(nums, i, j) {
 }
 ```
 
+## 44.x 的平方根
+
+```js
+/**
+ * @param {number} x
+ * @return {number}
+ */
+var mySqrt = function (x) {
+  if (x <= 1) return x;
+  let l = 0;
+  let r = x;
+  while (l <= r) {
+    let mid = l + Math.floor((r - l) / 2);
+    if (mid * mid > x) {
+      r = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+  return r;
+};
+mySqrt(8); // 2
+mySqrt(4); // 2
+```
+
+## 45.爬楼梯
+
 ## [46.括号生成](https://leetcode.cn/problems/generate-parentheses/solutions/597236/sui-ran-bu-shi-zui-xiu-de-dan-zhi-shao-n-0yt3/)
 
 ```js
@@ -1128,7 +1243,45 @@ function generate(n) {
 }
 ```
 
+## 47.字符串转换整数 (atoi)
+
 ## 48.两数相加
+
+```js
+function addTwoNumbers(l1, l2) {
+  let dummy = new ListNode();
+  let flag = 0;
+  let cur = dummy;
+  while (l1 || l2) {
+    let a = (l1 && l1.val) || 0;
+    let b = (l2 && l2.val) || 0;
+    let sum = a + b + flag;
+    cur = new ListNode(sum % 10);
+    cur = cur.next;
+    if (l1) {
+      l1 = l1.next;
+    }
+    if (l2) {
+      l2 = l2.next;
+    }
+    flag = Math.floor(sum / 10);
+  }
+  if (flag == 1) {
+    cur.next = new ListNode(flag);
+  }
+  return dummy.next;
+}
+function ListNode(val, next) {
+  return {
+    val: val !== undefined ? val : 0,
+    next: next != undefined ? next : null,
+  };
+}
+```
+
+## 49.滑动窗口最大值
+
+> 难！
 
 ## [50.比较版本号](https://leetcode.cn/problems/compare-version-numbers/description/)
 

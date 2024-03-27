@@ -9,7 +9,28 @@
  * 8.平衡二叉树
  * 9.观察者模式
  * 10.实现setInterval
+ * 11.完全二叉树的节点个数
+ * 12.零钱兑换
  */
+
+var countNodes = function (root) {
+  let queue = [root];
+  let count = 0;
+  while (queue.length) {
+    let len = queue.length;
+    for (let i = 0; i < len; i++) {
+      let cur = queue.shift();
+      count++;
+      if (cur.left) {
+        queue.push(cur.left);
+      }
+      if (cur.right) {
+        queue.push(cur.right);
+      }
+    }
+  }
+  return count;
+};
 
 class Subject {
   constructor() {

@@ -41,11 +41,16 @@ nav:
  * 21.分割回文串
  * 22.划分字母区间
  * 23.多数元素
- * 24.反转链表II
+ * 24.随机链表的复制
  * 25.判断两个数组内容相等
  * 26.最长连续序列
  * 27.二叉搜索树中第k小的元素
  * 28.查找有序二维数组的目标值
+ * 29.电话号码组合
+ * 30.课程表
+ * 31.搜索二维矩阵
+ * 32.寻找旋转排序数组中的最小值
+ * 33.字符串解码
  */
 ```
 
@@ -268,4 +273,46 @@ function reverseLink(head, left, right) {
 输出：4
 解释：最长数字连续序列是 [1, 2, 3, 4]。它的长度为 4。
  */
+```
+
+## [29.电话号码组合](https://leetcode.cn/problems/letter-combinations-of-a-phone-number/)
+
+```js
+/**
+ * @param {string} digits
+ * @return {string[]}
+ */
+var letterCombinations = function (digits) {
+  let map = {
+    2: ['a', 'b', 'c'],
+    3: ['d', 'e', 'f'],
+    4: ['g', 'h', 'i'],
+    5: ['j', 'k', 'l'],
+    6: ['m', 'n', 'o'],
+    7: ['p', 'q', 'r', 's'],
+    8: ['t', 'u', 'v'],
+    9: ['w', 'x', 'y', 'z'],
+  };
+  let temp = [];
+  for (let n of digits) {
+    temp.push(map[n]);
+  }
+  let ans = [];
+  let backTrack = (path, row) => {
+    if (path.length === temp.length) {
+      if (path.length) {
+        ans.push(path.slice().join(''));
+      }
+      return;
+    }
+    for (let i = 0; i < temp[row].length; i++) {
+      let cur = temp[row][i];
+      path.push(cur);
+      backTrack(path, row + 1);
+      path.pop();
+    }
+  };
+  backTrack([], 0);
+  return ans;
+};
 ```

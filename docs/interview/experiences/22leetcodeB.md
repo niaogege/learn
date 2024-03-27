@@ -69,7 +69,7 @@ nav:
  * 45.最小覆盖子串
  * 46.回文子串
  * 47.和为 K 的子数组
- * 48.滑动窗口最大值
+ * 48.字符串转换整数
  * 49.除自身以外数组的乘积
  * 50.旋转图像
  * 51.分发饼干
@@ -260,6 +260,8 @@ function houseRobber(nums) {
   dp[0] = nums[0];
   dp[1] = Math.max(nums[0], nums[1]);
   for (let i = 2; i < len; i++) {
+    //   偷第i个房间 dp[i - 2] + nums[i]
+    // 不偷第i个房间 dp[i-1]
     dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
   }
   return dp[len - 1];
@@ -1157,16 +1159,17 @@ function twoCharDelete(a, b) {
 ## 43.杨辉三角形
 
 ```js
-function generate(n) {
-  let dp = [];
-  for (let i = 0; i < n; i++) {
+var generate = function (numRows) {
+  let dp = [[1]];
+  for (let i = 1; i < numRows; i++) {
+    // 这里的数组长度
     dp[i] = new Array(i + 1).fill(1);
     for (let j = 1; j < i; j++) {
       dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
     }
   }
   return dp;
-}
+};
 generate(5);
 ```
 
@@ -1225,7 +1228,7 @@ var subArraySum = function (nums, k) {
 };
 ```
 
-## 48.滑动窗口最大值
+## 48.字符串转换整数
 
 ## 49.除自身以外数组的乘积
 

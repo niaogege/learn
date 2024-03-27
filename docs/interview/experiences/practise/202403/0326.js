@@ -7,14 +7,70 @@
  * 6.01背包
  * 7.杨辉三角形
  * 8.打家劫舍
- * 9.完全二叉树
+ * 9.完全二叉树的节点个数
  * 10.二叉树中第k小的元素
  * 11.平衡二叉树
  * 12.两两交换链表
  */
 
-// 打家劫舍
+function allGenerate(arr) {
+  let ans = [];
+  let backTrack = (path, row) => {
+    if (path.length == arr.length) {
+      ans.push(path.slice().join(''));
+      return;
+    }
+    for (let i = 0; i < arr[row].length; i++) {
+      let cur = arr[row][i];
+      if (!path.includes(cur)) {
+        path.push(cur);
+        backTrack(path, row + 1);
+        path.pop();
+      }
+    }
+  };
+  backTrack([], 0);
+  return ans;
+}
+allGenerate([
+  [1, 2],
+  ['a', 'b', 'c'],
+]);
 
+// 杨辉三角形
+var generate = function (numRows) {
+  let dp = [[1]];
+  for (let i = 1; i < numRows; i++) {
+    dp[i] = new Array(i + 1).fill(1);
+    for (let j = 1; j < i; j++) {
+      dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j];
+    }
+  }
+  return dp;
+};
+generate(5);
+// 打家劫舍
+/**
+ * @param {number[]} nums
+ * @return {number}
+输入：nums = [1,2,3,1]
+输出：4
+解释：偷窃 1 号房屋 (金额 = 1) ，然后偷窃 3 号房屋 (金额 = 3)。
+     偷窃到的最高金额 = 1 + 3 = 4 。
+*/
+var rob = function (nums) {
+  let n = nums.length;
+  let dp = new Array(n).fill(0);
+  dp[0] = nums[0];
+  dp[1] = Math.max(nums[0], nums[1]);
+  for (let i = 2; i < n; i++) {
+    // 偷第i个房间dp[i - 2] + nums[i]
+    // 不偷i房间 dp[i-1]
+    dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+  }
+  return dp[n - 1];
+};
+rob([1, 2, 3, 1]);
 // 二叉树中第k小的元素
 //  左根右
 function binaryK(root, k) {
