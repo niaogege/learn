@@ -643,7 +643,7 @@ lodashGet(test, 'other[0].name');
 function lodashSet(obj, path, val) {}
 ```
 
-## 23.红绿灯问题
+## 23.场景应用题:红绿灯问题
 
 ```js
 
@@ -867,11 +867,86 @@ mockRender(vNode, docuement.getElementById('#app'));
 
 ## 34.实现加减乘除链式调用, 类似 jQuery 式用法
 
-## 35.
+## 35.场景应用题，实现 Array.prototype.flatMap
 
-## 36.
+```js
+var array1 = [1, 4, 9, 16];
+// pass a function to map
+var map1 = array1.flatMap((x) => (x === 1 ? [] : [x * 2]));
 
-## 37.
+console.log(map1);
+// expected output: Array [8, 18, 32]
+
+Array.prototype.mockFlatMap = function (fn, context) {
+  let arr = this || [];
+  let res = [];
+  for (let i = 0; i < arr.length; i++) {
+    let remain = fn.call(this, arr[i], i, arr);
+    if (Array.isArray(remain)) {
+      // 递归
+      res.push(...remain.mockFlatMap((x) => x));
+    } else {
+      res.push(remain);
+    }
+  }
+  return res;
+};
+var map2 = array1.mockFlatMap((x) => (x === 1 ? [] : [x * 2]));
+console.log(map2); // [8,18,32]
+var test2 = [1, 2, 1];
+var result = test2.flatMap((num) => (num === 2 ? [2, 2] : 1));
+// Expected output: Array [1, 2, 2, 1]
+console.log(result);
+var res2 = test2.mockFlatMap((num) => (num === 3 ? [2, 2] : 1));
+console.log(res2); // [1,1,1]
+```
+
+## 36.场景应用题，实现 Array.prototype.group,自定义分类
+
+```js
+var array = [1, 2, 3, 4, 5]; // sorted
+// expected
+var result = {
+  bigger: [4, 5],
+  smaller: [1, 2, 3],
+};
+Array.prototype.group = function (fn) {
+  let arr = this || [];
+  let res = {};
+  for (let i = 0; i < arr.length; i++) {
+    let val = fn.apply(this, [arr[i], i, this]);
+    res[val] = res[val] ? [...res[val], arr[i]] : [arr[i]];
+  }
+  return res;
+};
+var res = array.group((num, index, array) => {
+  return num > 3 ? 'bigger' : 'smaller';
+});
+console.log(res);
+```
+
+## 37.判断两个数组内容是否相同
+
+```js
+function isSameArr(a, b) {
+  if (a.length != b.length) return false;
+  let m = new Map();
+  // a塞到m
+  for (let item of a) {
+    if (m.has(item)) {
+      m.set(item, m.get(item) + 1);
+    } else {
+      m.set(item, 1);
+    }
+  }
+  for (let item of b) {
+    let val = m.get(item);
+    if (val == undefined || val < 1) return false;
+    m.set(item, val - 1);
+  }
+  return true;
+}
+```
 
 ## 38.
 

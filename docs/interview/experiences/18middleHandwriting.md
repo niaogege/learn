@@ -249,28 +249,7 @@ function mockData() {
 }
 ```
 
-## 11.判断两个数组内容是否相同
-
-```js
-function isSameArr(a, b) {
-  if (a.length != b.length) return false;
-  let m = new Map();
-  // a塞到m
-  for (let item of a) {
-    if (m.has(item)) {
-      m.set(item, m.get(item) + 1);
-    } else {
-      m.set(item, 1);
-    }
-  }
-  for (let item of b) {
-    let val = m.get(item);
-    if (val == undefined || val < 1) return false;
-    m.set(item, val - 1);
-  }
-  return true;
-}
-```
+## 11.
 
 ## 链接
 

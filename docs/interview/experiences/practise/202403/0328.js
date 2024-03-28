@@ -9,10 +9,57 @@
  * 7.最长重复子数组
  */
 
+/** 
+A: [1,2,3,2,1]
+B: [3,2,1,4,7]
+输出：3
+解释：长度最长的公共子数组是 [3, 2, 1] 。
+*/
+
+function sameLongest(a, b) {
+  let max = 0;
+  let [m, n] = [a.length, b.length];
+  let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] == b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      }
+      max = Math.max(dp[i][j], max);
+    }
+  }
+  return max;
+}
+
+/**
+输入：text1 = "abcde", text2 = "ace"
+输出：3
+解释：最长公共子序列是 "ace"，它的长度为 3。
+*/
+function findPublicSame(a, b) {
+  let [m, n] = [a.length, b.length];
+  let dp = new Array(m + 1).fill().map(() => new Array(n + 1).fill(0));
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      if (a[i - 1] == b[j - 1]) {
+        dp[i][j] = dp[i - 1][j - 1] + 1;
+      } else {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+      }
+    }
+  }
+  return dp[m][n];
+}
+
 function robs(nums) {
   let len = nums.length;
   let dp = new Array(len).fill(0);
-
+  dp[0] = nums[0];
+  dp[1] = Math.max(nums[0], nums[1]);
+  for (let i = 2; i < len; i++) {
+    // 偷与不偷
+    dp[i] = Math.max(dp[i - 1], dp[i - 2] + nums[i]);
+  }
   return dp[len - 1];
 }
 

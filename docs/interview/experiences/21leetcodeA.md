@@ -1079,10 +1079,11 @@ class MyQueue {
 
 ## [38.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/)
 
+> 跟最长重复子数组咋混淆呢？
+
 ```js
 function findLongest(nums1, nums2) {
   let [len1, len2] = [nums1.length, nums2.length;]
-  let max = 0;
   let dp = new Array(len1 + 1).fill().map(() => new Array(len2 + 1).fill(0));
   for (let i = 1; i <= len1; i++) {
     for (let j = 1; j <= len2; j++) {
@@ -1093,10 +1094,9 @@ function findLongest(nums1, nums2) {
       } else {
         dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
       }
-      max = Math.max(max, dp[i][j]);
     }
   }
-  return max;
+  return dp[len1][len2];
 }
 ```
 
