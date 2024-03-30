@@ -883,7 +883,7 @@ Array.prototype.mockFlatMap = function (fn, context) {
   for (let i = 0; i < arr.length; i++) {
     let remain = fn.call(this, arr[i], i, arr);
     if (Array.isArray(remain)) {
-      // 递归
+      // 递归  +
       res.push(...remain.mockFlatMap((x) => x));
     } else {
       res.push(remain);

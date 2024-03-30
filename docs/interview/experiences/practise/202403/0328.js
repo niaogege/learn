@@ -8,6 +8,25 @@
  * 6.最长公共子序列
  * 7.最长重复子数组
  */
+// 左跟右
+function smallerK(root, k) {
+  let cur = root;
+  let queue = [];
+  while (cur || queue.length) {
+    if (cur) {
+      queue.push(cur);
+      cur = cur.left;
+    } else {
+      cur = queue.pop();
+      k--;
+      if (k == 0) {
+        break;
+      }
+      cur = cur.right;
+    }
+  }
+  return cur.val;
+}
 
 /** 
 A: [1,2,3,2,1]
@@ -208,6 +227,7 @@ function render(str, data) {
   }
   return str;
 }
+''.replace;
 
 render('{{msg}}::{{name}}', {
   msg: 'info',

@@ -589,6 +589,36 @@ var diameterOfBinaryTree = function (root) {
 };
 ```
 
+## 21.二叉树的最大路径和
+
+## 22.二叉树的第 K 小的元素
+
+```js
+/**
+ * @param {TreeNode} root
+ * @param {number} k
+ * @return {number}
+ */
+var kthSmallest = function (tree, k) {
+  let stack = [];
+  let root = tree;
+  while (stack.length || root) {
+    if (root) {
+      stack.push(root);
+      root = root.left;
+    } else {
+      root = stack.pop();
+      --k;
+      if (k == 0) {
+        break;
+      }
+      root = root.right;
+    }
+  }
+  return root.val;
+};
+```
+
 ## 24.背包问题
 
 ```js

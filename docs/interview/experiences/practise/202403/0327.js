@@ -13,6 +13,30 @@
  * 12.零钱兑换
  */
 
+/**
+ * @param {string} s
+ * @return {number[]}
+ */
+var partitionLabels = function (s) {
+  let m = new Map();
+  let ans = [];
+  for (let i = 0; i < s.length; i++) {
+    let cur = s[i];
+    m.set(cur, i);
+  }
+  let left = 0;
+  let right = 0;
+  for (let i = 0; i < s.length; i++) {
+    let cur = s[i];
+    right = Math.max(right, m.get(cur));
+    if (i == right) {
+      ans.push(right - left + 1);
+      left = i + 1;
+    }
+  }
+  return ans;
+};
+
 var countNodes = function (root) {
   let queue = [root];
   let count = 0;

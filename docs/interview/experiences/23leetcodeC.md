@@ -18,7 +18,7 @@ nav:
 
 ```js
 /**
- * 1.二叉树的最小深度和最大深度
+ * 1.最大二叉树
  * 2.用队列实现栈
  * 3.删除升序链表中重复出现的所有节点
  * 4.数组转树
@@ -51,6 +51,13 @@ nav:
  * 31.搜索二维矩阵
  * 32.寻找旋转排序数组中的最小值
  * 33.字符串解码
+ * 34.
+ * 35.
+ * 36.
+ * 37.
+ * 38.
+ * 39。
+ * 40.
  */
 ```
 
@@ -227,6 +234,33 @@ var swapPairs = function (head) {
     cur = cue.next.next;
   }
   return dummy.next;
+};
+```
+
+## 14.字母异位词分组
+
+给你一个字符串数组，请你将 字母异位词 组合在一起。可以按任意顺序返回结果列表。字母异位词 是由重新排列源单词的所有字母得到的一个新单词。
+
+```js
+// 输入: strs = ["eat", "tea", "tan", "ate", "nat", "bat"]
+// 输出: [["bat"],["nat","tan"],["ate","eat","tea"]]
+/**
+ * @param {string[]} strs
+ * @return {string[][]}
+ */
+var groupAnagrams = function (strs) {
+  let m = new Map();
+  for (let str of strs) {
+    let cur = str.split('').sort().join('');
+    if (m.has(cur)) {
+      let arr = m.get(cur);
+      arr.push(str);
+      m.set(cur, arr);
+    } else {
+      m.set(cur, [str]);
+    }
+  }
+  return Array.from(m.values());
 };
 ```
 
