@@ -646,7 +646,30 @@ function lodashSet(obj, path, val) {}
 ## 23.场景应用题:红绿灯问题
 
 ```js
-
+function red() {
+  console.log('red 1000');
+}
+function green() {
+  console.log('green 2000');
+}
+function yellow() {
+  console.log('yellow 3000');
+}
+function mockDelay(fn, timer) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(fn());
+    }, timer);
+  });
+}
+function main() {
+  return Promise.resolve()
+    .then(() => mockDelay(red, 1000))
+    .then(() => mockDelay(green, 2000))
+    .then(() => mockDelay(yellow, 3000))
+    .then(() => main());
+}
+main();
 ```
 
 ## 24.实现每隔 1 秒打印 1/2/3/4
@@ -669,7 +692,7 @@ function print(n) {
 print(4);
 ```
 
-## 25.数组转树
+## 25.数组转树(dfs/bfs)
 
 ```js
 // arr => tree
@@ -700,6 +723,22 @@ function arrToTree(arr) {
   return res;
 }
 arrToTree(inputArray);
+
+// BFS
+function arrToTreeBfs(arr) {
+  let res = [];
+  arr.forEach((item) => {
+    let parent = arr.find((node) => node.id == item.parentId);
+    if (parent) {
+      parent.children = parent.children || [];
+      parent.children.push(item);
+    } else {
+      res.push(item);
+    }
+  });
+  return res;
+}
+arrToTreeBfs(inputArray);
 ```
 
 ## 26.树转数组
@@ -861,9 +900,83 @@ mockRender(vNode, docuement.getElementById('#app'));
 
 ## 31.实现观察模式
 
+```js
+class Subject {
+  constructor(name) {
+    this.name = name;
+    this.obsList = [];
+  }
+  addOb(observer) {
+    this.obsList.push(observer);
+  }
+  removeOb(observer) {
+    this.obsList = this.obsList.filter((cb) => cb != observer);
+  }
+  notify(...arg) {
+    this.obsList.forEach((fn) => fn.update(...arg));
+  }
+}
+class Observer {
+  constructor(name) {
+    this.name = name;
+  }
+  update(arg) {
+    console.log(this.name + 'update:' + arg);
+  }
+}
+let ob1 = new Observer('cpp');
+let ob2 = new Observer('wmh');
+let Sub = new Subject('sub');
+Sub.addOb(ob1);
+Sub.addOb(ob2);
+Sub.notify('test1');
+```
+
 ## 32.图片懒加载
 
+```js
+function lazyLoadImg(imgs, options) {
+  let Observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      const { target, intersectionRatio } = entry;
+      if (intersectionRatio > 0 && target) {
+        const trueUrl = target.dataset.src;
+        target.src = trueUrl;
+        target.onerror = function (err) {
+          if (e.type == 'error') {
+            target.src = options.defaultImg;
+          }
+        };
+        Observer.unobserve(target);
+      }
+    });
+  });
+  imgs.forEach((img) => Observer.observe(img));
+}
+```
+
 ## 33.实现简单 hash 路由
+
+```js
+class Route {
+  constructor() {
+    this.routes = [];
+    this.currentHash = '';
+    this.freshRoute = this.freshRoute.bind(this);
+    window.addEventListener('load', this.freshRoute, false);
+    window.addEventListener('hashchange', this.freshRoute, false);
+  }
+  // 存储
+  storeRoute(path, cb) {
+    this.routes[path] = cb || function () {};
+  }
+  // 刷新
+  freshRoute() {
+    this.currentHash = location.hash.slice(1) || '/';
+    this.routes[this.currentHash]();
+  }
+}
+```
 
 ## 34.实现加减乘除链式调用, 类似 jQuery 式用法
 
@@ -948,8 +1061,155 @@ function isSameArr(a, b) {
 }
 ```
 
-## 38.
+## 38.实现 (5).add(3).minus(2) 功能
 
-## 39.
+```js
+Number.prototype.add = function (n) {
+  return this.valueOf() + n;
+};
+Number.prototype.minus = function (n) {
+  return this.valueOf() - n;
+};
+// test
+(5).add(3).minus(2);
+```
 
-## 40.
+## 39.要求设计 LazyMan 类，实现以下功能
+
+> [要求设计 LazyMan 类，实现以下功能](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/98)
+
+```js
+LazyMan('Tony');
+// Hi I am Tony
+
+LazyMan('Tony').sleep(10).eat('lunch');
+// Hi I am Tony
+// 等待了10秒...
+// I am eating lunch
+
+LazyMan('Tony').eat('lunch').sleep(10).eat('dinner');
+// Hi I am Tony
+// I am eating lunch
+// 等待了10秒...
+// I am eating diner
+
+LazyMan('Tony').eat('lunch').eat('dinner').sleepFirst(5).sleep(10).eat('junk food');
+// Hi I am Tony
+// 等待了5秒...
+// I am eating lunch
+// I am eating dinner
+// 等待了10秒...
+// I am eating junk food
+```
+
+```js
+class LazyManClass {
+  constructor(name) {
+    this.name = name;
+    this.queue = [];
+    console.log(`Hi I am ${name}`);
+    setTimeout(() => {
+      this.next();
+    }, 0);
+  }
+
+  sleepFirst(time) {
+    const fn = () => {
+      setTimeout(() => {
+        console.log(`等待了${time}秒...`);
+        this.next();
+      }, time);
+    };
+    this.queue.unshift(fn);
+    return this;
+  }
+
+  sleep(time) {
+    const fn = () => {
+      setTimeout(() => {
+        console.log(`等待了${time}秒...`);
+        this.next();
+      }, time);
+    };
+    this.queue.push(fn);
+    return this;
+  }
+
+  eat(food) {
+    const fn = () => {
+      console.log(`I am eating ${food}`);
+      this.next();
+    };
+    this.queue.push(fn);
+    return this;
+  }
+
+  next() {
+    const fn = this.queue.shift();
+    fn && fn();
+  }
+}
+
+function LazyMan(name) {
+  return new LazyManClass(name);
+}
+```
+
+## 40.实现 SWR(stale-while-revalidate)机制
+
+一种由 HTTP RFC 5861 推广的 HTTP 缓存失效策略
+
+```js
+let cache = new Map();
+async function swr(cacheKey, fetcher, cacheTime) {
+  let data = cache.get(cacheKey) || { value: null, time: 0, promise: null };
+  cache.set(cacheKey, data);
+  const isStaled = Date.now() - data.time > cacheTime;
+  if (isStaled && !data.promise) {
+    data.promise = fetcher()
+      .then((val) => {
+        data.value = val;
+        data.time = Date.now();
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        data.promise = null;
+      });
+  }
+  if (data.promise && !data.value) {
+    await data.promise;
+  }
+  return data.value;
+}
+function MockPromise() {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('cpp');
+    });
+  });
+}
+const test = await MockPromise();
+swr('cache', MockPromise, 1000);
+```
+
+## 41.实现 shallow 浅比较
+
+```js
+
+```
+
+## 42.如何自定义一个事件，使某一个对象能够捕获到？
+
+## 43.
+
+## 44.
+
+## 45.
+
+## 46.
+
+## 47.
+
+## 48.

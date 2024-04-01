@@ -69,7 +69,7 @@ nav:
  * 45.最小覆盖子串
  * 46.回文子串
  * 47.和为 K 的子数组
- * 48.字符串转换整数
+ * 48.
  * 49.除自身以外数组的乘积
  * 50.旋转图像
  * 51.分发饼干
@@ -498,6 +498,10 @@ lengthOfLongestSubstring('abcabcbb');
 ```
 
 ## [15.乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
+
+```js
+
+```
 
 ## [16.螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/description/)
 
@@ -1258,7 +1262,7 @@ var subArraySum = function (nums, k) {
 };
 ```
 
-## 48.字符串转换整数
+## 48.
 
 ## 49.除自身以外数组的乘积
 

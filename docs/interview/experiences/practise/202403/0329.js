@@ -14,6 +14,37 @@
  * 12.打乱数组
  */
 
+function xQurt(x) {
+  if (x < 2) return x;
+  let l = 0;
+  let r = x;
+  while (l < r) {
+    let mid = l + Math.floor((r - l) / 2);
+    if (mid * mid > x) {
+      r = mid - 1;
+    } else {
+      l = mid + 1;
+    }
+  }
+  return r;
+}
+
+function randomArr(arr) {
+  for (let i = 1; i < arr.length; i++) {
+    let tmp = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[tmp]] = [arr[tmp], arr[i]];
+  }
+  return arr;
+}
+randomArr([1, 2, 3, 4, 5, 6, 7, 8]);
+
+// 实现 es6 extends
+function mockExtends(Child, Parent, staticProps) {
+  let proto = Object.create(Parent.prototype);
+  proto.constructor = Child;
+  Child.prototype = proto;
+}
+
 function add(a, b) {
   let dummy = new ListNode(0);
   let cur = dummy;

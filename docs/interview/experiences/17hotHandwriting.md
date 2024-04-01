@@ -258,7 +258,29 @@ function mockCreate(target) {
 ## 13.实现 Object.assign
 
 ```js
-
+var cpp = {
+  name: 'cpp',
+};
+var obj = { age: 33 };
+var target = Object.assign({ hobby: 'learn' }, cpp, obj);
+console.log(target, 'target'); // 合并
+function MyAssign(target, ...source) {
+  if (!target) {
+    throw new TypeError('can not be null');
+  }
+  let res = Object(target);
+  source.forEach((item) => {
+    if (item) {
+      for (let key in item) {
+        if (item.hasOwnProperty(key)) {
+          res[key] = item[key];
+        }
+      }
+    }
+  });
+  return res;
+}
+Object.MyAssign = MyAssign;
 ```
 
 ## 14.实现 es6 Class
@@ -475,3 +497,36 @@ function backTop() {
 ```
 
 ## 24.实现验证码倒计时
+
+```js
+
+```
+
+## 25.利用正则筛选只包含大小写字母的字符串
+
+```js
+const arr = ['Abc', 'DeF', '123', '_ghI'];
+
+const filteredArr = arr
+  .filter((item) => /^[a-zA-Z]+$/.test(item))
+  .map((item) => item.toUpperCase());
+
+console.log(filteredArr); // ["ABC", "DEF"]
+```
+
+## 26.使用 js 生成 1-10000 的数组
+
+```js
+function gen(n) {
+  return Array.from({ length: n }, (v, k) => k + 1);
+}
+gen(100);
+```
+
+## 27.
+
+## 28.
+
+## 29.
+
+## 30.

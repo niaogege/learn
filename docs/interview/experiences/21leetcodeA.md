@@ -309,15 +309,15 @@ threeSum([-1, 0, 1, 2, -1, -4]);
 ## [7.最大子序和](https://leetcode.cn/problems/maximum-subarray/description/)
 
 ```js
-// 迭代方式
+// 迭代方式 贪心算法
 var maxSubArray = function (nums) {
-  var max = 0;
-  var total = nums[0];
-  for (let i of nums) {
+  var max = nums[0];
+  var total = 0;
+  for (let num of nums) {
     if (total > 0) {
-      total = total + i;
+      total = total + num;
     } else {
-      total = i;
+      total = num;
     }
     max = Math.max(max, total);
   }
@@ -327,16 +327,12 @@ maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]);
 
 // dp 方式
 var maxSubArray = function (nums) {
-  var len = nums.length;
-  var max = nums[0];
-  var dp = new Array(len);
+  let len = nums.length;
+  let dp = new Array(len).fill(0);
   dp[0] = nums[0];
-  for (let i = 1; i < len; i++) {
-    if (dp[i - 1] > 0) {
-      dp[i] = dp[i - 1] + i;
-    } else {
-      dp[i] = i;
-    }
+  let max = nums[0];
+  for (let i = 0; i < len; i++) {
+    dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
     max = Math.max(dp[i], max);
   }
   return max;
@@ -1243,7 +1239,26 @@ function generate(n) {
 }
 ```
 
-## 47.字符串转换整数 (atoi)
+## [47.字符串转换整数 (atoi)](https://leetcode.cn/problems/string-to-integer-atoi/description/)
+
+```js
+/**
+ * @param {string} s
+ * @return {number}
+ */
+var myAtoi = function (s) {
+  let num = parseInt(s, 10);
+  let min = Math.pow(-2, 31);
+  let max = Math.pow(2, 31) - 1;
+  if (isNaN(num)) {
+    return 0;
+  } else if (num < min || num > max) {
+    return num < min ? min : max;
+  } else {
+    return num;
+  }
+};
+```
 
 ## 48.两数相加
 

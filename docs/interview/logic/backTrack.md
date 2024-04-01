@@ -634,3 +634,51 @@ var generateParenthesis = function (n) {
   return res;
 };
 ```
+
+### [79. 单词搜索](https://leetcode.cn/problems/word-search/)
+
+> 不简单 no esay
+
+给定一个 m x n 二维字符网格 board 和一个字符串单词 word 。如果 word 存在于网格中，返回 true ；否则，返回 false 。
+
+单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+
+输入： board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED" 输出：true
+
+```js
+/**
+ * @param {character[][]} board
+ * @param {string} word
+ * @return {boolean}
+ */
+var exist = function (board, word) {
+  let [m, n] = [board.length, board[0].length];
+  let used = new Array(m).fill().map(() => new Array(n).fill(false));
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (board[i][j] == word[0] && dfs(i, j, 0, board, word, used)) {
+        return true;
+      }
+    }
+  }
+  return false;
+};
+function dfs(row, col, i, board, word, used) {
+  if (i == word.length) return true;
+  if (!isValid(board, row, col) || used[row][col] || board[row][col] != word[i]) return false;
+  used[row][col] = true;
+  let res =
+    dfs(row - 1, col, i + 1, board, word, used) ||
+    dfs(row + 1, col, i + 1, board, word, used) ||
+    dfs(row, col - 1, i + 1, board, word, used) ||
+    dfs(row, col + 1, i + 1, board, word, used);
+  if (res) {
+    return true;
+  }
+  used[row][col] = false;
+  return false;
+}
+function isValid(grid, i, j) {
+  return i >= 0 && i < grid.length && j >= 0 && j < grid[0].length;
+}
+```

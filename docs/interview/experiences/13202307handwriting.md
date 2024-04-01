@@ -1571,26 +1571,40 @@ function fibonce(n) {
 fibonce(3);
 ```
 
-## 44.最大子序和
+## [44.最大子序和](https://leetcode.cn/problems/maximum-subarray/)
 
 ```js
 // 输入：nums = [-2,1,-3,4,-1,2,1,-5,4]
 // 输出：6
 // 解释：连续子数组 [4,-1,2,1] 的和最大，为 6 。
-function maxSumChild(arr) {
-  var max = 0;
-  var sum = 0;
-  for (let item of arr) {
-    if (sum > 0) {
-      sum = sum + item;
+// 迭代方式 贪心算法
+var maxSubArray = function (nums) {
+  var max = nums[0];
+  var total = 0;
+  for (let num of nums) {
+    if (total > 0) {
+      total = total + num;
     } else {
-      sum = item;
+      total = num;
     }
-    max = Math.max(max, sum);
+    max = Math.max(max, total);
   }
   return max;
-}
-maxSumChild([-2, 1, -3, 4, -1, 2, 1, -5, 4]);
+};
+maxSubArray([-2, 1, -3, 4, -1, 2, 1, -5, 4]);
+
+// dp 方式
+var maxSubArray = function (nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill(0);
+  dp[0] = nums[0];
+  let max = nums[0];
+  for (let i = 0; i < len; i++) {
+    dp[i] = Math.max(dp[i - 1] + nums[i], nums[i]);
+    max = Math.max(dp[i], max);
+  }
+  return max;
+};
 ```
 
 ## 45.实现简单的 hash 路由跟 history 路由!!!

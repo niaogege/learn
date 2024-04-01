@@ -136,6 +136,35 @@ function levelNode(root) {
 }
 ```
 
+### [N 叉树层序遍历](https://leetcode.cn/problems/n-ary-tree-level-order-traversal/)
+
+```js
+/**
+ * @param {Node|null} root
+ * @return {number[][]}
+ */
+var levelOrder = function (root) {
+  if (!root) return [];
+  let queue = [root];
+  let ans = [];
+  while (queue.length) {
+    let arr = [];
+    let len = queue.length;
+    for (let i = 0; i < len; i++) {
+      let cur = queue.shift();
+      arr.push(cur.val);
+      let childs = cur.children;
+      if (childs.length) {
+        queue.push(...childs);
+        delete cur.children;
+      }
+    }
+    ans.push(arr);
+  }
+  return ans;
+};
+```
+
 ### 多叉树 获取每一层的节点之和 BFS
 
 ```js
@@ -159,9 +188,7 @@ function layerSum(root) {
       let cur = stack.shift();
       sum += cur.value;
       if (cur.children) {
-        cur.children.forEach((child) => {
-          stack.push(child);
-        });
+        stack.push(...cur.children);
         delete cur.children;
       }
     }

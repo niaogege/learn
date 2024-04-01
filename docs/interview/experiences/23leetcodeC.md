@@ -51,8 +51,8 @@ nav:
  * 31.搜索二维矩阵
  * 32.寻找旋转排序数组中的最小值
  * 33.字符串解码
- * 34.
- * 35.
+ * 34.前 K 个高频元素
+ * 35.反转字符串里的单词
  * 36.
  * 37.
  * 38.
@@ -268,6 +268,34 @@ var groupAnagrams = function (strs) {
 
 有 30 个小孩儿，编号从 1-30，围成一圈依此报数，1、2、3 数到 3 的小孩儿退出这个圈， 然后下一个小孩 重新报数 1、2、3，问最后剩下的那个小孩儿的编号是多少?
 
+## [22.划分字母区间](https://leetcode.cn/problems/partition-labels/)
+
+```js
+/**
+ * @param {string} s
+ * @return {number[]}
+ */
+var partitionLabels = function (s) {
+  let m = new Map();
+  let ans = [];
+  for (let i = 0; i < s.length; i++) {
+    let cur = s[i];
+    m.set(cur, i);
+  }
+  let left = 0;
+  let right = 0;
+  for (let i = 0; i < s.length; i++) {
+    let cur = s[i];
+    right = Math.max(right, m.get(cur));
+    if (i == right) {
+      ans.push(right - left + 1);
+      left = i + 1;
+    }
+  }
+  return ans;
+};
+```
+
 ## 24.反转链表 II
 
 > 跟 k 个一组链表反转 好容易混淆
@@ -348,5 +376,59 @@ var letterCombinations = function (digits) {
   };
   backTrack([], 0);
   return ans;
+};
+```
+
+## [34.前 K 个高频元素](https://leetcode.cn/problems/top-k-frequent-elements/)
+
+```js
+/**
+ * @param {number[]} nums
+ * @param {number} k
+ * @return {number[]}
+ */
+var topKFrequent = function (nums, k) {
+  let m = new Map();
+  for (let num of nums) {
+    if (m.has(num)) {
+      let count = m.get(num);
+      m.set(num, count + 1);
+    } else {
+      m.set(num, 1);
+    }
+  }
+  let ans = [];
+  for (let [k, val] of m.entries()) {
+    ans.push(val);
+  }
+  // 排序
+  return [...m.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, k)
+    .map((i) => i[0]);
+};
+```
+
+## [35.反转字符串里的单词](https://leetcode.cn/problems/reverse-words-in-a-string/)
+
+示例：输入：s = "the sky is blue" 输出："blue is sky the"
+
+```js
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var reverseWords = function (s) {
+  let arr = s.trim().split(' ').filter(Boolean);
+  let l = 0;
+  let r = arr.length;
+  while (l < r) {
+    let tmp = arr[l];
+    arr[l] = arr[r];
+    arr[r] = tmp;
+    l++;
+    r--;
+  }
+  return arr.join('');
 };
 ```

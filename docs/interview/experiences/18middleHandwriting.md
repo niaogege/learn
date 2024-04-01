@@ -124,7 +124,22 @@ function mergeSort(arr) {
 mergeSort([1, 222, 1, 24, 23, 44, 9]);
 ```
 
-## 4.
+## 4.十进制转 36 进制
+
+```js
+function to36(num, radix = 36) {
+  num = +num;
+  let units = '0123456789abcdefghijklmnopqrstuvwxzy';
+  let res = '';
+  while (num > 0) {
+    let flag = Math.floor(num % radix);
+    res = units[flag] + res;
+    num = Math.floor(num / radix);
+  }
+  return res;
+}
+to36('360');
+```
 
 ## 5.
 
