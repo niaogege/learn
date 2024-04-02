@@ -10,6 +10,41 @@
  * 8.最长重复子数组
  */
 
+function maxMul(arr) {
+  let len = arr.length;
+  let dpMax = new Array(len).fill(1);
+  dpMax[0] = arr[0];
+  let dpMin = new Array(len).fill(1);
+  dpMin[0] = arr[0];
+  let max = arr[0];
+  for (let i = 1; i < len; i++) {
+    let cur = arr[i];
+    dpMax[i] = Math.max(dpMin[i - 1] * cur, cur, dpMax[i - 1] * cur);
+    dpMin[i] = Math.min(dpMin[i - 1] * cur, cur, dpMax[i - 1] * cur);
+    max = Math.max(dpMax[i], max);
+  }
+  return max;
+}
+
+function maxMul2(arr) {
+  let len = arr.length;
+  let max = 1;
+  let min = 1;
+  let res = Number.MIN_SAFE_INTEGER;
+  for (let i = 0; i < len; i++) {
+    let cur = arr[i];
+    if (cur < 0) {
+      let tmp = max;
+      max = min;
+      min = tmp;
+    }
+    min = Math.min(min * cur, cur);
+    max = Math.max(max * cur, cur);
+    res = Math.max(res, max);
+  }
+  return res;
+}
+
 class Route {
   constructor() {
     this.routes = [];

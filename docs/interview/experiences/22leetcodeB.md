@@ -348,6 +348,8 @@ var deleteNode = function (head, val) {
 };
 ```
 
+## 10.括号生成
+
 ## [11.轮转数组](https://leetcode.cn/problems/rotate-array/?envType=study-plan-v2&envId=top-100-liked)
 
 ### 第一种方式
@@ -500,7 +502,46 @@ lengthOfLongestSubstring('abcabcbb');
 ## [15.乘积最大子数组](https://leetcode.cn/problems/maximum-product-subarray/)
 
 ```js
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var maxProduct = function (nums) {
+  let max = Number.MIN_SAFE_INTEGER;
+  let imax = 1,
+    imin = 1;
+  for (let num of nums) {
+    if (num < 0) {
+      let tmp = imax;
+      imax = imin;
+      imin = tmp;
+    }
+    imax = Math.max(imax * num, num);
+    imin = Math.min(imin * num, num);
+    max = Math.max(max, imax);
+  }
+  return max;
+};
+```
 
+### second
+
+```js
+var maxProduct = function (nums) {
+  let len = nums.length;
+  let dpMax = new Array(len).fill(1);
+  dpMax[0] = nums[0];
+  let dpMin = new Array(len).fill(1);
+  dpMin[0] = nums[0];
+  let max = nums[0];
+  for (let i = 1; i < len; i++) {
+    let cur = nums[i];
+    dpMax[i] = Math.max(dpMin[i - 1] * cur, Math.max(dpMax[i - 1] * cur, cur));
+    dpMin[i] = Math.min(dpMin[i - 1] * cur, Math.min(dpMax[i - 1] * cur, cur));
+    max = Math.max(max, dpMax[i]);
+  }
+  return max;
+};
 ```
 
 ## [16.螺旋矩阵](https://leetcode.cn/problems/spiral-matrix/description/)
@@ -541,6 +582,8 @@ function matrix(nums) {
   return res;
 }
 ```
+
+## 17.按照版本号对数组排序
 
 ## 18.翻转二叉树，二叉树的左右节点翻转
 
@@ -1234,6 +1277,8 @@ findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]);
 ```
 
 ## [45.最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)
+
+## 46.回文子串
 
 ## [47.和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)
 

@@ -16,7 +16,7 @@ nav:
 
 > 练习的不是手写，而是对于这份工作的热爱
 
-> base 50 middle 30 hard 20
+> base 50 middle 30 hard 20 total 100
 
 # 最热的手写,没有之一,没有准备好，就不要出去面试
 
@@ -643,7 +643,7 @@ lodashGet(test, 'other[0].name');
 function lodashSet(obj, path, val) {}
 ```
 
-## 23.场景应用题:红绿灯问题
+## 23.场景应用题, 红绿灯问题
 
 ```js
 function red() {
@@ -1074,7 +1074,7 @@ Number.prototype.minus = function (n) {
 (5).add(3).minus(2);
 ```
 
-## 39.要求设计 LazyMan 类，实现以下功能
+## 39.场景应用题,要求设计 LazyMan 类，实现以下功能
 
 > [要求设计 LazyMan 类，实现以下功能](https://github.com/Advanced-Frontend/Daily-Interview-Question/issues/98)
 
@@ -1202,14 +1202,94 @@ swr('cache', MockPromise, 1000);
 
 ## 42.如何自定义一个事件，使某一个对象能够捕获到？
 
-## 43.
+```js
 
-## 44.
+```
+
+## 43.实现一个 node 异步函数的 promisify
+
+```js
+function promisify(fn) {
+  return (...arr) =>
+    new Promise((resolve, reject) => {
+      arr.push((err, ...val) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(val);
+        }
+      });
+      fn.apply(this, arr);
+    });
+}
+```
+
+## 44.实现字符串压缩
+
+```js
+// abbccccaaa->a1b2c4a3
+function compressWord(str) {
+  let res = '';
+  let arr = [];
+  for (let i = 0; i < str.length; i++) {
+    let cur = str[i];
+    const index = arr.indexOf(cur);
+    if (arr.length && index < 0) {
+      res += arr[0] + arr.length;
+      arr = [];
+    }
+    arr.push(cur);
+  }
+  if (arr.length) {
+    res += arr[0] + arr.length;
+  }
+  return res;
+}
+compressWord('abbccccaaa');
+```
 
 ## 45.
 
-## 46.
+## 46.TS 练习嵌套 Awaited<T>
 
-## 47.
+```ts
+type MockAwaited<T extends Promise<unknown>> = T extends Promise<infer P>
+  ? P extends Promise<unknown>
+    ? MockAwaited<P>
+    : P
+  : T;
+```
 
-## 48.
+## 47.TS 练习根据 xx 类型提取类型的对象 FunctionKeys<T, Function>
+
+> 关键词 as 映射
+
+```ts
+type TTP1 = {
+  name: string;
+  getName: () => void;
+  age: number;
+};
+type FunctionKeys<T, F> = {
+  [P in keyof T as T[P] extends F ? P : never]: T[P];
+};
+type Fun1 = FunctionKeys<TTP1, number>;
+```
+
+## 48.TS 练习索引类型转联合类型：IndexToUnion
+
+```ts
+
+```
+
+## 49.TS 练习独一无二类型：Unique
+
+```ts
+
+```
+
+## 50.TS 练习联合类型转交叉类型：UnionToIntersection
+
+```ts
+
+```
