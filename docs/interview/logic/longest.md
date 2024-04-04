@@ -163,14 +163,14 @@ function longestUpChildSeq(nums) {
 function longestUpChildSeq(nums) {
   if (nums.length == 0) return 0;
   let max = 1;
-  let temp = [];
+  let count = 1;
   for (let i = 1; i < nums.length; i++) {
     if (nums[i] > nums[i - 1]) {
-      temp.push(nums[i]);
+      count += 1;
     } else {
-      temp = [];
+      count = 1;
     }
-    max = Math.max(max, temp.length);
+    max = Math.max(max, count);
   }
   return max;
 }

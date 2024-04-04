@@ -207,23 +207,7 @@ function thousand(str) {
 thousand('123456789');
 ```
 
-## 8.实现一个 node 异步函数的 promisify
-
-```js
-function promisify(fn) {
-  return (...arr) =>
-    new Promise((resolve, reject) => {
-      arr.push((err, ...val) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(val);
-        }
-      });
-      fn.apply(this, arr);
-    });
-}
-```
+## 8.
 
 ## 9.封装一个类使对象可以被 for of 遍历
 

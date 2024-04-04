@@ -10,6 +10,29 @@
  * 8.最长重复子数组
  */
 
+var isHappy = function (n) {
+  let slow = n;
+  let fast = n;
+  while (fast != 1) {
+    slow = getSum(slow);
+    fast = getSum(fast);
+    fast = getSum(fast);
+    // 有环
+    if (slow == fast) {
+      return false;
+    }
+  }
+  return true;
+};
+function getSum(n) {
+  let sum = 0;
+  while (n > 0) {
+    sum += Math.pow(n % 10, 2);
+    n = Math.floor(n / 10);
+  }
+  return sum;
+}
+
 function maxMul(arr) {
   let len = arr.length;
   let dpMax = new Array(len).fill(1);

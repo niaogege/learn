@@ -7,10 +7,61 @@
  * 6.单词搜索
  * 7.版本号进行排序
  * 8.每日温度
- * 9.最长连续重复子串
+ * 9.最长连续递增子序列/最长递增子序列
  * 10.零钱兑换II
  */
+// /^[a-zA-Z]+$/;
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function (nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill(1);
+  let max = 1;
+  for (let i = 1; i < len; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[i] > nums[j]) {
+        dp[i] = Math.max(dp[j] + 1, dp[i]);
+      }
+    }
+    max = Math.max(dp[i], max);
+  }
+  return max;
+};
 
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findLengthOfLCIS = function (nums) {
+  let len = nums.length;
+  let max = 1;
+  let count = 1;
+  for (let i = 1; i < len; i++) {
+    if (nums[i] > nums[i - 1]) {
+      count += 1;
+    } else {
+      count = 1;
+    }
+    max = Math.max(count, max);
+  }
+  return max;
+};
+
+var findLengthOfLCIS = function (nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill(1);
+  let max = 1;
+  for (let i = 1; i < len; i++) {
+    if (nums[i] > nums[i - 1]) {
+      dp[i] = dp[i - 1] + 1;
+    }
+    max = Math.max(dp[i], max);
+  }
+  return max;
+};
+findLengthOfLCIS([1, 3, 5, 4, 7]);
 function myAssign(target, ...source) {
   if (typeof target != 'object') {
     throw new TypeError('error');

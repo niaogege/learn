@@ -56,7 +56,7 @@ nav:
  * 32.寻找两个正序数组的中位数
  * 33.分发糖果
  * 34.最长递增子序列
- * 35.最长连续递增序列
+ * 35.最长连续递增子序列
  * 36.最长公共子序列
  * 37.最小路径和
  * 38.移动零
@@ -999,10 +999,23 @@ var candy = function (ratings) {
 // 输入：nums = [10,9,2,5,3,7,101,18]
 // 输出：4
 // 解释：最长递增子序列是 [2,3,7,101]，因此长度为 4 。
-function longestUpChildSeq(nums) {}
+function longestUpChildSeq(nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill(1);
+  let max = 1;
+  for (let i = 1; i < len; i++) {
+    for (let j = 0; j < i; j++) {
+      if (nums[i] > nums[j]) {
+        dp[i] = Math.max(dp[j] + 1, dp[i]);
+      }
+    }
+    max = Math.max(dp[i], max);
+  }
+  return max;
+}
 ```
 
-## [35.最长连续递增序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/description/)
+## [35.最长连续递增子序列](https://leetcode.cn/problems/longest-continuous-increasing-subsequence/description/)
 
 ```js
 // 贪心算法
@@ -1020,6 +1033,18 @@ var findLengthOfLCIS = function (nums) {
   return ans;
 };
 // dp解法
+var findLengthOfLCIS = function (nums) {
+  let len = nums.length;
+  let dp = new Array(len).fill(1);
+  let max = 1;
+  for (let i = 1; i < len; i++) {
+    if (nums[i] > nums[i - 1]) {
+      dp[i] = dp[i - 1] + 1;
+    }
+    max = Math.max(dp[i], max);
+  }
+  return max;
+};
 ```
 
 ## [36.最长公共子序列](https://leetcode.cn/problems/longest-common-subsequence/description/)
