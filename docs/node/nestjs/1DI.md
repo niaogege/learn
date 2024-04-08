@@ -1,6 +1,6 @@
 ---
 title: TS中的DI笔记
-order: 0
+order: 1
 group:
   title: nestjs
   order: 5

@@ -69,12 +69,11 @@ nav:
  * 45.最小覆盖子串
  * 46.回文子串
  * 47.和为 K 的子数组
- * 48.
+ * 48.岛屿的最大面积
  * 49.除自身以外数组的乘积
  * 50.旋转图像
  * 51.分发饼干
  * 52.跳跃游戏
- * 53.岛屿的最大面积
  */
 ```
 
@@ -1184,7 +1183,7 @@ function findLongestValid(str) {
 }
 ```
 
-## 40.判断子序列
+## [40.判断子序列](https://leetcode.cn/problems/is-subsequence/)
 
 ```js
 输入：s = "abc", t = "ahbgdc"
@@ -1194,8 +1193,7 @@ function findLongestValid(str) {
 
 function isChildSeq(s, t) {
   if (s.length == 0) return true;
-  let j = 0;
-  for (let i = 0; i < t.length; i++) {
+  for (let i = 0,j=0; i < t.length; i++) {
     if (s[j] == t[i]) {
       j = j + 1;
       // 如何s的长度 == j 则完全包含
@@ -1224,7 +1222,7 @@ function isChild(s, t) {
 }
 ```
 
-## 41.不同的子序列
+## [41.不同的子序列]()
 
 ## [42.两个字符串的删除操作](https://leetcode.cn/problems/delete-operation-for-two-strings/)
 
@@ -1303,7 +1301,7 @@ findLength([1, 2, 3, 2, 1], [3, 2, 1, 4, 7]);
 
 ## [45.最小覆盖子串](https://leetcode.cn/problems/minimum-window-substring/description/)
 
-## 46.回文子串
+## [46.回文子串]()
 
 ## [47.和为 K 的子数组](https://leetcode.cn/problems/subarray-sum-equals-k/)
 
@@ -1332,9 +1330,9 @@ var subArraySum = function (nums, k) {
 };
 ```
 
-## 48.
+## [48.岛屿的最大面积]()
 
-## 49.除自身以外数组的乘积
+## [49.除自身以外数组的乘积]()
 
 ```js
 function mul(arr) {

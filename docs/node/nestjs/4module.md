@@ -1,6 +1,6 @@
 ---
-title: 控制器controller
-order: 11
+title: 模块@Module
+order: 4
 group:
   title: nestjs
   order: 5

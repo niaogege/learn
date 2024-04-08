@@ -11,6 +11,7 @@ nav:
 ---
 
 - [前端工程化历程](https://mp.weixin.qq.com/s/o8B8HAczZtIZM8V_HHwNqg)
+- [nvm 安装 nodejs](https://nodejs.org/en/download/package-manager)
 
 ## node 包含模块
 

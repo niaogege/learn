@@ -1,6 +1,6 @@
 ---
 title: 提供者Providers
-order: 1
+order: 3
 group:
   title: nestjs
   order: 5

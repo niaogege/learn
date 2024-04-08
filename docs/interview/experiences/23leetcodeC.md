@@ -58,8 +58,20 @@ nav:
  * 38.
  * 39。
  * 40.
+ * 41.
+ * 42.
+ * 43.
+ * 44.
+ * 45.
+ * 46.
+ * 47.
+ * 48.
+ * 49.
+ * 50.
  */
 ```
+
+## 1.最大二叉树
 
 ## [2.用队列实现栈](https://leetcode.cn/problems/implement-stack-using-queues/description/)
 
@@ -184,6 +196,8 @@ shufttle([1, 2, 3, 4, 5, 6]);
 
 ## 10.复原 IP 地址
 
+> 拆分 回溯
+
 ```js
 // 0000 => [0.0.0.0]
 function reverseIp(s) {
@@ -194,7 +208,7 @@ function reverseIp(s) {
       return;
     }
     for (let i = start; i < s.length; i++) {
-      let cur = s.slice(start, i + 1);
+      let cur = s.slice(start, i + 1); // important
       if (+cur > 255 || cur.length > 3) continue;
       if (cur.length > 1 && cur[0] == '0') continue;
       path.push(cur);
@@ -435,12 +449,64 @@ var reverseWords = function (s) {
 
 ## [36.快乐数](https://leetcode.cn/problems/happy-number/description/)
 
-快乐数定义： 1.对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和 2.然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。 3.如果这个过程 结果为 1，那么这个数就是快乐数 4.如果 n 是 快乐数 就返回 true ；不是，则返回 false 。
+快乐数定义：
+
+- 1.对于一个正整数，每一次将该数替换为它每个位置上的数字的平方和
+- 2.然后重复这个过程直到这个数变为 1，也可能是 无限循环 但始终变不到 1。
+- 3.如果这个过程 结果为 1，那么这个数就是快乐数
+- 4.如果 n 是 快乐数 就返回 true ；不是，则返回 false 。
+
+### 使用快慢指针
 
 ```js
 /**
  * @param {number} n
  * @return {boolean}
  */
-var isHappy = function (n) {};
+var isHappy = function (n) {
+  let slow = n;
+  let fast = n;
+  while (fast != 1) {
+    slow = getSum(slow);
+    fast = getSum(fast);
+    fast = getSum(fast);
+    // 有环
+    if (slow == fast) {
+      return false;
+    }
+  }
+  return true;
+};
+function getSum(n) {
+  let sum = 0;
+  while (n > 0) {
+    sum += Math.pow(n % 10, 2);
+    n = Math.floor(n / 10);
+  }
+  return sum;
+}
 ```
+
+### 第二种使用 Set 数据结构
+
+```js
+function isHappy(n) {
+  let set = new Set();
+  // 如果循环中某个值重复出现 说明进入死循环 说明不是快乐数
+  while (n != 1 && !set.has(n)) {
+    set.add(n);
+    n = getSum(n);
+  }
+  return n == 1;
+}
+function getSum(n) {
+  let sum = 0;
+  while (n > 0) {
+    sum += Math.pow(n % 10, 2);
+    n = Math.floor(n / 10);
+  }
+  return sum;
+}
+```
+
+## 38.

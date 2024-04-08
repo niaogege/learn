@@ -1,6 +1,6 @@
 ---
 title: 控制器controller
-order: 1
+order: 2
 group:
   title: nestjs
   order: 5
@@ -11,7 +11,7 @@ nav:
   path: /node
 ---
 
-控制器负责**处理传入的请求**和向客户端**`返回响应`**。
+控制器负责**处理传入的请求**和向客户端**返回响应**。
 
 > 完了，对 controller/module/provide/inject 概念不了解
 
