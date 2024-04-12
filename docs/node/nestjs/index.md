@@ -22,8 +22,8 @@ nav:
 - 理解 pipe/interceptor
 - 理解反射器 Reflector
 - 理解守卫 guard 和 使用 JWT（JSON Web Token）进行身份验证
-- typeOrm 相关使用
-- prisma 相关使用
+- typeOrm 相关使用，强烈推荐去官网文档查看
+- prisma 相关使用，强烈推荐去官网文档查看
 - 数据库建表以及 CURD 相关操作,一对多(OneToOne)/多对多(ManyToMany)/多对一
 - 学习 rxjs 相关
 
@@ -37,8 +37,16 @@ nav:
 - [nestjs](https://juejin.cn/post/7032079740982788132?searchId=202404061303234D363E19D3DDF005014F)
 - [nestjs-guide](https://pengtikui.cn/blog/nestjs-guide)
 - [nestjs](https://docs.nestjs.cn/9/firststeps)
+- []()
 - [五月君大佬图片压缩](https://github.com/qufei1993/compressor)
   > 发现自己有这么多的缺点和不懂的点，需要主动学习，什么时候才能想五月君大佬，写出这么优雅的代码出来?
+
+## 优秀 Nestjs 仓库
+
+- [typeorm 查询语句](https://github.com/typeorm/typeorm/blob/master/docs/find-options.md)
+- [nestjs 官网案例](https://github.com/nestjs/nest/tree/master/sample)
+- [nestjs 项目实战](https://github.com/zclzone/isme-nest-serve)
+- [nestjs 值得推荐的项目列表](https://github.com/nestjs/awesome-nestjs)
 
 ## Nestjs 学习
 

@@ -10,6 +10,8 @@
  * 8.乘积最大子数组
  */
 
+function maxArea(grid) {}
+
 function maxMul(arr) {
   let max = 1;
   let min = 1;
