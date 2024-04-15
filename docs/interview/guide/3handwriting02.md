@@ -3,7 +3,7 @@ title: 202308手写汇总(2)
 order: 14
 group:
   order: 0
-  title: interview
+  title: /interview/guide
 nav:
   order: 3
   title: 'interview'

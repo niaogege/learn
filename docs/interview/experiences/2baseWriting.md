@@ -1,8 +1,8 @@
 ---
 title: 面试经验之手写js基础版
-order: 2
+order: 13
 group:
-  order: 0
+  order: 11
   title: interview
 nav:
   order: 3
@@ -52,8 +52,9 @@ Array.prototype.mockMap = function (fn, context) {
 Array.prototype.myReduce = function (fn, init) {
   var arr = Array.prototype.slice.call(this) || [];
   var res = init ? init : arr[0];
-  for (let i = init ? 0 : 1; i < arr.length; i++) {
-    res = fn.call(null, res, arr[i], i, arr);
+  let startIndex = init ? 0 : 1;
+  for (let startIndex; startIndex < arr.length; startIndex++) {
+    res = fn.call(null, res, arr[startIndex], startIndex, arr);
   }
   return res;
 };
@@ -66,27 +67,29 @@ console.log(sum2, 'sum');
 ### myFlat
 
 ```js
-Array.prototype.myFlat = function (num = 1) {
+Array.prototype.myFlat = function (depth = 1) {
   var arr = Array.prototype.slice.call(this) || [];
   var i = 0;
   while (arr.some((e) => Array.isArray(e))) {
-    console.log(arr, 'before');
     arr = [].concat(...arr);
-    console.log(arr, 'after');
     i++;
-    if (i >= num) break;
+    if (i >= depth) break;
   }
+  console.log(arr, 'arr');
   return arr;
 };
 var test = [1, [2, 3, 4], [[5, 6, 7]]];
+test.myFlat(2);
 
-Array.prototype.myFlatten2 = function () {
+Array.prototype.myFlatten2 = function (depth = 1) {
   var arr = Array.prototype.slice.call(this) || [];
   var stack = [...arr];
   var res = [];
+  let i = 0;
   while (stack.length) {
     var cur = stack.pop();
-    if (Array.isArray(cur)) {
+    if (Array.isArray(cur) && i <= depth) {
+      i++;
       stack.push(...cur);
     } else {
       res.push(cur);
@@ -94,5 +97,6 @@ Array.prototype.myFlatten2 = function () {
   }
   return res;
 };
-test.myFlat();
+var test = [1, [2, 3, 4], [[5, 6, 7]]];
+test.myFlatten2(2);
 ```

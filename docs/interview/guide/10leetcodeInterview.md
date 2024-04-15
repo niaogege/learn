@@ -3,7 +3,7 @@ title: 手撕算法面试题1
 order: 25
 group:
   order: 0
-  title: interview
+  title: /interview/guide
 nav:
   order: 3
   title: 'interview'

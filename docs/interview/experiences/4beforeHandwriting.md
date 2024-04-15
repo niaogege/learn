@@ -2,8 +2,8 @@
 title: 面试经验之手写之历史汇总
 order: 4
 group:
-  order: 0
-  title: interview
+  order: 11
+  title: /interview/experience
 nav:
   order: 3
   title: 'interview'

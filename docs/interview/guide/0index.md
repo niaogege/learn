@@ -2,7 +2,7 @@
 title: 积少成多 面试经验
 group:
   order: 0
-  title: interview
+  title: /interview/guide
 nav:
   order: 3
   title: 'interview'

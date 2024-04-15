@@ -2,8 +2,8 @@
 title: 面试经验之手写js中阶版
 order: 5
 group:
-  order: 0
-  title: interview
+  order: 11
+  title: /interview/experience
 nav:
   order: 3
   title: 'interview'
@@ -177,6 +177,24 @@ rgbToHex(`rgb(255, 255, 255)`);
 ```
 
 ## 手写 es6 中的 class
+
+```js
+function mockClass(con, proto, staticProps) {
+  proto && defineProperties(con.prototype, proto);
+  staticProps && defineProperties(con, staticProps);
+  return con;
+}
+function defineProperties(target, obj) {
+  for (let key in obj) {
+    Object.defineProperty(target, key, {
+      value: obj[key],
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    });
+  }
+}
+```
 
 ## 手写 es6 中的 extends
 

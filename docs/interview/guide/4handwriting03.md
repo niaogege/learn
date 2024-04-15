@@ -3,7 +3,7 @@ title: 202309手写汇总(3)
 order: 15
 group:
   order: 0
-  title: interview
+  title: /interview/guide
 nav:
   order: 3
   title: 'interview'

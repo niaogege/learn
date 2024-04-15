@@ -1,9 +1,9 @@
 ---
-title: 202311手写汇总(6)-middleWriting
+title: 202311手写汇总(6)-hardWriting
 order: 18
 group:
   order: 0
-  title: interview
+  title: /interview/guide
 nav:
   order: 3
   title: 'interview'

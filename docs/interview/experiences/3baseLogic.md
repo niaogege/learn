@@ -1,9 +1,9 @@
 ---
 title: 面试经验之手写算法基础版
-order: 3
+order: 14
 group:
-  order: 0
-  title: interview
+  order: 11
+  title: /interview/experience
 nav:
   order: 3
   title: 'interview'
@@ -14,14 +14,14 @@ nav:
 
 - LRU 缓存淘汰策略
 - 二分法
-- 3. 无重复字符的最长子串
+- 无重复字符的最长子串
 - 反转链表
 - 删除链表一个节点
 - 链表是否有环
 - 链表如果有环的话返回入口节点
 - 无重复字符的最长子串
 - 盛最多水的容器
-- 20. 有效的括号
+- 有效的括号
 - 全排列
 - 前中后序遍历
 - 二叉树层序遍历

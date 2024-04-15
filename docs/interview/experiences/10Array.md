@@ -2,8 +2,8 @@
 title: 0310积累面试经验之Array相关
 order: 10
 group:
-  order: 0
-  title: interview
+  order: 11
+  title: /interview/experience
 nav:
   order: 3
   title: 'interview'
