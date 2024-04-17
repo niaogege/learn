@@ -3,7 +3,8 @@ title: 手写基础且重要的TS高级类型
 order: 27
 group:
   order: 0
-  title: /interview/guide
+  title: guide
+  path: /interview/guide
 nav:
   order: 3
   title: 'interview'

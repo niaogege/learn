@@ -26,6 +26,7 @@ nav:
 - hex 转换 rgb 互相转换
 - vue 中的 template 解析
 - 验证密码的合法性
+- 模拟实现 lodash.get()/lodash.set()
 
 ## 首字母大写，剩下小写
 
@@ -105,4 +106,10 @@ function transform(str) {
   return str.replace(/[_-\s](\w)/g, (_, p) => p.toUpperCase());
 }
 transform('cpp-wmh-and'); //cppWmhAnd
+```
+
+## 模拟实现 lodash.get()/lodash.set()
+
+```js
+function mockLodashGet(obj, path, defaultVal) {}
 ```

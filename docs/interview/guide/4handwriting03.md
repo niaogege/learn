@@ -3,7 +3,8 @@ title: 202309手写汇总(3)
 order: 15
 group:
   order: 0
-  title: /interview/guide
+  title: guide
+  path: /interview/guide
 nav:
   order: 3
   title: 'interview'
@@ -2065,7 +2066,7 @@ console.log(buyDrinks(20, 5));
 ```js
 function isPrime(num) {
   // 除了1和本身， 都不能整除
-  for (let i = 2; i <= num; i++) {
+  for (let i = 2; i * i <= num; i++) {
     if (num % i === 0) return false;
   }
   return num > 1;

@@ -3,7 +3,8 @@ title: 202311手写汇总(4)-HotWriting
 order: 16
 group:
   order: 0
-  title: /interview/guide
+  title: guide
+  path: /interview/guide
 nav:
   order: 3
   title: 'interview'
@@ -835,9 +836,9 @@ function dateFormat(date, format) {
   let day = date.getDate();
   let mon = date.getMonth() + 1;
   let year = date.getFullYear();
-  format = format.replace(/yyyy/, year);
-  format = format.replace(/MM/, mon);
-  format = format.replace(/dd/, day);
+  format = format.replace(/yyyy/i, year);
+  format = format.replace(/MM/i, mon);
+  format = format.replace(/dd/i, day);
   return format;
 }
 dateFormat(new Date('2024-02-20'), 'yyyy/MM/dd');
@@ -880,7 +881,7 @@ getType({}); // object
 getType(Promise.resolve()); // promise
 ```
 
-## 30.模拟实现虚拟 dom 实现
+## 30.实现虚拟 dom
 
 ```js
 function mockRender(node, parent) {}
@@ -943,6 +944,7 @@ function lazyLoadImg(imgs, options) {
         const trueUrl = target.dataset.src;
         target.src = trueUrl;
         target.onerror = function (err) {
+          // 错误的时候展示默认图片
           if (e.type == 'error') {
             target.src = options.defaultImg;
           }
@@ -1194,7 +1196,7 @@ const test = await MockPromise();
 swr('cache', MockPromise, 1000);
 ```
 
-## 41.实现 shallow 浅比较
+## 41.如何实现 shallow 浅比较
 
 ```js
 

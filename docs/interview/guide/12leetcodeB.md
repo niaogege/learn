@@ -3,7 +3,8 @@ title: 手撕热门算法题2
 order: 19
 group:
   order: 0
-  title: /interview/guide
+  title: guide
+  path: /interview/guide
 nav:
   order: 3
   title: 'interview'

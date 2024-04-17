@@ -1,6 +1,6 @@
 /**
  * 1.class手写
- * 2.
+ * 2.extend
  */
 
 function mockClass(con, proto, staticProps) {
