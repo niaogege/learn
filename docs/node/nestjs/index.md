@@ -37,7 +37,6 @@ nav:
 - [nestjs](https://juejin.cn/post/7032079740982788132?searchId=202404061303234D363E19D3DDF005014F)
 - [nestjs-guide](https://pengtikui.cn/blog/nestjs-guide)
 - [nestjs](https://docs.nestjs.cn/9/firststeps)
-- []()
 - [五月君大佬图片压缩](https://github.com/qufei1993/compressor)
   > 发现自己有这么多的缺点和不懂的点，需要主动学习，什么时候才能想五月君大佬，写出这么优雅的代码出来?
 

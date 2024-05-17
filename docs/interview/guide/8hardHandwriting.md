@@ -142,7 +142,21 @@ function to36(num, radix = 36) {
 to36('360');
 ```
 
-## 5.
+## 5.根据以下数组对 born 进行降序排序
+
+```js
+var singers = [
+  { name: 'Steven Tyler', band: 'Aerosmith', born: 1948 },
+  { name: 'Karen Carpenter', band: 'The Carpenters', born: 1950 },
+  { name: 'Kurt Cobain', band: 'Nirvana', born: 1967 },
+  { name: 'Stevie Nicks', band: 'Fleetwood Mac', born: 1948 },
+];
+function test(arr) {
+  // return arr.sort((a, b) => b.born - a.born);
+  return arr.sort((a, b) => (a.born < b.born ? 1 : -1));
+}
+test(singers);
+```
 
 ## 6.判断对象是否存在循环引用
 
@@ -171,21 +185,19 @@ function isCycleObj(obj) {
 
 ```js
 function redPacket(total, num, max = 2, min = '0.1') {
-  function name(params) {
-    let remain = total;
-    let ans = [];
-    for (let i = 0; i < num - 1; i++) {
-      let Max = (remain / num) * max;
-      let cur = Math.floor(Max * Math.random() * 100) / 100;
-      cur = cur < min ? min : cur;
-      ans.push(cur);
-      remain = Math.round((remain - cur) * 100) / 100;
-    }
-    ans.push(remain);
-    return ans;
+  let remain = total;
+  let ans = [];
+  for (let i = 0; i < num - 1; i++) {
+    let Max = (remain / num) * max;
+    let cur = Math.floor(Max * Math.random() * 100) / 100;
+    cur = cur < min ? min : cur;
+    ans.push(cur);
+    remain = Math.round((remain - cur) * 100) / 100;
   }
-  redPacket(10, 4);
+  ans.push(remain);
+  return ans;
 }
+redPacket(10, 4);
 ```
 
 ## 8.封装异步的 fetch，使用 async await 方式来使用
@@ -265,7 +277,62 @@ function mockData() {
 }
 ```
 
-## 11.
+## 11.编写 vue 组件，组件内部使用插槽接收外部内容，v-model 双向绑定，实现折叠展开功能
+
+```html
+<template>
+  <div>
+    <button @click="toggleCollapse">{{ collapsed ? '展开' : '折叠' }}</button>
+    <div v-show="!collapsed">
+      <slot></slot>
+    </div>
+  </div>
+</template>
+<script>
+  export default {
+    model: {
+      prop: 'collapsed',
+      event: 'toggle',
+    },
+    props: {
+      collapsed: {
+        type: Boolean,
+        default: true,
+      },
+    },
+    methods: {
+      toggleCollapse() {
+        this.$emit('toggle', !this.collapsed);
+      },
+    },
+  };
+</script>
+```
+
+在使用该组件时，可以使用 v-model 来进行双向绑定：
+
+```html
+<template>
+  <div>
+    <Panel v-model="isCollapsed">
+      <div>需要折叠展开的内容</div>
+    </Panel>
+  </div>
+</template>
+<script>
+  import Panel from './components/Panel.vue';
+  export default {
+    components: {
+      Panel,
+    },
+    data() {
+      return {
+        isCollapsed: true,
+      };
+    },
+  };
+</script>
+```
 
 ## 链接
 

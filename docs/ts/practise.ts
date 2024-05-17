@@ -225,3 +225,9 @@ type E28 = Equal<E251, { hobby: string; name: symbol }>;
 type T26 = Promise<[Promise<{ name: 'cpp' }>, 2, 3]>;
 type MyPromise<T> = T extends Promise<infer A> ? A : never;
 type T27 = MyPromise<T26>;
+
+const obj = { a: 1, b: '2' } as const;
+function fn<T, K extends keyof T>(obj: T, param: K) {
+  return obj[param];
+}
+const test = fn(obj, 'a');

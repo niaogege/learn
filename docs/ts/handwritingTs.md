@@ -609,3 +609,22 @@ type NumberRange<
   R extends number = never,
 > = U['length'] extends P ? R | U['length'] : NumberRange<T, P, [0, ...U], R | U['length']>;
 ```
+
+### 如何约束函数返回值类型
+
+```ts
+const obj = { a: 1, b: '2' } as const;
+function fn<T>(obj: T, param: keyof T) {
+  return obj[param];
+}
+const test = fn(obj, 'a'); // const test: 1 | "2"
+```
+
+如何是的 test 类型为 1
+
+```ts
+function fn2<T, K extends keyof T>(obj: T, param: K) {
+  return obj[param];
+}
+const test2 = fn2(obj, 'a'); // const test2: 1
+```
