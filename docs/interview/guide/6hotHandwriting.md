@@ -148,7 +148,7 @@ const pipe = (...funs) => {
   if (funs.length == 1) return funs(0);
   return (...arg) => {
     return funs.reduce((a, b) => {
-      return a(b);
+      return b(a);
     }, arg);
   };
 };
