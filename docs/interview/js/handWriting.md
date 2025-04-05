@@ -548,6 +548,50 @@ ajax({
 });
 ```
 
+如果加上 TS 类型注解，则需要改成如下
+
+```ts
+interface FetchPrams {
+  name: string;
+}
+export const postFetchData = async (params: {
+  FetchPrams;
+}): Promise<{ code: string; message: string }> => {
+  return mockAjax<FetchPrams, { code: string; message: string }>({
+    url: `${serviceUrl}/test`,
+    method: 'POST',
+    params,
+  });
+};
+
+function mockAjax<T, R>({
+  url,
+  method = 'GET',
+  params,
+}: {
+  url: string;
+  method?: 'GET' | 'POST';
+  params?: T;
+}): Promise<R> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === xhr.DONE && xhr.status === 200) {
+        const data = JSON.parse(xhr.responseText);
+        if (data.code === '0') {
+          resolve(data as R);
+        } else {
+          reject(new Error(data.message || '请求出错了'));
+        }
+      }
+    };
+    xhr.send(method === 'POST' ? JSON.stringify(params) : undefined);
+  });
+}
+```
+
 ### JS 检测网络宽带
 
 ```js

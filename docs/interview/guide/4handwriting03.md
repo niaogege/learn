@@ -77,6 +77,8 @@ nav:
  * 56.场景应用题：买饮料
  * 57.编写函数，每次返回下一个质数（Prime number）
  * 58.设计一个计算器，先乘除后加减
+ * 59.数组里的两个子项交换顺序，原序号10，更改后序号2，原2-9 变成 3-10；原序号1，更改后序号20，原2-20变成1-19
+ * 60.
  */
 ```
 
@@ -2118,6 +2120,29 @@ class Calculator {
 }
 let tt = new Calculator();
 console.log(tt.add(10).mul(2).sub(3).div(2).get());
+```
+
+## 59.数组里的两个子项交换顺序，原序号 10，更改后序号 2，原 2-9 变成 3-10；原序号 1，更改后序号 20，原 2-20 变成 1-19(这里序号从 1 开始，注意跟数组从 0 开始区分开)
+
+```js
+var arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+function transform(arr, fromIndex, toIndex) {
+  if (toIndex > arr.length) {
+    console.log('目标值超出最大值');
+  }
+  if (toIndex <= 0) {
+    console.log('目标值必须大于等于0');
+  }
+  const ele = arr.splice(fromIndex, 1)[0];
+  console.log(ele, 'ele');
+  arr.splice(toIndex, 0, ele);
+}
+transform(arr, 10 - 1, 2 - 1); // 原序号10更改成序号2
+console.log(arr, 'arr');
+// [1,10,2,3,4,5,6,7,8,9]
+transform(arr, 1 - 1, 10 - 1); // 原来第一位的移到最后一位
+// [2,3,4,5,6,7,8,9,10,1]
 ```
 
 ## 参考

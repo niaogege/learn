@@ -50,7 +50,7 @@ nav:
  * 29.手写并发控制器!!!
  * 30.手写ajax
  * 31.手写jsonp
- * 32.[如何最快捷计算【白屏时间 FCP】和【首屏时间 LCP】](https://mp.weixin.qq.com/s/66_ssrmZpzeddm3FugiMFQ)
+ * 32.手写通用的数据Map(实现一个Node Store，支持DOM element作为key)
  * 33.URL参数解析
  * 34.手写去重
  * 35.useEvent
@@ -201,15 +201,17 @@ var sum = (...rest) => rest.reduce((pre, cur) => cur + pre, 0);
 var getCurry = curryFn(sum);
 getCurry(1)(2)(3)();
 // 参数固定
-function curryFn1(fn) {
-  function temp(...rest) {
-    if (rest.length === fn.length) {
-      return fn.apply(this, rest);
+
+function curry(func) {
+  return function curriedFunc(...args) {
+    if (args.length >= func.length) {
+      return func(...args);
     } else {
-      return (...arg) => temp(...rest.concat(arg));
+      return function (...next) {
+        return curriedFunc(...args, ...next);
+      };
     }
-  }
-  return temp;
+  };
 }
 
 var sum1 = (a, b, c) => a + b + c;
@@ -239,16 +241,19 @@ bigIntSum('123', '123');
 ## 8.deepClone 深浅拷贝
 
 ```js
-function deepClone(obj) {
-  if (obj typeof !== 'Object') {
+function deepClone(obj, map = new Map()) {
+  if (obj typeof !== 'Object' || obj === null) {
     return obj
   }
+  if (map.has(obj)) {
+    return map.get(obj)
+  }
   var target = Array.isArray(obj) ? [] : {}
-  for (let key in obj) {
-    if(obj.hasOwnProperty(key)) {
-      let item = obj[key]
-      target[key] = item instanceof Object ? deepClone(item) : item
-    }
+  map.set(obj,target)
+  const keys = [...Object.keys(target), ...Object.getOwnPropertySymbols(obj)]
+  for(ket k of keys) {
+    const val = target[k]
+    target[k] = deepClone(val, map)
   }
   return target
 }
@@ -357,21 +362,20 @@ console.log(sum2);
 
 ```js
 // [[1,2,3,[4,5]]]
-const flatten = (list, level = +Infinity) => {
-  var stack = [...list];
+
+function flatten(arr, depth = 1) {
   var res = [];
-  let i = 0;
-  while (stack.length) {
-    var cur = stack.pop();
-    if (Array.isArray(cur) && i < level) {
-      i++;
-      stack.push(...cur);
+  var stack = [...arr.map((item) => [item, depth])];
+  while (stack.length > 0) {
+    const [top, dep] = stack.pop();
+    if (Array.isArray(top) && dep > 0) {
+      stack.push(...top.map((item) => [item, dep - 1]));
     } else {
-      res.push(cur);
+      res.push(top);
     }
   }
   return res.reverse();
-};
+}
 const array = [1, [2, [3, 4, [5]], 3], -4];
 const list1 = flatten(array);
 const list2 = flatten(array, 2);
@@ -392,7 +396,29 @@ function myFlatten2(arr) {
     return [...pre, cur];
   }, []);
 }
-flatten([1, 2, [3, 4, [5, 9]]]);
+// 递归correct Good!
+function flat(arr, depth = 1) {
+  if (depth === 0) return arr;
+  let res = [];
+  arr.forEach((val) => {
+    if (Array.isArray(val)) {
+      res.push(...flat(val, depth - 1));
+    } else {
+      res.push(val);
+    }
+  });
+  return res;
+}
+// 递归 correct
+function flat2(arr, depth = 1) {
+  return depth
+    ? arr.reduce((acc, cur) => {
+        return [...acc, ...(Array.isArray(cur) ? flat2(cur, depth - 1) : [cur])];
+      }, [])
+    : arr;
+}
+
+flat2([1, 2, [3, 4, [5, 9]]]);
 
 // 对象扁平化
 function objFlatten(obj, res = {}, key = '', isArray = false) {
@@ -655,7 +681,7 @@ var search = function (nums, target) {
 
 ```js
 function chartUppercase(str) {
-  return str.replace(/[-|@|_]([\w])/g, (m, p) => {
+  return str.replace(/[@_-\s]+(.)?/g, (m, p) => {
     return p.toUpperCase();
   });
 }
@@ -690,25 +716,44 @@ function debounce(fn, delay) {
     }, delay);
   };
 }
-// 节流 执行频率变低 应用场景：拖拽画布或者拖拽窗口
-function throttle(fn, delay) {
-  var cur = 0;
-  return (...rest) => {
-    var exeTime = new Date().getTime();
-    if (exeTime - cur > delay) {
-      fn.apply(this, rest);
-      cur = exeTime;
-    }
-  };
-}
-function throttle2(fn, delay) {
-  let timer = null;
-  return (...rest) => {
-    if (!timer) {
-      timer = setTimeout(() => {
-        fn.apply(this, rest);
-        timer = null;
-      }, delay);
+// // 节流 执行频率变低 应用场景：拖拽画布或者拖拽窗口
+// function throttle(fn, delay) {
+//   var cur = 0;
+//   return (...rest) => {
+//     var exeTime = new Date().getTime();
+//     if (exeTime - cur > delay) {
+//       fn.apply(this, rest);
+//       cur = exeTime;
+//     }
+//   };
+// }
+// function throttle2(fn, delay) {
+//   let timer = null;
+//   return (...rest) => {
+//     if (!timer) {
+//       timer = setTimeout(() => {
+//         fn.apply(this, rest);
+//         timer = null;
+//       }, delay);
+//     }
+//   };
+// }
+
+function throttle(func, wait) {
+  let waiting = false;
+  let lastArg = null;
+  return function (...arg) {
+    if (!waiting) {
+      waiting = true;
+      func.apply(this, arg);
+      setTimeout(() => {
+        waiting = false;
+        if (lastArg) {
+          func.apply(this, lastArg);
+        }
+      }, wait);
+    } else {
+      lastArg = arg;
     }
   };
 }
@@ -842,9 +887,10 @@ function render(str, data) {
 render('name:{{name}},age:{{age}}', { name: 'cpp', age: 30 });
 ```
 
-## 22.千分位分割以及包含小数点的分割
+## 22.千分位分割以及包含小数点的分割以及包含负数
 
 ```js
+// 正常情况下
 function thousand(str) {
   return str.replace(/(?!^)(?=(\d{3})+$)/g, ',');
 }
@@ -853,12 +899,14 @@ thousand('123456789');
 var num2 = '123456789.1234';
 num2.replace(/(?!^)(?=(\d{3})+\.)/g, ',');
 // '123,456,789.1234'
-
 function thousand(str) {
-  let ans = [];
-  str = str.split('').reverse();
-  for (let i = 0; i < str.length; i++) {}
+  let [start, end] = str.split('.');
+  start = start.replace(/(?!^)(?=(\d{3})+$)/g, ',');
+  if (end == undefined) return start;
+  return `${start}.${end}`;
 }
+thousand('-1234556');
+thousand('1234557.12345');
 ```
 
 ## 23.实现一个 node 异步函数的 promisify
@@ -888,7 +936,7 @@ readFileAsync('test.js').then(
 );
 // node端的错误回调变成promise形式
 function Promisify(fn) {
-  return (...rest) => {
+  return function (...rest) {
     return new Promise((resolve, reject) => {
       // rest.push((err, ...val) => {
       //   if (val) {
@@ -899,7 +947,7 @@ function Promisify(fn) {
       // });
       // fn.apply(this, rest);
       // rest[0] 约等于 test.js
-      fn(rest[0], (err, ...val) {
+      fn.call(this, ...rest, (err, val) {
         if (err) {
           reject(err)
         } else {
@@ -1097,24 +1145,26 @@ fn(10);
 
 ## 28.Promise.all/any/race/allSettled
 
+- 参考[Promise.all](https://bigfrontend.dev/zh/problem/implement-Promise-all)
+
 ```js
 class MyPromise {
   static all(arr) {
     return new Promise((resolve, reject) => {
-      var res = [];
-      for (let [index, item] of arr.entries()) {
-        Promise.resolve(item).then(
-          (val) => {
-            if (index === arr.length - 1) {
-              resolve(res);
-            }
-            res[index] = val;
-          },
-          (err) => {
-            reject(err);
-          },
-        );
+      let res = [];
+      if (arr.length == 0) {
+        resolve(res);
       }
+      let len = arr.length;
+      arr.forEach((promise, index) => {
+        Promise.resolve(promise).then((data) => {
+          res[index] = data;
+          len--;
+          if (len == 0) {
+            resolve(res);
+          }
+        }, reject);
+      });
     });
   }
   static race(all) {
@@ -1264,6 +1314,39 @@ function loadScript(url, callback) {
   });
   document.body.appendChild(node);
 }
+```
+
+## [32 手写通用的数据 Map 实现一个 Node Store，支持 DOM element 作为 key](https://bigfrontend.dev/zh/problem/create-a-simple-store-for-DOM-node)
+
+```js
+class NodeStore {
+  cache = {};
+  /**
+   * @param {Node} node
+   * @param {any} value
+   */
+  set(node, value) {
+    node.__nodeStoreKey = Symbol();
+    this.cache[node.__nodeStoreKey] = value;
+  }
+  /**
+   * @param {Node} node
+   * @return {any}
+   */
+  get(node) {
+    return this.cache[node.__nodeStoreKey];
+  }
+
+  /**
+   * @param {Node} node
+   * @return {Boolean}
+   */
+  has(node) {
+    return !!this.cache[node.__nodeStoreKey];
+  }
+}
+const map = new Map();
+map.set(domNode, somedata);
 ```
 
 ## 33.URL 参数解析
@@ -1835,16 +1918,6 @@ sum(1)(2)(3)(4).valueOf(); //10
 sum(2)(4, 1)(2).valueOf(); //9
 sum(1)(2)(3)(4)(5)(6).valueOf(); // 21
 function sum(...rest) {
-  // var res;
-  // var add = (...arg) => {
-  //   if (arg.length === rest.length) {
-  //     res = rest.reduce((a, b) => a + b);
-  //   }
-  //   return (...arg1) => add(...[...arg1, ...arg]);
-  // };
-  // return {
-  //   valueOf: add(),
-  // };
   var add = (...arg) => sum(...arg, ...rest);
   add.valueOf = () => rest.reduce((a, b) => a + b);
   return add;
@@ -1871,6 +1944,33 @@ function sum(...args) {
   };
 }
 console.log(sum(1, 2)(3)());
+
+// 20250327 又遇到一种类型的函数柯里化
+// 要注意这里的比较动作 才会触发valueOf 或者 toString
+// https://bigfrontend.dev/zh/problem/create-a-sum
+
+function sum(...rest) {
+  var add = (...arg) => {
+    let arr = [...arg, ...rest];
+    return sum(...arr);
+  };
+  add.valueOf = () => rest.reduce((a, b) => a + b);
+  return add;
+}
+sum(1)(2)(3) == 6;
+function sum(num) {
+  let func = (num2) => {
+    return num2 ? sum(num2 + num) : num;
+  };
+  // func.toString = () => num
+  func.valueOf = () => num;
+  return func;
+}
+const sum1 = sum(1);
+sum1(2) == 3; // true
+sum1(3) == 4; // true
+sum(1)(2)(3) == 6; // true
+sum(5)(-1)(2) == 6; // true
 ```
 
 ## 49.NoSSR

@@ -99,7 +99,7 @@ function partial() {}
 function addHandler(ele, type, handler) {}
 ```
 
-## 3.16 进制和颜色字符串进行转换
+## 3.十六进制和颜色字符串进行转换
 
 ## 4.二分查找
 
@@ -208,7 +208,37 @@ function thousand(str) {
 thousand('123456789');
 ```
 
-## 8.
+## 8.文件下载
+
+1.使用 a 标签的 download 属性，同源才能触发下载 2.使用 js 方式
+
+```html
+<a href="" download>Download</a>
+
+<script>
+  function touchDownload(url) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'file name';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+</script>
+```
+
+除了上面的在线文件下载，还能创建一个 text 或者 json 文件，然后下载，主要用到的 API 是**Blob**对象和**creatObjectURL**
+
+```js
+const data = JSON.stringify({ name: 'cpp' });
+const blob = new Blob([data], { type: 'application/json' });
+// 创建一个URL
+const url = window.URL.createObjectURL(blob);
+// 用上文的下载js
+touchDownload(url);
+// 释放URL
+window.URL.revokeObjectURL(url);
+```
 
 ## 9.封装一个类使对象可以被 for of 遍历
 
@@ -508,9 +538,28 @@ function gen(n) {
 gen(100);
 ```
 
-## 27.
+## 27.一次性的事件监听
 
-## 28.
+除了在监听的事件函数中移除当前的监听外，也可以使用 once 参数。
+
+```js
+document.addEventListener(
+  'click',
+  () => {
+    console.log('handle');
+  },
+  { once: true },
+);
+```
+
+## 28.当前点击元素是否是某元素的子集
+
+```js
+const parent = document.querySelector('.parent')
+document.addEventListener('click', function(e) [
+  const isOutside = !parent.contains(e.target) // 是否是父元素之外的元素
+])
+```
 
 ## 29.
 

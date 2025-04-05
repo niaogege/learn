@@ -272,15 +272,20 @@ var repeatFn = repeat(console.log, 4, 1000);
 repeatFn('hello');
 ```
 
-## 9.once 函数 跟 memo 函数差不多
+## [9.once 函数 跟 memo 函数差不多](https://bigfrontend.dev/zh/problem/implement-general-memoization-function/discuss)
 
 ```js
-function memo(fn) {
-  var cache = {}
-  return (...rest) => {
-    var args= JSON.stringify(rest)
-    return cache[args] || cache[args] = fn.apply(this, rest)
-  }
+function memo(func, resolver = (...args) => args.join('_')) {
+  let cache = new Map();
+  return function (...arg) {
+    let key = resolver(...arg);
+    if (cache.has(key)) {
+      return cache.get(key);
+    }
+    let val = func.apply(this, arg);
+    cache.set(key, val);
+    return val;
+  };
 }
 
 let complexCalc = (a, b) => {
@@ -292,14 +297,15 @@ memoCalc(666, 888);
 memoCalc(666, 888); // 从缓存中获取
 
 const once = (fn) => {
-  let res, isFirst = true
+  let res,
+    isFirst = true;
   return function (...args) {
-    if (!isFirst) return res
-    res = fn.call(this, ...args)
-    isFirst = false
-    return res
-  }
-}
+    if (!isFirst) return res;
+    res = fn.call(this, ...args);
+    isFirst = false;
+    return res;
+  };
+};
 const f = (x) => x;
 const onceF = once(f);
 //=> 3
@@ -856,9 +862,9 @@ maxCount('abcabcabcbbccccc');
 
 > 新奥面试的时候问过 202105
 
-## 32.实现一个 immutable
+## [31.实现一个 immutable](https://bigfrontend.dev/zh/problem/implement-Immutability-helper)
 
-> 暂时放弃
+> 暂时放弃 20250405
 
 ## 32.惰性函数
 
@@ -1160,20 +1166,27 @@ console.log(ex.getName()); // private
 console.log(ex.name); // undefined
 ```
 
-## 42.洗牌算法 Shuffle Algorithm, 用于随机排列或打乱数组或列表中的元素顺序，以产生随机性
+## [42.洗牌算法 Shuffle Algorithm, 用于随机排列或打乱数组或列表中的元素顺序，以产生随机性](https://bigfrontend.dev/zh/problem/can-you-shuffle-an-array)
 
 ```js
 function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
+  for (let i = arr.length - 1; i >= 0; i--) {
     // // 生成 0 到 i 之间的随机索引
-    const j = Math.floor(Math.random() * (i - 1));
-    var temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
+    const j = Math.floor(Math.random() * (i + 1));
+    // var temp = arr[i];
+    // arr[i] = arr[j];
+    // arr[j] = temp;
+    [arr[i], arr[j]] = [arr[j], arr[i]];
   }
   return arr;
 }
 shuffleArray([1, 2, 3, 4, 5]);
+function shuffleArray(arr) {
+  const random = (max, min = 0) => Math.floor(Math.random() * (max - min + 1) + min);
+  for (let i = arr.length - 1; i >= 0; i--) {
+    let rand = (random(i)[(arr[i], arr[rand])] = [arr[rand], arr[i]]);
+  }
+}
 ```
 
 ## 43.单例模式

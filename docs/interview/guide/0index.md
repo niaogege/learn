@@ -12,6 +12,12 @@ nav:
 
 > 20221229 开始积累面试经验！好久不背面试题，都快忘记了，记忆力真差
 
+> 2025 还在总结面试题 关键是还不会写 完蛋
+
+- [js 代码题](https://bigfrontend.dev/zh/problem)
+- [TS 手写练习题](https://bigfrontend.dev/zh/typescript)
+- [Promise 相关](https://bigfrontend.dev/zh/list/nghelsikl6faj6dfwp)
+- [前端面试](https://bigfrontend.dev/zh/question)
 - [山月的面经](https://q.shanyue.tech/interview)
 
 > 20230105 感觉在面试方面没有自信心了，更多的是忧虑/恐慌/无助

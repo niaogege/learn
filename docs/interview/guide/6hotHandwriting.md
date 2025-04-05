@@ -1210,7 +1210,31 @@ swr('cache', MockPromise, 1000);
 
 ## 43.实现一个 node 异步函数的 promisify
 
+promisify 作用是把回调函数转成 promise 形式？
+
+即调用该回调函数的时候有 2 个参数，第一个是错误信息，其次才是真正要返回的内容，Promisify 就是把第二个参数转化为 promise
+
 ```js
+// 输入：
+// 原有的callback调用
+fs.readFile('test.js', function (err, data) {
+  if (!err) {
+    console.log(data);
+  } else {
+    console.log(err);
+  }
+});
+// 输出：
+// promisify后
+var readFileAsync = promisify(fs.readFile);
+readFileAsync('test.js').then(
+  (data) => {
+    console.log(data);
+  },
+  (err) => {
+    console.log(err);
+  },
+);
 function promisify(fn) {
   return (...arr) =>
     new Promise((resolve, reject) => {
@@ -1222,6 +1246,7 @@ function promisify(fn) {
         }
       });
       fn.apply(this, arr);
+      // Reflect.apply(fn, this, arr);
     });
 }
 ```
@@ -1250,7 +1275,7 @@ function compressWord(str) {
 compressWord('abbccccaaa');
 ```
 
-## 45.
+## 45.TS 练习 Equal<A, B>
 
 ## 46.TS 练习嵌套 Awaited<T>
 
