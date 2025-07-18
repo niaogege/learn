@@ -240,6 +240,31 @@ touchDownload(url);
 window.URL.revokeObjectURL(url);
 ```
 
+### 20250613 fetch 下载,如果服务端的下载是一个 cdn 地址，如何下载呢
+
+> [fetch 作用真不少](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API/Using_Fetch)
+
+```js
+function fetchDownload({
+  url,fileName
+}) {
+  const body = await fetch(url, {
+    method: 'GET',
+  });
+
+  const bodyBlob = await body.blob();
+  const fileUrl = URL.createObjectURL(bodyBlob);
+  let downloadBtn: any = document.createElement('a');
+
+  downloadBtn.href = fileUrl;
+  downloadBtn.download = fileName;
+  downloadBtn.click();
+  URL.revokeObjectURL(fileUrl);
+  downloadBtn.remove();
+  downloadBtn = null;
+}
+```
+
 ## 9.封装一个类使对象可以被 for of 遍历
 
 ## 10.URL 参数解析

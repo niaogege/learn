@@ -78,7 +78,8 @@ nav:
  * 57.编写函数，每次返回下一个质数（Prime number）
  * 58.设计一个计算器，先乘除后加减
  * 59.数组里的两个子项交换顺序，原序号10，更改后序号2，原2-9 变成 3-10；原序号1，更改后序号20，原2-20变成1-19
- * 60.
+ * 60.手写JSON.stringify()/JSON.parse()
+ * 61.真实dom转化为虚拟dom
  */
 ```
 
@@ -2143,6 +2144,36 @@ console.log(arr, 'arr');
 // [1,10,2,3,4,5,6,7,8,9]
 transform(arr, 1 - 1, 10 - 1); // 原来第一位的移到最后一位
 // [2,3,4,5,6,7,8,9,10,1]
+```
+
+## 61.真实 dom 转化为虚拟 dom
+
+```js
+/**
+ * @param {HTMLElement}
+ * @return {object} object literal presentation
+ */
+function virtualize(element) {
+  const result = {
+    type: element.tagName.toLowerCase(),
+    props: {},
+  };
+  for (let attr of element.attributes) {
+    let name = attr.name === 'class' ? 'className' : attr.name;
+    result.props[name] = arrt.value;
+  }
+  // children
+  let children = [];
+  for (let node of element.childNodes) {
+    if (node.nodeType === 3) {
+      children.push(node.textContent);
+    } else {
+      children.push(virtualize(node));
+    }
+  }
+  result.props.children = children.length === 1 ? children[0] : children;
+  return result;
+}
 ```
 
 ## 参考

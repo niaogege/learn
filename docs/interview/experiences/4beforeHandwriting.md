@@ -187,6 +187,13 @@ Promise.myAny = function(arr) {
     }
   })
 }
+function race(promises) {
+  return new Promise((resolve, reject) => {
+     promises.forEach((promise) => {
+      return Promise.resolve(promise).then(resolve).cactch(reject)
+    })
+  })
+}
 ```
 
 ## mock Promise.allSettled(es7+)

@@ -240,9 +240,23 @@ bigIntSum('123', '123');
 
 ## 8.deepClone 深浅拷贝
 
+> Map 结构运用场景很多啊 还有 Memo
+
 ```js
+// 基础版 不能解决循环引用以及Smbol数据类型
+function dedepClone(obj) {
+  if (typeof obj !== 'object' || obj == null) return obj;
+  let val = Array.isArray(obj) ? [] : {};
+  for (let key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      val[key] = typeof obj[key] == 'object' ? dedepClone(obj[key]) : obj[key];
+    }
+  }
+  return val;
+}
+// 进阶版
 function deepClone(obj, map = new Map()) {
-  if (obj typeof !== 'Object' || obj === null) {
+  if (obj typeof !== 'object' || obj === null) {
     return obj
   }
   if (map.has(obj)) {
@@ -252,7 +266,7 @@ function deepClone(obj, map = new Map()) {
   map.set(obj,target)
   const keys = [...Object.keys(target), ...Object.getOwnPropertySymbols(obj)]
   for(ket k of keys) {
-    const val = target[k]
+    const val = obj[k]
     target[k] = deepClone(val, map)
   }
   return target
