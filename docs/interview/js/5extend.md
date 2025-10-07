@@ -462,9 +462,22 @@ console.log(child1, 'CHILD1');
 
 - 子类必须在 constructor 方法中调用 super 方法,否则新建实例时会报错。这是因为子类自己的 this 对象，必须先通过父类的构造函数完成塑造，得到与父类同样的实例属性和方法，然后再对其进行加工，加上子类自己的实例属性和方法。如果不调用 super 方法，子类就得不到 this 对象
 
-### 用 ES5 实现 es6 class 中的 extends(高频面试题)
+### [用 ES5 实现 es6 class 中的 extends(高频面试题)](https://bigfrontend.dev/zh/problem/write-your-own-extends-in-es5/discuss)
 
 ```js
+function extends(SuperType,SuberType) {
+  function Child(...arg) {
+    SuperType.call(this,args)
+    SuberType.call(this, args)
+   this.__proto__ = SuberType.prototype
+  }
+  // Object.setPrototypeOf(SuberType.prototype, SuperType.prototype)
+  SuberType.prototype.__proto__ = SuperType.prototype
+  // Object.setPrototypeOf(Child, SuperType)
+  Child.__proto__ = SuperType
+  return Child
+}
+
 function extend(Child, Parent, staticProp) {
   var prototype = Object.create(Parent.prototype); // 1
   prototype.constructor = Child; // 2

@@ -164,3 +164,11 @@ function insertSort(arr) {
   }
   return arr;
 }
+function addNum(num) {
+  let len = String(num).length;
+  return new Intl.NumberFormat('zh-CN', {
+    style: 'decimal',
+    maximumFractionDigits: len,
+  }).format(num);
+}
+addNum(123456789.12345);

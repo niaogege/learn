@@ -206,6 +206,13 @@ function thousand(str) {
   return str.replace(/(?!^)(?=(\d{3})+$)/g, ',');
 }
 thousand('123456789');
+function addNum(num) {
+  let len = String(num).length;
+  return new Intl.NumberFormat('zh-CN', {
+    style: 'decimal',
+    max,
+  });
+}
 ```
 
 ## 8.文件下载

@@ -120,6 +120,18 @@ function thousand(str) {
   return str.replace(reg, ',');
 }
 thousand('123456789');
+function addComma(num) {
+  const len = String(num).length;
+  // your code here
+  return new Intl.NumberFormat('zh-CN', {
+    style: 'decimal',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: len,
+  }).format(num);
+}
+addComma(123456789);
+addComma(-12345678); // '-12,345,678'
+addComma(12345678.12345); // '12,345,678.12345'
 ```
 
 ## 手机号 3-4-4 分割

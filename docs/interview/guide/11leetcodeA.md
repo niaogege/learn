@@ -1056,6 +1056,7 @@ class MyQueue {
     this.stackIn.push(x);
   }
   static pop() {
+    // 如果输出栈为空，则将输入栈的所有元素转移到输出栈
     if (this.stackOut.length == 0) {
       while (this.stackIn.length) {
         this.stackOut.push(this.stackIn.pop());
@@ -1070,6 +1071,42 @@ class MyQueue {
   }
   static empty() {
     return !this.stackIn.length && !this.stackOut.length;
+  }
+}
+```
+
+[用 俩个 Stack 实现 Queue](https://bigfrontend.dev/zh/problem/implement-a-queue-by-using-stack)
+
+```js
+class Queue {
+  constructor() {
+    this.ins = new Stack();
+    this.outs = new Stack();
+  }
+  // 添加元素到Queue，类似于Array.prototype.push
+  enqueue(e) {
+    this.ins.push(e);
+  }
+  // 获取头元素
+  peek() {
+    // 如果输出栈为空，则将输入栈的所有元素转移到输出栈
+    if (this.outs.size() === 0) {
+      while (this.ins.size()) {
+        this.outs.push(this.ins.pop());
+      }
+    }
+    // 从输出栈弹出栈顶元素，即为队列的头元素
+    return this.outs.peek();
+  }
+
+  size() {
+    return this.ins.size() + this.outs.size();
+  }
+  /* 弹出头元素，类似于Array.prototype.pop */
+  dequeue() {
+    this.peek();
+    // 查看输出栈的栈顶元素，即为队列的头元素
+    return this.outs.pop();
   }
 }
 ```
